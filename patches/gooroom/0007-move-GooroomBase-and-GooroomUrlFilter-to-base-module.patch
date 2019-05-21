@@ -1,0 +1,59 @@
+From c6a2ec46e16f1b1b281a00587a573b8395b51b20 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Fri, 24 May 2019 20:29:47 +0900
+Subject: [PATCH 07/63] move GooroomBase and GooroomUrlFilter to base module
+
+---
+ base/BUILD.gn               | 9 +++++++++
+ gooroom/BUILD.gn            | 1 +
+ gooroom/base/gooroom_base.h | 2 ++
+ 3 files changed, 12 insertions(+)
+
+diff --git a/base/BUILD.gn b/base/BUILD.gn
+index 60c4ba26e..8b41ef711 100644
+--- a/base/BUILD.gn
++++ b/base/BUILD.gn
+@@ -1071,6 +1071,15 @@ jumbo_component("base") {
+     "win/wrapped_window_proc.h",
+   ]
+ 
++  if (is_gooroom) {
++    sources += [
++      "//gooroom/base/gooroom_base.cc",
++      "//gooroom/base/gooroom_base.h",
++      "//gooroom/base/gooroom_url_filter.cc",
++      "//gooroom/base/gooroom_url_filter.h",
++     ]
++  }
++
+   if (is_posix) {
+     sources += [
+       "debug/debugger_posix.cc",
+diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
+index 87df3b6bb..8ed30660f 100644
+--- a/gooroom/BUILD.gn
++++ b/gooroom/BUILD.gn
+@@ -219,6 +219,7 @@ if (!is_android && !is_mac) {
+ 
+       data_deps += [
+         "//chrome/browser/resources/media/mei_preload:component",
++        "//third_party/widevine/cdm:widevine_cdm_binary",
+       ]
+ 
+       if (is_multi_dll_chrome) {
+diff --git a/gooroom/base/gooroom_base.h b/gooroom/base/gooroom_base.h
+index c64ed691b..7547bc1cb 100644
+--- a/gooroom/base/gooroom_base.h
++++ b/gooroom/base/gooroom_base.h
+@@ -16,6 +16,8 @@
+ 
+ namespace base {
+ 
++BASE_EXPORT GooroomBase* GetGooroomBase();
++
+ class BASE_EXPORT GooroomBase {
+  public:
+   GooroomBase();
+-- 
+2.11.0
+

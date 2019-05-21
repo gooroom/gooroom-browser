@@ -1,0 +1,47 @@
+From 1ca9291dad50b20eb2c38a77c9ac8976637c9aea Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 17:33:40 +0900
+Subject: [PATCH 20/63] pruning extensions pages(chrome://extensions)
+
+---
+ chrome/app/gooroom/md_extensions_strings.grdp       | 4 ++--
+ chrome/browser/resources/md_extensions/sidebar.html | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/chrome/app/gooroom/md_extensions_strings.grdp b/chrome/app/gooroom/md_extensions_strings.grdp
+index aa875dd87..6fa167b39 100644
+--- a/chrome/app/gooroom/md_extensions_strings.grdp
++++ b/chrome/app/gooroom/md_extensions_strings.grdp
+@@ -250,8 +250,8 @@
+   <message name="IDS_MD_EXTENSIONS_NO_ACTIVITIES" desc="The message shown to the user when an extension has no recent activities.">
+     No recent activities
+   </message>
+-  <message name="IDS_MD_EXTENSIONS_NO_INSTALLED_ITEMS" desc="The message shown to the user on the Extensions settings page when there are no extensions or apps installed.">
+-    Find extensions and themes in the <ph name="BEGIN_LINK">&lt;a target="_blank" href="https://chrome.google.com/webstore/category/extensions"&gt;</ph>Chrome Web Store<ph name="END_LINK">&lt;/a&gt;<ex>&lt;/a&gt;</ex></ph>
++  <message name="IDS_MD_EXTENSIONS_NO_INSTALLED_ITEMS" desc="Text on next line after IDS_EXTENSIONS_NONE_INSTALLED that suggests the user look in the Chrome Web Store for extensions to install.">
++    Extensions no-installed items
+   </message>
+   <message name="IDS_MD_EXTENSIONS_NO_DESCRIPTION" desc="The message shown to the user when an extension does not have any description.">
+     No description provided
+diff --git a/chrome/browser/resources/md_extensions/sidebar.html b/chrome/browser/resources/md_extensions/sidebar.html
+index 8aaf1ef5f..131ca95d9 100644
+--- a/chrome/browser/resources/md_extensions/sidebar.html
++++ b/chrome/browser/resources/md_extensions/sidebar.html
+@@ -80,12 +80,14 @@
+     </iron-selector>
+     <div hidden="[[isSupervised]]">
+       <div class="separator"></div>
++      <if expr="not _gooroom">
+       <a class="section-item" id="more-extensions" target="_blank"
+           href="$i18n{getMoreExtensionsUrl}" on-click="onMoreExtensionsTap_">
+         <span>$i18n{openChromeWebStore}</span>
+         <div class="cr-icon icon-external"></div>
+         <paper-ripple></paper-ripple>
+       </a>
++      </if>
+     </div>
+   </template>
+   <script src="sidebar.js"></script>
+-- 
+2.11.0
+

@@ -1,0 +1,27 @@
+From ad11cebf3455affd7e83255edc2d89bcddbd6d51 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Fri, 24 May 2019 20:30:42 +0900
+Subject: [PATCH 09/63] move GooroomBase and GooroomUrlFilter to base module #2
+
+---
+ gooroom/BUILD.gn | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
+index 8ed30660f..f148807b8 100644
+--- a/gooroom/BUILD.gn
++++ b/gooroom/BUILD.gn
+@@ -257,10 +257,6 @@ if (!is_android && !is_mac) {
+         "browser/gooroom_browser_extra_parts_security.h",
+ 
+         # for commit #4
+-        "base/gooroom_base.cc",
+-        "base/gooroom_base.h",
+-        "base/gooroom_url_filter.cc",
+-        "base/gooroom_url_filter.h",
+         "browser/gooroom_pref.cc",
+         "browser/gooroom_pref.h",
+         "browser/gooroom_url_filter_impl.cc",
+-- 
+2.11.0
+

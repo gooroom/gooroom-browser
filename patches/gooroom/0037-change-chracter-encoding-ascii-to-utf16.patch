@@ -1,0 +1,31 @@
+From e72704a25748f73d6aa2127e5bd905dc07215570 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 18:14:26 +0900
+Subject: [PATCH 37/63] change chracter encoding ascii to utf16
+
+---
+ third_party/blink/renderer/modules/websockets/dom_websocket.cc | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+index f1c3438d5..dd592f204 100644
+--- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
++++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+@@ -441,10 +441,10 @@ void DOMWebSocket::Connect(const String& url,
+     LocalFrame* frm = GetExecutionContext()->ExecutingWindow()->GetFrame();
+     Page* page = frm->GetPage();
+     // FIXME : care character encoding
+-    // page->GetChromeClient().OpenJavaScriptConfirm(frm, "정책에 의해 외부 연결
+-    // 시도가 차단되었습니다.");
+-    page->GetChromeClient().OpenJavaScriptAlert(
+-        frm, "External connection attempts were blocked by policy.");
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, WTF::String::FromUTF8("정책에 의해 외부 연결 시도가 차단되었습니다."));
++    //page->GetChromeClient().OpenJavaScriptAlert(
++    //    frm, "External connection attempts were blocked by policy.");
++ 
+ 
+     ReleaseChannel();
+     return;
+-- 
+2.11.0
+

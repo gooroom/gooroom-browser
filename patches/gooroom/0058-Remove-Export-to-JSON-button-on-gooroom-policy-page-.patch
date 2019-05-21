@@ -1,0 +1,41 @@
+From 3cea7c4883277b91e155c2a338f9111bd279b9ea Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 21:31:00 +0900
+Subject: [PATCH 58/63] Remove 'Export to JSON' button on gooroom://policy page
+ [Gooroom Bug Tracking System - 0000560] Change 'Chrome policies' to 'Gooroom
+ policies' string on gooroom://policy page
+
+---
+ chrome/browser/resources/policy.html    | 2 +-
+ chrome/browser/resources/policy_base.js | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/chrome/browser/resources/policy.html b/chrome/browser/resources/policy.html
+index 938c57a17..caa020745 100644
+--- a/chrome/browser/resources/policy.html
++++ b/chrome/browser/resources/policy.html
+@@ -34,7 +34,7 @@
+         <button id="reload-policies">$i18n{reloadPolicies}</button>
+       </div>
+       <div class="left-aligned-button">
+-        <button id="export-policies">$i18n{exportPoliciesJSON}</button>
++        <button id="export-policies" hidden>$i18n{exportPoliciesJSON}</button>
+       </div>
+       <div id="show-unset-container" class="show-unset-checkbox">
+         <label>
+diff --git a/chrome/browser/resources/policy_base.js b/chrome/browser/resources/policy_base.js
+index d659374c9..d3823a93f 100644
+--- a/chrome/browser/resources/policy_base.js
++++ b/chrome/browser/resources/policy_base.js
+@@ -440,7 +440,7 @@ cr.define('policy', function() {
+     let table;
+     // Create tables and set known policy names for Chrome and extensions.
+     if (names.hasOwnProperty('chromePolicyNames')) {
+-      table = page.appendNewTable('chrome', 'Chrome policies', '');
++      table = page.appendNewTable('chrome', 'Gooroom policies', '');
+       table.setPolicyNames(names.chromePolicyNames);
+     }
+ 
+-- 
+2.11.0
+

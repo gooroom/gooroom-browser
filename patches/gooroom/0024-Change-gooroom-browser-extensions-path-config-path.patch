@@ -1,0 +1,48 @@
+From b2f326c8c045cb228befa1d08953802692a07eb0 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 17:36:14 +0900
+Subject: [PATCH 24/63] Change gooroom-browser extensions path & config path
+
+---
+ chrome/common/chrome_paths.cc       | 8 ++++++++
+ chrome/common/chrome_paths_linux.cc | 2 ++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
+index b3cff585b..905b246ec 100644
+--- a/chrome/common/chrome_paths.cc
++++ b/chrome/common/chrome_paths.cc
+@@ -57,9 +57,17 @@ const base::FilePath::CharType kPepperFlashSystemBaseDirectory[] =
+ // /usr/share seems like a good choice, see: http://www.pathname.com/fhs/
+ const base::FilePath::CharType kFilepathSinglePrefExtensions[] =
+ #if defined(GOOGLE_CHROME_BUILD)
++#if !defined(GOOROOM_BUILD)
+     FILE_PATH_LITERAL("/usr/share/google-chrome/extensions");
+ #else
++    FILE_PATH_LITERAL("/usr/share/gooroom/browser/extensions");
++#endif  // defined(GOOROOM_BUILD)
++#else
++#if !defined(GOOROOM_BUILD)
+     FILE_PATH_LITERAL("/usr/share/chromium/extensions");
++#else
++    FILE_PATH_LITERAL("/usr/share/gooroom/browser/extensions");
++#endif  // defined(GOOROOM_BUILD)
+ #endif  // defined(GOOGLE_CHROME_BUILD)
+ 
+ // The path to the hint file that tells the pepper plugin loader
+diff --git a/chrome/common/chrome_paths_linux.cc b/chrome/common/chrome_paths_linux.cc
+index 5659ef5d6..41097cd40 100644
+--- a/chrome/common/chrome_paths_linux.cc
++++ b/chrome/common/chrome_paths_linux.cc
+@@ -89,6 +89,8 @@ bool GetDefaultUserDataDirectory(base::FilePath* result) {
+ 
+ #if defined(GOOGLE_CHROME_BUILD)
+   *result = config_dir.Append("google-chrome" + GetChannelSuffixForDataDir());
++#elseif defined(GOOROOM_BUILD)
++  *result = config_dir.Append("gooroom");
+ #else
+   *result = config_dir.Append("chromium");
+ #endif
+-- 
+2.11.0
+

@@ -1,0 +1,81 @@
+From ef05302a4283bb0922e8e49a1c296a777aa53677 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 21:27:19 +0900
+Subject: [PATCH 57/63] Send URL-log to gooroom-browser-agent via D-bus
+
+---
+ content/browser/BUILD.gn                          |  1 +
+ content/browser/web_contents/web_contents_impl.cc | 34 +++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+
+diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
+index 75b89a941..ada816c1d 100644
+--- a/content/browser/BUILD.gn
++++ b/content/browser/BUILD.gn
+@@ -227,6 +227,7 @@ jumbo_source_set("browser") {
+     "//media/mojo/interfaces:remoting",
+     "//third_party/blink/public:embedded_frame_sink_mojo_bindings",
+     "//third_party/leveldatabase",
++    "//dbus",
+   ]
+ 
+   sources = [
+diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
+index 86c19cc18..500a5422d 100644
+--- a/content/browser/web_contents/web_contents_impl.cc
++++ b/content/browser/web_contents/web_contents_impl.cc
+@@ -9,10 +9,17 @@
+ #include <cmath>
+ #include <utility>
+ #include <vector>
++#include <unistd.h>
++#include <arpa/inet.h>
++#include <sys/un.h>
+ 
+ #if BUILDFLAG(ENABLE_GOOROOM)
+ #include "base/path_service.h"
+ #include "gooroom/base/gooroom_base.h"
++#include "dbus/bus.h"
++#include "dbus/message.h"
++#include "dbus/object_path.h"
++#include "dbus/object_proxy.h"
+ #endif
+ 
+ #include "base/command_line.h"
+@@ -4375,6 +4382,33 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+     should_focus_location_bar_by_default_ = false;
+   }
+ #if BUILDFLAG(ENABLE_GOOROOM)
++/* Delete temporarily
++  // browser-agent IPC use dbus
++  // except about:* url
++  if (strncmp(navigation_handle->GetURL().spec().c_str(), "about:", 6)) {
++    const char service_name[] = "kr.gooroom.browser.agent";
++    const char object_path[] = "/kr/gooroom/browser/agent";
++    const char kInterface[] = "kr.gooroom.browser.agent";
++
++    dbus::Bus::Options bus_options;
++    bus_options.bus_type = dbus::Bus::SYSTEM;
++    bus_options.connection_type = dbus::Bus::PRIVATE;
++
++    dbus::Bus* bus = new dbus::Bus(bus_options);
++
++    dbus::ObjectProxy* object_proxy =
++         bus->GetObjectProxy(service_name, dbus::ObjectPath(object_path));
++
++    dbus::MethodCall method_call(kInterface, "do_task_geturl");
++    dbus::MessageWriter writer(&method_call);
++    writer.AppendString(navigation_handle->GetURL().spec().c_str());
++    std::unique_ptr<dbus::Response> response(
++        object_proxy->CallMethodAndBlock(&method_call, dbus::ObjectProxy::TIMEOUT_USE_DEFAULT));
++    if (response.get() == nullptr) {  // Fail received response.
++      printf("Check your gooroom-browser-agent\n");
++    }
++  }
++*/
+   if (navigation_handle->IsInMainFrame() && RequestCurrentUserDataDir(navigation_handle->GetURL())) {
+     ClosePage();
+   }
+-- 
+2.11.0
+

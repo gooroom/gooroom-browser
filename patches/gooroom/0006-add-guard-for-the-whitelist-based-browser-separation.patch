@@ -1,0 +1,50 @@
+From d63f496c2e81268294e083908b9f20f0850dd2d4 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Fri, 24 May 2019 20:29:10 +0900
+Subject: [PATCH 06/63] add guard for the whitelist based browser separation
+
+---
+ build/config/chrome_build.gni   | 1 +
+ ppapi/buildflags/BUILD.gn       | 5 ++++-
+ ppapi/buildflags/buildflags.gni | 1 +
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/build/config/chrome_build.gni b/build/config/chrome_build.gni
+index 4bb4a043c..3484b0681 100644
+--- a/build/config/chrome_build.gni
++++ b/build/config/chrome_build.gni
+@@ -7,6 +7,7 @@ declare_args() {
+   # true means official Google Chrome branding (requires extra Google-internal
+   # resources).
+   is_chrome_branded = false
++  is_gooroom = true
+ 
+   # Break chrome.dll into multple pieces based on process type. Only available
+   # on Windows.
+diff --git a/ppapi/buildflags/BUILD.gn b/ppapi/buildflags/BUILD.gn
+index 4dfdc7a5b..2b50baf98 100644
+--- a/ppapi/buildflags/BUILD.gn
++++ b/ppapi/buildflags/BUILD.gn
+@@ -11,5 +11,8 @@ import("//ppapi/buildflags/buildflags.gni")
+ 
+ buildflag_header("buildflags") {
+   header = "buildflags.h"
+-  flags = [ "ENABLE_PLUGINS=$enable_plugins" ]
++  flags = [
++    "ENABLE_PLUGINS=$enable_plugins",
++    "ENABLE_GOOROOM=$enable_gooroom"
++  ]
+ }
+diff --git a/ppapi/buildflags/buildflags.gni b/ppapi/buildflags/buildflags.gni
+index 560d1ecae..cdfbc36d2 100644
+--- a/ppapi/buildflags/buildflags.gni
++++ b/ppapi/buildflags/buildflags.gni
+@@ -8,4 +8,5 @@ import("//build/config/features.gni")
+ 
+ declare_args() {
+   enable_plugins = !is_android && !is_ios && !is_chromecast && !is_fuchsia
++  enable_gooroom = is_gooroom
+ }
+-- 
+2.11.0
+

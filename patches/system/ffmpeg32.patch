@@ -1,0 +1,52 @@
+description: changes required to support ffmpeg 3.2 in stretch
+author: Michael Gilbert <mgilbert@debian.org>
+
+--- a/media/ffmpeg/ffmpeg_common.cc
++++ b/media/ffmpeg/ffmpeg_common.cc
+@@ -189,8 +189,6 @@ static VideoCodec CodecIDToVideoCodec(AV
+       return kCodecVP8;
+     case AV_CODEC_ID_VP9:
+       return kCodecVP9;
+-    case AV_CODEC_ID_AV1:
+-      return kCodecAV1;
+     default:
+       DVLOG(1) << "Unknown video CodecID: " << codec_id;
+   }
+@@ -213,8 +211,6 @@ AVCodecID VideoCodecToCodecID(VideoCodec
+       return AV_CODEC_ID_VP8;
+     case kCodecVP9:
+       return AV_CODEC_ID_VP9;
+-    case kCodecAV1:
+-      return AV_CODEC_ID_AV1;
+     default:
+       DVLOG(1) << "Unknown VideoCodec: " << video_codec;
+   }
+@@ -567,8 +563,7 @@ bool AVStreamToVideoDecoderConfig(const
+     // We also ignore the resolution for AV1, since it's new and it's easy
+     // to make it behave correctly from the get-go.
+     // TODO(hubbe): Skip this inference for all codecs.
+-    if (codec_context->codec_id != AV_CODEC_ID_VP9 &&
+-        codec_context->codec_id != AV_CODEC_ID_AV1) {
++    if (codec_context->codec_id != AV_CODEC_ID_VP9) {
+       // Otherwise, assume that SD video is usually Rec.601, and HD is usually
+       // Rec.709.
+       color_space = (natural_size.height() < 720) ? VideoColorSpace::REC601()
+@@ -730,9 +725,6 @@ VideoPixelFormat AVPixelFormatToVideoPix
+     case AV_PIX_FMT_YUV444P12LE:
+       return PIXEL_FORMAT_YUV444P12;
+ 
+-    case AV_PIX_FMT_P016LE:
+-      return PIXEL_FORMAT_P016LE;
+-
+     default:
+       DVLOG(1) << "Unsupported AVPixelFormat: " << pixel_format;
+   }
+@@ -767,8 +759,6 @@ AVPixelFormat VideoPixelFormatToAVPixelF
+       return AV_PIX_FMT_YUV444P10LE;
+     case PIXEL_FORMAT_YUV444P12:
+       return AV_PIX_FMT_YUV444P12LE;
+-    case PIXEL_FORMAT_P016LE:
+-      return AV_PIX_FMT_P016LE;
+ 
+     default:
+       DVLOG(1) << "Unsupported Format: " << video_format;

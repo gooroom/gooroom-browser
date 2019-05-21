@@ -1,0 +1,601 @@
+{
+                                                                                // * tags
+                                                                                //   * NO NEED TO CHANGE
+                                                                                //   * DO NOT CHANGE (REASON)
+                                                                                //   * DO NOT ACTIVATE (REASON)
+
+
+
+
+
+    // *********************************************************************************************************************************************************
+    // ***** Security options for GOOROOM                                  *************************************************************************************
+    // *********************************************************************************************************************************************************
+    // -------------------------------------------------------------------------
+    // ----- Origin Access Control                                         -----
+    // -------------------------------------------------------------------------
+    "URLBlacklist": [
+        "file://*"
+    ],
+    "URLWhitelist": [
+        "file:///home"
+    ],
+    // -------------------------------------------------------------------------
+    // ----- Content Settings                                              -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * values
+                                                                                                                        //   * 0
+                                                                                                                        //   * 1 : Allow all sites to set local data
+                                                                                                                        //   * 2 : Do not allow any site to set local data
+                                                                                                                        //   * 3 : Click to play
+                                                                                                                        //   * 4 : Keep cookies for the duration of the session
+    "DefaultCookiesSetting": 1,                                                                                         // * can be 1 | 2 | 4
+    "DefaultImagesSetting": 1,                                                                                          // * can be 1 | 2
+    "DefaultJavaScriptSetting": 1,                                                                                      // * can be 1 | 2
+    "DefaultPluginsSetting": 1,                                                                                         // * can be 1 | 2 | 3
+    "DefaultPopupsSetting": 1,                                                                                          // * can be 1 | 2
+    "DefaultNotificationsSetting": 1,                                                                                   // * can be 1 | 2 | 3
+    "DefaultGeolocationSetting": 1,                                                                                     // * can be 1 | 2 | 3
+    "DefaultWebBluetoothGuardSetting": 2,                                                                               // * can be 2 | 3
+                                                                                                                        // * example
+                                                                                                                        //   "https://www.example.com",
+                                                                                                                        //   "[*.]example.edu"
+    "CookiesAllowedForUrls": [
+        ""
+    ],
+    "CookiesBlockedForUrls": [
+        ""
+    ],
+    "CookiesSessionOnlyForUrls": [
+        ""
+    ],
+    "ImagesAllowedForUrls": [
+        ""
+    ],
+    "ImagesBlockedForUrls": [
+        ""
+    ],
+    "JavaScriptAllowedForUrls": [
+        ""
+    ],
+    "JavaScriptBlockedForUrls": [
+        ""
+    ],
+    "PluginsAllowedForUrls": [
+        ""
+    ],
+    "PluginsBlockedForUrls": [
+        ""
+    ],
+    "PopupsAllowedForUrls": [
+        ""
+    ],
+    "PopupsBlockedForUrls": [
+        ""
+    ],
+    "NotificationsAllowedForUrls": [
+        ""
+    ],
+    "NotificationsBlockedForUrls": [
+        ""
+    ],
+    "VideoCaptureAllowed": false,
+    "VideoCaptureAllowedUrls": [
+        ""  
+    ],
+    "AudioCaptureAllowed": false,
+    "AudioCaptureAllowedUrls": [
+        ""
+    ],
+                                                                                                                        // * example
+                                                                                                                        //   "{\"pattern\":\"https://www.example.com\",\"filter\":{\"ISSUER\":{\"CN\":\"certificate issuer name\"}}}"
+    "AutoSelectCertificateForUrls": [
+        ""
+    ],
+    //"RegisteredProtocolHandlers": [                                           // DO NOT ACTIVATE (not working)
+    //    {
+    //        "url": "https://mail.google.com/mail/?extsrc=mailto&url=%s",
+    //        "default": true,
+    //        "protocol": "mailto"
+    //    }
+    //],
+    // -------------------------------------------------------------------------
+    // ----- Extensions                                                    -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * values
+                                                                                                                        //   * Extension ID or "*"
+                                                                                                                        // * example
+                                                                                                                        //   "gbchcmhmhahfdphkhkmpfmihenigjmpp",
+                                                                                                                        //   "gbchcmhmhahfdphkhkmpfmihenigjmpp"
+    "ExtensionInstallBlacklist": [
+        "*"
+    ],
+    "ExtensionInstallWhitelist": [
+        "oajnamicaljolbegbmcflmbndoapjked", "jfeafeooobhcblajimfjhpnndeokdbko"
+    ],
+                                                                                                                        // * values
+                                                                                                                        //   * "'Extension ID';'Update URL'"
+                                                                                                                        // * example
+                                                                                                                        //   "gbchcmhmhahfdphkhkmpfmihenigjmpp;https://clients2.google.com/service/update2/crx"                                                                                
+                                                                                                                        // * note : 'Update URL' is pointing to a location for update check
+                                                                                                                        // * note : https://developer.chrome.com/extensions/autoupdate
+                                                                                                                        // * example of 'Update Manifest' pointed by 'Update URL'
+                                                                                                                        //   <?xml version='1.0' encoding='UTF-8'?>
+                                                                                                                        //   <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
+                                                                                                                        //     <app appid='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'>
+                                                                                                                        //       <updatecheck codebase='http://myhost.com/mytestextension/mte_v2.crx' version='2.0' />
+                                                                                                                        //     </app>
+                                                                                                                        //   </gupdate>
+    "ExtensionInstallForcelist": [
+        ""
+    ],
+                                                                                                                        // * example
+                                                                                                                        //   "https://corp.mycompany.com/*"
+    //"ExtensionInstallSources": [                                              // DO NOT ACTIVATE (Gooroom distribute extensions through 'apt')
+    //    ""
+    //],
+                                                                                                                        // * values
+                                                                                                                        //   * "extension"              
+                                                                                                                        //   * "theme"
+                                                                                                                        //   * "user_script"                    // DO NOT ACTIVATE (for 'Google Apps Script')
+                                                                                                                        //   * "hosted_app"                     // DO NOT ACTIVATE (deprecated)
+                                                                                                                        //   * "legacy_packaged_app"            // DO NOT ACTIVATE (deprecated)
+                                                                                                                        //   * "platform_app"                   // DO NOT ACTIVATE (deprecated)
+    "ExtensionAllowedTypes": [
+        "extension",
+        "theme"
+    ],
+                                                                                                                        // * example
+                                                                                                                        //   "example.com",
+                                                                                                                        //   "https://ssl.server.com",
+                                                                                                                        //   "hosting.com/bad_path",
+                                                                                                                        //   "https://server:8080/path",
+                                                                                                                        //   ".exact.hostname.com",
+                                                                                                                        //   "file://*",
+                                                                                                                        //   "custom_scheme:*"
+    // -------------------------------------------------------------------------
+    // ----- Policies for HTTP authentication                              -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * values
+                                                                                                                        //   * 'basic'
+                                                                                                                        //   * 'digest'
+                                                                                                                        //   * 'ntlm'
+                                                                                                                        //   * 'negotiate'
+    "AuthSchemes": "basic,digest,ntlm,negotiate",                               // NO NEED TO CHANGE
+    "DisableAuthNegotiateCnameLookup": false,                                   // NO NEED TO CHANGE
+    "EnableAuthNegotiatePort": false,                                           // NO NEED TO CHANGE
+                                                                                                                        // * example
+                                                                                                                        //   "*example.com,foobar.com,*baz"
+    "AuthServerWhitelist": "",                                                                                          
+                                                                                                                        // * example
+                                                                                                                        //   "foobar.example.com"
+    "AuthNegotiateDelegateWhitelist": "",                                       // NO NEED TO CHANGE
+    //"GSSAPILibraryName": "libgssapi_krb5.so.2",                               // DO NOT ACTIVATE (default by Gooroom)
+    "AllowCrossOriginAuthPrompt": false,                                        // NO NEED TO CHANGE
+    "ComponentUpdatesEnabled": true,                                            // NO NEED TO CHANGE
+    // -------------------------------------------------------------------------
+    // ----- Native Messaging                                              -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * note : Native Messaging is substituion of NPAPI, 
+                                                                                                                        // * note : used for communication between extension and native application.
+                                                                                                                        // * values
+                                                                                                                        //   * can be "*"
+                                                                                                                        // * example
+                                                                                                                        //   "com.native.messaging.host.name1",
+                                                                                                                        //   "com.native.messaging.host.name2"
+    "NativeMessagingBlacklist": [                                               // DO NOT CHANGE (default by Gooroom)
+        "*"
+    ],
+    "NativeMessagingWhitelist": [                                               // DO NOT CHANGE (default by Gooroom)
+        ""
+    ],
+    "NativeMessagingUserLevelHosts": false,                                     // DO NOT CHANGE (default by Gooroom)
+    // -------------------------------------------------------------------------
+    // ----- Password manager                                              -----
+    // -------------------------------------------------------------------------
+    "PasswordManagerEnabled": false,                                                                                    
+    // -------------------------------------------------------------------------
+    // ----- etc                                                           -----
+    // -------------------------------------------------------------------------
+    "AllowDeletingBrowserHistory": false,                                                                               
+    "AllowFileSelectionDialogs": true,
+    "BlockThirdPartyCookies": false,                                                            
+    "ForceGoogleSafeSearch": false,                                            
+    "PrintingEnabled": true,
+    "SafeBrowsingEnabled": false,
+    "SavingBrowserHistoryDisabled": false,
+    "AllowOutdatedPlugins": false,                                              // NO NEED TO CHANGE
+    "AlwaysAuthorizePlugins": true,                                             // NO NEED TO CHANGE
+    "BackgroundModeEnabled": false,                                             // NO NEED TO CHANGE
+    "PrintPreviewUseSystemDefaultPrinter": true,                                // NO NEED TO CHANGE
+    "WebRtcUdpPortRange": "10000-11999",                                        // NO NEED TO CHANGE
+    "BrowserAddPersonEnabled": false,                                           // DO NOT CHANGE (default by Gooroom)
+    "BrowserGuestModeEnabled": false,                                           // DO NOT CHANGE (default by Gooroom)
+    "CertificateTransparencyEnforcementDisabledForUrls": [                      // DO NOT CHANGE (default by Gooroom)
+        ""
+    ],
+    "DeveloperToolsDisabled": false,                                            // DO NOT CHANGE (default by Gooroom)
+    "DisableSafeBrowsingProceedAnyway": false,                                  // DO NOT CHANGE (default by Gooroom)
+                                                                                                                        // * values
+                                                                                                                        //   * 0 : No special restrictions
+                                                                                                                        //   * 1 : Block dangerous downloads
+                                                                                                                        //   * 2 : Block potentially dangerous downloads
+                                                                                                                        //   * 3 : Block all downloads
+    "DownloadRestrictions": 2,                                                  // DO NOT CHANGE (default by Gooroom)
+                                                                                                                        // * example
+                                                                                                                        //   "example.com",
+                                                                                                                        //   ".example.com"
+    "EnableCommonNameFallbackForLocalAnchors": false,                           // DO NOT CHANGE (default by Gooroom)
+    "EnableSha1ForLocalAnchors": false,                                         // DO NOT CHANGE (default by Gooroom)
+                                                                                                                        // * values
+                                                                                                                        //   * 0 : Incognito mode available
+                                                                                                                        //   * 1 : Incognito mode disabled
+                                                                                                                        //   * 2 : Incognito mode forced
+    "IncognitoModeAvailability": 1,                                             // DO NOT CHANGE (default by Gooroom)
+    "SafeBrowsingExtendedReportingOptInAllowed": false,                         // DO NOT CHANGE (default by Gooroom)
+    "SSLErrorOverrideAllowed": false,                                           // DO NOT CHANGE (default by Gooroom)
+                                                                                                                        // * values
+                                                                                                                        //   * "tls1.2" = TLS 1.2
+                                                                                                                        //   * "tls1.3" = TLS 1.3
+    "SSLVersionMax": "tls1.2",                                                  // DO NOT CHANGE (default by Gooroom)
+    "TaskManagerEndProcessEnabled": false,                                      // DO NOT CHANGE (default by Gooroom)
+    //"DisableScreenshots": true,                                               // DO NOT ACTIVATE (not working)
+    //"RestrictSigninToPattern": "*@domain.com",                                // DO NOT ACTIVATE (for 'Chrome Sync')
+
+
+
+
+
+    // *********************************************************************************************************************************************************
+    // ***** Convenience options for GOOROOM                               *************************************************************************************
+    // *********************************************************************************************************************************************************
+    // -------------------------------------------------------------------------
+    // ----- Default HTML render for Google Chrome Frame                   -----
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ----- Default search provider                                       -----
+    // -------------------------------------------------------------------------
+    "DefaultSearchProviderEnabled": true,
+    "DefaultSearchProviderName": "정부24 검색",
+    "DefaultSearchProviderKeyword": "find",
+                                                                                                                        // * example
+                                                                                                                        //   '{google:baseURL}search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}'
+    "DefaultSearchProviderSearchURL": "https://www.gov.kr/search?srhQuery={searchTerms}",
+                                                                                                                        // * example
+                                                                                                                        //   '{google:baseURL}complete/search?output=chrome&q={searchTerms}'
+                                                                                                                        //   "https://search.my.company/suggest?q={searchTerms}"
+                                                                                                                        // * note : sample output for the case, "https://google.co.kr/complete/search?output=chrome&q=한국"
+    //"DefaultSearchProviderSuggestURL": "",                                    // DO NOT ACTIVATE (for 'Google Instance(removed)')
+                                                                                                                        // * example 
+                                                                                                                        //   '{google:baseURL}suggest?q={searchTerms}'
+                                                                                                                        //   "https://search.my.company/suggest?q={searchTerms}"
+    //"DefaultSearchProviderInstantURL": "",                                    // DO NOT ACTIVATE (for 'Google Instance(removed)')
+    "DefaultSearchProviderIconURL": "https://www.gov.kr/images/etc/favicon.png",
+                                                                                                                        // * values
+                                                                                                                        //   * "UTF-8"
+                                                                                                                        //   * "UTF-16"
+                                                                                                                        //   * "GB2312"
+                                                                                                                        //   * "ISO-8859-1"
+    "DefaultSearchProviderEncodings": [                                         // NO NEED TO CHANGE
+        "UTF-8",
+        "UTF-16",
+        "GB2312",
+        "ISO-8859-1"
+    ],
+    //"DefaultSearchProviderAlternateURLs": [                                   // DO NOT ACTIVATE (for 'Google Suggest')
+    //    "https://search.my.company/suggest#q={searchTerms}",
+    //    "https://search.my.company/suggest/search#q={searchTerms}"
+    //],
+                                                                                                                        // * example
+                                                                                                                        //   "espv"
+    //"DefaultSearchProviderSearchTermsReplacementKey": "",                     // DO NOT ACTIVATE (not working)
+                                                                                                                        // * example
+                                                                                                                        //   "https://search.my.company/searchbyimage/upload"
+    //"DefaultSearchProviderImageURL": "",                                      // DO NOT ACTIVATE (for 'Google Image Search')
+    "DefaultSearchProviderNewTabURL": "https://www.gov.kr",
+                                                                                                                        // * example
+                                                                                                                        //   "q={searchTerms},ie=utf-8,oe=utf-8"
+    //"DefaultSearchProviderSearchURLPostParams": "",                           // DO NOT ACTIVATE (for 'Google Search')
+                                                                                                                        // * example
+                                                                                                                        //   "q={searchTerms},ie=utf-8,oe=utf-8"
+    //"DefaultSearchProviderSuggestURLPostParams": "",                          // DO NOT ACTIVATE (for 'Google Suggest')
+                                                                                                                        // * example
+                                                                                                                        //   "q={searchTerms},ie=utf-8,oe=utf-8"
+    //"DefaultSearchProviderInstantURLPostParams": "",                          // DO NOT ACTIVATE (for 'Google Instance(removed)')
+                                                                                                                        // * example
+                                                                                                                        //   "content={imageThumbnail},url={imageURL},sbisrc={SearchSource}"
+    //"DefaultSearchProviderImageURLPostParams": "",                            // DO NOT ACTIVATE (for 'Google Image Search')
+    // -------------------------------------------------------------------------
+    // ----- Bookmark                                                      -----
+    // -------------------------------------------------------------------------
+    "ManagedBookmarks": [
+        {
+            "toplevel_name": "공공기관 웹 사이트"
+        },
+        {
+            "url": "www.gov.kr",
+            "name": "정부24"
+        },
+        {
+            "url": "www.minwon.go.kr",
+            "name": "민원24"
+        },
+        {
+            "url": "www.president.go.kr",
+            "name": "청와대"
+        },
+        {
+            "name": "18부 웹 사이트",
+            "children": [
+                { "url": "www.work.go.kr", "name": "고용노동부" },
+                { "url": "www.msip.go.kr", "name": "과학기술정보통신부" },
+                { "url": "www.moe.go.kr", "name": "교육부" },
+                { "url": "www.mnd.go.kr", "name": "국방부" },
+                { "url": "www.molit.go.kr", "name": "국토교통부" },
+                { "url": "www.mosf.go.kr", "name": "기획재정부" },
+                { "url": "www.mafra.go.kr", "name": "농림축산식품부" },
+                { "url": "www.mcst.go.kr", "name": "문화체육관광부" },
+                { "url": "www.moj.go.kr", "name": "법무부" },
+                { "url": "www.mohw.go.kr", "name": "보건복지부" },
+                { "url": "www.motie.go.kr", "name": "산업통상자원부" },
+                { "url": "www.mogef.go.kr", "name": "여성가족부" },
+                { "url": "www.mofa.go.kr", "name": "외교부" },
+                { "url": "www.mss.go.kr", "name": "중소기업벤처부" },
+                { "url": "www.unikorea.go.kr", "name": "통일부" },
+                { "url": "www.mof.go.kr", "name": "해양수산부" },
+                { "url": "www.mois.go.kr", "name": "행정안전부" },
+                { "url": "www.me.go.kr", "name": "환경부" }
+            ]
+        },
+        {
+            "name": "5처 웹 사이트",
+            "children": [
+                { "url": "www.mpva.go.kr", "name": "국가보훈처" },
+                { "url": "www.pss.go.kr", "name": "대통령경호처" },
+                { "url": "www.moleg.go.kr", "name": "법제처" },
+                { "url": "www.mfds.go.kr", "name": "식품의약품안전처" },
+                { "url": "www.mpm.go.kr", "name": "인사혁신처" }
+            ]
+        },
+        {
+            "name": "17청 웹 사이트",
+            "children": [
+                { "url": "www.police.go.kr", "name": "경찰청" },
+                { "url": "www.customs.go.kr", "name": "관세청" },
+                { "url": "www.nts.go.kr", "name": "국세청" },
+                { "url": "www.kma.go.kr", "name": "기상청" },
+                { "url": "www.rda.go.kr", "name": "농촌진흥청" },
+                { "url": "www.spo.go.kr", "name": "대검찰청" },
+                { "url": "www.cha.go.kr", "name": "문화재청" },
+                { "url": "www.dapa.go.kr", "name": "방위사업청" },
+                { "url": "www.mma.go.kr", "name": "병무청" },
+                { "url": "www.forest.go.kr", "name": "산림청" },
+                { "url": "www.saemangeum.go.kr", "name": "새만금개발청" },
+                { "url": "www.nfa.go.kr", "name": "소방청" },
+                { "url": "www.pps.go.kr", "name": "조달청" },
+                { "url": "www.kostat.go.kr", "name": "통계청" },
+                { "url": "www.kipo.go.kr", "name": "특허청" },
+                { "url": "www.kcg.go.kr", "name": "해양경찰청" },
+                { "url": "www.naacc.go.kr", "name": "행정중심복합도시건설청" }
+            ]
+        },
+        {
+            "name": "기타기관 웹 사이트",
+            "children": [
+                { "url": "www.bai.go.kr", "name": "감사원" },
+                { "url": "www.esdc.go.kr", "name": "경제사회발전노사정위원회" },
+                { "url": "www.ftc.go.kr", "name": "공정거래위원회" },
+                { "url": "www.humanrights.go.kr", "name": "국가인권위원회" },
+                { "url": "www.pmo.go.kr", "name": "국무조정실" },
+                { "url": "www.acrc.go.kr", "name": "국민권익위원회" },
+                { "url": "www.fsc.go.kr", "name": "금융위원회" },
+                { "url": "www.nuac.go.kr", "name": "민주평화통일자문회의" },
+                { "url": "www.kcc.go.kr", "name": "방송통신위원회" },
+                { "url": "www.nssc.go.kr", "name": "원자력안전위원회" },
+                { "url": "www.nec.go.kr", "name": "중앙선거관리위원회" }
+            ]
+        }
+    ],
+    // -------------------------------------------------------------------------
+    // ----- Home page                                                     -----
+    // -------------------------------------------------------------------------
+    "HomepageLocation": "https://www.gov.kr",
+    "HomepageIsNewTabPage": true,
+    // -------------------------------------------------------------------------
+    // ----- New Tab Page                                                  -----
+    // -------------------------------------------------------------------------
+    "NewTabPageLocation": "https://www.gov.kr",
+    // -------------------------------------------------------------------------
+    // ----- Startup pages                                                 -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * values
+                                                                                                                        //   * 5 : Open New Tab Page
+                                                                                                                        //   * 1 : Restore the last session
+                                                                                                                        //   * 4 : Open a list of URLs
+    "RestoreOnStartup": 5,
+                                                                                                                        // * example
+                                                                                                                        //   "https://example.com",
+                                                                                                                        //   "https://www.chromium.org"
+    "RestoreOnStartupURLs": [
+        ""
+    ],
+    // -------------------------------------------------------------------------
+    // ----- Proxy server                                                  -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * values
+                                                                                                                        //   * "direct"        : Never use a proxy
+                                                                                                                        //   * "auto_detect"   : Auto detect proxy settings
+                                                                                                                        //   * "pac_script"    : Use a .pac proxy script
+                                                                                                                        //   * "fixed_servers" : Use fixed proxy servers
+                                                                                                                        //   * "system"        : Use system proxy settings
+    "ProxyMode": "direct",                                                      // NO NEED TO CHANGE
+                                                                                                                        // * example
+                                                                                                                        //   "123.123.123.123:8080"
+    "ProxyServer": "",                                                          // NO NEED TO CHANGE
+                                                                                                                        // * example
+                                                                                                                        //   "https://internal.site/example.pac" 
+    "ProxyPacUrl": "",                                                          // NO NEED TO CHANGE
+                                                                                                                        // * example
+                                                                                                                        //   "https://www.example1.com,https://www.example2.com,https://internalsite/"
+    "ProxyBypassList": "",                                                      // NO NEED TO CHANGE
+    // -------------------------------------------------------------------------
+    // ----- etc                                                           -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * values
+                                                                                                                        //   * "kind": { "description": "Whether to limit the search of the matching printer to a specific set of printers.", "type": { "enum": [ "local", "cloud" ] } }, 
+                                                                                                                        //   * "idPattern": { "description": "Regular expression to match printer id.", "type": "string" }, 
+                                                                                                                        //   * "namePattern": { "description": "Regular expression to match printer display name.", "type": "string" }
+                                                                                                                        // * example
+                                                                                                                        //   "kind": "cloud",
+                                                                                                                        //   "idPattern": ".*public",
+                                                                                                                        //   "namePattern": ".*Color"
+    "DefaultPrinterSelection": {                                                // NO NEED TO CHANGE
+        "kind": "local"
+    },
+    "DisablePrintPreview": false,                                               // NO NEED TO CHANGE
+    "EditBookmarksEnabled": false,                                              // NO NEED TO CHANGE
+    "BookmarkBarEnabled": true,                                                 // NO NEED TO CHANGE
+    "ShowAppsShortcutInBookmarkBar": false,                                     // NO NEED TO CHANGE
+    "ShowHomeButton": true,                                                     // NO NEED TO CHANGE
+    
+    
+     
+    
+    
+    // *********************************************************************************************************************************************************
+    // *** Other options for GOOROOM                                       *************************************************************************************
+    // *********************************************************************************************************************************************************
+    // -------------------------------------------------------------------------
+    // ----- Accessibility settings (No available in GOOROOM)              -----
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ----- Allow Google Chrome Frame to handle the following content types ---
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ----- Configure Google Drive options (for 'Google Drive')           -----
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ----- Quick unlock policies (No available in GOOROOM)               -----
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ----- Remote Attestation (for 'Google Remote Desktop')              -----
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ----- Power management (No available in GOOROOM)                    -----
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // ----- Google Cast                                                   -----
+    // -------------------------------------------------------------------------
+    //"EnableMediaRouter": false,                                               // DO NOT ACTIVATE (for 'Google Cast')
+    //"ShowCastIconInToolbar": false,                                           // DO NOT ACTIVATE (for 'Google Cast')
+    // -------------------------------------------------------------------------
+    // ----- Locally managed users settings                                -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * note : First, You should login google chrome with your google account and then,
+                                                                                                                        // * note : You can create supervised users and control their access control via
+                                                                                                                        // * note : https://chrome.google.com/manage
+    "SupervisedUserCreationEnabled": false,                                     // DO NOT CHANGE (for 'Google Manage')
+    // -------------------------------------------------------------------------
+    // ----- Configure remote access options                               -----
+    // -------------------------------------------------------------------------
+                                                                                                                        // * example
+                                                                                                                        //   "my-awsome-domain.com",
+                                                                                                                        //   "my-auxiliary-domain.com"
+    //"RemoteAccessHostClientDomainList": [                                     // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    //    ""
+    //],
+                                                                                                                        // * example
+                                                                                                                        //   "my-awsome-domain.com",
+                                                                                                                        //   "my-auxiliary-domain.com"
+    //"RemoteAccessHostFirewallTraversal": false,                               // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    //"RemoteAccessHostDomainList": [                                           // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    //    ""
+    //],
+                                                                                                                        // * example
+                                                                                                                        //   "chromoting-host"
+    //"RemoteAccessHostTalkGadgetPrefix": "chromoting-host",                    // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    //"RemoteAccessHostRequireCurtain": false,                                  // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    //"RemoteAccessHostAllowClientPairing": false,                              // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    //"RemoteAccessHostAllowGnubbyAuth": true,                                  // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    //"RemoteAccessHostAllowRelayedConnection": false,                          // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+                                                                                                                        // * example
+                                                                                                                        //   "12400-12409"
+    //"RemoteAccessHostUdpPortRange": "",                                       // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    //"RemoteAccessHostMatchUsername": false,                                   // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+                                                                                                                        // * example
+                                                                                                                        //   "https://example.com/issue"
+    //"RemoteAccessHostTokenUrl": "",                                           // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+                                                                                                                        // * example
+                                                                                                                        //   "https://example.com/issue"
+    //"RemoteAccessHostTokenValidationUrl": "",                                 // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+                                                                                                                        // * example
+                                                                                                                        //   "Example Certificate Authority"
+    //"RemoteAccessHostTokenValidationCertificateIssuer": "",                   // DO NOT ACTIVATE (for 'Chrome Remote Desktop')
+    // -------------------------------------------------------------------------
+    // ----- etc                                                           -----
+    // -------------------------------------------------------------------------
+    "AllowDinosaurEasterEgg": false,                                            // NO NEED TO CHANGE
+    "AlternateErrorPagesEnabled": false,                                        // NO NEED TO CHANGE
+    "Disable3DAPIs": false,                                                     // NO NEED TO CHANGE
+    "DisablePluginFinder": true,                                                // NO NEED TO CHANGE
+    "FullscreenAllowed": true,                                                  // NO NEED TO CHANGE
+    "HardwareAccelerationModeEnabled": true,                                    // NO NEED TO CHANGE
+    "Http09OnNonDefaultPortsEnabled": false,                                    // NO NEED TO CHANGE
+    "QuicAllowed": true,                                                        // NO NEED TO CHANGE
+    "WPADQuickCheckEnabled": true,                                              // NO NEED TO CHANGE
+    "EnableOnlineRevocationChecks": false,                                      // NO NEED TO CHANGE
+                                                                                                                        // * values
+                                                                                                                        //   * 6 < x < 100
+    "MaxConnectionsPerProxy": 0,                                                // NO NEED TO CHANGE
+                                                                                                                        // * values
+                                                                                                                        //   * 1000 < x < 300000
+    "MaxInvalidationFetchDelay": 5000,                                          // NO NEED TO CHANGE
+    "PacHttpsUrlStrippingEnabled": false,                                       // NO NEED TO CHANGE
+    "RequireOnlineRevocationChecksForLocalAnchors": false,                      // NO NEED TO CHANGE
+    "DefaultBrowserSettingEnabled": false,                                      // DO NOT CHANGE (default by Gooroom)
+    "HideWebStoreIcon": true,                                                   // DO NOT CHANGE (default by Gooroom)
+    "MetricsReportingEnabled": false,                                           // DO NOT CHANGE (default by Gooroom)
+    "BrowserNetworkTimeQueriesEnabled": false,                                  // DO NOT CHANGE (default by Gooroom)
+    "BuiltInDnsClientEnabled": false,                                           // DO NOT CHANGE (default by Gooroom)
+                                                                                                                        // * values
+                                                                                                                        //   * 0 = Predict network actions on any network connection
+                                                                                                                        //   * 1 = Predict network actions on any network that is not cellular. (Deprecated in 50, removed in 52. After 52, if value 1 is set, it will be treated as 0 - predict network actions on any network connection.)
+                                                                                                                        //   * 2 = Do not predict network actions on any network connection
+    "NetworkPredictionOptions": 1,                                              // DO NOT CHANGE (default by Gooroom)
+    "ForceEphemeralProfiles": false,                                            // DO NOT CHANGE (default by Gooroom)
+    "ImportAutofillFormData": false,                                            // DO NOT CHANGE (default by Gooroom)
+    "ImportBookmarks": false,                                                   // DO NOT CHANGE (default by Gooroom)
+    "ImportHistory": false,                                                     // DO NOT CHANGE (default by Gooroom)
+    "ImportHomepage": false,                                                    // DO NOT CHANGE (default by Gooroom)
+    "ImportSavedPasswords": false,                                              // DO NOT CHANGE (default by Gooroom)
+    "ImportSearchEngine": false,                                                // DO NOT CHANGE (default by Gooroom)
+    "SuppressUnsupportedOSWarning": false,                                      // DO NOT CHANGE (Gooroom supports Gooroom browser)
+    "CloudPrintProxyEnabled": false,                                            // DO NOT CHANGE (for 'Google Cloud Print')
+    "CloudPrintSubmitEnabled": false,                                           // DO NOT CHANGE (for 'Google Cloud Print')
+    "AlwaysOpenPdfExternally": false,                                           // DO NOT CHANGE (Gooroom has no PDF viewer)
+    "SearchSuggestEnabled": false,                                              // DO NOT CHANGE (for 'Google Suggest')
+    "SpellCheckServiceEnabled": false,                                          // DO NOT CHANGE (for 'Google Translation')
+    "TranslateEnabled": false,                                                  // DO NOT CHANGE (for 'Google Translation')
+    "SyncDisabled": true,                                                       // DO NOT CHANGE (for 'Chrome Sync with Google Account')
+    "AutoFillEnabled": false,                                                   // DO NOT CHANGE (for 'Google Search')
+                                                                                                                        // * values
+                                                                                                                        //   * 0 : Do not enforce Restricted Mode on YouTube
+                                                                                                                        //   * 1 : Enforce at least Moderate Restricted Mode on YouTube
+                                                                                                                        //   * 2 : Enforce Strict Restricted Mode for YouTube
+    "ForceYouTubeRestrict": 0,                                                  // DO NOT CHANGE (for 'Youtube')
+    
+                                                                                                                        // * example
+                                                                                                                        //   "managedchrome.com,gmail.com"
+    "AllowedDomainsForApps": "",                                                // DO NOT CHANGE (for 'Google Apps')
+                                                                                                                        // * example
+                                                                                                                        //   "ExampleDeprecatedFeature_EffectiveUntil20080902" = Enable ExampleDeprecatedFeature API through 2008/09/02
+    //"EnableDeprecatedWebPlatformFeatures": [                                  // DO NOT ACTIVATE (default by Gooroom)
+    //    ""
+    //],
+    //"DiskCacheDir": "${user_home}/Chrome_cache",                              // DO NOT ACTIVATE (default by Gooroom)
+    "DiskCacheSize": 1                                             	        // DO NOT ACTIVATE (default by Gooroom)
+    //"DownloadDirectory": "/home/${user_name}/Downloads",                      // DO NOT ACTIVATE (default by Gooroom)
+                                                                                                                        // * values
+                                                                                                                        //   * 0 : default value
+    //"MediaCacheSize": 104857600,                                              // DO NOT ACTIVATE (default by Gooroom)
+}

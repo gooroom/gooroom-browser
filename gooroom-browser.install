@@ -1,0 +1,18 @@
+out/Release/gooroom-browser usr/lib/gooroom-browser
+out/Release/chrome-sandbox usr/lib/gooroom-browser
+
+out/Release/*.bin usr/lib/gooroom-browser
+out/Release/*.pak usr/lib/gooroom-browser
+out/Release/*.so usr/lib/gooroom-browser
+
+out/Release/resources/*.pak usr/lib/gooroom-browser/locales
+
+debian/gooroom-browser.xml usr/share/gnome-control-center/default-apps
+
+debian/gooroom-browser.desktop usr/share/applications
+debian/setups/calculator.crx usr/share/gooroom/browser/extensions
+debian/setups/note.crx usr/share/gooroom/browser/extensions
+debian/setups/oajnamicaljolbegbmcflmbndoapjked.json usr/share/gooroom/browser/extensions
+debian/setups/jfeafeooobhcblajimfjhpnndeokdbko.json usr/share/gooroom/browser/extensions
+debian/setups/gooroom-browser-setup.sh usr/lib/gooroom-browser
+debian/setups/mainpref.json usr/lib/gooroom-browser

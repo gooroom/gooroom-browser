@@ -1,0 +1,334 @@
+description: backwards compatibility for older versions of icu
+author: Michael Gilbert <mgilbert@debian.org>
+
+--- a/components/url_formatter/idn_spoof_checker.cc
++++ b/components/url_formatter/idn_spoof_checker.cc
+@@ -381,8 +381,8 @@ Skeletons IDNSpoofChecker::GetSkeletons(
+   if ((u04cf_pos = host.indexOf(0x4CF)) != -1) {
+     icu::UnicodeString host_alt(host);
+     size_t length = host_alt.length();
+-    char16_t* buffer = host_alt.getBuffer(-1);
+-    for (char16_t* uc = buffer + u04cf_pos; uc < buffer + length; ++uc) {
++    UChar* buffer = host_alt.getBuffer(-1);
++    for (UChar* uc = buffer + u04cf_pos; uc < buffer + length; ++uc) {
+       if (*uc == 0x4CF)
+         *uc = 0x6C;  // Lowercase L
+     }
+--- a/v8/src/objects/intl-objects.cc
++++ b/v8/src/objects/intl-objects.cc
+@@ -38,14 +38,6 @@
+ #include "unicode/ustring.h"
+ #include "unicode/uvernum.h"  // U_ICU_VERSION_MAJOR_NUM
+ 
+-#define XSTR(s) STR(s)
+-#define STR(s) #s
+-static_assert(
+-    V8_MINIMUM_ICU_VERSION <= U_ICU_VERSION_MAJOR_NUM,
+-    "v8 is required to build with ICU " XSTR(V8_MINIMUM_ICU_VERSION) " and up");
+-#undef STR
+-#undef XSTR
+-
+ namespace v8 {
+ namespace internal {
+ 
+@@ -408,9 +400,21 @@ icu::Locale Intl::CreateICULocale(const
+ 
+   // Convert BCP47 into ICU locale format.
+   UErrorCode status = U_ZERO_ERROR;
++  char icu_result[ULOC_FULLNAME_CAPACITY];
++  int parsed_length = 0;
+ 
+-  icu::Locale icu_locale = icu::Locale::forLanguageTag(bcp47_locale, status);
++  // bcp47_locale_str should be a canonicalized language tag, which
++  // means this shouldn't fail.
++  uloc_forLanguageTag(bcp47_locale.c_str(), icu_result, ULOC_FULLNAME_CAPACITY,
++                      &parsed_length, &status);
+   CHECK(U_SUCCESS(status));
++
++  // bcp47_locale is already checked for its structural validity
++  // so that it should be parsed completely.
++  size_t bcp47_length = bcp47_locale.length();
++  CHECK_EQ(bcp47_length, parsed_length);
++
++  icu::Locale icu_locale(icu_result);
+   if (icu_locale.isBogus()) {
+     FATAL("Failed to create ICU locale, are ICU data files missing?");
+   }
+@@ -518,7 +522,13 @@ std::set<std::string> Intl::BuildLocaleS
+ 
+ Maybe<std::string> Intl::ToLanguageTag(const icu::Locale& locale) {
+   UErrorCode status = U_ZERO_ERROR;
+-  std::string res = locale.toLanguageTag<std::string>(status);
++  char result[ULOC_FULLNAME_CAPACITY];
++  uloc_toLanguageTag(locale.getName(), result, ULOC_FULLNAME_CAPACITY, FALSE, &status);
++  if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
++    // This shouldn't happen, but lets not break the user.
++    return Nothing<std::string>();
++  }
++  std::string res(result);
+   if (U_FAILURE(status)) {
+     return Nothing<std::string>();
+   }
+@@ -766,26 +776,36 @@ Maybe<std::string> Intl::CanonicalizeLan
+   // handle long locale names better. See
+   // https://unicode-org.atlassian.net/browse/ICU-13417
+   UErrorCode error = U_ZERO_ERROR;
++  char icu_result[ULOC_FULLNAME_CAPACITY];
+   // uloc_forLanguageTag checks the structrual validity. If the input BCP47
+   // language tag is parsed all the way to the end, it indicates that the input
+   // is structurally valid. Due to a couple of bugs, we can't use it
+   // without Chromium patches or ICU 62 or earlier.
+-  icu::Locale icu_locale = icu::Locale::forLanguageTag(locale.c_str(), error);
+-  if (U_FAILURE(error) || icu_locale.isBogus()) {
++  int parsed_length;
++  uloc_forLanguageTag(locale.c_str(), icu_result, ULOC_FULLNAME_CAPACITY,
++                      &parsed_length, &error);
++  if (U_FAILURE(error) ||
++      static_cast<size_t>(parsed_length) < locale.length() ||
++      error == U_STRING_NOT_TERMINATED_WARNING) {
+     THROW_NEW_ERROR_RETURN_VALUE(
+         isolate,
+         NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),
+         Nothing<std::string>());
+   }
+-  Maybe<std::string> maybe_to_language_tag = Intl::ToLanguageTag(icu_locale);
+-  if (maybe_to_language_tag.IsNothing()) {
++
++  // Force strict BCP47 rules.
++  char result[ULOC_FULLNAME_CAPACITY];
++  int32_t result_len = uloc_toLanguageTag(icu_result, result,
++                                          ULOC_FULLNAME_CAPACITY, TRUE, &error);
++
++  if (U_FAILURE(error)) {
+     THROW_NEW_ERROR_RETURN_VALUE(
+         isolate,
+         NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),
+         Nothing<std::string>());
+   }
+ 
+-  return Intl::ToLanguageTag(icu_locale);
++  return Just(std::string(result, result_len));
+ }
+ 
+ Maybe<std::vector<std::string>> Intl::CanonicalizeLocaleList(
+--- a/v8/src/objects/js-locale.cc
++++ b/v8/src/objects/js-locale.cc
+@@ -20,7 +20,6 @@
+ #include "src/objects-inl.h"
+ #include "src/objects/intl-objects.h"
+ #include "src/objects/js-locale-inl.h"
+-#include "unicode/char16ptr.h"
+ #include "unicode/locid.h"
+ #include "unicode/uloc.h"
+ #include "unicode/unistr.h"
+@@ -30,6 +29,51 @@ namespace internal {
+ 
+ namespace {
+ 
++// Adapted from icu 6.3
++void
++getUnicodeKeywordValue(const icu::Locale& locale, StringPiece keywordName, ByteSink& sink, UErrorCode& status)
++{
++    if (keywordName.empty()) {
++        return;
++    }
++
++    const char* keyword_name = keywordName.data();
++    if (keyword_name[keywordName.length()-1] != '\0') {
++        return;
++    }
++
++    const char* legacy_key = uloc_toLegacyKey(keyword_name);
++    if (legacy_key == nullptr) {
++        status = U_ILLEGAL_ARGUMENT_ERROR;
++        return;
++    }
++
++    char legacy_value[ULOC_FULLNAME_CAPACITY];
++    uloc_getKeywordValue(locale.getName(), legacy_key, legacy_value, ULOC_FULLNAME_CAPACITY, &status);
++    if (U_FAILURE(status)) {
++        return;
++    }
++
++    const char* unicode_value = uloc_toUnicodeLocaleType(
++            keyword_name, legacy_value);
++    if (unicode_value == nullptr) {
++        status = U_ILLEGAL_ARGUMENT_ERROR;
++        return;
++    }
++
++    sink.Append(unicode_value, static_cast<int32_t>(strlen(unicode_value)));
++}
++
++// From icu 6.3
++template<typename StringClass> inline StringClass
++getUnicodeKeywordValue(const icu::Locale& locale, StringPiece keywordName, UErrorCode& status)
++{
++    StringClass result;
++    StringByteSink<StringClass> sink(&result);
++    getUnicodeKeywordValue(locale, keywordName, sink, status);
++    return result;
++}
++
+ // Helper function to check a locale is valid. It will return false if
+ // the length of the extension fields are incorrect. For example, en-u-a or
+ // en-u-co-b will return false.
+@@ -130,7 +174,7 @@ Handle<Object> UnicodeKeywordValue(Isola
+   icu::Locale* icu_locale = locale->icu_locale()->raw();
+   UErrorCode status = U_ZERO_ERROR;
+   std::string value =
+-      icu_locale->getUnicodeKeywordValue<std::string>(key, status);
++      getUnicodeKeywordValue<std::string>(*icu_locale, key, status);
+   if (status == U_ILLEGAL_ARGUMENT_ERROR || value == "") {
+     return isolate->factory()->undefined_value();
+   }
+@@ -202,9 +246,20 @@ Maybe<icu::Locale> ApplyOptionsToTag(Iso
+   // 2. If IsStructurallyValidLanguageTag(tag) is false, throw a RangeError
+   // exception.
+   UErrorCode status = U_ZERO_ERROR;
+-  icu::Locale icu_locale =
+-      icu::Locale::forLanguageTag({*bcp47_tag, bcp47_tag.length()}, status);
+-  if (U_FAILURE(status)) {
++  char icu_result[ULOC_FULLNAME_CAPACITY];
++  int parsed_length = 0;
++  int icu_length =
++      uloc_forLanguageTag(*bcp47_tag, icu_result, ULOC_FULLNAME_CAPACITY,
++                          &parsed_length, &status);
++  if (U_FAILURE(status) ||
++      parsed_length < static_cast<int>(bcp47_tag.length()) ||
++      status == U_STRING_NOT_TERMINATED_WARNING || icu_length == 0) {
++    THROW_NEW_ERROR_RETURN_VALUE(
++        isolate, NewRangeError(MessageTemplate::kLocaleBadParameters),
++        Nothing<icu::Locale>());
++  }
++  icu::Locale icu_locale(icu_result, FALSE);
++  if (icu_locale.isBogus()) {
+     THROW_NEW_ERROR_RETURN_VALUE(
+         isolate, NewRangeError(MessageTemplate::kLocaleBadParameters),
+         Nothing<icu::Locale>());
+@@ -359,34 +414,46 @@ MaybeHandle<JSLocale> JSLocale::Initiali
+ }
+ 
+ namespace {
+-Handle<String> MorphLocale(Isolate* isolate, String locale,
+-                           void (*morph_func)(icu::Locale*, UErrorCode*)) {
++Handle<String> MorphLocale(Isolate* isolate, String language_tag,
++                           int32_t (*morph_func)(const char*, char*, int32_t,
++                                                 UErrorCode*)) {
++  char localeBuffer[ULOC_FULLNAME_CAPACITY];
++  char morphBuffer[ULOC_FULLNAME_CAPACITY];
++
+   UErrorCode status = U_ZERO_ERROR;
+-  icu::Locale icu_locale =
+-      icu::Locale::forLanguageTag(locale.ToCString().get(), status);
+-  CHECK(U_SUCCESS(status));
+-  CHECK(!icu_locale.isBogus());
+-  (*morph_func)(&icu_locale, &status);
+-  CHECK(U_SUCCESS(status));
+-  CHECK(!icu_locale.isBogus());
+-  std::string locale_str = Intl::ToLanguageTag(icu_locale).FromJust();
++  // Convert from language id to locale.
++  int32_t parsed_length;
++  int32_t length =
++      uloc_forLanguageTag(language_tag->ToCString().get(), localeBuffer,
++                          ULOC_FULLNAME_CAPACITY, &parsed_length, &status);
++  CHECK(parsed_length == language_tag->length());
++  DCHECK(U_SUCCESS(status));
++  DCHECK_GT(length, 0);
++  DCHECK_NOT_NULL(morph_func);
++  // Add the likely subtags or Minimize the subtags on the locale id
++  length =
++      (*morph_func)(localeBuffer, morphBuffer, ULOC_FULLNAME_CAPACITY, &status);
++  DCHECK(U_SUCCESS(status));
++  DCHECK_GT(length, 0);
++  // Returns a well-formed language tag
++  length = uloc_toLanguageTag(morphBuffer, localeBuffer, ULOC_FULLNAME_CAPACITY,
++                              false, &status);
++  DCHECK(U_SUCCESS(status));
++  DCHECK_GT(length, 0);
++  std::string locale_str(localeBuffer, length);
++  std::replace(locale_str.begin(), locale_str.end(), '_', '-');
++
+   return isolate->factory()->NewStringFromAsciiChecked(locale_str.c_str());
+ }
+ 
+ }  // namespace
+ 
+ Handle<String> JSLocale::Maximize(Isolate* isolate, String locale) {
+-  return MorphLocale(isolate, locale,
+-                     [](icu::Locale* icu_locale, UErrorCode* status) {
+-                       icu_locale->addLikelySubtags(*status);
+-                     });
++  return MorphLocale(isolate, locale, uloc_addLikelySubtags);
+ }
+ 
+ Handle<String> JSLocale::Minimize(Isolate* isolate, String locale) {
+-  return MorphLocale(isolate, locale,
+-                     [](icu::Locale* icu_locale, UErrorCode* status) {
+-                       icu_locale->minimizeSubtags(*status);
+-                     });
++  return MorphLocale(isolate, locale, uloc_minimizeSubtags);
+ }
+ 
+ Handle<Object> JSLocale::Language(Isolate* isolate, Handle<JSLocale> locale) {
+@@ -438,7 +505,7 @@ Handle<Object> JSLocale::Numeric(Isolate
+   icu::Locale* icu_locale = locale->icu_locale()->raw();
+   UErrorCode status = U_ZERO_ERROR;
+   std::string numeric =
+-      icu_locale->getUnicodeKeywordValue<std::string>("kn", status);
++      getUnicodeKeywordValue<std::string>(*icu_locale, "kn", status);
+   return (numeric == "true") ? factory->true_value() : factory->false_value();
+ }
+ 
+--- a/v8/src/objects/js-list-format.cc
++++ b/v8/src/objects/js-list-format.cc
+@@ -284,7 +284,6 @@ MaybeHandle<JSArray> GenerateListFormatP
+   Handle<String> substring;
+   for (const icu::FieldPosition pos : positions) {
+     CHECK(pos.getBeginIndex() >= prev_item_end_index);
+-    CHECK(pos.getField() == ULISTFMT_ELEMENT_FIELD);
+     if (pos.getBeginIndex() != prev_item_end_index) {
+       ASSIGN_RETURN_ON_EXCEPTION(
+           isolate, substring,
+@@ -322,10 +321,7 @@ std::vector<icu::FieldPosition> Generate
+   std::vector<icu::FieldPosition> positions;
+   icu::FieldPosition pos;
+   while (iter.next(pos)) {
+-    // Only take the information of the ULISTFMT_ELEMENT_FIELD field.
+-    if (pos.getField() == ULISTFMT_ELEMENT_FIELD) {
+       positions.push_back(pos);
+-    }
+   }
+   // Because the format may reoder the items, ICU FieldPositionIterator
+   // keep the order for FieldPosition based on the order of the input items.
+@@ -441,7 +437,7 @@ MaybeHandle<JSArray> JSListFormat::Forma
+   icu::UnicodeString formatted;
+   icu::FieldPositionIterator iter;
+   formatter->format(array.data(), static_cast<int32_t>(array.size()), formatted,
+-                    &iter, status);
++                    status);
+   DCHECK(U_SUCCESS(status));
+ 
+   std::vector<icu::FieldPosition> field_positions = GenerateFieldPosition(iter);
+--- a/v8/src/regexp/regexp-parser.cc
++++ b/v8/src/regexp/regexp-parser.cc
+@@ -1293,11 +1293,9 @@ bool IsSupportedBinaryProperty(UProperty
+     case UCHAR_DEPRECATED:
+     case UCHAR_DIACRITIC:
+     case UCHAR_EMOJI:
+-    case UCHAR_EMOJI_COMPONENT:
+     case UCHAR_EMOJI_MODIFIER_BASE:
+     case UCHAR_EMOJI_MODIFIER:
+     case UCHAR_EMOJI_PRESENTATION:
+-    case UCHAR_EXTENDED_PICTOGRAPHIC:
+     case UCHAR_EXTENDER:
+     case UCHAR_GRAPHEME_BASE:
+     case UCHAR_GRAPHEME_EXTEND:
+@@ -1316,7 +1314,6 @@ bool IsSupportedBinaryProperty(UProperty
+     case UCHAR_PATTERN_WHITE_SPACE:
+     case UCHAR_QUOTATION_MARK:
+     case UCHAR_RADICAL:
+-    case UCHAR_REGIONAL_INDICATOR:
+     case UCHAR_S_TERM:
+     case UCHAR_SOFT_DOTTED:
+     case UCHAR_TERMINAL_PUNCTUATION:

@@ -1,0 +1,50 @@
+From ccdbb3b00c7b1539e912c4083ad9a7339b94e8c5 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 18:14:48 +0900
+Subject: [PATCH 38/63] change default path of policy including content
+ settings
+
+---
+ chrome/common/chrome_paths.cc | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
+index 905b246ec..8cadb2346 100644
+--- a/chrome/common/chrome_paths.cc
++++ b/chrome/common/chrome_paths.cc
+@@ -4,6 +4,9 @@
+ 
+ #include "chrome/common/chrome_paths.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/base/gooroom_base.h"
++#endif
+ #include "base/files/file_util.h"
+ #include "base/logging.h"
+ #include "base/native_library.h"
+@@ -472,8 +475,22 @@ bool PathProvider(int key, base::FilePath* result) {
+ #if defined(GOOGLE_CHROME_BUILD)
+       cur = base::FilePath(FILE_PATH_LITERAL("/etc/opt/chrome/policies"));
+ #else
++#if defined(GOOROOM_BUILD)
++      base::FilePath home_path_dir;
++      base::PathService::Get(base::DIR_HOME, &home_path_dir);
++      std::string assignedDir =
++          home_path_dir.AsUTF8Unsafe() + "/.config/gooroom/trust";
++
++      if (base::GetGooroomBase()->isTrustMode())
++        cur = base::FilePath(
++            FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/trust"));
++      else
++        cur = base::FilePath(
++            FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/untrust"));
++#else
+       cur = base::FilePath(FILE_PATH_LITERAL("/etc/chromium/policies"));
+ #endif
++#endif
+       break;
+     }
+ #endif
+-- 
+2.11.0
+

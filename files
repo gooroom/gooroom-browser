@@ -1,0 +1,4 @@
+gooroom-browser-dbgsym_2.2.0+grm1u1_amd64.deb debug extra
+gooroom-browser-l10n_2.2.0+grm1u1_all.deb localization optional
+gooroom-browser_2.2.0+grm1u1_amd64.buildinfo web optional
+gooroom-browser_2.2.0+grm1u1_amd64.deb web optional

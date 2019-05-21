@@ -1,0 +1,604 @@
+From 22d13c78e4856b1c21c28061bc54f19ac76ab91a Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 21:02:53 +0900
+Subject: [PATCH 45/63] Add verifySign module. Add GRMCODE on syslog.
+
+---
+ base/syslog_logging.cc                             |   2 +-
+ build/config/linux/gtk3/BUILD.gn                   |  44 ++++
+ .../policy/core/common/config_dir_policy_loader.cc |   9 +
+ gooroom/BUILD.gn                                   |  17 ++
+ gooroom/app/gooroom_exe_main_aura.cc               |  95 +++++++-
+ gooroom/app/verify_signature.cc                    | 259 +++++++++++++++++++++
+ gooroom/app/verify_signature.h                     |  30 +++
+ gooroom/browser/gooroom_url_filter_impl.cc         |   6 +-
+ 8 files changed, 457 insertions(+), 5 deletions(-)
+ create mode 100644 build/config/linux/gtk3/BUILD.gn
+ create mode 100644 gooroom/app/verify_signature.cc
+ create mode 100644 gooroom/app/verify_signature.h
+
+diff --git a/base/syslog_logging.cc b/base/syslog_logging.cc
+index 2c44cd5b3..f2333eada 100644
+--- a/base/syslog_logging.cc
++++ b/base/syslog_logging.cc
+@@ -95,7 +95,7 @@ EventLogMessage::~EventLogMessage() {
+     stream() << " !!NOT ADDED TO EVENTLOG!!";
+   }
+ #elif defined(OS_LINUX)
+-  const char kEventSource[] = "chrome";
++  const char kEventSource[] = "gooroom-browser";
+   openlog(kEventSource, LOG_NOWAIT | LOG_PID, LOG_USER);
+   // We can't use the defined names for the logging severity from syslog.h
+   // because they collide with the names of our own severity levels. Therefore
+diff --git a/build/config/linux/gtk3/BUILD.gn b/build/config/linux/gtk3/BUILD.gn
+new file mode 100644
+index 000000000..1e2285aa2
+--- /dev/null
++++ b/build/config/linux/gtk3/BUILD.gn
+@@ -0,0 +1,44 @@
++# Copyright 2015 The Chromium Authors. All rights reserved.
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++
++import("//build/config/linux/pkg_config.gni")
++
++assert(is_linux, "This file should only be referenced on Linux")
++
++# Depend on //build/config/linux/gtk3 to use GTKv3. Depend on
++# //build/config/linux/gtk to get GTK 2 or 3 depending on the build flags.
++#
++# GN doesn't check visibility for configs so we give this an obviously internal
++# name to discourage random targets from accidentally depending on this and
++# bypassing the GTK target's visibility.
++pkg_config("gtk3_internal_config") {
++  # Gtk requires gmodule, but it does not list it as a dependency in some
++  # misconfigured systems.
++  packages = [
++    "gmodule-2.0",
++    "gtk+-3.0",
++    "gthread-2.0",
++  ]
++}
++
++# Basically no parts of Chrome should depend on GTK. To prevent accidents, the
++# parts that explicitly need GTK3 are whitelisted on this target.
++group("gtk3") {
++  visibility = [
++    "//build/config/linux/gtk",
++    "//chrome/browser/ui/libgtkui:*",
++    "//gooroom:gooroom_initial",
++  ]
++  public_configs = [ ":gtk3_internal_config" ]
++}
++
++# Depend on "gtkprint3" to get this.
++pkg_config("gtkprint3_internal_config") {
++  packages = [ "gtk+-unix-print-3.0" ]
++}
++
++group("gtkprint3") {
++  visibility = [ "//chrome/browser/ui/libgtkui:libgtk3ui" ]
++  public_configs = [ ":gtkprint3_internal_config" ]
++}
+diff --git a/components/policy/core/common/config_dir_policy_loader.cc b/components/policy/core/common/config_dir_policy_loader.cc
+index 6a81e761b..b5b86fac2 100644
+--- a/components/policy/core/common/config_dir_policy_loader.cc
++++ b/components/policy/core/common/config_dir_policy_loader.cc
+@@ -18,6 +18,7 @@
+ #include "base/json/json_reader.h"
+ #include "base/logging.h"
+ #include "base/stl_util.h"
++#include "base/syslog_logging.h"
+ #include "components/policy/core/common/policy_bundle.h"
+ #include "components/policy/core/common/policy_load_status.h"
+ #include "components/policy/core/common/policy_types.h"
+@@ -134,7 +135,15 @@ void ConfigDirPolicyLoader::LoadFromPath(const base::FilePath& path,
+   PolicyLoadStatusUmaReporter status;
+   if (files.empty()) {
+     status.Add(POLICY_LOAD_STATUS_NO_POLICY);
++    if(path.AsUTF8Unsafe().find("managed")!=std::string::npos)
++      SYSLOG(INFO) << "Not-Exist-Policy GRMCODE=050004";
+     return;
++  } else {
++    if (path.AsUTF8Unsafe().find("managed")!=std::string::npos) {
++      char buff[100] = {0,};
++      snprintf(buff, sizeof(buff), "POLICY DIR=$(%s)", path.AsUTF8Unsafe().c_str());
++      SYSLOG(INFO) << buff << " GRMCODE=050005";
++    }
+   }
+ 
+   // Start with an empty dictionary and merge the files' contents.
+diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
+index f92f188c5..d5529b63a 100644
+--- a/gooroom/BUILD.gn
++++ b/gooroom/BUILD.gn
+@@ -20,6 +20,7 @@ import("//media/media_options.gni")
+ import("//third_party/widevine/cdm/widevine.gni")
+ import("//tools/resources/generate_resource_whitelist.gni")
+ import("//v8/gni/v8.gni")
++import("//build/config/linux/gtk/gtk.gni")
+ 
+ if (is_android) {
+   import("//build/config/android/rules.gni")
+@@ -135,6 +136,14 @@ if (!is_android && !is_mac) {
+       data_deps = []
+ 
+       if (is_linux) {
++
++        if (host_cpu != "arm") {
++          #include_dirs = [ "/usr/include/gooroom" ]
++          libs = [ "/usr/lib/x86_64-linux-gnu/libgrmpycaller.so"]
++          libs += [ "/usr/lib/x86_64-linux-gnu/libcrypto.so.1.1" ]
++        } else {
++          libs = [ "/usr/lib/arm-linux-gnueabihf/libcrypto.so.1.1" ]
++        }
+         sources += [
+           #"app/chrome_dll_resource.h",
+           #"app/chrome_main.cc",
+@@ -150,6 +159,8 @@ if (!is_android && !is_mac) {
+           "app/gooroom_main.cc",
+           "app/gooroom_main_delegate.h",
+           "app/gooroom_main_delegate.cc",
++          "app/verify_signature.h",
++          "app/verify_signature.cc",
+         ]
+ 
+         deps += [
+@@ -165,6 +176,8 @@ if (!is_android && !is_mac) {
+           "//content/public/app:both",
+           "//content/public/common:service_names",
+ 
++          "//chrome/browser/ui/libgtkui",
++
+           # For headless mode.
+           "//headless:headless_shell_lib",
+           "//services/service_manager/embedder",
+@@ -210,6 +223,10 @@ if (!is_android && !is_mac) {
+       #public_deps += [ "packed_resources" ]
+       public_deps += [ "//chrome:packed_resources" ]
+ 
++      deps += [
++        "//build/config/linux/gtk3",
++      ]
++
+       # Only ChromeOS has precompiled Flash that needs to get copied to the output
+       # directory. On other platforms, Flash is either component-updated only or
+       # not supported at all.
+diff --git a/gooroom/app/gooroom_exe_main_aura.cc b/gooroom/app/gooroom_exe_main_aura.cc
+index 50053010c..0b06f47fd 100644
+--- a/gooroom/app/gooroom_exe_main_aura.cc
++++ b/gooroom/app/gooroom_exe_main_aura.cc
+@@ -4,8 +4,11 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <gtk/gtk.h>
++#include <fstream>
+ 
+ #include "build/build_config.h"
++#include "verify_signature.h"
+ #include "base/syslog_logging.h"
+ 
+ // The entry point for all invocations of Chromium, browser and renderer. On
+@@ -13,10 +16,98 @@
+ // order to make it easy to update the app from GoogleUpdate. We don't need
+ // that extra layer with on linux.
+ 
++using std::string;
++
+ extern "C" {
+ int GooroomMain(int argc, const char** argv);
+ }
+ 
+-int main(int argc, const char** argv) {
+-  return GooroomMain(argc, argv);
++bool is_file_exist(const char *fileName)
++{
++    std::ifstream infile(fileName);
++    return infile.good();
++}
++
++// verify a sing is valid
++bool verifySign(int argc, const char** argv) {
++  int ret_code;
++  int i;
++  ret_code = is_onlineuser();
++  if (ret_code == LOCAL_USER) {
++    char buff[100] = {0,};
++    snprintf(buff, sizeof(buff), "SIGN verified ret_code=$(%d)", ret_code);
++    SYSLOG(INFO) << buff << " GRMCODE=050001";
++    SYSLOG(INFO) << "SIGN verified ok GRMCODE=050002";
++    return true;
++  }
++  bool validSign = true;
++  string* verifySign = new string[5] { "/usr/share/gooroom/browser/policies/mainpref.json",
++                                       "/usr/share/gooroom/browser/policies/trust/managed/policy.json",
++                                       "/usr/share/gooroom/browser/policies/trust/managed/ui-policy.json",
++                                       "/usr/share/gooroom/browser/policies/untrust/managed/policy.json",
++                                       "/usr/share/gooroom/browser/policies/untrust/managed/ui-policy.json" };
++  for(i=0;i<5;i++){
++    if (is_file_exist(verifySign[i].c_str())){
++      ret_code = verify_signature(verifySign[i].c_str());
++      char buff[100] = {0,};
++      snprintf(buff, sizeof(buff), "SIGN verified ret_code=$(%d)", ret_code);
++      SYSLOG(INFO) << buff << " GRMCODE=050001";
++    }
++    else
++      continue;
++
++    validSign = ret_code == 0 || ret_code == 1;
++    if(validSign == 0)
++      break;
++  }
++
++  if(validSign)
++    SYSLOG(INFO) << "SIGN verified ok GRMCODE=050002";
++  else
++    SYSLOG(INFO) << "SIGN verified error GRMCODE=050003";
++  return validSign;
++}
++
++void noVerifySignAlarm(int argc, char** argv) {
++    GtkWidget *window;
++    GtkWidget *label;
++
++    gtk_init(&argc, &argv);
++
++    /* Create the main, top level window */
++    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
++
++    /* Give it the title */
++    gtk_window_set_title(GTK_WINDOW(window), "Info Bars");
++    gtk_window_set_default_size(GTK_WINDOW(window), 230, 50);
++
++    /*
++    ** Map the destroy signal of the window to gtk_main_quit;
++    ** When the window is about to be destroyed, we get a notification and
++    ** stop the main GTK+ loop by returning 0
++    */
++    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
++
++    label = gtk_label_new("Gooroom-Browser : No sign verify. Check gooroom-agent service.");
++
++    /* Plot the label onto the main window */
++    gtk_container_add(GTK_CONTAINER(window), label);
++
++    /* Make sure that everything, window and label, are visible */
++    gtk_widget_show_all(window);
++
++    /*
++    ** Start the main loop, and do nothing (block) until
++    ** the application is closed
++    */
++    gtk_main();
++}
++
++int main(int argc, char** argv) {
++
++  bool validSign = verifySign(argc,(const char**) argv);
++  if ( validSign ) return GooroomMain(argc, (const char**) argv);
++  else
++    noVerifySignAlarm(argc, argv);
++  return 0;
+ }
+diff --git a/gooroom/app/verify_signature.cc b/gooroom/app/verify_signature.cc
+new file mode 100644
+index 000000000..a848ecacc
+--- /dev/null
++++ b/gooroom/app/verify_signature.cc
+@@ -0,0 +1,259 @@
++//-----------------------------------------------------------------------
++#include <openssl/aes.h>
++#include <openssl/evp.h>
++#include <openssl/rsa.h>
++#include <openssl/pem.h>
++#include <openssl/ssl.h>
++#include <openssl/bio.h>
++#include <openssl/err.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <string.h>
++#include <unistd.h>
++#include <stdio.h>
++#include <fcntl.h>
++#include <utmp.h>
++#include <pwd.h>
++
++#include "verify_signature.h"
++
++//-----------------------------------------------------------------------
++const char *g_cert_path = "/etc/gooroom/agent/server_certificate.crt";
++const char *g_signature_path = "/var/tmp/gooroom-agent-service/";
++
++//-----------------------------------------------------------------------
++static int get_loginid(char *loginid, int idlen)
++{
++    if (!loginid) {
++        return LOGINID_PARAMETER_NULL;
++    }
++
++    struct utmp w;
++    int fd = open("/var/run/utmp", O_RDONLY); 
++
++    if(fd < 0) { 
++        return LOGINID_FAILED_OPEN_UTMP;
++    }
++
++    while (read(fd, &w, sizeof(w)) > 0) {
++        if (w.ut_type == 7 && !strcmp(w.ut_id, ":0")) {
++            snprintf(loginid, idlen, "%s", w.ut_user);
++            close(fd);
++            return LOGINID_SUCCESS;
++        }
++    }
++
++    close(fd);
++    return LOGINID_NOT_LOGIN;
++}
++
++//-----------------------------------------------------------------------
++int is_onlineuser()
++{
++    char loginid[64] = { 0, };
++    int ret_code = get_loginid(loginid, sizeof(loginid));
++    if (ret_code < 0) {
++        return ret_code;
++    }
++
++    int online_in_passwd = 0;
++    struct passwd *pd;
++    while ((pd = getpwent())) {
++        if (!strcmp(pd->pw_name, loginid) && strstr(pd->pw_gecos, "gooroom-online-account")) {
++            online_in_passwd = 1;
++            break;
++        }
++    }
++    if (!online_in_passwd) return LOCAL_USER;
++
++    char grmuser_path[128] = { 0, };
++    snprintf(grmuser_path, sizeof(grmuser_path), "/var/run/user/%d/gooroom/.grm-user", pd->pw_uid);
++    if (access(grmuser_path, F_OK)) return LOCAL_USER;
++
++    return ONLINE_USER;
++}
++
++//-----------------------------------------------------------------------
++static void decode_base64(
++    char *text, unsigned char **decoded_text, size_t *decoded_text_len)
++{
++    //calc text's length to decode
++    size_t text_len = strlen(text);
++    size_t padding = 0;
++
++    if (text[text_len-1] == '=' && text[text_len-2] == '=')
++        padding = 2;
++    else if (text[text_len-1] == '=')
++        padding = 1;
++
++    int decoding_text_len = (text_len*3)/4 - padding;
++
++    //decode
++    *decoded_text = (unsigned char*)calloc(1, decoding_text_len + 1);
++    BIO *bio = BIO_new_mem_buf(text, -1);
++    BIO *b64 = BIO_new(BIO_f_base64());
++    bio = BIO_push(b64, bio);
++    *decoded_text_len = BIO_read(bio, *decoded_text, strlen(text));
++
++    BIO_free_all(bio);
++}
++
++//-----------------------------------------------------------------------
++static EVP_PKEY* get_pubkey_from_cert(const char *cert_path) 
++{
++    OpenSSL_add_all_algorithms();
++    ERR_load_BIO_strings();
++    ERR_load_crypto_strings();
++
++    BIO *certbio = BIO_new(BIO_s_file());
++    BIO_read_filename(certbio, cert_path);
++
++    EVP_PKEY *pkey = NULL;
++
++    X509 *cert = PEM_read_bio_X509(certbio, NULL, 0, NULL);
++    if (!cert) goto ERR_0;
++
++    pkey = X509_get_pubkey(cert);
++    if (!pkey)  goto ERR_1;
++
++ERR_1:
++    X509_free(cert);
++ERR_0:
++    BIO_free_all(certbio);
++
++    return pkey;
++}
++
++//-----------------------------------------------------------------------
++static int _verify_signature_deprecated(
++    const char *cert_path, const char *data, char *signature) 
++{
++    //make rsa public key
++    EVP_PKEY *evp_key = get_pubkey_from_cert(cert_path);
++    if (!evp_key) return READ_PUBKEY_FROM_CERT_ERROR;
++
++    //decode signature from base64
++    unsigned char *decoded_signature;
++    size_t decoded_signature_len;
++    decode_base64(signature, &decoded_signature, &decoded_signature_len);
++
++    //verify
++    EVP_MD_CTX *evp_ctx = EVP_MD_CTX_create();
++
++    int ret_code = VERIFY_SUCCESS;
++    if (EVP_DigestVerifyInit(evp_ctx, NULL, EVP_sha256(),NULL, evp_key)<=0) {
++        ret_code = DIGEST_VERIFY_INIT_ERROR;
++        goto CLEANUP;
++    }
++    if (EVP_DigestVerifyUpdate(evp_ctx, data, strlen(data)) <= 0) {
++        ret_code = DIGEST_VERIFY_UPDATE_ERROR;
++        goto CLEANUP;
++    }
++    if (EVP_DigestVerifyFinal(evp_ctx, decoded_signature, decoded_signature_len) != 1) {
++        ret_code = DIGEST_VERIFY_FINAL_ERROR;
++        goto CLEANUP;
++    }
++
++CLEANUP:
++    EVP_MD_CTX_cleanup(evp_ctx);
++    free(decoded_signature);
++    EVP_PKEY_free(evp_key);
++
++    return ret_code;
++}
++
++//-----------------------------------------------------------------------
++static int read_filesize(FILE *fp)
++{
++    struct stat file_stat;
++    fstat(fileno(fp), &file_stat);
++    return file_stat.st_size;
++}
++
++//-----------------------------------------------------------------------
++static const char* split_filename(const char *path)
++{
++    int len = strlen(path);
++    int i;
++    for (i=len-1; i >= 0; i--) { 
++        if (path[i] == '/') break;
++    }
++    return path+i+1;
++}
++   
++//-----------------------------------------------------------------------
++static void replace_slash_dot(char *path)
++{
++	int len = strlen(path);
++	int i;
++	for (i=0; i < len; i++) {
++		if (path[i] == '/') path[i] = '.';
++	}
++}
++
++//-----------------------------------------------------------------------
++#define TRIVIAL_LEN 4096
++int verify_signature_deprecated(const char *file_path)
++{
++    //read file
++    FILE *fp = fopen(file_path, "r");
++    if (!fp) {
++        return FILE_OPEN_ERROR;
++    }
++    int file_size = read_filesize(fp);
++    char *text = (char *)malloc(file_size+1);
++    fread(text, 1, file_size, fp);
++    text[file_size] = 0;
++    fclose(fp);
++
++	//create dirname of signature
++	int sig_dir_len = strlen(file_path)+1;
++	char *sig_dir = (char *)calloc(1, sig_dir_len);
++	snprintf(sig_dir, sig_dir_len, "%s", file_path);
++	replace_slash_dot(sig_dir);
++	
++    //read signature
++    char signature_name[TRIVIAL_LEN] = { 0, };
++    const char *fn = split_filename(file_path);
++    snprintf(signature_name, sizeof(signature_name), 
++        "%s%s/%s+signature", g_signature_path, sig_dir, fn);
++    fp = fopen(signature_name, "r");
++    if (!fp) {
++        free(text);
++        free(sig_dir);
++        return FILE_OPEN_ERROR;
++    }
++    char signature[TRIVIAL_LEN] = { 0, };
++    fread(signature, 1, sizeof(signature), fp);
++    fclose(fp);
++
++    //do
++    int ret_code = _verify_signature_deprecated(g_cert_path, text, signature);
++    free(text);
++    free(sig_dir);
++    return ret_code; 
++}
++
++#if DEBUG
++//-----------------------------------------------------------------------
++//sudo apt install libssl-dev
++//gcc -g -DDEBUG -o verify_signature verify_signature.c -lcrypto -lssl
++
++//-----------------------------------------------------------------------
++int main()
++{
++    int ret_code = verify_signature(
++        "/etc/apt/sources.list.d/official-package-repositories.list");
++
++    if (ret_code == VERIFY_SUCCESS) {
++        printf("VERIFY SUCCESS\n");
++    }
++    else {
++        printf("VERIFY FAILURE\n");
++    }
++
++    printf("ret_code=%d\n", ret_code);
++    return 0;
++}
++#endif //DEBUG
++
+diff --git a/gooroom/app/verify_signature.h b/gooroom/app/verify_signature.h
+new file mode 100644
+index 000000000..4bef22d21
+--- /dev/null
++++ b/gooroom/app/verify_signature.h
+@@ -0,0 +1,30 @@
++#ifndef VERIFY_SIGNATURE_H
++#define VERIFY_SIGNATURE_H
++
++#define LOGINID_SUCCESS                 0
++
++#define LOCAL_USER                      0
++#define ONLINE_USER                     1
++
++#define VERIFY_NO_NEED                  1
++#define VERIFY_SUCCESS                  0
++
++#define DIGEST_VERIFY_FINAL_ERROR       -1
++
++#define DIGEST_VERIFY_UPDATE_ERROR      -2
++#define DIGEST_VERIFY_INIT_ERROR        -3
++#define READ_PUBKEY_FROM_CERT_ERROR     -4
++#define FILE_OPEN_ERROR                 -5
++#define LOGINID_NOT_LOGIN               -6
++#define LOGINID_FAILED_OPEN_UTMP        -7
++#define LOGINID_PARAMETER_NULL          -8
++
++#ifdef __cplusplus
++extern "C" int is_onlineuser();
++extern "C" int verify_signature(const char *file_path);
++#else
++int is_onlineuser();
++int verify_signature(const char *file_path);
++#endif //__cplusplus
++
++#endif //VERIFY_SIGNATURE_H
+diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
+index 6f132f84b..348a9ff1e 100644
+--- a/gooroom/browser/gooroom_url_filter_impl.cc
++++ b/gooroom/browser/gooroom_url_filter_impl.cc
+@@ -16,8 +16,10 @@ bool GooroomUrlFilterImpl::isTrustUrl(std::string url) {
+       url_matcher_.MatchURL(GURL(url));
+   bool trusted = !matching_ids.empty();
+   GURL url_(url);
+-  SYSLOG(INFO) << "GOOROOM Trust mode = " << trusted << " by " << url_.scheme()
+-               << "://" << url_.host();
++
++  char buff[100] = {0,};
++  snprintf(buff, sizeof(buff), "GOOROOM Trust mode = $(%d) by $(%s://%s)", trusted, url_.scheme().c_str(), url_.host().c_str());
++  SYSLOG(INFO) << buff << " GRMCODE=050006";
+   return trusted;
+ }
+ 
+-- 
+2.11.0
+

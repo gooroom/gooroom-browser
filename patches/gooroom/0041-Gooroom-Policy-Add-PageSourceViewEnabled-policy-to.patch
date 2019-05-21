@@ -1,0 +1,290 @@
+From 92b55dc217ad7f1453c7c4ecfa5848d474dd2d11 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Tue, 14 May 2019 02:52:19 +0900
+Subject: [PATCH 41/63] [Gooroom-Policy] Add PageSourceViewEnabled policy to 
+ control  page-source-view
+
+---
+ .../configuration_policy_handler_list_factory.cc   | 13 ++++++-
+ chrome/common/pref_names.cc                        |  4 ++
+ chrome/common/pref_names.h                         |  3 ++
+ components/policy/core/browser/BUILD.gn            |  5 ++-
+ .../core/browser/configuration_policy_handler.cc   | 44 ++++++++++++++++++++++
+ .../core/browser/configuration_policy_handler.h    | 25 ++++++++++++
+ components/policy/resources/policy_templates.json  | 20 ++++++++++
+ content/browser/BUILD.gn                           |  2 +
+ .../frame_host/navigation_controller_impl.cc       |  9 +++++
+ tools/metrics/histograms/enums.xml                 |  1 +
+ 10 files changed, 124 insertions(+), 2 deletions(-)
+
+diff --git a/chrome/browser/policy/configuration_policy_handler_list_factory.cc b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
+index ced0ba01a..bca9e6970 100644
+--- a/chrome/browser/policy/configuration_policy_handler_list_factory.cc
++++ b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
+@@ -10,6 +10,10 @@
+ #include <utility>
+ #include <vector>
+ 
++#if defined(GOOROOM_BUILD)
++#include "components/policy/core/browser/configuration_policy_handler.h"
++#endif
++
+ #include "base/bind.h"
+ #include "base/memory/ptr_util.h"
+ #include "base/stl_util.h"
+@@ -140,6 +144,11 @@ namespace {
+ // that directly map to a single preference.
+ // clang-format off
+ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
++#if defined(GOOROOM_BUILD)
++  { key::kPageSourceViewEnabled,
++    prefs::kPageSourceViewEnabled,
++    base::Value::Type::BOOLEAN },
++#endif
+   { key::kHomepageIsNewTabPage,
+     prefs::kHomePageIsNewTabPage,
+     base::Value::Type::BOOLEAN },
+@@ -1369,7 +1378,9 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
+ #if BUILDFLAG(ENABLE_PLUGINS)
+   handlers->AddHandler(std::make_unique<PluginPolicyHandler>());
+ #endif  // BUILDFLAG(ENABLE_PLUGINS)
+-
++#if defined(GOOROOM_BUILD)
++  handlers->AddHandler(std::make_unique<PageSourceViewPolicyHandler>());
++#endif
+   return handlers;
+ }
+ 
+diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
+index cdcd266fd..83062afed 100644
+--- a/chrome/common/pref_names.cc
++++ b/chrome/common/pref_names.cc
+@@ -22,6 +22,10 @@ namespace prefs {
+ const char kAbusiveExperienceInterventionEnforce[] =
+     "abusive_experience_intervention_enforce";
+ 
++#if defined(GOOROOM_BUILD)
++const char kPageSourceViewEnabled[] = "page_source_view_enabled";
++#endif
++
+ // A bool pref that keeps whether the child status for this profile was already
+ // successfully checked via ChildAccountService.
+ const char kChildAccountStatusKnown[] = "child_account_status_known";
+diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
+index 4c632ec04..4c055f2bc 100644
+--- a/chrome/common/pref_names.h
++++ b/chrome/common/pref_names.h
+@@ -21,6 +21,9 @@ namespace prefs {
+ 
+ // Profile prefs. Please add Local State prefs below instead.
+ extern const char kAbusiveExperienceInterventionEnforce[];
++#if defined(GOOROOM_BUILD)
++extern const char kPageSourceViewEnabled[];
++#endif
+ extern const char kChildAccountStatusKnown[];
+ extern const char kDefaultApps[];
+ extern const char kSafeBrowsingForTrustedSourcesEnabled[];
+diff --git a/components/policy/core/browser/BUILD.gn b/components/policy/core/browser/BUILD.gn
+index a2fc5fe75..21088603f 100644
+--- a/components/policy/core/browser/BUILD.gn
++++ b/components/policy/core/browser/BUILD.gn
+@@ -20,7 +20,10 @@ group("browser") {
+ }
+ 
+ jumbo_source_set("internal") {
+-  visibility = [ "//components/policy/*" ]
++  visibility = [
++    "//components/policy/*",
++    "//content/browser:browser",
++  ]
+   sources = [
+     "browser_policy_connector.cc",
+     "browser_policy_connector.h",
+diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
+index b51d221cd..7331af6ae 100644
+--- a/components/policy/core/browser/configuration_policy_handler.cc
++++ b/components/policy/core/browser/configuration_policy_handler.cc
+@@ -353,6 +353,50 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
+     prefs->SetValue(pref_path_, value->CreateDeepCopy());
+ }
+ 
++// PageSouceViewPolicyHandler implementation -----------------------------------
++
++// Retrieves a list typed policy or nullptr if not present or not a list.
++const base::ListValue* GetListPolicy(const policy::PolicyMap& policies,
++                                     const std::string& policy) {
++  const base::Value* value = policies.GetValue(policy);
++  if (!value)
++    return nullptr;
++
++  const base::ListValue* policy_value = nullptr;
++  value->GetAsList(&policy_value);
++  return policy_value;
++}
++
++bool PageSourceViewPolicyHandler::enabled = true;
++
++PageSourceViewPolicyHandler::PageSourceViewPolicyHandler() {}
++
++PageSourceViewPolicyHandler::~PageSourceViewPolicyHandler() {}
++
++bool PageSourceViewPolicyHandler::CheckPolicySettings(const policy::PolicyMap& policies,
++                                              policy::PolicyErrorMap* errors) {
++  return true;
++}
++
++void PageSourceViewPolicyHandler::ProcessPolicy(const policy::PolicyMap& policies,
++                                        PrefValueMap* prefs,
++                                        const std::string& policy,
++                                        bool disable_pdf_plugin,
++                                        ContentSetting flash_content_setting) {
++  if(policies.GetValue(policy::key::kPageSourceViewEnabled))
++    if(!policies.GetValue(policy::key::kPageSourceViewEnabled)->GetBool())
++      PageSourceViewPolicyHandler::enabled = false;
++  return;
++}
++
++void PageSourceViewPolicyHandler::ApplyPolicySettings(const policy::PolicyMap& policies,
++                                              PrefValueMap* prefs) {
++  // This order makes enabled plugins take precedence as is now.
++  ProcessPolicy(policies, prefs, policy::key::kDisabledPlugins, true,
++                CONTENT_SETTING_BLOCK);
++  ProcessPolicy(policies, prefs, policy::key::kEnabledPlugins, false,
++                CONTENT_SETTING_ALLOW);
++}
+ 
+ // SchemaValidatingPolicyHandler implementation --------------------------------
+ 
+diff --git a/components/policy/core/browser/configuration_policy_handler.h b/components/policy/core/browser/configuration_policy_handler.h
+index 01bd7f74a..5fc6e3e95 100644
+--- a/components/policy/core/browser/configuration_policy_handler.h
++++ b/components/policy/core/browser/configuration_policy_handler.h
+@@ -15,6 +15,7 @@
+ #include "base/values.h"
+ #include "components/policy/core/common/schema.h"
+ #include "components/policy/policy_export.h"
++#include "components/content_settings/core/common/content_settings.h"
+ 
+ class PrefValueMap;
+ 
+@@ -304,6 +305,30 @@ class POLICY_EXPORT IntPercentageToDoublePolicyHandler
+   DISALLOW_COPY_AND_ASSIGN(IntPercentageToDoublePolicyHandler);
+ };
+ 
++class POLICY_EXPORT PageSourceViewPolicyHandler
++   : public policy::ConfigurationPolicyHandler {
++ public:
++  PageSourceViewPolicyHandler();
++  ~PageSourceViewPolicyHandler() override;
++
++ static bool getEnabled() { return enabled; }
++ protected:
++  bool CheckPolicySettings(const policy::PolicyMap& policies,
++                           policy::PolicyErrorMap* errors) override;
++  void ApplyPolicySettings(const policy::PolicyMap& policies,
++                           PrefValueMap* prefs) override;
++
++ private:
++  void ProcessPolicy(const policy::PolicyMap& policies,
++                     PrefValueMap* prefs,
++                     const std::string& policy,
++                     bool disable_pdf_plugin,
++                     ContentSetting flash_content_setting);
++
++  static bool enabled;
++  DISALLOW_COPY_AND_ASSIGN(PageSourceViewPolicyHandler);
++};
++
+ // Like TypeCheckingPolicyHandler, but validates against a schema instead of a
+ // single type. |schema| is the schema used for this policy, and |strategy| is
+ // the strategy used for schema validation errors.
+diff --git a/components/policy/resources/policy_templates.json b/components/policy/resources/policy_templates.json
+index f8e015dd0..4f6cc6153 100644
+--- a/components/policy/resources/policy_templates.json
++++ b/components/policy/resources/policy_templates.json
+@@ -1055,6 +1055,26 @@
+       'label': '''Set <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> as Default Browser''',
+     },
+     {
++      'name': 'PageSourceViewEnabled',
++      'type': 'main',
++      'schema': { 'type': 'boolean' },
++      'supported_on': ['chrome.*:11-'],
++      'features': {
++        'dynamic_refresh': True,
++        'per_profile': False,
++      },
++      'example_value': False,
++      'id': 555,
++      'caption': '''Set page view enable/disable.''',
++      'tags': [],
++      'desc': '''If you enable this setting, User can view page sources.
++
++      If this setting is disabled, User can't access page sources.
++
++      Default is enable.''',
++      'label': '''Set page view enable/disable.''',
++    },
++    {
+       'name': 'ApplicationLocaleValue',
+       'type': 'string',
+       'schema': { 'type': 'string' },
+diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
+index 8dd7dc2f2..75b89a941 100644
+--- a/content/browser/BUILD.gn
++++ b/content/browser/BUILD.gn
+@@ -217,10 +217,12 @@ jumbo_source_set("browser") {
+     "//ui/snapshot",
+     "//ui/touch_selection",
+     "//v8:v8_version",
++    "//dbus",
+   ]
+ 
+   public_deps = [
+     ":accessibility_buildflags",
++    "//components/policy/core/browser:internal",
+     "//ipc",
+     "//media/mojo/interfaces:remoting",
+     "//third_party/blink/public:embedded_frame_sink_mojo_bindings",
+diff --git a/content/browser/frame_host/navigation_controller_impl.cc b/content/browser/frame_host/navigation_controller_impl.cc
+index a28b7c8a3..dc2924ab1 100644
+--- a/content/browser/frame_host/navigation_controller_impl.cc
++++ b/content/browser/frame_host/navigation_controller_impl.cc
+@@ -88,6 +88,10 @@
+ #include "third_party/blink/public/common/mime_util/mime_util.h"
+ #include "url/url_constants.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "components/policy/core/browser/configuration_policy_handler.h"
++#endif
++
+ namespace content {
+ namespace {
+ 
+@@ -723,6 +727,11 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
+ }
+ 
+ bool NavigationControllerImpl::CanViewSource() {
++#if defined(GOOROOM_BUILD)
++  if(!policy::PageSourceViewPolicyHandler::getEnabled()){
++    return false;
++  }
++#endif
+   const std::string& mime_type = delegate_->GetContentsMimeType();
+   bool is_viewable_mime_type = blink::IsSupportedNonImageMimeType(mime_type) &&
+                                !media::IsSupportedMediaMimeType(mime_type);
+diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
+index 75dbd9165..a0975e1a8 100644
+--- a/tools/metrics/histograms/enums.xml
++++ b/tools/metrics/histograms/enums.xml
+@@ -15325,6 +15325,7 @@ Called by update_net_error_codes.py.-->
+   <int value="516" label="ExtensionAllowInsecureUpdates"/>
+   <int value="517" label="BrowserSwitcherEnabled"/>
+   <int value="521" label="ForceNetworkInProcess"/>
++  <int value="555" label="PageSourceViewEnabled"/>
+ </enum>
+ 
+ <enum name="EnterprisePolicyInvalidations">
+-- 
+2.11.0
+

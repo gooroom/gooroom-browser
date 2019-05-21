@@ -1,0 +1,9 @@
+{
+  "gooroom" : {
+    "policy" : {
+      "websocket" : true,
+      "webworker" : true,
+      "whitelist" : [ "*" ]
+    }
+  }
+}

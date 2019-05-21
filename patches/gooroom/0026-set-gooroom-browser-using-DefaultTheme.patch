@@ -1,0 +1,26 @@
+From 2b38ae2b965fb7712139c18faba238ff89090ae3 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 18:04:45 +0900
+Subject: [PATCH 26/63] set gooroom-browser using DefaultTheme
+
+---
+ chrome/browser/themes/theme_service_aurax11.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/chrome/browser/themes/theme_service_aurax11.cc b/chrome/browser/themes/theme_service_aurax11.cc
+index 3a4c40d33..d72163ba1 100644
+--- a/chrome/browser/themes/theme_service_aurax11.cc
++++ b/chrome/browser/themes/theme_service_aurax11.cc
+@@ -86,6 +86,9 @@ ThemeServiceAuraX11::ThemeServiceAuraX11() {}
+ ThemeServiceAuraX11::~ThemeServiceAuraX11() {}
+ 
+ bool ThemeServiceAuraX11::ShouldInitWithSystemTheme() const {
++#if defined(GOOROOM_BUILD)
++  return false;
++#endif
+   return profile()->GetPrefs()->GetBoolean(prefs::kUsesSystemTheme);
+ }
+ 
+-- 
+2.11.0
+

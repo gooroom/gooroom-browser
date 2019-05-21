@@ -1,0 +1,32 @@
+From 59693e5938ca9fca46769d01a9fc131c9d1d563e Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 21:20:58 +0900
+Subject: [PATCH 49/63] Remove 'signinAllowedToggle' element in settings page
+
+---
+ chrome/browser/resources/settings/privacy_page/privacy_page.html | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index af8829a5a..2b58616cb 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -101,6 +101,7 @@
+            hidden="[[!unifiedConsentEnabled_]]">
+         </cr-link-row>
+ <if expr="not chromeos">
++<if expr="not _gooroom">
+         <settings-toggle-button id="signinAllowedToggle"
+             pref="{{prefs.signin.allowed_on_next_startup}}"
+             label="$i18n{signinAllowedTitle}"
+@@ -108,6 +109,7 @@
+             on-settings-boolean-control-change="onSigninAllowedChange_"
+             no-set-pref>
+         </settings-toggle-button>
++</if><!-- not _gooroom-->
+ </if><!-- not chromeos -->
+         <template is="dom-if" if="[[!unifiedConsentEnabled_]]">
+           <settings-personalization-options prefs="{{prefs}}"
+-- 
+2.11.0
+

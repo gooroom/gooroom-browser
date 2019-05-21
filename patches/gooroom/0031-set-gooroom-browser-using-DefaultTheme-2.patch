@@ -1,0 +1,28 @@
+From 3f598a01ad4f797f94721e48412930a2a03eef1e Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 18:07:02 +0900
+Subject: [PATCH 31/63] set gooroom-browser using DefaultTheme #2
+
+---
+ chrome/browser/themes/theme_service_factory.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/themes/theme_service_factory.cc b/chrome/browser/themes/theme_service_factory.cc
+index c128e96f7..a87c172d6 100644
+--- a/chrome/browser/themes/theme_service_factory.cc
++++ b/chrome/browser/themes/theme_service_factory.cc
+@@ -74,9 +74,11 @@ void ThemeServiceFactory::RegisterProfilePrefs(
+ #if defined(USE_X11)
+   bool default_uses_system_theme = false;
+ 
++#if !defined(GOOROOM_BUILD)
+   const views::LinuxUI* linux_ui = views::LinuxUI::instance();
+   if (linux_ui)
+     default_uses_system_theme = linux_ui->GetDefaultUsesSystemTheme();
++#endif
+ 
+   registry->RegisterBooleanPref(prefs::kUsesSystemTheme,
+                                 default_uses_system_theme);
+-- 
+2.11.0
+

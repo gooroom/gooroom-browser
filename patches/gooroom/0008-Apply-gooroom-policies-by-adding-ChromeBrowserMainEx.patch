@@ -1,0 +1,113 @@
+From cf5674b66b9e9b63e3c3181a938094c2e591261e Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Fri, 24 May 2019 20:30:11 +0900
+Subject: [PATCH 08/63] Apply gooroom policies by adding
+ ChromeBrowserMainExtraParts module
+
+---
+ gooroom/app/gooroom_main_delegate.cc              |  2 +-
+ gooroom/browser/gooroom_content_browser_client.cc | 25 ++++++++++++++++++-----
+ gooroom/browser/gooroom_content_browser_client.h  | 10 +++++++++
+ 3 files changed, 31 insertions(+), 6 deletions(-)
+
+diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
+index be42160ea..25c61cab2 100644
+--- a/gooroom/app/gooroom_main_delegate.cc
++++ b/gooroom/app/gooroom_main_delegate.cc
+@@ -48,7 +48,7 @@ GooroomMainDelegate::CreateContentBrowserClient() {
+     chrome_feature_list_creator_ = std::make_unique<ChromeFeatureListCreator>();
+ 
+     chrome_content_browser_client_ =
+-        std::make_unique<ChromeContentBrowserClient>(
++        std::make_unique<GooroomContentBrowserClient>(
+             chrome_feature_list_creator_.get());
+   }
+   return chrome_content_browser_client_.get();
+diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
+index 5e26741c9..baa959dfd 100644
+--- a/gooroom/browser/gooroom_content_browser_client.cc
++++ b/gooroom/browser/gooroom_content_browser_client.cc
+@@ -4,6 +4,9 @@
+ 
+ #include "gooroom/browser/gooroom_content_browser_client.h"
+ #include "gooroom/browser/gooroom_browser_extra_parts_security.h"
++#include "chrome/browser/resource_coordinator/chrome_browser_main_extra_parts_resource_coordinator.h"
++#include "chrome/browser/profiling_host/chrome_browser_main_extra_parts_profiling.h"
++
+ 
+ #include "chrome/browser/chrome_browser_main.h"
+ #include "chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.h"
+@@ -82,6 +85,14 @@
+ #include "chrome/browser/chrome_browser_main_posix.h"
+ #endif
+ 
++GooroomContentBrowserClient::GooroomContentBrowserClient(
++    ChromeFeatureListCreator* chrome_feature_list_creator)
++    : chrome_feature_list_creator_(chrome_feature_list_creator),
++      weak_factory_(this) {
++}
++GooroomContentBrowserClient::~GooroomContentBrowserClient() {
++}
++
+ content::BrowserMainParts* GooroomContentBrowserClient::CreateBrowserMainParts(
+     const content::MainFunctionParams& parameters) {
+   ChromeBrowserMainParts* main_parts;
+@@ -112,23 +123,27 @@ content::BrowserMainParts* GooroomContentBrowserClient::CreateBrowserMainParts(
+   main_parts->AddParts(new ChromeBrowserMainExtraPartsViewsLinux());
+ #else
+   main_parts->AddParts(new ChromeBrowserMainExtraPartsViews());
+-#if defined(USE_ASH)
+-  main_parts->AddParts(new ChromeBrowserMainExtraPartsAsh());
+ #endif
+ #endif
++
++#if defined(OS_CHROMEOS)
++  // TODO(jamescook): Combine with ChromeBrowserMainPartsChromeos.
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsAsh());
+ #endif
+ 
+ #if defined(USE_X11)
+   main_parts->AddParts(new ChromeBrowserMainExtraPartsX11());
+ #endif
+ 
+-#if BUILDFLAG(ENABLE_WAYLAND_SERVER)
+-  main_parts->AddParts(new ChromeBrowserMainExtraPartsExo());
+-#endif
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsResourceCoordinator);
++
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsProfiling);
+ 
+   chrome::AddMetricsExtraParts(main_parts);
+ 
+   main_parts->AddParts(new GooroomBrowserExtraPartsSecurity());
+ 
++  main_parts->AddParts(ChromeService::GetInstance()->CreateExtraParts());
++
+   return main_parts;
+ }
+diff --git a/gooroom/browser/gooroom_content_browser_client.h b/gooroom/browser/gooroom_content_browser_client.h
+index 870372f8c..6e5faf9f5 100644
+--- a/gooroom/browser/gooroom_content_browser_client.h
++++ b/gooroom/browser/gooroom_content_browser_client.h
+@@ -10,8 +10,18 @@
+ 
+ class GooroomContentBrowserClient : public ChromeContentBrowserClient {
+  public:
++  explicit GooroomContentBrowserClient(
++      ChromeFeatureListCreator* chrome_feature_list_creator = nullptr);
++  ~GooroomContentBrowserClient() override;
++
+   content::BrowserMainParts* CreateBrowserMainParts(
+       const content::MainFunctionParams& parameters) override;
++
++ protected:
++  ChromeFeatureListCreator* chrome_feature_list_creator_;
++
++ private:
++  base::WeakPtrFactory<ChromeContentBrowserClient> weak_factory_;
+ };
+ 
+ #endif  // CHROME_BROWSER_CHROME_CONTENT_BROWSER_CLIENT_H_
+-- 
+2.11.0
+

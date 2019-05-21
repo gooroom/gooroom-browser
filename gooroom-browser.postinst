@@ -1,0 +1,5 @@
+#!/bin/sh
+chmod 4755 /usr/lib/gooroom-browser/chrome-sandbox
+bash /usr/lib/gooroom-browser/gooroom-browser-setup.sh
+exit 0
+

@@ -1,0 +1,116 @@
+From 346dc35f4f1d519ba8136766a50c1256c1be3cba Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 21:22:57 +0900
+Subject: [PATCH 52/63] Add Pdf switching strings on settings page
+
+---
+ .../app/gooroom/resources/generated_resources_ko.xtb   |  3 ++-
+ chrome/app/gooroom/settings_strings.grdp               |  3 +++
+ .../settings/site_settings/pdf_documents.html          |  7 +++++--
+ .../resources/settings/site_settings/pdf_documents.js  | 18 ++++++++++++++++++
+ .../settings/md_settings_localized_strings_provider.cc |  2 ++
+ 5 files changed, 30 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+index 63fb44a8e..c4f88e7be 100644
+--- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
++++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+@@ -3265,7 +3265,8 @@
+     <ph name="LINE_BREAK" />
+     이 사진이 ChromeBook 로그인 화면과 잠금 화면에 표시됩니다.</translation>
+ <translation id="5925147183566400388">인증 업무 준칙 URI</translation>
+-<translation id="592880897588170157">Gooroom Browser에서 PDF 파일을 자동으로 여는 대신 다운로드</translation>
++<translation id="2851514022662865814">Gooroom Browser에서 PDF 파일을 자동으로 여는 대신 다운로드</translation>
++<translation id="5065357668282619421">Gooroom Browser에서 PDF 파일을 자동으로 열기</translation>
+ <translation id="5931146425219109062">방문하는 웹사이트의 전체 데이터 조회 및 변경</translation>
+ <translation id="5932224571077948991">사이트에서 방해가 되거나 사용자를 현혹하는 광고를 표시함</translation>
+ <translation id="5932881020239635062">일련번호</translation>
+diff --git a/chrome/app/gooroom/settings_strings.grdp b/chrome/app/gooroom/settings_strings.grdp
+index 6d0977ebe..ceed16e25 100644
+--- a/chrome/app/gooroom/settings_strings.grdp
++++ b/chrome/app/gooroom/settings_strings.grdp
+@@ -2885,6 +2885,9 @@
+   <message name="IDS_SETTINGS_SITE_SETTINGS_PDF_DOWNLOAD_PDFS" desc="Label for downloading PDF documents instead of automatically opening them in Chrome.">
+     Download PDF files instead of automatically opening them in Gooroom-browser
+   </message>
++  <message name="IDS_SETTINGS_SITE_SETTINGS_PDFS_AUTO_OPEN" desc="Label for downloading PDF documents instead of automatically opening them in Chrome.">
++    automatically opening them in Gooroom-browser
++  </message>
+   <message name="IDS_SETTINGS_SITE_SETTINGS_POPUPS" desc="Label for the pop-ups and redirects site settings.">
+     Pop-ups and redirects
+   </message>
+diff --git a/chrome/browser/resources/settings/site_settings/pdf_documents.html b/chrome/browser/resources/settings/site_settings/pdf_documents.html
+index a6a0b7cdc..798779297 100644
+--- a/chrome/browser/resources/settings/site_settings/pdf_documents.html
++++ b/chrome/browser/resources/settings/site_settings/pdf_documents.html
+@@ -2,6 +2,7 @@
+ 
+ <link rel="import" href="../controls/settings_toggle_button.html">
+ <link rel="import" href="../settings_shared_css.html">
++<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+ 
+ <dom-module id="settings-pdf-documents">
+   <template>
+@@ -10,9 +11,11 @@
+       margin-top: 0;  /* Cancel separation between main and secondary text. */
+     }
+     </style>
++
+     <settings-toggle-button id="toggle" class="first two-line"
+-        label="$i18n{siteSettingsPdfDownloadPdfs}"
+-        pref="{{prefs.plugins.always_open_pdf_externally}}">
++         pref="{{prefs.plugins.always_open_pdf_externally}}"
++         label="[[getPdfExternally_(prefs.plugins.always_open_pdf_externally.value)]]"
++         disabled$="[[isGuest_]]">
+     </settings-toggle-button>
+   </template>
+   <script src="pdf_documents.js"></script>
+diff --git a/chrome/browser/resources/settings/site_settings/pdf_documents.js b/chrome/browser/resources/settings/site_settings/pdf_documents.js
+index 66f61a6db..cd0e79ac6 100644
+--- a/chrome/browser/resources/settings/site_settings/pdf_documents.js
++++ b/chrome/browser/resources/settings/site_settings/pdf_documents.js
+@@ -11,10 +11,28 @@
+ Polymer({
+   is: 'settings-pdf-documents',
+ 
++  behaviors: [
++    I18nBehavior,
++  ],
++
+   properties: {
++    /** @private */
++    isGuest_: {
++      type: Boolean,
++      value: function() {
++        return loadTimeData.getBoolean('isGuest');
++      }
++    },
++
+     prefs: {
+       type: Object,
+       notify: true,
+     },
+   },
++
++  getPdfExternally_ : function(value) {
++    return value ? this.i18n('siteSettingsPdfDownloadPdfs') :
++                   this.i18n('siteSettingsPdfopenPdfs');
++  },
++
+ });
+diff --git a/chrome/browser/ui/webui/settings/md_settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/md_settings_localized_strings_provider.cc
+index 33700833b..a953a136c 100644
+--- a/chrome/browser/ui/webui/settings/md_settings_localized_strings_provider.cc
++++ b/chrome/browser/ui/webui/settings/md_settings_localized_strings_provider.cc
+@@ -2380,6 +2380,8 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+     {"siteSettingsPdfDocuments", IDS_SETTINGS_SITE_SETTINGS_PDF_DOCUMENTS},
+     {"siteSettingsPdfDownloadPdfs",
+      IDS_SETTINGS_SITE_SETTINGS_PDF_DOWNLOAD_PDFS},
++    {"siteSettingsPdfopenPdfs",
++     IDS_SETTINGS_SITE_SETTINGS_PDFS_AUTO_OPEN},
+     {"siteSettingsProtectedContent",
+      IDS_SETTINGS_SITE_SETTINGS_PROTECTED_CONTENT},
+     {"siteSettingsProtectedContentIdentifiers",
+-- 
+2.11.0
+

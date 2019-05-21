@@ -1,0 +1,49 @@
+From d6cf497789ba174a95bcb27645bb1e2829f34aeb Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Fri, 24 May 2019 20:26:59 +0900
+Subject: [PATCH 03/63] enable GooroomBrowserExtraPartsSecurity by attaching it
+ to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
+
+---
+ gooroom/BUILD.gn                                  | 4 ++--
+ gooroom/browser/gooroom_content_browser_client.cc | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
+index 4f1a76fe0..294e62b62 100644
+--- a/gooroom/BUILD.gn
++++ b/gooroom/BUILD.gn
+@@ -252,8 +252,8 @@ if (!is_android && !is_mac) {
+         "browser/gooroom_content_client.h",
+ 
+         # for commit #2
+-        #"browser/gooroom_browser_extra_parts_security.cc",
+-        #"browser/gooroom_browser_extra_parts_security.h",
++        "browser/gooroom_browser_extra_parts_security.cc",
++        "browser/gooroom_browser_extra_parts_security.h",
+       ]
+     }
+   }
+diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
+index b934db353..5e26741c9 100644
+--- a/gooroom/browser/gooroom_content_browser_client.cc
++++ b/gooroom/browser/gooroom_content_browser_client.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "gooroom/browser/gooroom_content_browser_client.h"
++#include "gooroom/browser/gooroom_browser_extra_parts_security.h"
+ 
+ #include "chrome/browser/chrome_browser_main.h"
+ #include "chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.h"
+@@ -127,5 +128,7 @@ content::BrowserMainParts* GooroomContentBrowserClient::CreateBrowserMainParts(
+ 
+   chrome::AddMetricsExtraParts(main_parts);
+ 
++  main_parts->AddParts(new GooroomBrowserExtraPartsSecurity());
++
+   return main_parts;
+ }
+-- 
+2.11.0
+

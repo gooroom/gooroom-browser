@@ -1,0 +1,154 @@
+From bff0bb01897900a3a61635e1df1118afad215ce8 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Sat, 25 May 2019 18:12:34 +0900
+Subject: [PATCH 35/63] pruning settings pages(chrome://settings)
+
+---
+ chrome/browser/resources/settings/about_page/about_page.html          | 2 ++
+ .../browser/resources/settings/appearance_page/appearance_page.html   | 2 +-
+ chrome/browser/resources/settings/basic_page/basic_page.html          | 4 ++++
+ chrome/browser/resources/settings/printing_page/printing_page.html    | 2 ++
+ .../resources/settings/privacy_page/personalization_options.html      | 2 ++
+ chrome/browser/resources/settings/settings_menu/settings_menu.html    | 4 ++++
+ 6 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
+index 9968dfdb7..408d65d31 100644
+--- a/chrome/browser/resources/settings/about_page/about_page.html
++++ b/chrome/browser/resources/settings/about_page/about_page.html
+@@ -217,9 +217,11 @@
+             </div>
+           </template>
+ </if>
++<if expr="not _gooroom">
+           <cr-link-row class="hr" icon-class="icon-external" id="help"
+               on-click="onHelpTap_" label="$i18n{aboutGetHelpUsingChrome}">
+           </cr-link-row>
++</if>
+ <if expr="_google_chrome">
+           <cr-link-row class="hr" icon-class="subpage-arrow" id="reportIssue"
+               on-click="onReportIssueTap_" label="$i18n{aboutReportAnIssue}">
+diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
+index a446d5fa2..a187895a1 100644
+--- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
++++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
+@@ -59,9 +59,9 @@
+         </cr-link-row>
+         <div class="hr"></div>
+ </if>
+-<if expr="not _gooroom">
+         <div class="settings-row continuation" id="themeRow"
+             hidden="[[!pageVisibility.setTheme]]">
++<if expr="not _gooroom">
+           <cr-link-row class="first" icon-class="icon-external"
+               hidden="[[!pageVisibility.setTheme]]"
+               label="$i18n{themes}" sub-label="[[themeSublabel_]]"
+diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
+index 65d9633a7..c4fc30ab4 100644
+--- a/chrome/browser/resources/settings/basic_page/basic_page.html
++++ b/chrome/browser/resources/settings/basic_page/basic_page.html
+@@ -133,6 +133,7 @@
+             <settings-change-password-page></settings-change-password-page>
+           </settings-section>
+         </template>
++<if expr="not _gooroom">
+         <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
+           <settings-section page-title="$i18n{peoplePageTitle}"
+               section="people">
+@@ -150,6 +151,7 @@
+             </settings-autofill-page>
+           </settings-section>
+         </template>
++</if>
+         <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
+             restamp>
+           <settings-section page-title="$i18n{appearancePageTitle}"
+@@ -288,6 +290,7 @@
+                 </settings-printing-page>
+               </settings-section>
+             </template>
++<if expr="not _gooroom">
+             <template is="dom-if" if="[[showPage_(pageVisibility.a11y)]]"
+                 restamp>
+               <settings-section page-title="$i18n{a11yPageTitle}"
+@@ -295,6 +298,7 @@
+                 <settings-a11y-page prefs="{{prefs}}"></settings-a11y-page>
+               </settings-section>
+             </template>
++</if>
+ <if expr="not chromeos">
+             <template is="dom-if" if="[[showPage_(pageVisibility.system)]]"
+                 restamp>
+diff --git a/chrome/browser/resources/settings/printing_page/printing_page.html b/chrome/browser/resources/settings/printing_page/printing_page.html
+index 90d7aa254..85d04d52b 100644
+--- a/chrome/browser/resources/settings/printing_page/printing_page.html
++++ b/chrome/browser/resources/settings/printing_page/printing_page.html
+@@ -34,6 +34,7 @@
+             on-click="onTapLocalPrinters_">
+         </cr-link-row>
+ </if>
++<if expr="not _gooroom">
+         <cr-link-row
+             class="hr"
+             icon-class="subpage-arrow"
+@@ -41,6 +42,7 @@
+             label="$i18n{cloudPrintersTitle}"
+             on-click="onTapCloudPrinters_">
+         </cr-link-row>
++</if>
+       </div>
+ <if expr="chromeos">
+       <template is="dom-if" route-path="/cupsPrinters">
+diff --git a/chrome/browser/resources/settings/privacy_page/personalization_options.html b/chrome/browser/resources/settings/privacy_page/personalization_options.html
+index 9df16c868..f2e6529ba 100644
+--- a/chrome/browser/resources/settings/privacy_page/personalization_options.html
++++ b/chrome/browser/resources/settings/privacy_page/personalization_options.html
+@@ -32,6 +32,7 @@
+         label="$i18n{linkDoctorPref}"
+         sub-label="$i18n{linkDoctorPrefDesc}">
+     </settings-toggle-button>
++<if expr="not _gooroom">
+     <settings-toggle-button pref="{{prefs.safebrowsing.enabled}}"
+         label="$i18n{safeBrowsingEnableProtection}"
+         sub-label="$i18n{safeBrowsingEnableProtectionDesc}">
+@@ -41,6 +42,7 @@
+         label="$i18n{safeBrowsingEnableExtendedReporting}"
+         sub-label="$i18n{safeBrowsingEnableExtendedReportingDesc}">
+     </settings-toggle-button>
++</if>
+ <if expr="_google_chrome">
+ <if expr="chromeos">
+     <settings-toggle-button pref="{{prefs.cros.metrics.reportingEnabled}}"
+diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+index aa08477a7..cb9963a44 100644
+--- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
++++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+@@ -109,10 +109,12 @@
+         $i18n{multidevicePageTitle}
+       </a>
+ </if>
++<if expr="not _gooroom">
+       <a id="people" href="/people" hidden="[[!pageVisibility.people]]">
+         <iron-icon icon="cr:person"></iron-icon>
+         $i18n{peoplePageTitle}
+       </a>
++</if>
+       <a id="autofill" href="/autofill"
+           hidden="[[!pageVisibility.autofill]]">
+         <iron-icon icon="settings:assignment"></iron-icon>
+@@ -189,10 +191,12 @@
+             <iron-icon icon="cr:print"></iron-icon>
+             $i18n{printingPageTitle}
+           </a>
++<if expr="not _gooroom">
+           <a href="/accessibility">
+             <iron-icon icon="settings:accessibility"></iron-icon>
+             $i18n{a11yPageTitle}
+           </a>
++</if>
+ <if expr="not chromeos">
+           <a href="/system">
+             <iron-icon icon="settings:build"></iron-icon>
+-- 
+2.11.0
+
