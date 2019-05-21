@@ -1,6 +1,6 @@
-gooroom-browser (2.2.0+grm1u1) stretch; urgency=medium
+gooroom-browser (2.2.0-1+grm1u1) stretch; urgency=medium
 
-  * Init Gooroom browser version (2.2.0+grm1u1)
+  * Init Gooroom browser version (2.2.0-1+grm1u1)
 
  -- Choi J.S. <junsungc91@gmail.com>  Fri, 10 May 2019 18:35:00 +0900
 
