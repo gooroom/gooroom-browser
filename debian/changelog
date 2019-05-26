@@ -1,3 +1,22 @@
+gooroom-browser (2.2.0-1+grm1u2) stretch; urgency=medium
+
+  * Fix Gooroom Bug Tracking System
+    - 746 : Change string Chromium to Gooroom Browser on gooroom://flags page
+    - 743 : Remove Translate option on settings language page
+    - 741 : Remove report function on settings person security page
+    - 740 : Remove 'USB not found'strings on content settings usb page
+    - 738 : Change string 'Chromium' to 'Open Project(Chromium)'on reset settings page
+    - 731 : Update adobe-flash version
+    - 728 : Remove browser-login on gooroom://devices page
+    - 726 : Change string 'chrome' to 'gooroom' on man page
+    - 723 : Change strings 'About Chromium' to 'About Gooroom Browser' on settings icon
+    - 722 : Remove browser-login on gooroom://history page
+    - 721 : Restrict secret mode access on bookmark
+    - 714 : Remove browser-login on gooroom://welcome page
+    - 205 : Remove google-cloud-login on print page
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 27 May 2019 15:17:00 +0900
+
 gooroom-browser (2.2.0-1+grm1u1) stretch; urgency=medium
 
   * Init Gooroom browser version (2.2.0-1+grm1u1)

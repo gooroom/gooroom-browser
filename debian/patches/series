@@ -128,3 +128,4 @@ gooroom/0059-Change-Strings-make-Gooroom-browser-better-by-report.patch
 gooroom/0060-Migrate-verifySign-module.-Add-DIR-path-on-GRMCODE-0.patch
 gooroom/0061-Migrate-syslog-GRMCODE-050004-050005-to-GooroomPref-.patch
 gooroom/0062-Gooroom-Characteristic-change-sign-verify-gtk3-to-gt.patch
+gooroom/20190527-BugTrackingSystem.patch
