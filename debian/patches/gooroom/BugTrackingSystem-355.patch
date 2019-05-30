@@ -1,0 +1,85 @@
+From 7981c87f2a6b7d4022b4288dbb9d62d2ec64db5b Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Tue, 28 May 2019 08:35:05 +0900
+Subject: [PATCH 2/3] BugTrackingSystem
+
+355 : Re-register the whitelist upon trust/untrust judgement module.
+---
+ content/browser/web_contents/web_contents_impl.cc |  3 +++
+ gooroom/browser/gooroom_pref.cc                   | 11 ++++++++---
+ gooroom/browser/gooroom_pref.h                    |  2 ++
+ 3 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
+index 4ccca1567..e4fe6ebc4 100644
+--- a/content/browser/web_contents/web_contents_impl.cc
++++ b/content/browser/web_contents/web_contents_impl.cc
+@@ -16,6 +16,7 @@
+ #if BUILDFLAG(ENABLE_GOOROOM)
+ #include "base/path_service.h"
+ #include "gooroom/base/gooroom_base.h"
++#include "gooroom/browser/gooroom_pref.h"
+ #include "dbus/bus.h"
+ #include "dbus/message.h"
+ #include "dbus/object_path.h"
+@@ -4209,6 +4210,8 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
+ const char kUserDataDir[] = "user-data-dir";
+ 
+ bool RequestCurrentUserDataDir(GURL url) {
++  //set whitelist mainpref.json again
++  gooroom::g_gooroom->setMainpref();
+   base::GooroomUrlFilter* pFilter = base::GetGooroomBase()->getUrlFilter();
+ 
+   if (!pFilter) return false;
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index b6b5f2f2a..a5c5d2760 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -126,9 +126,7 @@ PrefService* GooroomPref::pref() {
+   return pref_.get();
+ }
+ 
+-void GooroomPref::setup() {
+-  DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
+-
++GooroomUrlFilterImpl* GooroomPref::setMainpref() {
+   // read CORE policy file from ... ==================================
+   // TODO use constant value
+   base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
+@@ -151,6 +149,13 @@ void GooroomPref::setup() {
+   if (p != nullptr)
+     pfilterImpl->setWhiteList(p->GetValue());
+   base::GetGooroomBase()->setUrlFilter(pfilterImpl);
++  return pfilterImpl;
++}
++
++void GooroomPref::setup() {
++  DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
++
++  GooroomUrlFilterImpl* pfilterImpl = setMainpref();
+ 
+   // if there is a url in command line, check the url is trust to determine the
+   // mode whether trust or not.
+diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
+index 0c18a6f86..c85a11296 100644
+--- a/gooroom/browser/gooroom_pref.h
++++ b/gooroom/browser/gooroom_pref.h
+@@ -9,6 +9,7 @@
+ #define GOOROOM_BROWSER_GOOROOM_PREF_H_
+ 
+ #include "components/prefs/pref_service.h"
++#include "gooroom/browser/gooroom_url_filter_impl.h"
+ 
+ namespace gooroom {
+ 
+@@ -30,6 +31,7 @@ class GooroomPref {
+   ~GooroomPref();
+ 
+   PrefService* pref();
++  GooroomUrlFilterImpl* setMainpref();
+   void setup();
+ 
+   bool useWebSocket();
+-- 
+2.11.0
+
