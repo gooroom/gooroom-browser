@@ -1,0 +1,27 @@
+From 7fbf31cd8aaa43633f2767c8f0ed3e0bed4f9339 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Wed, 5 Jun 2019 02:27:39 +0900
+Subject: [PATCH] BugTrackingSystem
+
+507 : Disable 'Open as window' on making shortcut app popup
+---
+ chrome/browser/extensions/extension_util.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/chrome/browser/extensions/extension_util.cc b/chrome/browser/extensions/extension_util.cc
+index 24f465f5f..41d93f71d 100644
+--- a/chrome/browser/extensions/extension_util.cc
++++ b/chrome/browser/extensions/extension_util.cc
+@@ -320,6 +320,9 @@ bool IsNewBookmarkAppsEnabled() {
+ }
+ 
+ bool CanHostedAppsOpenInWindows() {
++#if defined(GOOROOM_BUILD)
++  return false;
++#endif
+ #if defined(OS_MACOSX)
+   return base::CommandLine::ForCurrentProcess()->HasSwitch(
+              ::switches::kEnableHostedAppsInWindows) ||
+-- 
+2.11.0
+
