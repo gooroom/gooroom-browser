@@ -1,0 +1,145 @@
+From a729b52d0855140ddeae9c3f7341af52e3356213 Mon Sep 17 00:00:00 2001
+From: JunSung Choi <junsungc@gooroom.kr>
+Date: Fri, 14 Jun 2019 08:22:32 +0900
+Subject: [PATCH] tmp patch for buster build
+
+---
+ gooroom/browser/BUILD.gn        |  7 ----
+ gooroom/browser/gooroom_pref.cc | 89 -----------------------------------------
+ 2 files changed, 96 deletions(-)
+
+diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
+index 6312e1e2a..3bb634df0 100644
+--- a/gooroom/browser/BUILD.gn
++++ b/gooroom/browser/BUILD.gn
+@@ -2,13 +2,6 @@ import("//chrome/chrome_paks.gni")
+ import("//build/util/branding.gni")
+ 
+ static_library("gooroom_browser") {
+-  if (host_cpu != "arm") {
+-    libs = [ "/usr/lib/x86_64-linux-gnu/libgrmpycaller.so"]
+-    libs += [ "/usr/lib/x86_64-linux-gnu/libcrypto.so.1.1" ]
+-  } else {
+-    libs = [ "/usr/lib/arm-linux-gnueabihf/libcrypto.so.1.1" ]
+-  }
+-
+   sources = [
+     "gooroom_browser_extra_parts_security.cc",
+     "gooroom_browser_extra_parts_security.h",
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index a5c5d2760..a3b2559c3 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -4,7 +4,6 @@
+ #include <gtk/gtk.h>
+ 
+ #include "base/files/file_enumerator.h"
+-#include "verify_signature.h"
+ #include "gooroom/base/gooroom_base.h"
+ #include "gooroom/browser/gooroom_url_filter_impl.h"
+ 
+@@ -33,87 +32,6 @@ bool is_file_exist(const char *fileName)
+     return infile.good();
+ }
+ 
+-// verify a sing is valid
+-bool verifySign() {
+-  int ret_code;
+-  int i;
+-  ret_code = is_onlineuser();
+-  if (ret_code == LOCAL_USER) {
+-    char buff[100] = {0,};
+-    snprintf(buff, sizeof(buff), "SIGN verified ret_code=$(%d)", ret_code);
+-    SYSLOG(INFO) << buff << " GRMCODE=050001";
+-    SYSLOG(INFO) << "SIGN verified ok GRMCODE=050002";
+-    return true;
+-  }
+-  bool validSign = true;
+-  string* verifySignDir = new string[5] { "/usr/share/gooroom/browser/policies/mainpref.json",
+-                                       "/usr/share/gooroom/browser/policies/trust/managed/policy.json",
+-                                       "/usr/share/gooroom/browser/policies/trust/managed/ui-policy.json",
+-                                       "/usr/share/gooroom/browser/policies/untrust/managed/policy.json",
+-                                       "/usr/share/gooroom/browser/policies/untrust/managed/ui-policy.json" };
+-  for(i=0;i<5;i++){
+-    if (base::GetGooroomBase()->isTrustMode()) {
+-      if (i==3 || i==4)
+-        continue;
+-    } else {
+-      if (i==1 || i==2)
+-        continue;
+-    }
+-    if (is_file_exist(verifySignDir[i].c_str())) {
+-      ret_code = verify_signature(verifySignDir[i].c_str());
+-      char buff[100] = {0,};
+-      snprintf(buff, sizeof(buff), "$(%s) SIGN verified ret_code=$(%d)", verifySignDir[i].c_str(), ret_code);
+-
+-      SYSLOG(INFO) << buff << " GRMCODE=050001";
+-    }
+-    else
+-      continue;
+-
+-    validSign = ret_code == 0 || ret_code == 1;
+-    if(validSign == 0)
+-      break;
+-  }
+-
+-  if(validSign)
+-    SYSLOG(INFO) << "SIGN verified ok GRMCODE=050002";
+-  else
+-    SYSLOG(INFO) << "SIGN verified error GRMCODE=050003";
+-  return validSign;
+-}
+-
+-void noVerifySignAlarm() {
+-    GtkWidget *window;
+-    GtkWidget *label;
+-
+-    /* Create the main, top level window */
+-    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+-
+-    /* Give it the title */
+-    gtk_window_set_title(GTK_WINDOW(window), "Info Bars");
+-    gtk_window_set_default_size(GTK_WINDOW(window), 230, 50);
+-
+-    /*
+-    ** Map the destroy signal of the window to gtk_main_quit;
+-    ** When the window is about to be destroyed, we get a notification and
+-    ** stop the main GTK+ loop by returning 0
+-    */
+-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+-
+-    label = gtk_label_new("Gooroom-Browser : No sign verify. Check gooroom-agent service.");
+-
+-    /* Plot the label onto the main window */
+-    gtk_container_add(GTK_CONTAINER(window), label);
+-
+-    /* Make sure that everything, window and label, are visible */
+-    gtk_widget_show_all(window);
+-
+-    /*
+-    ** Start the main loop, and do nothing (block) until
+-    ** the application is closed
+-    */
+-    gtk_main();
+-}
+-
+ GooroomPref* g_gooroom = NULL;
+ 
+ GooroomPref::GooroomPref() {}
+@@ -236,13 +154,6 @@ void GooroomPref::setup() {
+     exit(0);
+   }
+ 
+-  // Gooroom-Browser policy Sign module
+-  bool validSign = verifySign();
+-  if (!validSign) {
+-    //noVerifySignAlarm();
+-    //exit(0);
+-  }
+-
+   // Check policies files
+   base::FilePath policies_path;
+   if (base::GetGooroomBase()->isTrustMode())
+-- 
+2.11.0
+
