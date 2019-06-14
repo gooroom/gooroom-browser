@@ -1,4 +1,5 @@
 debianization/manpage.patch
+debianization/sandbox.patch
 debianization/master-preferences.patch
 
 gn/libcxx.patch
@@ -25,6 +26,7 @@ gcc6/noexcept-redeclaration.patch
 gcc6/designated-initializers.patch
 
 fixes/mojo.patch
+fixes/vaapi.patch
 fixes/alignof.patch
 fixes/ps-print.patch
 fixes/as-needed.patch
@@ -34,7 +36,9 @@ fixes/gpu-timeout.patch
 fixes/empty-array.patch
 fixes/sequence-point.patch
 fixes/widevine-revision.patch
+fixes/widevine-locations.patch
 fixes/widevine-buildflag.patch
+fixes/connection-message.patch
 fixes/chromedriver-revision.patch
 
 disable/unrar.patch
@@ -46,26 +50,37 @@ disable/openh264.patch
 disable/perfetto.patch
 disable/installer.patch
 disable/swiftshader.patch
+disable/welcome-page.patch
 disable/google-api-warning.patch
 disable/third-party-cookies.patch
+disable/device-notifications.patch
+
+warnings/friend.patch
+warnings/printf.patch
+warnings/attribute.patch
+warnings/multichar.patch
+warnings/bool-compare.patch
+warnings/enum-compare.patch
+warnings/unused-result.patch
+warnings/initialization.patch
+warnings/unused-typedefs.patch
+warnings/null-destination.patch
+warnings/int-in-bool-context.patch
+warnings/explicit-constructor.patch
 
 system/vpx.patch
 system/icu.patch
 system/gtk2.patch
 system/jpeg.patch
+system/lcms.patch
 system/nspr.patch
 system/zlib.patch
 system/event.patch
-system/libdrm.patch
+system/jsoncpp.patch
 system/ffmpeg.patch
 system/openjpeg.patch
 system/convertutf.patch
 system/fontconfig.patch
-
-system/vpx16.patch
-system/icu57.patch
-system/ffmpeg32.patch
-system/openjpeg21.patch
 
 gooroom/0001-add-gooroom-and-configs-to-build-gooroom-browser-bin.patch
 gooroom/0002-add-GooroomExtraPartsSecurity-that-will-initialize-G.patch
