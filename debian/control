@@ -9,7 +9,7 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-chromium/pkg-chromium.git
 Homepage: http://www.chromium.org/Home
 Build-Depends:
  git,
- gtk2.0-dev,
+ libgtk2.0-dev,
  debhelper (>= 11),
  devscripts (>= 2.18.9),
  python3,
