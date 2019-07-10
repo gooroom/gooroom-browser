@@ -150,4 +150,6 @@ gooroom/BugTrackingSystem-650.patch
 gooroom/BugTrackingSystem-507.patch
 gooroom/CVE-2019-5818.patch
 gooroom/CVE-2019-5819.patch
-gooroom/Temporarily-remove-verify-sign-module.patch
+gooroom/BugTrackingSystem-884.patch
+gooroom/BugTrackingSystem-953.patch
+gooroom/gooroom-security-utils-migrated-into-gooroom-browser.patch
