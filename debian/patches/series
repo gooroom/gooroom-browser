@@ -128,7 +128,6 @@ gooroom/0059-Change-Strings-make-Gooroom-browser-better-by-report.patch
 gooroom/0060-Migrate-verifySign-module.-Add-DIR-path-on-GRMCODE-0.patch
 gooroom/0061-Migrate-syslog-GRMCODE-050004-050005-to-GooroomPref-.patch
 gooroom/0062-Gooroom-Characteristic-change-sign-verify-gtk3-to-gt.patch
-gooroom/0063-Add-AdobeFlash-Version-Reader-module.patch
 gooroom/20190527-BugTrackingSystem.patch
 gooroom/BugTrackingSystem-697.patch
 gooroom/BugTrackingSystem-355.patch
@@ -141,3 +140,4 @@ gooroom/BugTrackingSystem-953.patch
 gooroom/gooroom-security-utils-migrated-into-gooroom-browser.patch
 gooroom/BugTrackingSystem-736.patch
 gooroom/BugTrackingSystem-1030.patch
+gooroom/0063-Add-AdobeFlash-Version-Reader-module.patch
