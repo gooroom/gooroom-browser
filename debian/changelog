@@ -1,3 +1,13 @@
+gooroom-browser (2.2.0-1+grm1u7) stretch; urgency=medium
+
+  * Add AdobeFlash-Version Reader module
+  * Fix Gooroom Bug Tracking System
+    - 736 : Remove 'Offer to translate page' toggle button
+    - 1030 : Add korean translation about 'Extensions no-installed
+             items..' in extension page
+
+ -- Choi J.S. <junsungc91@gmail.com>  Wed, 24 Jul 2019 14:53:00 +0900
+
 gooroom-browser (2.2.0-1+grm1u6) stretch; urgency=medium
 
   * Fix Gooroom Bug Tracking System
