@@ -1,0 +1,13 @@
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index d34c8d7bb..cf37b376e 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -144,7 +144,7 @@ int is_local_user() {
+           if (strcmp(tok2, "Service") == 0) {
+             tok2 = strtok(nullptr, "=");
+             tok2 = strtok(tok2, "\n");
+-            if (strcmp(tok2, "lightdm") == 0) {
++            if (strncmp(tok2, "lightdm", 7) == 0) {
+               service_lightdm = true;
+               continue;
+             }
