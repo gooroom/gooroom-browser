@@ -1,3 +1,11 @@
+gooroom-browser (2.2.0-1+grm1u8) stretch; urgency=medium
+
+  * Relocation debian/patches/series file.
+  * Fix lightdm in the loginctl command because it looks like
+    lightdm-autologin in the live CD.
+
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 30 Jul 2019 9:42:00 +0900
+
 gooroom-browser (2.2.0-1+grm1u7) stretch; urgency=medium
 
   * Add AdobeFlash-Version Reader module
