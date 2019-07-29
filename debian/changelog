@@ -1,3 +1,9 @@
+gooroom-browser (2.2.0-1+grm1u9) stretch; urgency=medium
+
+  * Emergency Bug(local-user-checking) Fix in the live CD.
+
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 30 Jul 2019 16:15:00 +0900
+
 gooroom-browser (2.2.0-1+grm1u8) stretch; urgency=medium
 
   * Relocation debian/patches/series file.

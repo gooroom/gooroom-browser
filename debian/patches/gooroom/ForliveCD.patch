@@ -1,7 +1,19 @@
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index d34c8d7bb..cf37b376e 100644
+index d34c8d7bb..5f95627c9 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
+@@ -99,9 +99,9 @@ int is_local_user() {
+         if (!atoi(tok))
+           break;
+       }
+-      if (num==0 && sessionNum==0)
++      if (num==0)
+         sessionNum=atoi(tok);
+-      if (num==1 && userID==0)
++      if (num==1)
+         userID=atoi(tok);
+       if (num==2) {
+         FILE *fp2 = NULL;
 @@ -144,7 +144,7 @@ int is_local_user() {
            if (strcmp(tok2, "Service") == 0) {
              tok2 = strtok(nullptr, "=");
