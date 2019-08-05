@@ -1,3 +1,9 @@
+gooroom-browser (2.2.0-1+grm1u10) stretch; urgency=medium
+
+  * Handle exceptions when Flash is not installed
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 5 Aug 2019 18:46:00 +0900
+
 gooroom-browser (2.2.0-1+grm1u9) stretch; urgency=medium
 
   * Emergency Bug(local-user-checking) Fix in the live CD.

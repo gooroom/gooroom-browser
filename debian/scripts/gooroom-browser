@@ -117,10 +117,10 @@ if [ $want_debug -eq 1 ] ; then
   exit $?
 else
   if [ $want_temp_profile -eq 0 ] ; then
-    exec $LIBDIR/$APPNAME --checksign --ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so --ppapi-flash-version=31.0.0.153 "$@"
+    exec $LIBDIR/$APPNAME --checksign --ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so "$@"
   else
     # we can't exec here as we need to clean-up the temporary profile
-    $LIBDIR/$APPNAME --checksign --ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so --ppapi-flash-version=31.0.0.153 "$@"
+    $LIBDIR/$APPNAME --checksign --ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so "$@"
     rm -rf $TEMP_PROFILE
   fi
 fi
