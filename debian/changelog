@@ -1,3 +1,10 @@
+gooroom-browser (2.2.0-1+grm1u11) stretch; urgency=medium
+
+  * VerfySign module works only when checksign option is present.
+    - The 'checksign' option changed to not exist by default.
+
+ -- Choi J.S. <junsungc91@gmail.com>  Thu, 8 Aug 2019 17:54:00 +0900
+
 gooroom-browser (2.2.0-1+grm1u10) stretch; urgency=medium
 
   * Handle exceptions when Flash is not installed
