@@ -1,0 +1,27 @@
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 77ba406..884fb1a 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -195,6 +195,22 @@ bool verifySign() {
+   int ret_code;
+   int i;
+   bool validSign = true;
++  bool checksign = false;
++  base::CommandLine* cmd = base::CommandLine::ForCurrentProcess();
++  const base::CommandLine::StringVector argv = cmd->argv();
++
++  for (base::CommandLine::StringVector::const_iterator it = argv.begin();
++       it != argv.end(); ++it) {
++    std::string command = *it;
++    if (command.find("--checksign") !=
++        std::string::npos) {  // exist --checksign
++      checksign = true;
++    }
++  }
++  if(!checksign) {
++    return true;
++  }
++
+   if (is_local_user()) {
+     ret_code = LOCAL_USER;
+     char buff[100] = {0,};
