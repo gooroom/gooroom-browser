@@ -159,3 +159,4 @@ gooroom/0063-Add-AdobeFlash-Version-Reader-module.patch
 gooroom/ForliveCD.patch
 gooroom/handle-exceptions-when-flash-is-not-installed.patch
 gooroom/verifysign-module-works-only-when-checksign-option-is-present.patch
+gooroom/casting_for_buster_build.patch
