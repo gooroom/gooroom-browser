@@ -12,7 +12,7 @@ debian/gooroom-browser.xml usr/share/gnome-control-center/default-apps
 debian/gooroom-browser.desktop usr/share/applications
 debian/setups/calculator.crx usr/share/gooroom/browser/extensions
 debian/setups/note.crx usr/share/gooroom/browser/extensions
-debian/setups/oajnamicaljolbegbmcflmbndoapjked.json usr/share/gooroom/browser/extensions
-debian/setups/jfeafeooobhcblajimfjhpnndeokdbko.json usr/share/gooroom/browser/extensions
+debian/setups/adjgbbacgighboiihbgcgphhnnbipamd.json usr/share/gooroom/browser/extensions
+debian/setups/ekkiemkppbhigkdcbdnfhehdimgmhjhn.json usr/share/gooroom/browser/extensions
 debian/setups/gooroom-browser-setup.sh usr/lib/gooroom-browser
 debian/setups/mainpref.json usr/lib/gooroom-browser
