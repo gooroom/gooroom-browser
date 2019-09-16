@@ -1,103 +1,101 @@
-gooroom-browser (2.2.0-1+grm1u11) stretch; urgency=medium
+gooroom-browser (2.3.0-1+grm1u1) stretch; urgency=medium
 
-  * VerfySign module works only when checksign option is present.
-    - The 'checksign' option changed to not exist by default.
+  * Init Gooroom browser version (2.3.0-1+grm1u1)
 
- -- Choi J.S. <junsungc91@gmail.com>  Thu, 8 Aug 2019 17:54:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 16 Sep 2019 16:49:00 +0900
 
-gooroom-browser (2.2.0-1+grm1u10) stretch; urgency=medium
+chromium (76.0.3809.100-1~deb10u1) buster-security; urgency=medium
 
-  * Handle exceptions when Flash is not installed
+  * New upstream stable release.
+    - CVE-2019-5805: Use after free in PDFium. Reported by Anonymous
+    - CVE-2019-5806: Integer overflow in Angle. Reported by Wen Xu
+    - CVE-2019-5807: Memory corruption in V8. Reported by TimGMichaud
+    - CVE-2019-5808: Use after free in Blink. Reported by cloudfuzzer
+    - CVE-2019-5809: Use after free in Blink. Reported by Mark Brand
+    - CVE-2019-5810: User information disclosure in Autofill. Reported by Mark
+      Amery
+    - CVE-2019-5811: CORS bypass in Blink. Reported by Jun Kokatsu
+    - CVE-2019-5813: Out of bounds read in V8. Reported by Aleksandar Nikolic
+    - CVE-2019-5814: CORS bypass in Blink. Reported by @AaylaSecura1138
+    - CVE-2019-5815: Heap buffer overflow in Blink. Reported by Nicolas
+      Grégoire
+    - CVE-2019-5818: Uninitialized value in media reader. Reported by Adrian
+      Tolbaru
+    - CVE-2019-5819: Incorrect escaping in developer tools. Reported by Svyat
+      Mitin
+    - CVE-2019-5820: Integer overflow in PDFium. Reported by pdknsk
+    - CVE-2019-5821: Integer overflow in PDFium. Reported by pdknsk
+    - CVE-2019-5822: CORS bypass in download manager. Reported by Jun Kokatsu
+    - CVE-2019-5823: Forced navigation from service worker. Reported by David
+      Erceg
+    - CVE-2019-5824: Parameter passing error in media player. Reported by
+      leecraso and Guang Gong
+    - CVE-2019-5825: Out-of-bounds write in V8. Reported by Gengming Liu,
+      Jianyu Chen, Zhen Feng, and Jessica Liu
+    - CVE-2019-5826: Use-after-free in IndexedDB. Reported by Gengming Liu,
+      Jianyu Chen, Zhen Feng, and Jessica Liu
+    - CVE-2019-5827: Out-of-bounds access issue in SQLite. Reported by
+      mlfbrown
+    - CVE-2019-5828: Use after free in ServiceWorker. Reported by leecraso and
+      Guang Gong
+    - CVE-2019-5829: Use after free in Download Manager. Reported by Lucas
+      Pinheiro
+    - CVE-2019-5830: Incorrectly credentialed requests in CORS. Reported by
+      Andrew Krasichkov
+    - CVE-2019-5831: Incorrect map processing in V8. Reported by yngwei
+    - CVE-2019-5832: Incorrect CORS handling in XHR. Reported by Sergey Shekyan
+    - CVE-2019-5833: Inconsistent security UI placement. Reported by Khalil
+      Zhani
+    - CVE-2019-5834: URL spoof in Omnibox on iOS. Reported by Khalil Zhani
+    - CVE-2019-5835: Out of bounds read in Swiftshader. Reported by Wenxiang
+      Qian
+    - CVE-2019-5836: Heap buffer overflow in Angle. Reported by Omair
+    - CVE-2019-5837: Cross-origin resources size disclosure in Appcache.
+      Reported by Adam Iwaniuk
+    - CVE-2019-5838: Overly permissive tab access in Extensions. Reported by
+      David Erceg
+    - CVE-2019-5839: Incorrect handling of certain code points in Blink.
+      Reported by Masato Kinugawa
+    - CVE-2019-5840: Popup blocker bypass. Reported by Eliya Stein and Jerome
+      Dangu
+    - CVE-2019-5842: Use-after-free in Blink. Reported by BUGFENSE
+    - CVE-2019-5847: V8 sealed/frozen elements cause crash. Reported by m3plex
+    - CVE-2019-5848: Font sizes may expose sensitive information. Reported by
+      Mark Amery
+    - CVE-2019-5849: Out-of-bounds read in Skia. Reported by Zhen Zhou
+    - CVE-2019-5850: Use-after-free in offline page fetcher. Reported by
+      Brendon Tiszka
+    - CVE-2019-5851: Use-after-poison in offline audio context. Reported by Zhe
+      Jin
+    - CVE-2019-5852: Object leak of utility functions. Reported by David Erceg
+    - CVE-2019-5853: Memory corruption in regexp length check. Reported by
+      yngwei and sakura
+    - CVE-2019-5854: Integer overflow in PDFium text rendering. Reported by
+      Zhen Zhou
+    - CVE-2019-5855: Integer overflow in PDFium. Reported by Zhen Zhou
+    - CVE-2019-5856: Insufficient checks on filesystem: URI permissions.
+      Reported by Yongke Wang
+    - CVE-2019-5857: Comparison of -0 and null yields crash. Reported by
+      cloudfuzzer
+    - CVE-2019-5858: Insufficient filtering of Open URL service parameters.
+      Reported by evi1m0
+    - CVE-2019-5859: res: URIs can load alternative browsers. Reported by James
+      Lee
+    - CVE-2019-5860: Use-after-free in PDFium. Reported by Anonymous
+    - CVE-2019-5861: Click location incorrectly checked. Reported by Robin Linus
+    - CVE-2019-5862: AppCache not robust to compromised renderers. Reported by
+      Jun Kokatsu
+    - CVE-2019-5864: Insufficient port filtering in CORS for extensions.
+      Reported by Devin Grindle
+    - CVE-2019-5865: Site isolation bypass from compromised renderer. Reported
+      by Ivan Fratric
+    - CVE-2019-5867: Out-of-bounds read in V8. Reported by Lucas Pinheiro
+    - CVE-2019-5868: Use-after-free in PDFium ExecuteFieldAction. Reported by
+      banananapenguin
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 5 Aug 2019 18:46:00 +0900
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 10 Aug 2019 01:11:21 +0000
 
-gooroom-browser (2.2.0-1+grm1u9) stretch; urgency=medium
-
-  * Emergency Bug(local-user-checking) Fix in the live CD.
-
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 30 Jul 2019 16:15:00 +0900
-
-gooroom-browser (2.2.0-1+grm1u8) stretch; urgency=medium
-
-  * Relocation debian/patches/series file.
-  * Fix lightdm in the loginctl command because it looks like
-    lightdm-autologin in the live CD.
-
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 30 Jul 2019 9:42:00 +0900
-
-gooroom-browser (2.2.0-1+grm1u7) stretch; urgency=medium
-
-  * Add AdobeFlash-Version Reader module
-  * Fix Gooroom Bug Tracking System
-    - 736 : Remove 'Offer to translate page' toggle button
-    - 1030 : Add korean translation about 'Extensions no-installed
-             items..' in extension page
-
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 24 Jul 2019 14:53:00 +0900
-
-gooroom-browser (2.2.0-1+grm1u6) stretch; urgency=medium
-
-  * Fix Gooroom Bug Tracking System
-    - 884 : hange string chrome to gooroom on error page (URLBlacklist)
-    - 953 : Mojom JS: Fix string serialization
-  * gooroom-security-utils migrated into gooroom-browser
-    - remove gooroom-security-utils on debian/control
-
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 10 Jul 2019 17:25:00 +0900
-
-gooroom-browser (2.2.0-1+grm1u5) stretch; urgency=medium
-
-  * Remove debian/files (build)
-  * Change string 'gooroom web browser' to 'gooroom browser' on desktop
-
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 25 Jun 2019 10:20:00 +0900
-
-gooroom-browser (2.2.0-1+grm1u4) stretch; urgency=medium
-
-  * Fix Gooroom Bug Tracking System
-    - 507 : Disable 'Open as window' on making shortcut app popup.
-  * Security patch
-    - CVE-2019-5818: Uninitialized value in media reader. Reported by Adrian Tolbaru on
-    - CVE-2019-5819: Incorrect escaping in developer tools. Reported by Svyat Mitin
-
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 5 Jun 2019 11:36:00 +0900
-
-gooroom-browser (2.2.0-1+grm1u3) stretch; urgency=medium
-
-  * Fix Gooroom Bug Tracking System
-    - 355 : Re-register the whitelist upon trust/untrust judgement module.
-    - 650 : Client redirection URL does not apply Trust/Untrust judgement module.
-    - 697 : Change strings 'chrome&google' to gooroom on gooroom:// pages
-    - 697-6 : Change default ntp (google webstore -> gooroom.kr)
-
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 31 May 2019 10:14:00 +0900
-
-gooroom-browser (2.2.0-1+grm1u2) stretch; urgency=medium
-
-  * Fix Gooroom Bug Tracking System
-    - 746 : Change string Chromium to Gooroom Browser on gooroom://flags page
-    - 743 : Remove Translate option on settings language page
-    - 741 : Remove report function on settings person security page
-    - 740 : Remove 'USB not found'strings on content settings usb page
-    - 738 : Change string 'Chromium' to 'Open Project(Chromium)'on reset settings page
-    - 731 : Update adobe-flash version
-    - 728 : Remove browser-login on gooroom://devices page
-    - 726 : Change string 'chrome' to 'gooroom' on man page
-    - 723 : Change strings 'About Chromium' to 'About Gooroom Browser' on settings icon
-    - 722 : Remove browser-login on gooroom://history page
-    - 721 : Restrict secret mode access on bookmark
-    - 714 : Remove browser-login on gooroom://welcome page
-    - 205 : Remove google-cloud-login on print page
-
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 27 May 2019 15:17:00 +0900
-
-gooroom-browser (2.2.0-1+grm1u1) stretch; urgency=medium
-
-  * Init Gooroom browser version (2.2.0-1+grm1u1)
-
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 10 May 2019 18:35:00 +0900
-
-chromium (73.0.3683.75-1~deb9u1) stretch-security; urgency=medium
+chromium (73.0.3683.75-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2019-5787: Use after free in Canvas. Reported by Zhe Jin
@@ -119,32 +117,45 @@ chromium (73.0.3683.75-1~deb9u1) stretch-security; urgency=medium
     - CVE-2019-5803: CSP bypass with Javascript URLs'. Reported by Andrew
       Comminos
 
- -- Michael Gilbert <mgilbert@debian.org>  Tue, 26 Mar 2019 23:43:33 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 19 Mar 2019 02:19:17 +0000
 
-chromium (72.0.3626.122-1~deb9u1) stretch-security; urgency=medium
+chromium (73.0.3683.56-2) experimental; urgency=medium
 
-  * New upstream security release.
-    - CVE-2019-5786: Use-after-free in FileReader. Reported by Clement Lecigne
-  * Fix crash when launched in remote debugging mode (closes: #922794).
+  * Fix build failure on armhf.
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 09 Mar 2019 20:20:25 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 10 Mar 2019 04:35:32 +0000
 
-chromium (72.0.3626.96-1~deb9u2) stretch-security; urgency=medium
+chromium (73.0.3683.56-1) experimental; urgency=medium
 
-  * Fix crash when launched in headless mode (closes: #922806).
-  * Replace files from chromium-sandbox on upgrade (closes: #923298).
+  * New upstream beta release.
 
- -- Michael Gilbert <mgilbert@debian.org>  Tue, 26 Feb 2019 02:53:04 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 02 Mar 2019 18:02:02 +0000
 
-chromium (72.0.3626.96-1~deb9u1) stretch-security; urgency=medium
+chromium (72.0.3626.122-1) unstable; urgency=medium
+
+  * New upstream stable release.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 07 Mar 2019 14:05:20 +0000
+
+chromium (72.0.3626.121-1) unstable; urgency=medium
+
+  * New upstream stable release.
+    - CVE-2019-5786: Use-after-free in FileReader
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 02 Mar 2019 16:28:16 +0000
+
+chromium (72.0.3626.109-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2019-5784: Inappropriate implementation in V8. Reported by Lucas
       Pinheiro
+  * Build pdfium using system lcms.
+  * Renable support for kerberos (closes: #916684).
+  * Fix 32-bit type error in the vaapi implementation (closes: #921823).
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 16 Feb 2019 17:56:29 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 04 Feb 2019 04:27:06 +0000
 
-chromium (72.0.3626.81-1~deb9u1) stretch-security; urgency=medium
+chromium (72.0.3626.81-1) unstable; urgency=medium
 
   * New upstream stable release.
     - Stack buffer overflow in Skia. Reported by Ivan Fratric
@@ -197,10 +208,59 @@ chromium (72.0.3626.81-1~deb9u1) stretch-security; urgency=medium
     - CVE-2019-5782: Inappropriate implementation in V8 reported by Qixun Zhao
     - CVE-2019-5783: Insufficient validation of untrusted input in DevTools.
       Reported by Shintaro Kobori
+  * Opt out of all Google web service options by default (closes: #916320).
+  * Enable support for hardware accelerated video decoding (closes: #856255).
+    - Thanks to Akarshan Biswas.
 
- -- Michael Gilbert <mgilbert@debian.org>  Thu, 07 Feb 2019 02:41:49 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 02 Feb 2019 05:05:43 +0000
 
-chromium-browser (71.0.3578.80-1~deb9u1) stretch-security; urgency=medium
+chromium (72.0.3626.53-1) unstable; urgency=medium
+
+  * New upstream beta release.
+  * Organize the gcc 6 patches.
+  * Update standards version to 4.3.0.
+  * Drop libsrtp from the build dependencies (closes: #918542).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 12 Jan 2019 07:17:20 +0000
+
+chromium (72.0.3626.7-6) unstable; urgency=medium
+
+  * Upload to unstable: fix FTBFS on arm64 and armhf
+
+ -- Riku Voipio <riku.voipio@linaro.org>  Tue, 08 Jan 2019 14:41:13 +0200
+
+chromium (72.0.3626.7-5) experimental; urgency=medium
+
+  * Fix armhf and arm64 builds
+
+ -- Riku Voipio <riku.voipio@linaro.org>  Fri, 04 Jan 2019 16:17:43 +0200
+
+chromium (72.0.3626.7-4) unstable; urgency=medium
+
+  * Reenable support for widevine (closes: #916058).
+  * Update maintainer to chromium@packages.debian.org (closes: #915988).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 24 Dec 2018 19:41:02 +0000
+
+chromium (72.0.3626.7-3) unstable; urgency=medium
+
+  * Remove unintended extra brace in arm patch.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 16 Dec 2018 22:37:19 +0000
+
+chromium (72.0.3626.7-2) experimental; urgency=medium
+
+  * Fix build failures on arm.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 14 Dec 2018 02:50:58 +0000
+
+chromium (72.0.3626.7-1) experimental; urgency=medium
+
+  * New upstream developmental release.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 11 Dec 2018 03:31:15 +0000
+
+chromium (71.0.3578.80-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2018-17480: Out of bounds write in V8. Reported by Guang Gong
@@ -252,26 +312,53 @@ chromium-browser (71.0.3578.80-1~deb9u1) stretch-security; urgency=medium
     - Insufficient policy enforcement in Navigation. Reported by Ryan Pickren
     - Insufficient policy enforcement in URL Formatter. Reported by evi1m0
 
- -- Michael Gilbert <mgilbert@debian.org>  Fri, 07 Dec 2018 01:16:43 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 05 Dec 2018 00:45:35 +0000
 
-chromium-browser (70.0.3538.110-1~deb9u1) stretch-security; urgency=medium
+chromium (71.0.3578.62-1) unstable; urgency=medium
+
+  * New upstream beta release.
+  * Rename the source package to chromium.
+  * Build using the system jsoncpp library.
+  * Remove non-free unrar source from the upstream tarball (closes: #914487).
+    - Requires safe browsing inspection of rar files to be disabled.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 21 Nov 2018 02:37:35 +0000
+
+chromium-browser (70.0.3538.110-1) unstable; urgency=medium
 
   * New upstream security release.
     - CVE-2018-17479: Use-after-free in GPU.
 
- -- Michael Gilbert <mgilbert@debian.org>  Wed, 21 Nov 2018 02:17:45 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 20 Nov 2018 00:45:46 +0000
 
-chromium-browser (70.0.3538.102-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (70.0.3538.102-1) unstable; urgency=medium
 
   * New upstream security release.
     - CVE-2018-17478: Out of bounds memory access in V8.  Reported by
       cloudfuzzer
-  * Eliminate unintended dependency on gconf-service (closes: #913926).
-  * Restore arm64 crashpad patch mistakenly dropped in the previous upload.
+  * Fix new lintian warnings.
+  * Drop libjs-excanvas build dependency.
+  * Add support for building with harfbuzz 2.1.1.
+  * Document how to run chromium as root (closes: #838534).
+  * Output debian specific instructions when no working sandbox is available.
+  * Do not rely on transitive recommendation for the sandbox (closes: #913116).
 
- -- Michael Gilbert <mgilbert@debian.org>  Tue, 13 Nov 2018 00:12:43 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 16 Nov 2018 03:12:53 +0000
 
-chromium-browser (70.0.3538.67-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (70.0.3538.67-3) unstable; urgency=medium
+
+  * Fix a compiler warning.
+  * Move the setuid sandbox into a separate package (closes: #839277).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 03 Nov 2018 17:30:16 +0000
+
+chromium-browser (70.0.3538.67-2) unstable; urgency=medium
+
+  * Restore support for building with gtk2.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 23 Oct 2018 01:11:35 +0000
+
+chromium-browser (70.0.3538.67-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2018-17462: Sandbox escape in AppCache. Reported by Ned Williamson
@@ -297,18 +384,60 @@ chromium-browser (70.0.3538.67-1~deb9u1) stretch-security; urgency=medium
     - CVE-2018-5179: Lack of limits on update() in ServiceWorker. Reported by
       Yannic Bonenberger
     - CVE-2018-17477: UI spoof in Extensions. Reported by Aaron Muir Hamilton
+  * Fix build failure on i386.
+  * Fix installation path of the master preferences file (closes: #911056).
 
- -- Michael Gilbert <mgilbert@debian.org>  Wed, 31 Oct 2018 00:46:08 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 16 Oct 2018 12:36:22 +0000
 
-chromium-browser (69.0.3497.92-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (70.0.3538.54-2) unstable; urgency=medium
+
+  * Build with gcc 8 (closes: #901368).
+  * Move the master preferences file to /etc/chromium (closes: #891232).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 14 Oct 2018 00:49:46 +0000
+
+chromium-browser (70.0.3538.54-1) unstable; urgency=medium
+
+  * New upstream beta release.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 13 Oct 2018 04:18:08 +0000
+
+chromium-browser (69.0.3497.100-1) unstable; urgency=medium
+
+  * New upstream stable release.
+  * Update standards version to 4.2.1.
+  * Clarify debugging section in README.debian (closes: #910842).
+  * Remove ConvertUTF from the upstream tarball (closes: #900596).
+  * Load all extensions installed to /usr/share/chromium/extensions.
+    - Thanks to Michael Meskes (closes: #890392).
+  * Remove audio_capture_enable setting from the default preferences
+    (closes: #884887).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 13 Oct 2018 02:35:46 +0000
+
+chromium-browser (69.0.3497.92-1) unstable; urgency=medium
 
   * New upstream security release.
     - Function signature mismatch in WebAssembly. Reported by Kevin Cheung
     - URL Spoofing in Omnibox. Reported by evi1m0
 
- -- Michael Gilbert <mgilbert@debian.org>  Fri, 14 Sep 2018 00:48:39 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 13 Sep 2018 03:12:53 +0000
 
-chromium-browser (69.0.3497.81-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (69.0.3497.81-3) unstable; urgency=medium
+
+  * Move another file needed for the armhf build to where it is expected.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 07 Sep 2018 00:06:13 +0000
+
+chromium-browser (69.0.3497.81-2) unstable; urgency=medium
+
+  * Disable swiftshader.
+  * Move file needed for the armhf build to where it is expected.
+  * Document disabled built-in extensions in README.debian (closes: #886358).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 06 Sep 2018 01:45:12 +0000
+
+chromium-browser (69.0.3497.81-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2018-16065: Out of bounds write in V8. Reported by Brendon Tiszka
@@ -340,12 +469,24 @@ chromium-browser (69.0.3497.81-1~deb9u1) stretch-security; urgency=medium
       Reported by Jun Kokatsu
     - CVE-2018-16085: Use after free in Memory Instrumentation. Reported by
       Roman Kuksin
-  * Replace files from chromium-common on upgrade (closes: #904798).
-  * Fix build failure on arm64 caused by binutils in stretch (closes: #904796).
 
- -- Michael Gilbert <mgilbert@debian.org>  Sun, 12 Aug 2018 01:10:32 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 05 Sep 2018 00:01:50 +0000
 
-chromium-browser (68.0.3440.75-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (69.0.3497.12-1) experimental; urgency=medium
+
+  * New upstream development release.
+    - Fixes an error that can occur on pages containing xml (closes: #865592).
+  * Install swiftshader libraries to /usr/lib/chromium (closes: #901831).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 29 Jul 2018 09:30:34 +0000
+
+chromium-browser (68.0.3440.75-2) unstable; urgency=medium
+
+  * Restore a mistakenly omitted call to InitializeFFmpeg (closes: #902909).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 26 Jul 2018 00:37:11 +0000
+
+chromium-browser (68.0.3440.75-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2018-4117: Cross origin information leak in Blink. Reported by
@@ -390,18 +531,74 @@ chromium-browser (68.0.3440.75-1~deb9u1) stretch-security; urgency=medium
       Masas
     - CVE-2018-6178: UI spoof in Extensions. Reported by Khalil Zhani
     - CVE-2018-6179: Local file information leak in Extensions.
-  * Correct a regression in audio/video file handling caused by the ffmpeg 3.4
-    support patch introduced in the previous security upload (closes: #902909).
 
- -- Michael Gilbert <mgilbert@debian.org>  Sun, 15 Jul 2018 20:09:38 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 25 Jul 2018 00:28:20 +0000
 
-chromium-browser (67.0.3396.87-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (68.0.3440.42-1) experimental; urgency=medium
+
+  * New upstream beta release.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 30 Jun 2018 17:46:03 +0000
+
+chromium-browser (68.0.3440.33-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Build using upstream's "lite" tarball.
+  * Restore decoder initialization from chromium 66 to maintain compatibility
+    with ffmpeg 3.4 (closes: #900533).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 29 Jun 2018 20:48:51 +0000
+
+chromium-browser (68.0.3440.25-1) experimental; urgency=medium
+
+  * New upstream beta release.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 24 Jun 2018 16:32:18 +0000
+
+chromium-browser (68.0.3440.17-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Recommend upower and notification-daemon.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 11 Jun 2018 04:40:58 +0000
+
+chromium-browser (68.0.3440.7-1) experimental; urgency=medium
+
+  * New upstream development release.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 10 Jun 2018 23:44:14 +0000
+
+chromium-browser (67.0.3396.87-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2018-6149: Out of bounds write in V8. Reported by Yu Zhou and
+      Jundong Xie
+
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 19 Jun 2018 12:13:46 +0000
+
+chromium-browser (67.0.3396.79-2) unstable; urgency=medium
+
+  * Use embedded ffmpeg code copy (closes: #900533).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 11 Jun 2018 00:33:39 +0000
+
+chromium-browser (67.0.3396.79-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2018-6148: Incorrect handling of CSP header. Reported by Michał
+      Bentkowski
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 10 Jun 2018 21:48:45 +0000
+
+chromium-browser (67.0.3396.62-2) unstable; urgency=medium
+
+  * Fix build on arm64/armhf
+
+ -- Riku Voipio <riku.voipio@linaro.org>  Fri, 08 Jun 2018 15:37:05 +0300
+
+chromium-browser (67.0.3396.62-1) unstable; urgency=medium
 
   * New upstream stable release.
-    - CVE-2018-6118: Use after free in Media Cache. Reported by Ned Williamson
-    - CVE-2018-6120: Heap buffer overflow in PDFium. Reported by Zhou Aiting
-    - CVE-2018-6121: Privilege Escalation in extensions.
-    - CVE-2018-6122: Type confusion in V8.
     - CVE-2018-6123: Use after free in Blink. Reported by Looben Yang
     - CVE-2018-6124: Type confusion in Blink. Reported by Guang Gong
     - CVE-2018-6125: Overly permissive policy in WebUSB. Reported by Yubico
@@ -436,54 +633,54 @@ chromium-browser (67.0.3396.87-1~deb9u1) stretch-security; urgency=medium
       Kinugawa
     - CVE-2018-6147: Password fields not taking advantage of OS protections in
       Views. Reported by Michail Pishchagin
-    - CVE-2018-6148: Incorrect handling of CSP header. Reported by Michał
-      Bentkowski
-    - CVE-2018-6149: Out of bounds write in V8. Reported by Yu Zhou and
-      Jundong Xie
-  * The widevine adaptor package is now empty, it is no longer required to
-    use the widevine content decryption module.
 
- -- Michael Gilbert <mgilbert@debian.org>  Fri, 29 Jun 2018 23:47:08 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 30 May 2018 13:03:02 +0000
 
-chromium-browser (66.0.3359.117-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (67.0.3396.57-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Ignore more compiler warnings.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 29 May 2018 13:06:17 +0000
+
+chromium-browser (67.0.3396.56-1) experimental; urgency=medium
+
+  * New upstream beta release.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 27 May 2018 04:27:00 +0000
+
+chromium-browser (67.0.3396.48-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Indicate that binary rules do not require root.
+  * Change maintainer address to chromium-browser@packages.debian.org.
+  * Drop widevine adapter package, no longer supported upstream (chromium
+    should automatically detect and use libwidevinecdm.so without the extra
+    adapter library now).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 19 May 2018 03:30:20 +0000
+
+chromium-browser (66.0.3359.181-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2018-6120: Heap buffer overflow in PDFium. Reported by Zhou Aiting
+    - CVE-2018-6121: Privilege Escalation in extensions.
+    - CVE-2018-6122: Type confusion in V8.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 18 May 2018 21:08:59 +0000
+
+chromium-browser (66.0.3359.139-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2018-6118: Use after free in Media Cache. Reported by Ned Williamson
+  * Enable jumbo build.
+  * Recommend libgl1-mesa-dri.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 28 Apr 2018 02:44:15 +0000
+
+chromium-browser (66.0.3359.117-1) unstable; urgency=medium
 
   * New upstream stable release.
-    - CVE-2018-6056: Incorrect derived class instantiation in V8. Reported by
-      lokihardt
-    - CVE-2018-6057: Incorrect permissions on shared memory. Reported by Gal
-      Beniamini
-    - CVE-2018-6060: Use after free in Blink. Reported by Omair
-    - CVE-2018-6061: Race condition in V8. Reported by Guang Gong
-    - CVE-2018-6062: Heap buffer overflow in Skia. Reported by Anonymous
-    - CVE-2018-6063: Incorrect permissions on shared memory. Reported by Gal
-      Beniamini
-    - CVE-2018-6064: Type confusion in V8. Reported by lokihardt
-    - CVE-2018-6065: Integer overflow in V8. Reported by Mark Brand
-    - CVE-2018-6066: Same Origin Bypass via canvas. Reported by Masato Kinugawa
-    - CVE-2018-6067: Buffer overflow in Skia. Reported by Ned Williamson
-    - CVE-2018-6068: Object lifecycle issues in Chrome Custom Tab. Reported by
-      Luan Herrera
-    - CVE-2018-6069: Stack buffer overflow in Skia. Reported by Wanglu &
-      Yangkang
-    - CVE-2018-6070: CSP bypass through extensions. Reported by Rob Wu
-    - CVE-2018-6071: Heap bufffer overflow in Skia. Reported by Anonymous
-    - CVE-2018-6072: Integer overflow in PDFium. Reported by Atte Kettunen
-    - CVE-2018-6073: Heap bufffer overflow in WebGL. Reported by Omair
-    - CVE-2018-6074: Mark-of-the-Web bypass. Reported by Abdulrahman Alqabandi
-    - CVE-2018-6075: Overly permissive cross origin downloads. Reported by Inti
-      De Ceukelaire
-    - CVE-2018-6076: Incorrect handling of URL fragment identifiers in Blink.
-      Reported by Mateusz Krzeszowiec
-    - CVE-2018-6077: Timing attack using SVG filters. Reported by Khalil Zhani
-    - CVE-2018-6078: URL Spoof in OmniBox. Reported by Khalil Zhani
-    - CVE-2018-6079: Information disclosure via texture data in WebGL. Reported
-      by Ivars Atteka
-    - CVE-2018-6080: Information disclosure in IPC call. Reported by Gal
-      Beniamini
-    - CVE-2018-6081: XSS in interstitials. Reported by Rob Wu
-    - CVE-2018-6082: Circumvention of port blocking. Reported by WenXu Wu
-    - CVE-2018-6083: Incorrect processing of AppManifests. Reported by Jun
-      Kokatsu
     - CVE-2018-6085: Use after free in Disk Cache. Reported by Ned Williamson
     - CVE-2018-6086: Use after free in Disk Cache. Reported by Ned Williamson
     - CVE-2018-6087: Use after free in WebAssembly. Reported by Anonymous
@@ -524,13 +721,156 @@ chromium-browser (66.0.3359.117-1~deb9u1) stretch-security; urgency=medium
     - CVE-2018-6112: Incorrect URL handling in DevTools. Reported by Rob Wu
     - CVE-2018-6113: URL spoof in Navigation. Reported by Khalil Zhani
     - CVE-2018-6114: CSP bypass. Reported by Lnyas Zhang
+    - CVE-2018-6115: SmartScreen bypass in downloads. Reported by James Feher
     - CVE-2018-6116: Incorrect low memory handling in WebAssembly. Reported by
       Chengdu Security Response Center
     - CVE-2018-6117: Confusing autofill settings. Reported by Spencer Dailey
+    - Fixes proxy time out error (closes: #892994).
+    - Removes not implemented messages (closes: #893799).
+  * Remove third_party/chromite from the upstream tarball (closes: #895076).
 
- -- Michael Gilbert <mgilbert@debian.org>  Wed, 25 Apr 2018 23:48:58 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 26 Apr 2018 01:27:39 +0000
 
-chromium-browser (64.0.3282.119-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (66.0.3359.26-2) unstable; urgency=medium
+
+  [ Michael Gilbert ]
+  * Build using gcc6.
+  * Move version control to salsa.debian.org.
+  * Change maintainer address to chromium-browser@tracker.debian.org.
+
+  [ Riku Voipio ]
+  * [arm64/armhf] Fix neon autodetection with patch from upstream
+  * [armhf] drop debug symbols
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 08 Apr 2018 03:11:08 +0000
+
+chromium-browser (66.0.3359.26-1) experimental; urgency=medium
+
+  * New upstream release.
+  * Use threaded compression while repacking the upstream tarball.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 26 Mar 2018 00:53:25 +0000
+
+chromium-browser (66.0.3359.22-3) experimental; urgency=medium
+
+  * Build pdfium using the system openjpeg library.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 24 Mar 2018 22:53:20 +0000
+
+chromium-browser (66.0.3359.22-2) experimental; urgency=medium
+
+  * Fix typo in vpx patch.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 24 Mar 2018 21:39:20 +0000
+
+chromium-browser (66.0.3359.22-1) experimental; urgency=medium
+
+  * New upstream release.
+    - Fixes swiftshader library loading error (closes: #864606).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 19 Mar 2018 01:04:11 +0000
+
+chromium-browser (65.0.3325.146-4) unstable; urgency=medium
+
+  * Fix another incomplete type build error (closes: #892891).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 15 Mar 2018 01:22:51 +0000
+
+chromium-browser (65.0.3325.146-3) unstable; urgency=medium
+
+  * Fix incomplete type build error.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 11 Mar 2018 00:33:12 +0000
+
+chromium-browser (65.0.3325.146-2) unstable; urgency=medium
+
+  * Fix a few gcc build warnings.
+  * Apply upstream's fix for a bug in gcc7's handling of non-copyable types
+    (closes: #890954).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 10 Mar 2018 00:36:33 +0000
+
+chromium-browser (65.0.3325.146-1) unstable; urgency=medium
+
+  * New upstream stable release release.
+    - CVE-2018-6056: Incorrect derived class instantiation in V8. Reported by
+      lokihardt
+    - CVE-2018-6060: Use after free in Blink. Reported by Omair
+    - CVE-2018-6061: Race condition in V8. Reported by Guang Gong
+    - CVE-2018-6062: Heap buffer overflow in Skia. Reported by Anonymous
+    - CVE-2018-6057: Incorrect permissions on shared memory. Reported by Gal
+      Beniamini
+    - CVE-2018-6063: Incorrect permissions on shared memory. Reported by Gal
+      Beniamini
+    - CVE-2018-6064: Type confusion in V8. Reported by lokihardt
+    - CVE-2018-6065: Integer overflow in V8. Reported by Mark Brand
+    - CVE-2018-6066: Same Origin Bypass via canvas. Reported by Masato Kinugawa
+    - CVE-2018-6067: Buffer overflow in Skia. Reported by Ned Williamson
+    - CVE-2018-6068: Object lifecycle issues in Chrome Custom Tab. Reported by
+      Luan Herrera
+    - CVE-2018-6069: Stack buffer overflow in Skia. Reported by Wanglu &
+      Yangkang
+    - CVE-2018-6070: CSP bypass through extensions. Reported by Rob Wu
+    - CVE-2018-6071: Heap bufffer overflow in Skia. Reported by Anonymous
+    - CVE-2018-6072: Integer overflow in PDFium. Reported by Atte Kettunen
+    - CVE-2018-6073: Heap bufffer overflow in WebGL. Reported by Omair
+    - CVE-2018-6074: Mark-of-the-Web bypass. Reported by Abdulrahman Alqabandi
+    - CVE-2018-6075: Overly permissive cross origin downloads. Reported by Inti
+      De Ceukelaire
+    - CVE-2018-6076: Incorrect handling of URL fragment identifiers in Blink.
+      Reported by Mateusz Krzeszowiec
+    - CVE-2018-6077: Timing attack using SVG filters. Reported by Khalil Zhani
+    - CVE-2018-6078: URL Spoof in OmniBox. Reported by Khalil Zhani
+    - CVE-2018-6079: Information disclosure via texture data in WebGL. Reported
+      by Ivars Atteka
+    - CVE-2018-6080: Information disclosure in IPC call. Reported by Gal
+      Beniamini
+    - CVE-2018-6081: XSS in interstitials. Reported by Rob Wu
+    - CVE-2018-6082: Circumvention of port blocking. Reported by WenXu Wu
+    - CVE-2018-6083: Incorrect processing of AppManifests. Reported by Jun
+      Kokatsu
+  * Enable support for vp9 (closes: #891831).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 05 Mar 2018 01:26:31 +0000
+
+chromium-browser (65.0.3325.85-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Remove third_party/ffmpeg from the upstream tarball.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 24 Feb 2018 08:17:44 +0000
+
+chromium-browser (65.0.3325.74-1) experimental; urgency=medium
+
+  [ Michael Gilbert ]
+  * New upstream release.
+  * Update to debhelper 11.
+  * Update standards version.
+  * Remove third_party/llvm from the upstream tarball.
+  * Drop -fno-delete-null-pointer from debian/rules, applied upstream now.
+
+  [ Riku Voipio ]
+  * Fix skia build on arm64, (closes: #891062)
+  * Set some armhf specific gn args to help linking
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 24 Feb 2018 02:36:40 +0000
+
+chromium-browser (65.0.3325.73-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Recommend libu2f-udev (closes: #890239).
+  * Add support for ffmpeg 4.0 (closes: #888387).
+  * Remove icc_profiles from the upstream tarball.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 18 Feb 2018 02:22:56 +0000
+
+chromium-browser (64.0.3282.119-2) unstable; urgency=medium
+
+  * Drop chromecast patch (closes: #884173).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 11 Feb 2018 03:00:09 +0000
+
+chromium-browser (64.0.3282.119-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2017-15420: URL spoofing in Omnibox. Reported by Drew Springall
@@ -570,9 +910,9 @@ chromium-browser (64.0.3282.119-1~deb9u1) stretch-security; urgency=medium
       Kabdenov
     - CVE-2018-6054: Use after free in WebUI. Reported by Rob Wu
 
- -- Michael Gilbert <mgilbert@debian.org>  Wed, 31 Jan 2018 02:27:51 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 28 Jan 2018 01:00:12 +0000
 
-chromium-browser (63.0.3239.84-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (63.0.3239.84-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2017-15407: Out of bounds write in QUIC. Reported by Ned Williamson
@@ -598,21 +938,49 @@ chromium-browser (63.0.3239.84-1~deb9u1) stretch-security; urgency=medium
     - CVE-2017-15426: URL Spoof in Omnibox. Reported by WenXu Wu
     - CVE-2017-15427: Insufficient blocking of JavaScript in Omnibox. Reported
       by Junaid Farhan
+  * Update standards version to 4.1.2.
+  * Stricter default master preferences.
+  * Avoid showing the welcome page (closes: #857767).
+  * Switch from gtk2 to gtk3 again (closes: #883364).
 
- -- Michael Gilbert <mgilbert@debian.org>  Sun, 03 Dec 2017 15:26:02 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 03 Dec 2017 16:05:00 +0000
 
-chromium-browser (62.0.3202.89-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (63.0.3239.40-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Disable chromium signin feature.
+  * Fix error in icon installation script.
+  * Update to the latest standards version.
+  * Indicate that the package can be built without root.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 12 Nov 2017 05:36:26 +0000
+
+chromium-browser (63.0.3239.30-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Install 16 and 32 pixel png icon files (closes: #857071).
+  * Improve description for --temp-profile (closes: #881040).
+  * Document Debian bug reports in the manpage (closes: #880965).
+  * Stricter breaks/replaces to support security uploads (closes: #877970).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 08 Nov 2017 01:54:47 +0000
+
+chromium-browser (62.0.3202.89-1) unstable; urgency=medium
 
   * New upstream security release.
     - CVE-2017-15398: Stack buffer overflow in QUIC. Reported by Ned
       Williamson
     - CVE-2017-15399: Use after free in V8. Reported by Zhao Qixun
+  * Revert new dependency on gconf.
+  * Link against system lcms2 library (closes: #879153).
+  * Disable device notifications by default (closes: #856571).
+  * Remove icon extension from the desktop file (closes: #860256).
 
- -- Michael Gilbert <mgilbert@debian.org>  Wed, 08 Nov 2017 01:29:57 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 07 Nov 2017 02:22:17 +0000
 
-chromium-browser (62.0.3202.75-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (62.0.3202.75-1) unstable; urgency=medium
 
-  * New upstream stable release.
+  * New upstream stable release (closes: #879451).
     - CVE-2017-5124: UXSS with MHTML. Reported by Anonymous
     - CVE-2017-5125: Heap overflow in Skia. Reported by Anonymous
     - CVE-2017-5126: Use after free in PDFium. Reported by Luat Nguyen
@@ -639,12 +1007,19 @@ chromium-browser (62.0.3202.75-1~deb9u1) stretch-security; urgency=medium
     - CVE-2017-15395: Null pointer dereference in ImageCapture. Reported by
       Johannes Bergman
     - CVE-2017-15396: Stack overflow in V8. Reported by Yuan Deng
+  * Enable chromecast feature switch (closes: #878244).
 
- -- Michael Gilbert <mgilbert@debian.org>  Sun, 05 Nov 2017 03:09:35 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 04 Nov 2017 19:01:28 +0000
 
-chromium-browser (61.0.3163.100-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (61.0.3163.100-2) unstable; urgency=medium
 
-  * New upstream stable release
+  * Add liblcms2-dev as a build dependency (closes: #876804).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 26 Sep 2017 12:54:35 +0000
+
+chromium-browser (61.0.3163.100-1) unstable; urgency=medium
+
+  * New upstream stable release (closes: #876030).
     - CVE-2017-5111: Use after free in PDFium. Reported by Luật Nguyễn
     - CVE-2017-5112: Heap buffer overflow in WebGL. Reported by Tobias Klein
     - CVE-2017-5113: Heap buffer overflow in Skia. Reported by Anonymous
@@ -660,15 +1035,17 @@ chromium-browser (61.0.3163.100-1~deb9u1) stretch-security; urgency=medium
       Reported by Xiaoyin Liu
     - CVE-2017-5121: Out-of-bounds access in V8. Reported by Jordan Rabet
     - CVE-2017-5122: Out-of-bounds access in V8. Reported by Choongwoo Han
+    - Adds support for gcc7 (closes: #853347).
+  * Update standards version.
+  * Use system libstdc++ instead of chromium's bundled custom libc++.
+  * Improve error message when network is unreachable (closes: #864539).
+  * Fix a mistake that lead to unstripped binary files (closes: #870531).
 
- -- Michael Gilbert <mgilbert@debian.org>  Wed, 27 Sep 2017 02:03:41 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 24 Sep 2017 20:26:02 +0000
 
-chromium-browser (60.0.3112.78-1~deb9u1) stretch-security; urgency=medium
+chromium-browser (60.0.3112.78-1) unstable; urgency=medium
 
-  * New upstream stable release.
-    - CVE-2017-5087: Sandbox Escape in IndexedDB. Reported by Ned Williamson
-    - CVE-2017-5088: Out of bounds read in V8. Reported by Xiling Gong
-    - CVE-2017-5089: Domain spoofing in Omnibox. Reported by Michał Bentkowski
+  * New upstream stable release:
     - CVE-2017-5091: Use after free in IndexedDB. Reported by Ned Williamson
     - CVE-2017-5092: Use after free in PPAPI. Reported by Yu Zhou, Yuan Deng
     - CVE-2017-5093: UI spoofing in Blink. Reported by Luan Herrera
@@ -685,6 +1062,8 @@ chromium-browser (60.0.3112.78-1~deb9u1) stretch-security; urgency=medium
     - CVE-2017-5102: Uninitialized use in Skia. Reported by Anonymous
     - CVE-2017-5103: Uninitialized use in Skia. Reported by Anonymous
     - CVE-2017-5104: UI spoofing in browser. Reported by Khalil Zhani
+    - CVE-2017-7000: Pointer disclosure in SQLite. Reported by Chaitin Security
+      Research Lab
     - CVE-2017-5105: URL spoofing in OmniBox. Reported by Rayyan Bijoora
     - CVE-2017-5106: URL spoofing in OmniBox. Reported by Jack Zac
     - CVE-2017-5107: User information leak via SVG. Reported by David
@@ -693,10 +1072,33 @@ chromium-browser (60.0.3112.78-1~deb9u1) stretch-security; urgency=medium
     - CVE-2017-5109: UI spoofing in browser. Reported by José María Acuña
       Morgado
     - CVE-2017-5110: UI spoofing in payments dialog. Reported by xisigr
-    - CVE-2017-7000: Pointer disclosure in SQLite. Reported by Chaitin Security
-      Research Lab
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 29 Jul 2017 19:56:20 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 27 Jul 2017 03:22:03 +0000
+
+chromium-browser (60.0.3112.72-1) unstable; urgency=medium
+
+  * New upstream beta release.
+    - Adds support for gcc 6.4 (closes: #868926).
+  * Update to debhelper version 10.
+  * Update to standards version 4.0.0.
+  * Only include pak files that are needed.
+  * Drop chromedriver transitional package.
+  * Drop ffmpeg.patch, now applied upstream.
+  * Drop libgnome-keyring-dev build dependency (closes: #867917).
+  * Install chromium-shell to /usr/lib/chromium (closes: #864565).
+    - Thanks to Bert Schulze.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 22 Jul 2017 16:41:59 +0000
+
+chromium-browser (59.0.3071.104-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2017-5087: Sandbox Escape in IndexedDB. Reported by Ned Williamson
+    - CVE-2017-5088: Out of bounds read in V8. Reported by Xiling Gong
+    - CVE-2017-5089: Domain spoofing in Omnibox. Reported by Michał Bentkowski
+  * Update get-orig-source to support really long arguments to tar --delete.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 17 Jun 2017 20:03:49 +0000
 
 chromium-browser (59.0.3071.86-1) unstable; urgency=medium
 
@@ -2323,7 +2725,7 @@ chromium-browser (30.0.1599.101-1) unstable; urgency=low
     - Medium CVE-2013-2908: Address bar spoofing related to the "204
       No Content" status code. Credit to Chamal de Silva.
     - High CVE-2013-2909: Use after free in inline-block
-      rendering. Credit to Atte Kettunen of OUSPG. 
+      rendering. Credit to Atte Kettunen of OUSPG.
     - Medium CVE-2013-2910: Use-after-free in Web Audio. Credit to
       Byoungyoung Lee of Georgia Tech Information Security Center (GTISC).
     - High CVE-2013-2911: Use-after-free in XSLT. Credit to Atte
@@ -2331,27 +2733,27 @@ chromium-browser (30.0.1599.101-1) unstable; urgency=low
     - High CVE-2013-2912: Use-after-free in PPAPI. Credit to Chamal
       de Silva and 41.w4r10r(at)garage4hackers.com.
     - High CVE-2013-2913: Use-after-free in XML document parsing.
-      Credit to cloudfuzzer. 
+      Credit to cloudfuzzer.
     - High CVE-2013-2914: Use after free in the Windows color
-      chooser dialog. Credit to Khalil Zhani. 
+      chooser dialog. Credit to Khalil Zhani.
     - Low CVE-2013-2915: Address bar spoofing via a malformed scheme.
-      Credit to Wander Groeneveld. 
+      Credit to Wander Groeneveld.
     - High CVE-2013-2916: Address bar spoofing related to the "204
       No Content” status code. Credit to Masato Kinugawa.
     - Medium CVE-2013-2917: Out of bounds read in Web Audio. Credit
       to Byoungyoung Lee and Tielei Wang of Georgia Tech Information
-      Security Center (GTISC). 
+      Security Center (GTISC).
     - High CVE-2013-2918: Use-after-free in DOM. Credit to
       Byoungyoung Lee of Georgia Tech Information Security Center (GTISC).
     - High CVE-2013-2919: Memory corruption in V8. Credit to Adam
-      Haile of Concrete Data. 
+      Haile of Concrete Data.
     - Medium CVE-2013-2920: Out of bounds read in URL parsing. Credit to
       Atte Kettunen of OUSPG.
     - High CVE-2013-2921: Use-after-free in resource loader. Credit
       to Byoungyoung Lee and Tielei Wang of Georgia Tech Information
-      Security Center (GTISC). 
+      Security Center (GTISC).
     - High CVE-2013-2922: Use-after-free in template element. Credit
-      to Jon Butler. 
+      to Jon Butler.
     - CVE-2013-2923: Various fixes from internal audits, fuzzing and other
       initiatives (Chrome 30).
     - Medium CVE-2013-2924: Use-after-free in ICU. Upstream bug here.
@@ -2414,7 +2816,7 @@ chromium-browser (29.0.1547.57-1) unstable; urgency=medium
   * Use source package name for get-orig-source rule.
   * Remove gfdl documentation (closes: #708860).
   * Build-depend on git.
-  
+
   [ Shawn Landden ]
   * New standards version.
   * Use canonical VCS url.
@@ -2699,42 +3101,42 @@ chromium-browser (24.0.1312.68-1) unstable; urgency=high
     - Medium CVE-2013-0842: Problems with NULL characters embedded in
       paths. Credit to Google Chrome Security Team (Jüri Aedla).
     - High CVE-2012-5145: Use-after-free in SVG layout. Credit to
-      Atte Kettunen of OUSPG. 
+      Atte Kettunen of OUSPG.
     - High CVE-2012-5146: Same origin policy bypass with malformed
-      URL. Credit to Erling A Ellingsen and Subodh Iyengar, both of Facebook. 
+      URL. Credit to Erling A Ellingsen and Subodh Iyengar, both of Facebook.
     - High CVE-2012-5147: Use-after-free in DOM handling. Credit to
-      José A. Vázquez. 
+      José A. Vázquez.
     - Medium CVE-2012-5148: Missing filename sanitization in hyphenation
-      support. Credit to Google Chrome Security Team (Justin Schuh). 
+      support. Credit to Google Chrome Security Team (Justin Schuh).
     - High CVE-2012-5149: Integer overflow in audio IPC handling. Credit to
-      Google Chrome Security Team (Chris Evans). 
+      Google Chrome Security Team (Chris Evans).
     - High CVE-2012-5150: Use-after-free when seeking video. Credit to
-      Google Chrome Security Team (Inferno). 
+      Google Chrome Security Team (Inferno).
     - High CVE-2012-5151: Integer overflow in PDF JavaScript. Credit to
       Mateusz Jurczyk, with contribution from Gynvael Coldwind, both of Google
-      Security Team. 
+      Security Team.
     - Medium CVE-2012-5152: Out-of-bounds read when seeking video. Credit
-      to Google Chrome Security Team (Inferno). 
+      to Google Chrome Security Team (Inferno).
     - High CVE-2012-5153: Out-of-bounds stack access in v8. Credit to
-      Andreas Rossberg of the Chromium development community. 
+      Andreas Rossberg of the Chromium development community.
     - High CVE-2013-0829: Corruption of database metadata leading to
-      incorrect file access. Credit to Google Chrome Security Team (Jüri Aedla). 
+      incorrect file access. Credit to Google Chrome Security Team (Jüri Aedla).
     - Low CVE-2013-0831: Possible path traversal from extension process.
-      Credit to Google Chrome Security Team (Tom Sepez). 
+      Credit to Google Chrome Security Team (Tom Sepez).
     - [160380] Medium CVE-2013-0832: Use-after-free with printing. Credit to Google
-      Chrome Security Team (Cris Neckar). 
+      Chrome Security Team (Cris Neckar).
     - Medium CVE-2013-0833: Out-of-bounds read with printing. Credit to
-      Google Chrome Security Team (Cris Neckar). 
+      Google Chrome Security Team (Cris Neckar).
     - Medium CVE-2013-0834: Out-of-bounds read with glyph handling. Credit
-      to Google Chrome Security Team (Cris Neckar). 
+      to Google Chrome Security Team (Cris Neckar).
     - Low CVE-2013-0835: Browser crash with geolocation. Credit to Arthur
-      Gerkis. 
+      Gerkis.
     - High CVE-2013-0836: Crash in v8 garbage collection. Credit to Google
-      Chrome Security Team (Cris Neckar). 
+      Chrome Security Team (Cris Neckar).
     - Medium CVE-2013-0837: Crash in extension tab handling. Credit to Tom
-      Nielsen. 
+      Nielsen.
     - Low CVE-2013-0838: Tighten permissions on shared memory
-      segments. Credit to Google Chrome Security Team (Chris Palmer). 
+      segments. Credit to Google Chrome Security Team (Chris Palmer).
     - High CVE-2012-5139: Use-after-free with visibility events.
       Credit to Chamal de Silva.
     - High CVE-2012-5140: Use-after-free in URL loader. Credit to
@@ -2925,8 +3327,8 @@ chromium-browser (21.0.1180.75~r150248-1) unstable; urgency=medium
     - Audio objects are not "switched" immediately
     - Print and Print Preview ignore paper size default in printer config
     - Candidate windows is shown in wrong place in Retina display
-    - more of the choppy and distorted audio issues 
-    - Japanese characters showing in Chinese font 
+    - more of the choppy and distorted audio issues
+    - Japanese characters showing in Chinese font
     - Sync invalidation notification broken after restart
 
  -- Giuseppe Iuculano <iuculano@debian.org>  Fri, 10 Aug 2012 17:31:57 +0200
@@ -3516,7 +3918,7 @@ chromium-browser (14.0.835.202~r103287-1) unstable; urgency=low
       bindings. Credit to Sergey Glazunov.
     - High CVE-2011-2881: Memory corruption with v8 hidden objects.
       Credit to Sergey Glazunov.
-    - Critical CVE-2011-3873: Memory corruption in shader translator. 
+    - Critical CVE-2011-3873: Memory corruption in shader translator.
 
  -- Giuseppe Iuculano <iuculano@debian.org>  Wed, 05 Oct 2011 11:15:53 +0200
 
@@ -3581,9 +3983,9 @@ chromium-browser (14.0.835.163~r101024-1) unstable; urgency=low
       Credit to Sergey Glazunov.
     - Medium CVE-2011-2864: Out-of-bounds read with Tibetan characters.
       Credit to Google Chrome Security Team (Inferno).
-    - Medium CVE-2011-2858: Out-of-bounds read with triangle arrays. 
+    - Medium CVE-2011-2858: Out-of-bounds read with triangle arrays.
       Credit to Google Chrome Security Team (Inferno).
-    - Low CVE-2011-2874: Failure to pin a self-signed cert for a session. 
+    - Low CVE-2011-2874: Failure to pin a self-signed cert for a session.
       Credit to Nishant Yadant of VMware and Craig Chamberlain (@randomuserid).
     - High CVE-2011-2875: Type confusion in v8 object sealing.
       Credit to Christian Holler.
@@ -3947,7 +4349,7 @@ chromium-browser (10.0.648.133~r77742-1) unstable; urgency=high
 chromium-browser (10.0.648.127~r76697-1) unstable; urgency=low
 
   * New stable version
-  * Refreshed patches 
+  * Refreshed patches
 
  -- Giuseppe Iuculano <iuculano@debian.org>  Wed, 09 Mar 2011 23:04:13 +0100
 
@@ -3987,7 +4389,7 @@ chromium-browser (9.0.597.107~r75357-1) unstable; urgency=low
     - [71296] High Stale pointer in SVG animations. Credit to miaubiz.
     - [71386] High Stale nodes in XHTML. Credit to wushi of team509.
     - [71388] High Crash in textarea handling. Credit to wushi of team509.
-    - [71595] High Stale pointer in device orientation. Credit to 
+    - [71595] High Stale pointer in device orientation. Credit to
       Sergey Glazunov.
     - [71717] Medium Out-of-bounds read in WebGL. Credit to miaubiz.
     - [71855] High Integer overflow in textarea handling. Credit to miaubiz.
@@ -4045,7 +4447,7 @@ chromium-browser (9.0.597.83~r72435-1) unstable; urgency=low
 
   [ Giuseppe Iuculano ]
   * New beta version.
-  * Added a README.Debian and warn about downgrading (Closes: #605548) 
+  * Added a README.Debian and warn about downgrading (Closes: #605548)
   * honor DEB_BUILD_OPTIONS=nocheck, thanks to Jonathan Nieder
     (Closes: #589653)
   * Avoid "cannot access" messagges when using ffmpeg internal copy. Thanks to
@@ -4125,16 +4527,16 @@ chromium-browser (6.0.472.63~r59945-5) unstable; urgency=high
 
   * Backported security patches from stable:
     - High Bad pointer handling in node iteration. Credit to Sergey Glazunov.
-    - High Stale pointer with CSS + canvas. Credit to Sergey Glazunov. 
+    - High Stale pointer with CSS + canvas. Credit to Sergey Glazunov.
     - High Stale pointer with CSS + cursors. Credit to Jan Tošovský.
     - High Stale pointer with SVG use element. Credited anonymously; plus
       indepdent discovery by miaubiz.
-    - High Vorbis decoder buffer overflows. Credit to David Warren of CERT. 
-    - High Bad cast in anchor handling. Credit to Sergey Glazunov. 
-    - High Bad cast in video handling. Credit to Sergey Glazunov. 
+    - High Vorbis decoder buffer overflows. Credit to David Warren of CERT.
+    - High Bad cast in anchor handling. Credit to Sergey Glazunov.
+    - High Bad cast in video handling. Credit to Sergey Glazunov.
     - High Stale rendering node after DOM node removal. Credit to Martin
       Barbella; plus independent discovery by Google Chrome Security Team
-      (SkyLined). 
+      (SkyLined).
 
  -- Giuseppe Iuculano <iuculano@debian.org>  Sat, 15 Jan 2011 12:04:52 +0100
 
@@ -4143,7 +4545,7 @@ chromium-browser (6.0.472.63~r59945-4) unstable; urgency=high
   * Backported security patches from stable:
     - [64-bit Linux only] High Bad validation for message deserialization on
       64-bit builds. Credit to Lei Zhang of the Chromium development community.
-    - Low Browser crash with NULL pointer in web worker handling. Credit to 
+    - Low Browser crash with NULL pointer in web worker handling. Credit to
       Nathan Weizenbaum of Google.
     - Medium Out-of-bounds read in CSS parsing. Credit to Chris Rohlf.
     - High Stale pointers in cursor handling. Credit to Sławomir Błażek and
@@ -4159,7 +4561,7 @@ chromium-browser (6.0.472.63~r59945-3) unstable; urgency=high
     - High Use after free in history handling. Credit to Stefan Troger.
     - Medium Make sure the “dangerous file types” list is uptodate with the
       Windows platforms. Credit to Billy Rios of the Google Security Team.
-    - High Crash due to bad indexing with malformed video. Credit to miaubiz. 
+    - High Crash due to bad indexing with malformed video. Credit to miaubiz.
     - High Use after free with SVG animations. Credit to Sławomir Błażek.
     - Medium Use after free in mouse dragging event handling. Credit to kuzzcc.
 
@@ -4218,7 +4620,7 @@ chromium-browser (6.0.472.62~r59676-1) unstable; urgency=low
       of MindedSecurity.
   * Add translations for the "Name" field in the desktop file, and fix
     some "Comment" / "GenericName". Thanks to the Ubuntu translation team.
-  * Build with PIE (Position Independent Executable) 
+  * Build with PIE (Position Independent Executable)
 
  -- Giuseppe Iuculano <iuculano@debian.org>  Sat, 18 Sep 2010 16:48:44 +0200
 
@@ -4395,7 +4797,7 @@ chromium-browser (5.0.375.99~r51029-1) unstable; urgency=low
   * New stable version, this release fixes the following security
     issues:
     - [42396] Low OOB read with WebGL. Credit to Sergey Glazunov; Google Chrome
-      Security Team (SkyLined). 
+      Security Team (SkyLined).
     - [42575] [42980] Medium Isolate sandboxed iframes more strongly. Credit to
       sirdarckcat of Google Security Team.
     - [43488] High Memory corruption with invalid SVGs. Credit to Aki Hekin of
@@ -4439,7 +4841,7 @@ chromium-browser (5.0.375.86~r49890-2) unstable; urgency=low
   * Partially revert info in about:version, it has significant impact in
     first-run performance
   * Build and use the custom ffmpeg copy, when ffmpeg 0.6 will be uploaded in
-    unstable chromium will use the system copy of ffmpeg. (Closes: #581507) 
+    unstable chromium will use the system copy of ffmpeg. (Closes: #581507)
   * Install libffmpegsumo
   * Add a replace and conflict entry for chromium-codecs-ffmpeg and
     chromium-codecs-ffmpeg-extra. This is necessary for people who used or
@@ -4469,9 +4871,9 @@ chromium-browser (5.0.375.86~r49890-1) unstable; urgency=low
     - [45267] High Memory error in video handling. Credit to Google Chrome
       Security Team (Cris Neckar).
     - [46126] High Stale pointer in x509-user-cert response. Credit to Rodrigo
-      Marcos of SECFORCE. 
+      Marcos of SECFORCE.
     - Drop the XLIB_SKIP_ARGB_VISUALS workaround as it creates regressions.
-      See http://crbug.com/46439 
+      See http://crbug.com/46439
   * Use /usr/bin/chromium-browser in chromium-browser.xml (Closes: #580582)
 
   [ Fabien Tassin ]
@@ -4517,7 +4919,7 @@ chromium-browser (5.0.375.70~r48679-1) unstable; urgency=low
     with a Gdk-ERROR when gtk2 is built with RGBA support (like in Maverick).
     (LP: #584959)
     - update debian/chromium-browser.sh
-  
+
   [ Giuseppe Iuculano ]
   * New upstream stable release, this release fixes the following security
     issues:
@@ -4556,7 +4958,7 @@ chromium-browser (5.0.375.38~r46659-2) unstable; urgency=low
   * Unbreak get-orig-source when it needs to drop its cache after a channel jump
     (replace brace expansion - which is a bashism - with proper $(wildcard))
     - update debian/rules
-  
+
   [ Giuseppe Iuculano ]
   * chromium-browser-inspector: demoted chromium-browser to Recommend and
     avoid circular dependency (Closes: #581743)
@@ -4574,7 +4976,7 @@ chromium-browser (5.0.375.38~r46659-2) unstable; urgency=low
   * Removed libc6-dev-i386 [amd64] and g++-multilib [amd64] from Build-Depends
     - update debian/control
   * Install a presubj bug file
-    - update debian/chromium-browser.install 
+    - update debian/chromium-browser.install
     - add debian/presubj
   * Forget zoom levels set/changed in incognito mode
     - add debian/patches/zoom_incognito.patch
@@ -4639,7 +5041,7 @@ chromium-browser (5.0.375.29~r46008-2) experimental; urgency=low
     - update debian/patches/add_enable_sse2_flag.patch
     - update debian/patches/series
   * Added a Debian menu file (Closes: #580591)
-    - add debian/chromium-browser.menu 
+    - add debian/chromium-browser.menu
   * Use system yasm
     - update debian/rules
     - update debian/control
@@ -4806,7 +5208,7 @@ chromium-browser (5.0.342.7~r42476-0ubuntu1) lucid; urgency=low
   * Rename chromium-codecs-ffmpeg-nonfree into chromium-codecs-ffmpeg-extra
     and move the two codecs back to Depends (LP: #537617, #513776)
     - update debian/control
- 
+
  -- Fabien Tassin <fta@ubuntu.com>  Thu, 25 Mar 2010 08:22:40 +0100
 
 chromium-browser (5.0.307.11~r39572-0ubuntu1) lucid; urgency=low

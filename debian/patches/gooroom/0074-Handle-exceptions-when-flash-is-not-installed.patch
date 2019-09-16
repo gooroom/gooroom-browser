@@ -1,0 +1,46 @@
+From 836c497c453c35f7adc847b76599a747636f4ab6 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 6 Sep 2019 17:14:53 +0900
+Subject: [PATCH 74/78] Handle exceptions when flash is not installed
+
+---
+ gooroom/browser/gooroom_pref.cc | 3 ++-
+ gooroom/flash/flash_version.cc  | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 5f95627c98a3..77ba406c6520 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -394,7 +394,8 @@ void GooroomPref::setup() {
+   if(base::CommandLine::ForCurrentProcess()->HasSwitch(switches::kPpapiFlashPath))
+   {
+     std::string flashVersion = FlashVersion::GetFlashVersion();
+-    base::CommandLine::ForCurrentProcess()->AppendSwitchASCII(switches::kPpapiFlashVersion, flashVersion);
++    if(!flashVersion.empty())
++      base::CommandLine::ForCurrentProcess()->AppendSwitchASCII(switches::kPpapiFlashVersion, flashVersion);
+   }
+ 
+ }
+diff --git a/gooroom/flash/flash_version.cc b/gooroom/flash/flash_version.cc
+index eb352296e65d..f5e73e1e3357 100644
+--- a/gooroom/flash/flash_version.cc
++++ b/gooroom/flash/flash_version.cc
+@@ -2,7 +2,7 @@
+ 
+ std::string FlashVersion::GetFlashVersion()
+ {
+-  std::string line;
++  std::string line = "";
+   std::ifstream flash_manifest_json("/usr/lib/adobe-flashplugin/manifest.json");
+   if (flash_manifest_json.is_open())
+   {
+@@ -29,4 +29,5 @@ std::string FlashVersion::GetFlashVersion()
+       }
+     }
+   }
++  return line;
+ }
+-- 
+2.20.1
+

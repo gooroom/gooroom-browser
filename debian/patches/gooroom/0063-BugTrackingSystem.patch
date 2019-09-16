@@ -1,0 +1,400 @@
+From b3e510034095a793edcf6f776a1f1de8c0221fe4 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 6 Sep 2019 10:28:39 +0900
+Subject: [PATCH 63/78] BugTrackingSystem
+
+746 : Change string Chromium to Gooroom Browser on gooroom://flags page
+743 : Remove Translate option on settings language page
+741 : Remove report function on settings person security page
+740 : Remove 'USB not found'strings on content settings usb page
+738 : Change string 'Chromium' to 'Open Project(Chromium)'on reset settings page
+731 : Update adobe-flash version
+728 : Remove browser-login on gooroom://devices page
+726 : Change string 'chrome' to 'gooroom' on man page
+723 : Change strings 'About Chromium' to 'About Gooroom Browser' on settings icon
+722 : Remove browser-login on gooroom://history page
+721 : Restrict secret mode access on bookmark
+714 : Remove browser-login on gooroom://welcome page
+205 : Remove google-cloud-login on print page
+---
+ chrome/app/gooroom/chromium_strings.grd       |  2 +-
+ .../gooroom/resources/chromium_strings_ko.xtb |  3 ++-
+ .../gooroom/settings_chromium_strings.grdp    |  2 +-
+ chrome/app/resources/manpage.1.in             | 10 ++++----
+ .../browser/resources/history/side_bar.html   |  5 ----
+ .../local_discovery/local_discovery.html      |  4 ++-
+ .../print_preview/ui/destination_dialog.html  | 25 -------------------
+ .../print_preview/ui/destination_dialog.js    | 10 --------
+ .../languages_page/languages_page.html        | 10 --------
+ .../settings/privacy_page/privacy_page.html   |  2 +-
+ .../site_settings/chooser_exception_list.js   |  2 +-
+ chrome/browser/resources/welcome/welcome.html |  3 ++-
+ .../bookmark_context_menu_controller.cc       |  4 +--
+ .../components_chromium_strings_ko.xtb        | 16 ++++++------
+ .../browser/web_contents/web_contents_impl.cc |  3 ++-
+ gooroom/browser/gooroom_pref.cc               |  2 +-
+ 16 files changed, 29 insertions(+), 74 deletions(-)
+
+diff --git a/chrome/app/gooroom/chromium_strings.grd b/chrome/app/gooroom/chromium_strings.grd
+index ca0fc9aba04a..593d31a1759b 100644
+--- a/chrome/app/gooroom/chromium_strings.grd
++++ b/chrome/app/gooroom/chromium_strings.grd
+@@ -603,7 +603,7 @@ Chromium is unable to recover your settings.
+       </if>
+       <if expr="not use_titlecase and not chromeos">
+         <message name="IDS_ABOUT" desc="The text label of the About Chrome menu item">
+-          About &amp;Chromium
++          About &amp;Gooroom Browser
+         </message>
+         <message name="IDS_UPDATE_NOW" desc="The text label of the Update Chrome Now menu item">
+           Update &amp;Chromium
+diff --git a/chrome/app/gooroom/resources/chromium_strings_ko.xtb b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
+index 6015791c3435..9de8c9e31775 100644
+--- a/chrome/app/gooroom/resources/chromium_strings_ko.xtb
++++ b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
+@@ -1,6 +1,7 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE translationbundle>
+ <translationbundle lang="ko">
++<translation id="8176165558631682515">Gooroom browser 정보</translation>
+ <translation id="1065672644894730302">환경설정을 읽을 수 없습니다.
+ 
+ 일부 기능을 사용할 수 없으며 환경설정의 변경사항이 저장되지 않습니다.</translation>
+@@ -88,7 +89,7 @@
+ <translation id="388648406173476553">Gooroom browser을 맞춤설정 및 제어합니다. 확인이 필요한 항목이 있습니다. 클릭하여 세부정보를 보세요.</translation>
+ <translation id="3889543394854987837">Gooroom browser을 열고 탐색을 시작하려면 내 이름을 클릭하세요.</translation>
+ <translation id="3898493977366060150">Google과 스마트하게 웹을 탐색하세요</translation>
+-<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 Chromium 개선에 참여</translation>
++<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 오픈소스 프로젝트(Chromium) 개선에 참여</translation>
+ <translation id="4050175100176540509">최신 버전에는 중요한 보안 개선사항 및 새로운 기능이 포함되어 있습니다.</translation>
+ <translation id="407254336480250557"><ph name="SMALL_PRODUCT_LOGO" /><ph name="BEGIN_BOLD" />Gooroom browser<ph name="END_BOLD" /> 선택</translation>
+ <translation id="421369550622382712">Gooroom browser에 유용한 앱, 게임, 확장 프로그램, 테마를 찾아보세요.</translation>
+diff --git a/chrome/app/gooroom/settings_chromium_strings.grdp b/chrome/app/gooroom/settings_chromium_strings.grdp
+index 3a5787bb153c..ace01a61d5b6 100644
+--- a/chrome/app/gooroom/settings_chromium_strings.grdp
++++ b/chrome/app/gooroom/settings_chromium_strings.grdp
+@@ -4,7 +4,7 @@
+   <!-- About Page -->
+   <if expr="not chromeos">
+     <message name="IDS_SETTINGS_ABOUT_PROGRAM" desc="Menu title for the About Chromium page.">
+-      About Chromium
++      About Gooroom-Browser
+     </message>
+     <message name="IDS_SETTINGS_GET_HELP_USING_CHROME" desc="Text of the button which takes the user to the Chrome help page.">
+       Get help with Chromium
+diff --git a/chrome/app/resources/manpage.1.in b/chrome/app/resources/manpage.1.in
+index 1e4fe85907e3..085cbe85ff3a 100644
+--- a/chrome/app/resources/manpage.1.in
++++ b/chrome/app/resources/manpage.1.in
+@@ -3,16 +3,16 @@
+ .TH @@PACKAGE@@ 1 "" "" "USER COMMANDS"
+ 
+ .SH NAME
+-@@PACKAGE@@ \- the web browser from Google
++@@PACKAGE@@ \- the web browser from Gooroom
+ 
+ .SH SYNOPSIS
+ .B @@PACKAGE@@
+ [\fIOPTION\fR] [\fIPATH\fR|\fIURL\fR]
+ 
+ .SH DESCRIPTION
+-See the Google Chrome help center for help on using the browser.
++See the Gooroom help center for help on using the browser.
+ .IP
+-<https://support.google.com/chrome/>
++<https://www.gooroom.kr/>
+ .PP
+ This manpage only describes invocation, environment, and arguments.
+ 
+@@ -150,11 +150,11 @@ Comma separated list of hosts or patterns to bypass proxying.
+ 
+ .SH FILES
+ .TP
+-.I $HOME/.config/@@PACKAGE@@
++.I $HOME/.config/gooroom
+ Default directory for configuration data.
+ 
+ .TP
+-.I $HOME/.cache/@@PACKAGE@@
++.I $HOME/.cache/gooroom
+ Default directory for cache data.  (Why?  See
+ <http://standards.freedesktop.org/basedir-spec/latest/> .)
+ 
+diff --git a/chrome/browser/resources/history/side_bar.html b/chrome/browser/resources/history/side_bar.html
+index 73fa9dec87d7..7d616aed9198 100644
+--- a/chrome/browser/resources/history/side_bar.html
++++ b/chrome/browser/resources/history/side_bar.html
+@@ -119,11 +119,6 @@
+         $i18n{historyMenuItem}
+         <paper-ripple></paper-ripple>
+       </a>
+-      <a href="/syncedTabs" class="page-item" path="syncedTabs"
+-          on-click="onItemClick_">
+-        $i18n{openTabsMenuItem}
+-        <paper-ripple></paper-ripple>
+-      </a>
+       <div class="separator"></div>
+       <a id="clear-browsing-data"
+           href="chrome://settings/clearBrowserData"
+diff --git a/chrome/browser/resources/local_discovery/local_discovery.html b/chrome/browser/resources/local_discovery/local_discovery.html
+index 9dc7d5254509..bbfdd0687956 100644
+--- a/chrome/browser/resources/local_discovery/local_discovery.html
++++ b/chrome/browser/resources/local_discovery/local_discovery.html
+@@ -94,7 +94,8 @@
+       <div id="no-printers-message" class="cloud-print-message">
+         $i18n{noPrintersOnNetworkExplanation}
+       </div>
+-
++    </div>
++<!--
+       <div class="devices" id="register-device-list"></div>
+ 
+       <if expr="not chromeos">
+@@ -134,6 +135,7 @@
+ 
+     </div>
+     </div>
++-->
+   </div>
+ </body>
+ </html>
+diff --git a/chrome/browser/resources/print_preview/ui/destination_dialog.html b/chrome/browser/resources/print_preview/ui/destination_dialog.html
+index 624b32bd370e..4bdff881b894 100644
+--- a/chrome/browser/resources/print_preview/ui/destination_dialog.html
++++ b/chrome/browser/resources/print_preview/ui/destination_dialog.html
+@@ -187,31 +187,6 @@
+           $i18n{cancel}
+         </paper-button>
+       </div>
+-      <div id="promos" slot="footer" hidden="[[!shouldShowFooter_(
+-          shouldShowCloudPrintPromo_, invitation_)]]">
+-        <div class="promo" id="cloudprintPromo"
+-            hidden$="[[!shouldShowCloudPrintPromo_]]">
+-          <iron-icon icon="print-preview:cloud-queue" alt=""></iron-icon>
+-          <div class="promo-text"></div>
+-          <cr-icon-button id="cloudPrintClose" class="icon-clear"
+-              on-click="onCloudPrintPromoDismissed_"></cr-icon-button>
+-        </div>
+-        <div class="promo" id="invitationPromo" hidden="[[!invitation_]]">
+-          <div inner-h-t-m-l="[[getInvitationText_(invitation_)]]"></div>
+-          <div class="invitation-buttons">
+-            <paper-button on-click="onInvitationAcceptClick_">
+-              [[getAcceptButtonText_(invitation_)]]
+-            </paper-button>
+-            <paper-button on-click="onInvitationRejectClick_">
+-              $i18n{reject}
+-            </paper-button>
+-            <div id="invitation-process-throbber" class="throbber" hidden></div>
+-          </div>
+-          <div class="invitation-details">
+-            $i18nRaw{registerPrinterInformationMessage}
+-          </div>
+-        </div>
+-      </div>
+     </cr-dialog>
+   </template>
+   <script src="destination_dialog.js"></script>
+diff --git a/chrome/browser/resources/print_preview/ui/destination_dialog.js b/chrome/browser/resources/print_preview/ui/destination_dialog.js
+index bf05c1a44453..7849ed958031 100644
+--- a/chrome/browser/resources/print_preview/ui/destination_dialog.js
++++ b/chrome/browser/resources/print_preview/ui/destination_dialog.js
+@@ -91,16 +91,6 @@ Polymer({
+ 
+   /** @override */
+   ready: function() {
+-    this.$$('.promo-text').innerHTML =
+-        this.i18nAdvanced('cloudPrintPromotion', {
+-          substitutions: ['<a is="action-link" class="sign-in">', '</a>'],
+-          attrs: {
+-            'is': (node, v) => v == 'action-link',
+-            'class': (node, v) => v == 'sign-in',
+-            'tabindex': (node, v) => v == '0',
+-            'role': (node, v) => v == 'link',
+-          },
+-        });
+   },
+ 
+   /** @override */
+diff --git a/chrome/browser/resources/settings/languages_page/languages_page.html b/chrome/browser/resources/settings/languages_page/languages_page.html
+index 0cd54256af29..71321ad76e65 100644
+--- a/chrome/browser/resources/settings/languages_page/languages_page.html
++++ b/chrome/browser/resources/settings/languages_page/languages_page.html
+@@ -407,16 +407,6 @@
+                 </iron-icon>
+               </cr-checkbox>
+ </if>
+-              <cr-checkbox id="offerTranslations"
+-                  class="dropdown-item"
+-                  checked="[[detailLanguage_.translateEnabled]]"
+-                  on-change="onTranslateCheckboxChange_"
+-                  hidden="[[!prefs.translate.enabled.value]]"
+-                  disabled="[[disableTranslateCheckbox_(
+-                      detailLanguage_, languages.translateTarget)]]">
+-                $i18n{offerToTranslateInThisLanguage}
+-              </cr-checkbox>
+-              <hr hidden="[[!shouldShowDialogSeparator_(languages.enabled.*)]]">
+               <button class="dropdown-item" role="menuitem"
+                   on-click="onMoveToTopTap_"
+                   hidden="[[isNthLanguage_(
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index 8f2d7ab4d565..e776d526349a 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -83,6 +83,7 @@
+     <settings-animated-pages id="pages" section="privacy"
+         focus-config="[[focusConfig_]]">
+       <div route-path="default">
++<if expr="not _gooroom">
+         <template is="dom-if" if="[[!unifiedConsentEnabled_]]">
+           <div class="settings-box first">
+             <p class="privacy-explanation">
+@@ -95,7 +96,6 @@
+             on-click="onSyncAndGoogleServicesClick_"
+             hidden="[[!unifiedConsentEnabled_]]"></cr-link-row>
+ <if expr="not chromeos">
+-<if expr="not _gooroom">
+         <settings-toggle-button id="signinAllowedToggle"
+             pref="{{prefs.signin.allowed_on_next_startup}}"
+             label="$i18n{signinAllowedTitle}"
+diff --git a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
+index 7e37cdebf203..18a957dd87cf 100644
+--- a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
++++ b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
+@@ -108,7 +108,7 @@ Polymer({
+     // Set the message to display when the exception list is empty.
+     switch (this.chooserType) {
+       case settings.ChooserType.USB_DEVICES:
+-        this.emptyListMessage_ = this.i18n('noUsbDevicesFound');
++        //this.emptyListMessage_ = this.i18n('noUsbDevicesFound');
+         break;
+       case settings.ChooserType.SERIAL_PORTS:
+         this.emptyListMessage_ = this.i18n('noSerialPortsFound');
+diff --git a/chrome/browser/resources/welcome/welcome.html b/chrome/browser/resources/welcome/welcome.html
+index 4aa0ce861ecf..1c35899abc74 100644
+--- a/chrome/browser/resources/welcome/welcome.html
++++ b/chrome/browser/resources/welcome/welcome.html
+@@ -217,6 +217,7 @@
+     <if expr="_google_chrome">
+           <div class="subheading">$i18n{subheaderText}</div>
+     </if>
++<!--
+           <div class="signin">
+             <div class="signin-description">$i18n{descriptionText}</div>
+             <div class="signin-buttons">
+@@ -228,6 +229,7 @@
+               </paper-button>
+             </div>
+           </div>
++-->
+         </div>
+       </div>
+     </template>
+@@ -236,7 +238,6 @@
+ </head>
+ <body>
+   <welcome-app></welcome-app>
+-  <div class="watermark"></div>
+   <link rel="import" href="chrome://resources/html/dark_mode.html">
+ </body>
+ </html>
+diff --git a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+index 146145284d31..ae6c463f908a 100644
+--- a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
++++ b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+@@ -126,8 +126,8 @@ void BookmarkContextMenuController::BuildMenu() {
+             IDS_BOOKMARK_BAR_OPEN_IN_NEW_TAB);
+     AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_NEW_WINDOW,
+             IDS_BOOKMARK_BAR_OPEN_IN_NEW_WINDOW);
+-    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
+-            IDS_BOOKMARK_BAR_OPEN_INCOGNITO);
++//    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
++//            IDS_BOOKMARK_BAR_OPEN_INCOGNITO);
+   } else {
+     int count = chrome::OpenCount(parent_window_, selection_);
+     AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
+diff --git a/components/strings/components_chromium_strings_ko.xtb b/components/strings/components_chromium_strings_ko.xtb
+index d2fd6441be2c..41da528b3ec2 100644
+--- a/components/strings/components_chromium_strings_ko.xtb
++++ b/components/strings/components_chromium_strings_ko.xtb
+@@ -2,12 +2,12 @@
+ <!DOCTYPE translationbundle>
+ <translationbundle lang="ko">
+ <translation id="130631256467250065">기기를 다시 시작할 때 변경사항이 적용됩니다.</translation>
+-<translation id="1838412507805038478">Chromium이 <ph name="ISSUER" />에서 이 웹사이트의 인증서를 발행했음을 확인했습니다.</translation>
++<translation id="1838412507805038478">Gooroom-browser가 <ph name="ISSUER" />에서 이 웹사이트의 인증서를 발행했음을 확인했습니다.</translation>
+ <translation id="275588974610408078">비정상 종료 보고서는 Chromium에서 사용할 수 없습니다.</translation>
+ <translation id="32013959327000922">안전한 Gooroom 페이지를 보는 중</translation>
+ <translation id="3550966579244642892">Chromium OS 초기 설정이 완료되지 않았습니다.</translation>
+-<translation id="7813260108943103110">Chromium은 <ph name="BEGIN_LINK_CHROMIUM" />Chromium<ph name="END_LINK_CHROMIUM" /> 오픈소스 프로젝트를 비롯한 여러 <ph name="BEGIN_LINK_OSS" />오픈소스 소프트웨어<ph name="END_LINK_OSS" />에 기초해 만들어진 브라우저입니다.</translation>
+-<translation id="4559775032954821361">Chromium 메뉴 &gt;
++<translation id="7813260108943103110">Gooroom Browser는 <ph name="BEGIN_LINK_CHROMIUM" />Chromium<ph name="END_LINK_CHROMIUM" /> 오픈소스 프로젝트를 비롯한 여러 <ph name="BEGIN_LINK_OSS" />오픈소스 소프트웨어<ph name="END_LINK_OSS" />에 기초해 만들어진 브라우저입니다.</translation>
++<translation id="4559775032954821361">Gooroom 메뉴 &gt;
+           <ph name="SETTINGS_TITLE" />
+           &gt;
+           <ph name="ADVANCED_TITLE" />
+@@ -16,17 +16,17 @@
+           &gt;
+           LAN 설정으로 이동하여
+           '사용자 LAN에 프록시 서버 사용'을 선택 취소합니다.</translation>
+-<translation id="48558539577516920">Chromium이 방화벽이나 백신 프로그램이 설정된
++<translation id="48558539577516920">Gooroom이 방화벽이나 백신 프로그램이 설정된
+         네트워크에 액세스할 수 있도록 허용합니다.</translation>
+-<translation id="580822234363523061">Chromium 메뉴 &gt;
++<translation id="580822234363523061">Gooroom 메뉴 &gt;
+           <ph name="SETTINGS_TITLE" />
+           &gt;
+           <ph name="ADVANCED_TITLE" />
+           &gt;
+           <ph name="PROXIES_TITLE" />
+           (으)로 이동하여 '프록시 없음' 또는 '직접 연결'로 설정되어 있는지 확인합니다.</translation>
+-<translation id="6613594504749178791">변경사항은 다음에 Chromium을 다시 시작할 때 적용됩니다.</translation>
+-<translation id="7861509383340276692">Chromium 메뉴 &gt;
++<translation id="6613594504749178791">변경사항은 다음에 Gooroom-browser를 다시 시작할 때 적용됩니다.</translation>
++<translation id="7861509383340276692">Gooroom 메뉴 &gt;
+           <ph name="SETTINGS_TITLE" />
+           &gt;
+           <ph name="ADVANCED_TITLE" />
+@@ -35,5 +35,5 @@
+           성능을 개선해 보시기 바랍니다.</translation>
+ <translation id="8187289872471304532">애플리케이션 &gt; 시스템 환경설정 &gt; 네트워크 &gt; 고급 &gt; 프록시로 이동한 다음
+           선택된 프록시를 선택 취소합니다.</translation>
+-<translation id="8684913864886094367">Chromium이 제대로 종료되지 않았습니다.</translation>
++<translation id="8684913864886094367">Gooroom-browser가 제대로 종료되지 않았습니다.</translation>
+ </translationbundle>
+diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
+index c5e6565ce19a..7241b9bd6cb0 100644
+--- a/content/browser/web_contents/web_contents_impl.cc
++++ b/content/browser/web_contents/web_contents_impl.cc
+@@ -22,6 +22,7 @@
+ #include "dbus/object_proxy.h"
+ #endif
+ 
++#include "chrome/common/chrome_switches.h"
+ #include "base/bind.h"
+ #include "base/command_line.h"
+ #include "base/debug/dump_without_crashing.h"
+@@ -4294,7 +4295,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+       "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
+       "/.config/gooroom/untrust";
+   std::string flash_dir = "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so";
+-  std::string flash_version = "--ppapi-flash-version=31.0.0.153";
++  std::string flash_version = "--ppapi-flash-version=32.0.0.192";
+ 
+   if (trusted) {
+     pid = fork();
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 495c169b85be..b6b5f2f2aca5 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -172,7 +172,7 @@ void GooroomPref::setup() {
+       "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
+       "/.config/gooroom/untrust";
+   std::string flash_dir = "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so";
+-  std::string flash_version = "--ppapi-flash-version=31.0.0.153";
++  std::string flash_version = "--ppapi-flash-version=32.0.0.192";
+ 
+   bool use_user_data_dir = false;
+ 
+-- 
+2.20.1
+

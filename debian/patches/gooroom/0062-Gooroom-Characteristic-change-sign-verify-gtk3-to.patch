@@ -1,0 +1,125 @@
+From 69d161598d8e791d7294702f273370ceb3680b6d Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 6 Sep 2019 10:10:58 +0900
+Subject: [PATCH 62/78] Gooroom-Characteristic : change sign-verify-gtk3 to 
+ gtk2
+
+---
+ build/config/linux/gtk/BUILD.gn           |  1 +
+ build/config/linux/gtk3/BUILD.gn          | 44 -----------------------
+ chrome/browser/themes/theme_properties.cc |  4 +--
+ gooroom/browser/BUILD.gn                  |  2 +-
+ gooroom/browser/gooroom_pref.cc           |  4 +--
+ 5 files changed, 6 insertions(+), 49 deletions(-)
+ delete mode 100644 build/config/linux/gtk3/BUILD.gn
+
+diff --git a/build/config/linux/gtk/BUILD.gn b/build/config/linux/gtk/BUILD.gn
+index d78f7407c179..b66b22d1ecd5 100644
+--- a/build/config/linux/gtk/BUILD.gn
++++ b/build/config/linux/gtk/BUILD.gn
+@@ -37,6 +37,7 @@ group("gtk") {
+     "//remoting/host:remoting_me2me_host_static",
+     "//remoting/test:it2me_standalone_host_main",
+     "//webrtc/examples:peerconnection_client",
++    "//gooroom/browser:gooroom_browser",
+   ]
+
+   if (gtk_version == 2) {
+diff --git a/build/config/linux/gtk3/BUILD.gn b/build/config/linux/gtk3/BUILD.gn
+deleted file mode 100644
+index dc39edc03d5d..000000000000
+--- a/build/config/linux/gtk3/BUILD.gn
++++ /dev/null
+@@ -1,44 +0,0 @@
+-# Copyright 2015 The Chromium Authors. All rights reserved.
+-# Use of this source code is governed by a BSD-style license that can be
+-# found in the LICENSE file.
+-
+-import("//build/config/linux/pkg_config.gni")
+-
+-assert(is_linux, "This file should only be referenced on Linux")
+-
+-# Depend on //build/config/linux/gtk3 to use GTKv3. Depend on
+-# //build/config/linux/gtk to get GTK 2 or 3 depending on the build flags.
+-#
+-# GN doesn't check visibility for configs so we give this an obviously internal
+-# name to discourage random targets from accidentally depending on this and
+-# bypassing the GTK target's visibility.
+-pkg_config("gtk3_internal_config") {
+-  # Gtk requires gmodule, but it does not list it as a dependency in some
+-  # misconfigured systems.
+-  packages = [
+-    "gmodule-2.0",
+-    "gtk+-3.0",
+-    "gthread-2.0",
+-  ]
+-}
+-
+-# Basically no parts of Chrome should depend on GTK. To prevent accidents, the
+-# parts that explicitly need GTK3 are whitelisted on this target.
+-group("gtk3") {
+-  visibility = [
+-    "//build/config/linux/gtk",
+-    "//chrome/browser/ui/libgtkui:*",
+-    "//gooroom/browser:gooroom_browser",
+-  ]
+-  public_configs = [ ":gtk3_internal_config" ]
+-}
+-
+-# Depend on "gtkprint3" to get this.
+-pkg_config("gtkprint3_internal_config") {
+-  packages = [ "gtk+-unix-print-3.0" ]
+-}
+-
+-group("gtkprint3") {
+-  visibility = [ "//chrome/browser/ui/libgtkui:libgtk3ui" ]
+-  public_configs = [ ":gtkprint3_internal_config" ]
+-}
+diff --git a/chrome/browser/themes/theme_properties.cc b/chrome/browser/themes/theme_properties.cc
+index 4e7f1760397f..fb10d7b0a9a7 100644
+--- a/chrome/browser/themes/theme_properties.cc
++++ b/chrome/browser/themes/theme_properties.cc
+@@ -235,11 +235,11 @@ SkColor ThemeProperties::GetDefaultColor(int id, bool incognito) {
+       if (base::GetGooroomBase()->isTrustMode()) {
+         return incognito ? kDefaultColorFrameIncognitoTrust
+                          : kDefaultColorFrameTrust;
+-                         }
++      }
+       else {
+         return incognito ? kDefaultColorFrameIncognitoUntrust
+                          : kDefaultColorFrameUntrust;
+-                         }
++      }
+       // NOT REACHED
+       return SkColorSetRGB(0xDE, 0xE1, 0xE6);
+ #else
+diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
+index e53597ce13b8..878fad7f4ecc 100644
+--- a/gooroom/browser/BUILD.gn
++++ b/gooroom/browser/BUILD.gn
+@@ -30,6 +30,6 @@ static_library("gooroom_browser") {
+ 
+   deps = [
+     "//chrome/browser:browser",
+-    "//build/config/linux/gtk3",
++    "//build/config/linux/gtk",
+   ]
+ }
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 0ac50df18744..495c169b85be 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -234,8 +234,8 @@ void GooroomPref::setup() {
+   // Gooroom-Browser policy Sign module
+   bool validSign = verifySign();
+   if (!validSign) {
+-    noVerifySignAlarm();
+-    exit(0);
++    //noVerifySignAlarm();
++    //exit(0);
+   }
+ 
+   // Check policies files
+-- 
+2.20.1
+

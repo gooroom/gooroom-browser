@@ -1,0 +1,34 @@
+From 4075c57d6a0f65d763395f5ab50d8990849f556f Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 5 Sep 2019 17:44:11 +0900
+Subject: [PATCH 55/78] Add extension webstore wording 'compatible'
+
+---
+ chrome/app/gooroom/resources/generated_resources_ko.xtb | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+index 43f6cea559cb..4aa1072583d3 100644
+--- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
++++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+@@ -2462,7 +2462,7 @@
+ <translation id="4744981231093950366">{NUM_TABS,plural, =1{사이트 숨기기 취소}other{사이트 숨기기 취소}}</translation>
+ <translation id="4746351372139058112">메시지</translation>
+ <translation id="4746971725921104503">해당 이름으로 이미 사용자를 관리 중입니다. <ph name="LINK_START" /><ph name="USER_DISPLAY_NAME" />을(를) 이 기기로 가져오시겠습니까<ph name="LINK_END" />?</translation>
+-<translation id="4748762018725435655">Gooroom browser 웹 스토어의 확장 프로그램 필요</translation>
++<translation id="4748762018725435655"><Gooroom-browser 호환 웹 스토어로 연결/translation>
+ <translation id="4750394297954878236">추천</translation>
+ <translation id="475088594373173692">첫 번째 사용자</translation>
+ <translation id="4751476147751820511">모션 또는 조도 센서</translation>
+@@ -4174,7 +4174,7 @@
+ <translation id="7377169924702866686">Caps Lock이 켜져 있습니다.</translation>
+ <translation id="7377451353532943397">계속해서 센서 액세스 차단</translation>
+ <translation id="7378627244592794276">안함</translation>
+-<translation id="73786666777299047">Gooroom browser 웹 스토어 열기</translation>
++<translation id="73786666777299047">Gooroom browser 호환 웹 스토어 열기</translation>
+ <translation id="7378812711085314936">데이터 연결 가져오기</translation>
+ <translation id="7380768571499464492"><ph name="PRINTER_NAME" /> 업데이트됨</translation>
+ <translation id="7385854874724088939">인쇄를 시도하는 동안 문제가 발생했습니다. 프린터를 점검한 다음 다시 시도해 보세요.</translation>
+-- 
+2.20.1
+

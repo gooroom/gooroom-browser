@@ -1,23 +1,23 @@
-From 9b7d591a44d643453c5fb6cf1b36ad0674ed1d8c Mon Sep 17 00:00:00 2001
-From: JunSung Choi <junsungc@gooroom.kr>
-Date: Fri, 24 May 2019 20:25:41 +0900
-Subject: [PATCH 02/63] add GooroomExtraPartsSecurity that will initialize
+From e737df7337f7435233fe97f65ef9461631291dae Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 4 Sep 2019 14:00:15 +0900
+Subject: [PATCH 02/78] add GooroomExtraPartsSecurity that will initialize
  GooroomBase via GooroomPrefs
 
 ---
- gooroom/BUILD.gn                                   |  4 +++
- gooroom/browser/BUILD.gn                           |  3 +-
- .../gooroom_browser_extra_parts_security.cc        | 37 ++++++++++++++++++++++
- .../browser/gooroom_browser_extra_parts_security.h | 27 ++++++++++++++++
+ gooroom/BUILD.gn                              |  4 ++
+ gooroom/browser/BUILD.gn                      |  3 +-
+ .../gooroom_browser_extra_parts_security.cc   | 37 +++++++++++++++++++
+ .../gooroom_browser_extra_parts_security.h    | 27 ++++++++++++++
  4 files changed, 70 insertions(+), 1 deletion(-)
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.cc
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 8be48d42a..4f1a76fe0 100644
+index 500a6ac6a4f1..fb727ec7730c 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -250,6 +250,10 @@ if (!is_android && !is_mac) {
+@@ -247,6 +247,10 @@ if (!is_android && !is_mac) {
          "browser/gooroom_content_browser_client.h",
          "browser/gooroom_content_client.cc",
          "browser/gooroom_content_client.h",
@@ -29,7 +29,7 @@ index 8be48d42a..4f1a76fe0 100644
      }
    }
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
-index aa90542e9..5fae651d7 100644
+index aa90542e9239..5fae651d7173 100644
 --- a/gooroom/browser/BUILD.gn
 +++ b/gooroom/browser/BUILD.gn
 @@ -3,11 +3,12 @@ import("//build/util/branding.gni")
@@ -48,7 +48,7 @@ index aa90542e9..5fae651d7 100644
    deps = [
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.cc b/gooroom/browser/gooroom_browser_extra_parts_security.cc
 new file mode 100644
-index 000000000..c1ca04e9a
+index 000000000000..c1ca04e9a19a
 --- /dev/null
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.cc
 @@ -0,0 +1,37 @@
@@ -92,7 +92,7 @@ index 000000000..c1ca04e9a
 \ No newline at end of file
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.h b/gooroom/browser/gooroom_browser_extra_parts_security.h
 new file mode 100644
-index 000000000..944f4a170
+index 000000000000..944f4a170c8a
 --- /dev/null
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.h
 @@ -0,0 +1,27 @@
@@ -124,5 +124,5 @@ index 000000000..944f4a170
 +
 +#endif  // GOOROOM_BROWSER_EXTRA_PARTS_SECURITY_H_
 -- 
-2.11.0
+2.20.1
 

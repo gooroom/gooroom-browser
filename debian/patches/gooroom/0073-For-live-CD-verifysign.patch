@@ -1,0 +1,37 @@
+From 7c03a27a4533ce0434f250784cccea8c22881e51 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 6 Sep 2019 17:14:00 +0900
+Subject: [PATCH 73/78] For live CD (verifysign)
+
+---
+ gooroom/browser/gooroom_pref.cc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index d34c8d7bb02e..5f95627c98a3 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -99,9 +99,9 @@ int is_local_user() {
+         if (!atoi(tok))
+           break;
+       }
+-      if (num==0 && sessionNum==0)
++      if (num==0)
+         sessionNum=atoi(tok);
+-      if (num==1 && userID==0)
++      if (num==1)
+         userID=atoi(tok);
+       if (num==2) {
+         FILE *fp2 = NULL;
+@@ -144,7 +144,7 @@ int is_local_user() {
+           if (strcmp(tok2, "Service") == 0) {
+             tok2 = strtok(nullptr, "=");
+             tok2 = strtok(tok2, "\n");
+-            if (strcmp(tok2, "lightdm") == 0) {
++            if (strncmp(tok2, "lightdm", 7) == 0) {
+               service_lightdm = true;
+               continue;
+             }
+-- 
+2.20.1
+

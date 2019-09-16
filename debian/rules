@@ -6,22 +6,54 @@ export DH_VERBOSE=1
 # enable all build hardening flags
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
-# needed to avoid build system choosing clang as the compiler
-export CC=gcc
-export CXX=g++
+# indicate that binary targets do not require root
+export DEB_RULES_REQUIRES_ROOT=no
 
-# build with gcc instead of clang
-defines=is_clang=false clang_use_chrome_plugins=false
+# default to gcc when compiler environment variables are unset
+export AR=ar
+export NM=nm
+export CC?=gcc
+export CXX?=g++
 
 # more verbose linker output
 export LDFLAGS+=-Wl,--stats
 
-# avoid error in v8's garbage collector (see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=68853)
-export CXXFLAGS+=-fno-delete-null-pointer-checks
+# extra flags to reduce warnings that aren't very useful
+export CXXFLAGS+=-Wno-pedantic \
+                 -Wno-unused-result \
+                 -Wno-unused-function \
+                 -Wno-unused-variable \
+                 -Wno-unused-but-set-variable \
+                 -Wno-deprecated-declarations \
 
-DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+# ignore warnings for minor mistakes that are too common
+export CXXFLAGS+=-Wno-return-type \
+                 -Wno-parentheses \
+                 -Wno-misleading-indentation \
+
+# ignore warnings that are not supported well until gcc 8
+export CXXFLAGS+=-Wno-attributes \
+                 -Wno-subobject-linkage \
+
+# ignore warnings due to gcc bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=84055)
+export CXXFLAGS+=-Wno-ignored-attributes
+
+# ingore new gcc 8 warnings that aren't yet handled upstream
+export CXXFLAGS+=-Wno-address \
+                 -Wno-dangling-else \
+                 -Wno-class-memaccess \
+                 -Wno-invalid-offsetof \
+                 -Wno-packed-not-aligned \
+
+# disable clang options
+defines=is_clang=false clang_use_chrome_plugins=false
+
+# build using system toolchain
+defines+=host_toolchain=\"//build/toolchain/linux/unbundle:default\"
+defines+=custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
 
 # set the appropriate cpu architecture
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifeq (i386,$(DEB_HOST_ARCH))
 defines+=host_cpu=\"x86\"
 endif
@@ -36,26 +68,27 @@ defines+=host_cpu=\"arm\" arm_use_neon=false symbol_level=0
 endif
 
 # disabled features
-defines+=gtk_version=2 \
-         is_debug=false \
-         use_allocator=\"none\" \
+defines+=is_debug=false \
          use_goma=false \
          use_ozone=false \
          use_sysroot=false \
          use_openh264=false \
+         use_allocator=\"none\" \
+         use_libjpeg_turbo=true \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
-         use_system_harfbuzz=false \
-         rtc_libvpx_build_vp9=false \
-         treat_warnings_as_errors=false \
-         remove_webcore_debug_symbols=true \
-         optimize_webui=false \
-         enable_swiftshader=false \
+         use_unofficial_version_number=false \
+         enable_vr=false \
          enable_nacl=false \
          enable_nacl_nonsfi=false \
+         enable_swiftshader=false \
+         enable_reading_list=false \
          enable_one_click_signin=false \
-         enable_hangout_services_extension=false \
          enable_iterator_debugging=false \
+         enable_hangout_services_extension=false \
+         optimize_webui=false \
+         blink_symbol_level=0 \
+         treat_warnings_as_errors=false \
          linux_use_bundled_binutils=false \
 
 # enabled features
@@ -63,12 +96,16 @@ defines+=use_gio=true \
          use_pulseaudio=true \
          link_pulseaudio=true \
          enable_widevine=true \
-         use_libjpeg_turbo=true \
+         v8_enable_backtrace=true \
+         use_system_zlib=true \
+         use_system_lcms2=true \
          use_system_libjpeg=true \
          use_system_freetype=true \
-         concurrent_links=1 \
+         use_system_harfbuzz=true \
+         use_system_libopenjpeg2=true \
          use_jumbo_build=true \
          jumbo_file_merge_limit=8 \
+         concurrent_links=1 \
          proprietary_codecs=true \
          ffmpeg_branding=\"Chrome\" \
          fieldtrial_testing_like_official_build=true \
@@ -78,8 +115,9 @@ defines+=use_gio=true \
 #  can't use system ots (open text *summarizer*) since that's not google's ots (open text *sanitizer*)
 
 # handle parallel build options
+njobs=1
 ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
-njobs=-j$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+njobs=$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 endif
 
 # paths to files needed by flot
@@ -87,7 +125,10 @@ flotpaths=/usr/share/javascript/jquery/*min.js \
           /usr/share/javascript/jquery-flot/*min.js \
 
 %:
-	dh $@ --parallel
+	dh $@
+
+out/Release/gn:
+	./tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles -j$(njobs)
 
 override_dh_auto_configure:
 	# output compiler information
@@ -97,28 +138,23 @@ override_dh_auto_configure:
 	# put yasm script in the location expected by gn
 	ln -sf ../pdfium/third_party/yasm/run_yasm.py third_party/yasm
 	# strip out system third_party libraries
-	rm -f build/config/freetype/freetype.gni
+	rm -f base/third_party/libevent/BUILD.gn build/config/freetype/freetype.gni
 	mkdir -p base/third_party/libevent
 	./debian/scripts/unbundle
-	# build gn
-	cp base/numerics/safe_conversions_arm_impl.h base/numerics/safe_math_arm_impl.h tools/gn/base/numerics
-	./tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles -s $(njobs)
-	# configure
-	./out/Release/gn gen out/Release --args="$(defines)"
 
-override_dh_auto_build-arch:
-	git apply debian/patches/gooroom/0012-Put-gooroom-logo-into-the-browser.patch
+override_dh_auto_build-arch: out/Release/gn
+	git apply debian/patches/gooroom/0011-Put-gooroom-logo-into-the-browser.patch
 	./out/Release/gn gen out/Release --args="$(defines)"
-	ninja $(njobs) -C out/Release gooroom-browser chrome_sandbox
-	mv out/Release/gooroom-browser out/Release/gooroom-browser || true
-	mv out/Release/chrome_sandbox out/Release/chrome-sandbox || true
-	mv out/Release/locales/en-US.pak out/Release/resources || true
+	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox
+	cp out/Release/chrome_sandbox out/Release/chrome-sandbox
+	cp out/Release/locales/en-US.pak out/Release/resources
 	chmod 4755 out/Release/chrome-sandbox # suid sandbox
 	sed -e s/@@PACKAGE@@/gooroom-browser/g -e s/@@MENUNAME@@/gooroom-browser/g \
 	    < chrome/app/resources/manpage.1.in > out/Release/gooroom-browser.1
 
-override_dh_auto_build-indep:
-	ninja $(njobs) -C out/Release packed_resources
+override_dh_auto_build-indep: out/Release/gn
+	./out/Release/gn gen out/Release --args="$(defines)"
+	ninja -j$(njobs) -C out/Release packed_resources
 	rm -f out/Release/locales/en-US.pak
 
 override_dh_auto_install-arch:
@@ -127,20 +163,10 @@ override_dh_auto_install-arch:
 	sed 's|@BUILD_DIST@|$(shell cat /etc/debian_version)|' \
 	    < debian/scripts/gooroom-browser > debian/gooroom-browser/usr/bin/gooroom-browser
 	# move icons into /usr/share
-	for file in $(shell find chrome/app/theme/gooroom -name product_logo_[0-9]* -a ! -name *mono*); do \
-	    ext=$$(echo $$file | cut -d\. -f2); \
-	    siz=$$(echo $$file | cut -d_ -f3 | sed s/\.$$ext//); \
-	    dst=debian/gooroom-browser/usr/share/icons/hicolor/$$siz\x$$siz/apps; \
-	    mkdir -p $$dst; \
-	    cp $$file $$dst/gooroom-browser.$$ext; \
-	    done
+	./debian/scripts/icons
 
 override_dh_fixperms:
 	dh_fixperms --exclude chrome-sandbox
-
-override_dh_strip:
-	# this line can be removed once stretch is released
-	dh_strip --remaining-packages --ddeb-migration='chromium-dbg (<< 47.0.2526.80-4~)'
 
 override_dh_gencontrol:
 	dh_gencontrol -- -VBuilt-Using="$(shell dpkg-query -f '$${source:Package} (= $${source:Version}), ' -W libjs-jquery libjs-jquery-flot)"
@@ -154,13 +180,30 @@ override_dh_auto_clean:
 
 url=https://gsdview.appspot.com/chromium-browser-official
 version=$(shell dpkg-parsechangelog -S Version | sed s/-.*//)
-tarball=chromium-$(version).tar.xz
-removed=chromium-browser_$(version).files-removed
+extract=chromium-$(version)
+tarfile=$(extract)-lite.tar
+tarball=$(tarfile).xz
+debvers=../chromium_$(version)
+origtxz=$(debvers).orig.tar.xz
+removed=$(debvers).files-removed
+seconds=$(debvers).seconds
 
 get-orig-source:
 	wget -nv --show-progress -c $(url)/$(tarball) -O ../$(tarball)
-	mk-origtargz ../$(tarball) | tee ../$(removed)
-	echo >> ../$(removed)
-	tar tf ../$(tarball) | sort > ../chromium.upstream
-	tar tf ../chromium-browser_$(version).orig.tar.xz | sort > ../chromium.orig
-	diff -u ../chromium.upstream ../chromium.orig >> ../$(removed) || true
+	cp /usr/share/perl5/Devscripts/MkOrigtargz.pm debian/scripts/mk-origtargz
+	patch -p1 < debian/scripts/mk-origtargz.patch
+	date +%s > $(seconds)
+	perl debian/scripts/mk-origtargz ../$(tarball) > $(removed)
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	test ! -e $(extract) || rm -rf $(extract)
+	tar xf ../$(tarball)
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	while read line; do rm -rf $$line; done < $(removed)
+	cd $(extract) && ../debian/scripts/check-upstream
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	test ! -e $(origtxz) || rm -f $(origtxz)
+	tar cf - $(extract) | xz -6 -T $(njobs) - > $(origtxz)
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	rm -rf $(extract)
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds | tee seconds
+	@mv -f seconds $(seconds)

@@ -1,0 +1,55 @@
+From 4161dd9de8dd47b6c2feda41a6ddfa759c9ef794 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 5 Sep 2019 16:07:34 +0900
+Subject: [PATCH 41/78] fix gooroom-policy-dir bugs
+
+---
+ chrome/common/chrome_paths.cc | 25 ++++++++++++++-----------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
+
+diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
+index 8cadb2346a33..58a3185281e4 100644
+--- a/chrome/common/chrome_paths.cc
++++ b/chrome/common/chrome_paths.cc
+@@ -6,6 +6,8 @@
+ 
+ #if defined(GOOROOM_BUILD)
+ #include "gooroom/base/gooroom_base.h"
++#include "base/command_line.h"
++#include "chrome/common/chrome_switches.h"
+ #endif
+ #include "base/files/file_util.h"
+ #include "base/logging.h"
+@@ -476,17 +478,18 @@ bool PathProvider(int key, base::FilePath* result) {
+       cur = base::FilePath(FILE_PATH_LITERAL("/etc/opt/chrome/policies"));
+ #else
+ #if defined(GOOROOM_BUILD)
+-      base::FilePath home_path_dir;
+-      base::PathService::Get(base::DIR_HOME, &home_path_dir);
+-      std::string assignedDir =
+-          home_path_dir.AsUTF8Unsafe() + "/.config/gooroom/trust";
+-
+-      if (base::GetGooroomBase()->isTrustMode())
+-        cur = base::FilePath(
+-            FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/trust"));
+-      else
+-        cur = base::FilePath(
+-            FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/untrust"));
++  base::FilePath home_path_dir;
++  base::PathService::Get(base::DIR_HOME, &home_path_dir);
++  std::string assignedDir = home_path_dir.AsUTF8Unsafe() + "/.config/gooroom/trust";
++
++  base::CommandLine* cmdline = base::CommandLine::ForCurrentProcess();
++  base::FilePath user_data_dir =
++    cmdline->GetSwitchValuePath(switches::kUserDataDir);
++
++  if ( user_data_dir.AsUTF8Unsafe() == assignedDir )
++    cur = base::FilePath(FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/trust"));
++  else
++    cur = base::FilePath(FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/untrust"));
+ #else
+       cur = base::FilePath(FILE_PATH_LITERAL("/etc/chromium/policies"));
+ #endif
+-- 
+2.20.1
+

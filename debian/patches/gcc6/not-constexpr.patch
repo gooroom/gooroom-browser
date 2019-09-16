@@ -3,7 +3,7 @@ author: Michael Gilbert <mgilbert@debian.org>
 
 --- a/base/test/scoped_task_environment.h
 +++ b/base/test/scoped_task_environment.h
-@@ -207,11 +207,11 @@ class ScopedTaskEnvironment {
+@@ -245,11 +245,11 @@ class ScopedTaskEnvironment {
   protected:
    explicit ScopedTaskEnvironment(ScopedTaskEnvironment&& other);
  
@@ -12,9 +12,9 @@ author: Michael Gilbert <mgilbert@debian.org>
      return main_thread_type_;
    }
  
--  constexpr ExecutionMode execution_control_mode() const {
-+  const ExecutionMode execution_control_mode() const {
-     return execution_control_mode_;
+-  constexpr ThreadPoolExecutionMode thread_pool_execution_mode() const {
++  const ThreadPoolExecutionMode thread_pool_execution_mode() const {
+     return thread_pool_execution_mode_;
    }
  
 --- a/gpu/command_buffer/client/transfer_buffer_cmd_copy_helpers.h
@@ -50,8 +50,8 @@ author: Michael Gilbert <mgilbert@debian.org>
    uint32_t copy_count = buffer_size / elements_size;
  
    while (copy_count > 0) {
---- a/media/filters/jpeg_parser.cc
-+++ b/media/filters/jpeg_parser.cc
+--- a/media/parsers/jpeg_parser.cc
++++ b/media/parsers/jpeg_parser.cc
 @@ -91,13 +91,13 @@ const JpegHuffmanTable kDefaultAcTable[k
      },
  };
@@ -101,7 +101,7 @@ author: Michael Gilbert <mgilbert@debian.org>
    }
 --- a/base/trace_event/trace_arguments.h
 +++ b/base/trace_event/trace_arguments.h
-@@ -483,21 +483,21 @@ class BASE_EXPORT StringStorage {
+@@ -490,21 +490,21 @@ class BASE_EXPORT StringStorage {
    void Reset(size_t alloc_size = 0);
  
    // Accessors.
@@ -130,7 +130,7 @@ author: Michael Gilbert <mgilbert@debian.org>
      const char* char_ptr = static_cast<const char*>(ptr);
      return (char_ptr >= begin() && char_ptr < end());
    }
-@@ -508,7 +508,7 @@ class BASE_EXPORT StringStorage {
+@@ -515,7 +515,7 @@ class BASE_EXPORT StringStorage {
  
    // Return an estimate of the memory overhead of this instance. This doesn't
    // count the size of |data_| itself.
@@ -141,9 +141,9 @@ author: Michael Gilbert <mgilbert@debian.org>
  
 --- a/content/public/browser/desktop_media_id.h
 +++ b/content/public/browser/desktop_media_id.h
-@@ -41,16 +41,16 @@ struct CONTENT_EXPORT DesktopMediaID {
-   static aura::Window* GetAuraWindowById(const DesktopMediaID& id);
- #endif  // defined(USE_AURA)
+@@ -38,16 +38,16 @@ struct CONTENT_EXPORT DesktopMediaID {
+   static gfx::NativeWindow GetNativeWindowById(const DesktopMediaID& id);
+ #endif  // USE_AURA || OS_MACOSX
  
 -  constexpr DesktopMediaID() = default;
 +  DesktopMediaID() = default;
@@ -162,3 +162,56 @@ author: Michael Gilbert <mgilbert@debian.org>
        : type(type), id(id), audio_share(audio_share) {}
  
    // Operators so that DesktopMediaID can be used with STL containers.
+--- a/base/containers/any_internal.h
++++ b/base/containers/any_internal.h
+@@ -45,7 +45,7 @@ class BASE_EXPORT AnyInternal {
+     type_ops_ = other.type_ops_;
+   }
+ 
+-  constexpr bool has_value() const noexcept { return !!type_ops_; }
++  const bool has_value() const noexcept { return !!type_ops_; }
+ 
+   TypeId type() const noexcept {
+     if (!type_ops_)
+@@ -160,7 +160,7 @@ class BASE_EXPORT AnyInternal {
+ 
+ // static
+ template <typename T>
+-const AnyInternal::TypeOps AnyInternal::TypeOpsHelper<T>::type_ops;
++constexpr AnyInternal::TypeOps AnyInternal::TypeOpsHelper<T>::type_ops;
+ 
+ template <typename T>
+ struct AnyInternal::ConstructHelper<T, /* UseInlineStorage */ true> {
+--- a/base/trace_event/category_registry.h
++++ b/base/trace_event/category_registry.h
+@@ -68,7 +68,7 @@ class BASE_EXPORT CategoryRegistry {
+   // Returns a built-in category from its name or nullptr if not found at
+   // compile-time. The return value is an undefinitely lived pointer to the
+   // TraceCategory owned by the registry.
+-  static constexpr TraceCategory* GetBuiltinCategoryByName(
++  static TraceCategory* GetBuiltinCategoryByName(
+       const char* category_group) {
+ #if defined(OS_WIN) && defined(COMPONENT_BUILD)
+     // The address cannot be evaluated at compile-time in Windows compoment
+--- a/base/trace_event/trace_event.h
++++ b/base/trace_event/trace_event.h
+@@ -240,7 +240,7 @@
+       base::trace_event::BuiltinCategories::IsAllowedCategory(category_group), \
+       "Unknown tracing category is used. Please register your "                \
+       "category in base/trace_event/builtin_categories.h");                    \
+-  constexpr const unsigned char* INTERNAL_TRACE_EVENT_UID(                     \
++  const unsigned char* INTERNAL_TRACE_EVENT_UID(                     \
+       k_category_group_enabled) =                                              \
+       base::trace_event::TraceLog::GetBuiltinCategoryEnabled(category_group);  \
+   const unsigned char* INTERNAL_TRACE_EVENT_UID(category_group_enabled);       \
+--- a/base/trace_event/trace_log.h
++++ b/base/trace_event/trace_log.h
+@@ -217,7 +217,7 @@ class BASE_EXPORT TraceLog : public Memo
+   static const unsigned char* GetCategoryGroupEnabled(const char* name);
+   static const char* GetCategoryGroupName(
+       const unsigned char* category_group_enabled);
+-  static constexpr const unsigned char* GetBuiltinCategoryEnabled(
++  static const unsigned char* GetBuiltinCategoryEnabled(
+       const char* name) {
+     TraceCategory* builtin_category =
+         CategoryRegistry::GetBuiltinCategoryByName(name);

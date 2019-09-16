@@ -1,24 +1,24 @@
-From 6ed1fd403160a107ad3d74773d454b94109fc2a0 Mon Sep 17 00:00:00 2001
-From: JunSung Choi <junsungc@gooroom.kr>
-Date: Fri, 24 May 2019 20:24:37 +0900
-Subject: [PATCH 01/63] add /gooroom and configs to build gooroom-browser
+From 401f70d6ec72163e0f4d56fa902d4a3cc12120d3 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 4 Sep 2019 11:26:29 +0900
+Subject: [PATCH 01/78] add /gooroom and configs to build gooroom-browser
  binary
 
 ---
- BUILD.gn                                          |   2 +
- build/config/compiler/BUILD.gn                    |   3 +
- chrome/browser/chrome_content_browser_client.h    |   3 +-
- gooroom/BUILD.gn                                  | 472 ++++++++++++++++++++++
- gooroom/app/gooroom_exe_main_aura.cc              |  22 +
- gooroom/app/gooroom_main.cc                       | 121 ++++++
- gooroom/app/gooroom_main_delegate.cc              |  54 +++
- gooroom/app/gooroom_main_delegate.h               |  40 ++
- gooroom/browser/BUILD.gn                          |  16 +
- gooroom/browser/gooroom_content_browser_client.cc | 131 ++++++
- gooroom/browser/gooroom_content_browser_client.h  |  17 +
- gooroom/browser/gooroom_content_client.cc         |   8 +
- gooroom/browser/gooroom_content_client.h          |  18 +
- 13 files changed, 905 insertions(+), 2 deletions(-)
+ BUILD.gn                                      |   2 +
+ build/config/compiler/BUILD.gn                |   3 +
+ .../browser/chrome_content_browser_client.h   |   3 +-
+ gooroom/BUILD.gn                              | 470 ++++++++++++++++++
+ gooroom/app/gooroom_exe_main_aura.cc          |  22 +
+ gooroom/app/gooroom_main.cc                   | 125 +++++
+ gooroom/app/gooroom_main_delegate.cc          | 106 ++++
+ gooroom/app/gooroom_main_delegate.h           |  50 ++
+ gooroom/browser/BUILD.gn                      |  16 +
+ .../browser/gooroom_content_browser_client.cc | 169 +++++++
+ .../browser/gooroom_content_browser_client.h  |  29 ++
+ gooroom/browser/gooroom_content_client.cc     |   8 +
+ gooroom/browser/gooroom_content_client.h      |  18 +
+ 13 files changed, 1020 insertions(+), 1 deletion(-)
  create mode 100644 gooroom/BUILD.gn
  create mode 100644 gooroom/app/gooroom_exe_main_aura.cc
  create mode 100644 gooroom/app/gooroom_main.cc
@@ -31,10 +31,10 @@ Subject: [PATCH 01/63] add /gooroom and configs to build gooroom-browser
  create mode 100644 gooroom/browser/gooroom_content_client.h
 
 diff --git a/BUILD.gn b/BUILD.gn
-index dd21309c9..dfae89952 100644
+index 8209523bebe9..1cb5ce6b1e11 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
-@@ -148,6 +148,8 @@ group("gn_all") {
+@@ -150,6 +150,8 @@ group("gn_all") {
        "//tools/perf/clear_system_cache",
        "//ui/accessibility:accessibility_unittests",
        "//ui/accessibility/extensions",
@@ -44,12 +44,12 @@ index dd21309c9..dfae89952 100644
    }
  
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 24ba15e26..77ba8dcaf 100644
+index a3f21b7ef850..fc2200218e61 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -214,6 +214,9 @@ config("compiler") {
+@@ -207,6 +207,9 @@ config("compiler") {
+   defines = []
    configs = []
-   inputs = []
  
 +# TODO move into gooroom's and check ^^^^^ by gooroom
 +  defines += [ "GOOROOM_BUILD" ]
@@ -58,32 +58,32 @@ index 24ba15e26..77ba8dcaf 100644
    # categories here, add it to the associated file to keep this shared config
    # smaller.
 diff --git a/chrome/browser/chrome_content_browser_client.h b/chrome/browser/chrome_content_browser_client.h
-index 2f67ad908..09ce1e45b 100644
+index 499af0b670a1..0864d700e182 100644
 --- a/chrome/browser/chrome_content_browser_client.h
 +++ b/chrome/browser/chrome_content_browser_client.h
-@@ -571,6 +571,7 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
-   static bool HandleWebUI(GURL* url, content::BrowserContext* browser_context);
+@@ -636,6 +636,8 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
    static bool HandleWebUIReverse(GURL* url,
                                   content::BrowserContext* browser_context);
-+  ChromeFeatureListCreator* chrome_feature_list_creator_;
  
++  StartupData* startup_data_;
++
   private:
    friend class DisableWebRtcEncryptionFlagTest;
-@@ -644,8 +645,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+   friend class InProcessBrowserTest;
+@@ -712,7 +714,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
                                                const url::Origin&>>
        worker_interfaces_parameterized_;
  
--  ChromeFeatureListCreator* chrome_feature_list_creator_;
--
-   base::WeakPtrFactory<ChromeContentBrowserClient> weak_factory_;
+-  StartupData* startup_data_;
  
-   DISALLOW_COPY_AND_ASSIGN(ChromeContentBrowserClient);
+ #if !defined(OS_ANDROID)
+   std::unique_ptr<ChromeSerialDelegate> serial_delegate_;
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
 new file mode 100644
-index 000000000..8be48d42a
+index 000000000000..500a6ac6a4f1
 --- /dev/null
 +++ b/gooroom/BUILD.gn
-@@ -0,0 +1,472 @@
+@@ -0,0 +1,470 @@
 +# Copyright 2014 The Chromium Authors. All rights reserved.
 +# Use of this source code is governed by a BSD-style license that can be
 +# found in the LICENSE file.
@@ -204,10 +204,6 @@ index 000000000..8be48d42a
 +      sources += [ "app/chrome_exe_resource.h" ]
 +      defines = []
 +      public_deps = []
-+      deps += [
-+        "//build/config:common_deps",
-+      ]
-+
 +
 +      data += [ "$root_out_dir/resources.pak" ]
 +      if (is_linux || is_win) {
@@ -262,9 +258,10 @@ index 000000000..8be48d42a
 +        public_deps = [
 +          #":xdg_mime",  # Needs to be public for installer to consume files.
 +          "//chrome:xdg_mime",  # Needs to be public for installer to consume files.
++          "//chrome/common:buildflags",
 +        ]
 +
-+        ldflags = [ "-pie" ]
++        ldflags = []
 +
 +        # Chrome OS debug builds for arm need to pass --long-plt to the linker.
 +        # See https://bugs.chromium.org/p/chromium/issues/detail?id=583532
@@ -428,13 +425,14 @@ index 000000000..8be48d42a
 +    "//chrome/browser/resources:invalidations_resources",
 +    "//chrome/browser/resources:net_internals_resources",
 +    "//chrome/browser/resources:quota_internals_resources",
-+    "//chrome/browser/resources:translate_internals_resources",
 +    "//chrome/browser/resources:webapks_ui_resources",
 +  ]
 +
 +  if (!is_android) {
 +    public_deps += [
 +      "//chrome/browser/resources:component_extension_resources",
++      "//chrome/browser/resources:downloads_resources",
++      "//chrome/browser/resources:local_ntp_resources",
 +      "//chrome/browser/resources:settings_resources",
 +    ]
 +  }
@@ -558,7 +556,7 @@ index 000000000..8be48d42a
 +}
 diff --git a/gooroom/app/gooroom_exe_main_aura.cc b/gooroom/app/gooroom_exe_main_aura.cc
 new file mode 100644
-index 000000000..50053010c
+index 000000000000..50053010c311
 --- /dev/null
 +++ b/gooroom/app/gooroom_exe_main_aura.cc
 @@ -0,0 +1,22 @@
@@ -586,10 +584,10 @@ index 000000000..50053010c
 +}
 diff --git a/gooroom/app/gooroom_main.cc b/gooroom/app/gooroom_main.cc
 new file mode 100644
-index 000000000..6702a7fdc
+index 000000000000..ec95b0cde334
 --- /dev/null
 +++ b/gooroom/app/gooroom_main.cc
-@@ -0,0 +1,121 @@
+@@ -0,0 +1,125 @@
 +// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -655,7 +653,11 @@ index 000000000..6702a7fdc
 +
 +  GooroomMainDelegate gooroom_main_delegate(
 +      base::TimeTicks::FromInternalValue(exe_entry_point_ticks));
++  ChromeMainDelegate chrome_main_delegate(
++      base::TimeTicks::FromInternalValue(exe_entry_point_ticks));
++
 +  content::ContentMainParams params(&gooroom_main_delegate);
++//  content::ContentMainParams params(&chrome_main_delegate);
 +
 +#if defined(OS_WIN)
 +  // The process should crash when going through abnormal termination.
@@ -713,10 +715,10 @@ index 000000000..6702a7fdc
 +}
 diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
 new file mode 100644
-index 000000000..db1f0d45c
+index 000000000000..e0c9b8e9c0b7
 --- /dev/null
 +++ b/gooroom/app/gooroom_main_delegate.cc
-@@ -0,0 +1,54 @@
+@@ -0,0 +1,106 @@
 +// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -725,12 +727,22 @@ index 000000000..db1f0d45c
 +#include "base/lazy_instance.h"
 +#include "base/logging.h"
 +#include "gooroom/browser/gooroom_content_browser_client.h"
++#include "chrome/browser/chrome_resource_bundle_helper.h"
++#include "chrome/common/chrome_features.h"
++
++
++#include "chrome/browser/metrics/chrome_feature_list_creator.h"
++#include "chrome/browser/startup_data.h"
++#include "components/startup_metric_utils/browser/startup_metric_utils.h"
++
 +
 +#include <stddef.h>
 +#include <iostream>
 +#include <istream>
 +#include <ostream>
 +#include <string>
++#include <locale.h>
++
 +
 +#if !defined(CHROME_MULTIPLE_DLL_CHILD)
 +base::LazyInstance<GooroomContentBrowserClient>::DestructorAtExit
@@ -755,28 +767,70 @@ index 000000000..db1f0d45c
 +  return result;
 +}
 +
++void GooroomMainDelegate::PostEarlyInitialization(bool is_running_tests) {
++  // Chrome disallows cookies by default. All code paths that want to use
++  // cookies need to go through one of Chrome's URLRequestContexts which have
++  // a ChromeNetworkDelegate attached that selectively allows cookies again.
++  net::URLRequest::SetDefaultCookiePolicyToBlock();
++
++#if defined(OS_CHROMEOS)
++  // The feature list depends on BrowserPolicyConnectorChromeOS which depends
++  // on DBus, so initialize it here. Some D-Bus clients may depend on feature
++  // list, so initialize them separately later at the end of this function.
++  chromeos::InitializeDBus();
++#endif
++
++  DCHECK(startup_data_);
++  auto* chrome_feature_list_creator =
++      startup_data_->chrome_feature_list_creator();
++  chrome_feature_list_creator->CreateFeatureList();
++  PostFieldTrialInitialization();
++
++  // Initializes the resource bundle and determines the locale.
++  std::string actual_locale =
++      LoadLocalState(chrome_feature_list_creator, is_running_tests);
++  chrome_feature_list_creator->SetApplicationLocale(actual_locale);
++  chrome_feature_list_creator->OverrideCachedUIStrings();
++
++#if defined(OS_CHROMEOS)
++  // Initialize D-Bus clients that depend on feature list.
++  chromeos::InitializeFeatureListDependentDBus();
++#endif
++}
++
++
 +content::ContentBrowserClient*
 +GooroomMainDelegate::CreateContentBrowserClient() {
 +#if defined(CHROME_MULTIPLE_DLL_CHILD)
 +  return NULL;
 +#else
 +  if (chrome_content_browser_client_ == nullptr) {
-+    DCHECK(!chrome_feature_list_creator_);
-+    chrome_feature_list_creator_ = std::make_unique<ChromeFeatureListCreator>();
++    DCHECK(!startup_data_);
++    startup_data_ = std::make_unique<StartupData>();
 +
 +    chrome_content_browser_client_ =
-+        std::make_unique<ChromeContentBrowserClient>(
-+            chrome_feature_list_creator_.get());
++        std::make_unique<GooroomContentBrowserClient>(startup_data_.get());
 +  }
 +  return chrome_content_browser_client_.get();
 +#endif
 +}
++
++void GooroomMainDelegate::PostTaskSchedulerStart() {
++#if defined(OS_ANDROID)
++  startup_data_->CreateProfilePrefService();
++#endif
++  if (base::FeatureList::IsEnabled(
++          features::kWriteBasicSystemProfileToPersistentHistogramsFile)) {
++    startup_data_->RecordCoreSystemProfile();
++  }
++}
++
 diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
 new file mode 100644
-index 000000000..ffc1714c0
+index 000000000000..879ab6aa9044
 --- /dev/null
 +++ b/gooroom/app/gooroom_main_delegate.h
-@@ -0,0 +1,40 @@
+@@ -0,0 +1,50 @@
 +// Copyright (c) 2011 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -805,13 +859,23 @@ index 000000000..ffc1714c0
 +  explicit GooroomMainDelegate(base::TimeTicks exe_entry_point_ticks);
 +
 + protected:
++  void PostEarlyInitialization(bool is_running_tests) override;
++
 +  void PreSandboxStartup() override;
 +
 +  bool BasicStartupComplete(int* exit_code) override;
 +
 +  content::ContentBrowserClient* CreateContentBrowserClient() override;
 +
++  void PostTaskSchedulerStart() override;
++
++
 +  GooroomContentClient gooroom_content_client_;
++
++#if !defined(CHROME_MULTIPLE_DLL_CHILD)
++  std::unique_ptr<StartupData> startup_data_;
++#endif
++
 +
 +  DISALLOW_COPY_AND_ASSIGN(GooroomMainDelegate);
 +};
@@ -819,7 +883,7 @@ index 000000000..ffc1714c0
 +#endif  // CHROME_APP_CHROME_MAIN_DELEGATE_H_
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
 new file mode 100644
-index 000000000..aa90542e9
+index 000000000000..aa90542e9239
 --- /dev/null
 +++ b/gooroom/browser/BUILD.gn
 @@ -0,0 +1,16 @@
@@ -841,15 +905,19 @@ index 000000000..aa90542e9
 +}
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
 new file mode 100644
-index 000000000..b934db353
+index 000000000000..5753d86e31c7
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
-@@ -0,0 +1,131 @@
+@@ -0,0 +1,169 @@
 +// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
 +
 +#include "gooroom/browser/gooroom_content_browser_client.h"
++
++#include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux_x11.h"
++#include "chrome/browser/performance_manager/chrome_browser_main_extra_parts_performance_manager.h"
++#include "chrome/browser/profiling_host/chrome_browser_main_extra_parts_profiling.h"
 +
 +#include "chrome/browser/chrome_browser_main.h"
 +#include "chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.h"
@@ -867,8 +935,6 @@ index 000000000..b934db353
 +
 +#if defined(USE_AURA)
 +#include "services/ws/public/cpp/gpu/gpu.h"
-+#include "ui/aura/mus/window_tree_client.h"
-+#include "ui/views/mus/mus_client.h"
 +#endif
 +
 +#if defined(USE_ASH)
@@ -928,60 +994,96 @@ index 000000000..b934db353
 +#include "chrome/browser/chrome_browser_main_posix.h"
 +#endif
 +
-+content::BrowserMainParts* GooroomContentBrowserClient::CreateBrowserMainParts(
++GooroomContentBrowserClient::GooroomContentBrowserClient(
++    StartupData* startup_data)
++    : startup_data_(startup_data),
++      weak_factory_(this) {
++}
++
++GooroomContentBrowserClient::~GooroomContentBrowserClient() {
++}
++
++std::unique_ptr<content::BrowserMainParts>
++GooroomContentBrowserClient::CreateBrowserMainParts(
 +    const content::MainFunctionParams& parameters) {
-+  ChromeBrowserMainParts* main_parts;
-+// Construct the Main browser parts based on the OS type.
++  std::unique_ptr<ChromeBrowserMainParts> main_parts;
 +#if defined(OS_WIN)
-+  main_parts = new ChromeBrowserMainPartsWin(parameters);
++  main_parts =
++      std::make_unique<ChromeBrowserMainPartsWin>(parameters, startup_data_);
 +#elif defined(OS_MACOSX)
-+  main_parts = new ChromeBrowserMainPartsMac(parameters);
++  main_parts =
++      std::make_unique<ChromeBrowserMainPartsMac>(parameters, startup_data_);
 +#elif defined(OS_CHROMEOS)
-+  main_parts = new chromeos::ChromeBrowserMainPartsChromeos(parameters);
++  main_parts = std::make_unique<chromeos::ChromeBrowserMainPartsChromeos>(
++      parameters, startup_data_);
 +#elif defined(OS_LINUX)
-+  main_parts = new ChromeBrowserMainPartsLinux(parameters, chrome_feature_list_creator_);
++  main_parts =
++      std::make_unique<ChromeBrowserMainPartsLinux>(parameters, startup_data_);
 +#elif defined(OS_ANDROID)
-+  main_parts = new ChromeBrowserMainPartsAndroid(parameters);
++  main_parts = std::make_unique<ChromeBrowserMainPartsAndroid>(parameters,
++                                                               startup_data_);
 +#elif defined(OS_POSIX)
-+  main_parts = new ChromeBrowserMainPartsPosix(parameters);
++  main_parts =
++      std::make_unique<ChromeBrowserMainPartsPosix>(parameters, startup_data_);
 +#else
 +  NOTREACHED();
-+  main_parts = new ChromeBrowserMainParts(parameters);
++  main_parts =
++      std::make_unique<ChromeBrowserMainParts>(parameters, startup_data_);
 +#endif
 +
-+  chrome::AddProfilesExtraParts(main_parts);
++  bool add_profiles_extra_parts = true;
++#if defined(OS_ANDROID)
++  if (startup_data_->HasBuiltProfilePrefService())
++    add_profiles_extra_parts = false;
++#endif
++  if (add_profiles_extra_parts)
++    chrome::AddProfilesExtraParts(main_parts.get());
 +
-+// Construct additional browser parts. Stages are called in the order in
-+// which they are added.
++    // Construct additional browser parts. Stages are called in the order in
++    // which they are added.
 +#if defined(TOOLKIT_VIEWS)
-+#if defined(OS_LINUX) && !defined(OS_CHROMEOS) && !defined(USE_OZONE)
++#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
++#if defined(USE_X11)
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsViewsLinuxX11());
++#else
 +  main_parts->AddParts(new ChromeBrowserMainExtraPartsViewsLinux());
++#endif  // USE_X11
 +#else
 +  main_parts->AddParts(new ChromeBrowserMainExtraPartsViews());
-+#if defined(USE_ASH)
++#endif
++#endif
++
++#if defined(OS_CHROMEOS)
++  // TODO(jamescook): Combine with ChromeBrowserMainPartsChromeos.
 +  main_parts->AddParts(new ChromeBrowserMainExtraPartsAsh());
-+#endif
-+#endif
 +#endif
 +
 +#if defined(USE_X11)
 +  main_parts->AddParts(new ChromeBrowserMainExtraPartsX11());
 +#endif
 +
-+#if BUILDFLAG(ENABLE_WAYLAND_SERVER)
-+  main_parts->AddParts(new ChromeBrowserMainExtraPartsExo());
-+#endif
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsPerformanceManager);
 +
-+  chrome::AddMetricsExtraParts(main_parts);
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsProfiling);
++
++  chrome::AddMetricsExtraParts(main_parts.get());
++
++  main_parts->AddParts(ChromeService::GetInstance()->CreateExtraParts());
 +
 +  return main_parts;
 +}
++
++void GooroomContentBrowserClient::OnNetworkServiceCreated(
++    network::mojom::NetworkService* network_service) {
++  ChromeContentBrowserClient::OnNetworkServiceCreated(network_service);
++}
++
 diff --git a/gooroom/browser/gooroom_content_browser_client.h b/gooroom/browser/gooroom_content_browser_client.h
 new file mode 100644
-index 000000000..870372f8c
+index 000000000000..14b0973b67dc
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_browser_client.h
-@@ -0,0 +1,17 @@
+@@ -0,0 +1,29 @@
 +// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -994,14 +1096,26 @@ index 000000000..870372f8c
 +
 +class GooroomContentBrowserClient : public ChromeContentBrowserClient {
 + public:
-+  content::BrowserMainParts* CreateBrowserMainParts(
++  explicit GooroomContentBrowserClient(StartupData* startup_data = nullptr);
++  ~GooroomContentBrowserClient() override;
++
++  std::unique_ptr<content::BrowserMainParts> CreateBrowserMainParts(
 +      const content::MainFunctionParams& parameters) override;
++
++  void OnNetworkServiceCreated(
++      network::mojom::NetworkService* network_service) override;
++
++ protected:
++  StartupData* startup_data_;
++
++ private:
++  base::WeakPtrFactory<ChromeContentBrowserClient> weak_factory_;
 +};
 +
 +#endif  // CHROME_BROWSER_CHROME_CONTENT_BROWSER_CLIENT_H_
 diff --git a/gooroom/browser/gooroom_content_client.cc b/gooroom/browser/gooroom_content_client.cc
 new file mode 100644
-index 000000000..14822d1b5
+index 000000000000..14822d1b576e
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_client.cc
 @@ -0,0 +1,8 @@
@@ -1015,7 +1129,7 @@ index 000000000..14822d1b5
 +*/
 diff --git a/gooroom/browser/gooroom_content_client.h b/gooroom/browser/gooroom_content_client.h
 new file mode 100644
-index 000000000..1ff887956
+index 000000000000..1ff88795600e
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_client.h
 @@ -0,0 +1,18 @@
@@ -1038,5 +1152,5 @@ index 000000000..1ff887956
 +
 +#endif  // CHROME_COMMON_CHROME_CONTENT_CLIENT_H_
 -- 
-2.11.0
+2.20.1
 

@@ -1,0 +1,26 @@
+From 2633ea241f6be1bc17a6e153425ad87a299d3783 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 10 Sep 2019 15:44:33 +0900
+Subject: [PATCH 78/78] Add Korean tranlation about 'Gooroom browser isn't your
+ default browser'
+
+---
+ chrome/app/gooroom/resources/chromium_strings_ko.xtb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/chrome/app/gooroom/resources/chromium_strings_ko.xtb b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
+index 9de8c9e31775..41e8779a0b4b 100644
+--- a/chrome/app/gooroom/resources/chromium_strings_ko.xtb
++++ b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
+@@ -216,7 +216,7 @@ Gooroom browser에서 설정을 복구할 수 없습니다.</translation>
+ <translation id="7561906087460245826">Gooroom browser(<ph name="URL" />)에서도 데이터 삭제</translation>
+ <translation id="761356813943268536">Gooroom browser이 카메라와 마이크를 사용 중입니다.</translation>
+ <translation id="7617377681829253106">더욱 업그레이드된 Gooroom browser</translation>
+-<translation id="7686590090926151193">Gooroom browser이 기본 브라우저로 설정되어 있지 않습니다</translation>
++<translation id="7740040986902286301">Gooroom browser이 기본 브라우저로 설정되어 있지 않습니다</translation>
+ <translation id="7689606757190482937">모든 기기에서 Gooroom browser을 동기화하고 맞춤설정하세요.</translation>
+ <translation id="7729447699958282447">도메인에서 동기화를 사용할 수 없어 Gooroom browser에서 데이터를 동기화하지 못했습니다.</translation>
+ <translation id="7745317241717453663">인터넷 사용 기록이 기기에서 삭제됩니다. 나중에 데이터를 가져오려면 Gooroom browser에 <ph name="USER_EMAIL" />(으)로 로그인하세요.</translation>
+-- 
+2.20.1
+

@@ -1,0 +1,497 @@
+From 472817698e0845827ec80e8a62fdfc9fb55fa773 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 5 Sep 2019 15:38:19 +0900
+Subject: [PATCH 38/78] enable/disable WebSocket & WebWorker according to 
+ policy and settings page
+
+---
+ .../resources/generated_resources_ko.xtb      |  2 +
+ chrome/app/settings_strings.grdp              | 14 +++++++
+ .../api/settings_private/prefs_util.cc        |  8 ++++
+ .../settings/privacy_page/privacy_page.html   | 13 ++++++
+ .../settings/settings_ui/settings_ui.js       | 41 +++++++++++++++++++
+ chrome/browser/ui/prefs/pref_watcher.cc       |  4 ++
+ chrome/browser/ui/prefs/prefs_tab_helper.cc   |  7 ++++
+ .../settings_localized_strings_provider.cc    |  2 +
+ .../browser/ui/webui/settings/settings_ui.cc  |  9 ++++
+ chrome/common/pref_names.cc                   |  5 +++
+ chrome/common/pref_names.h                    |  5 +++
+ content/public/common/web_preferences.h       |  4 +-
+ content/renderer/render_view_impl.cc          | 10 +++--
+ gooroom/WebKit/gooroom_enabled_features.cc    |  2 +
+ gooroom/WebKit/gooroom_enabled_features.h     |  9 ++++
+ gooroom/browser/gooroom_pref.h                |  5 +++
+ gooroom/content/gooroom_safety_policy_part.cc |  8 +++-
+ .../public/platform/web_runtime_features.h    |  2 +
+ .../renderer/core/workers/dedicated_worker.cc | 29 +++++++++++++
+ .../modules/websockets/dom_websocket.cc       |  4 +-
+ .../platform/exported/web_runtime_features.cc |  8 ++++
+ 21 files changed, 182 insertions(+), 9 deletions(-)
+
+diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+index f54432c63838..215d42db10ae 100644
+--- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
++++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+@@ -1,6 +1,8 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE translationbundle>
+ <translationbundle lang="ko">
++<translation id="2273707414284427980">웹 소켓 사용 설정</translation>
++<translation id="4851515493665413363">웹 워커 사용 설정</translation>
+ <translation id="1002469766576243227">이 인증 서비스는 <ph name="EXTENSION_NAME" />에서 호스팅합니다</translation>
+ <translation id="1003088604756913841">새 <ph name="APP" /> 창에서 링크 열기</translation>
+ <translation id="1004218526896219317">사이트 액세스</translation>
+diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
+index 65b3d68ec84d..7db1580f30c1 100644
+--- a/chrome/app/settings_strings.grdp
++++ b/chrome/app/settings_strings.grdp
+@@ -2668,6 +2668,20 @@
+   <message name="IDS_SETTINGS_NETWORK_PREDICTION_ENABLED_DESC_UNIFIED_CONSENT" desc="In the advanced options tab, the secondary text next to the checkbox that enables prediction of network actions.">
+     Uses cookies to remember your preferences, even if you don’t visit those pages
+   </message>
++  <!-- by Gooroom TODO:need to use if-clause-->
++  <message name="IDS_OPTIONS_WEBSOCKET_ENABLE" desc="Websocket confirm enable.">
++    Enable Websocket
++  </message>
++  <message name="IDS_OPTIONS_WEBWORKER_ENABLE" desc="Webworker confirm enable">
++    Enable Webworker 
++  </message>
++  <message name="IDS_OPTIONS_WEBSOCKET_CONFIRM_MESSAGE" desc="Websocket confirm">
++    Allow Websocket
++  </message>
++  <message name="IDS_OPTIONS_WEBWORKER_CONFIRM_MESSAGE" desc="Webworker confirm">
++    Allow Webworker
++  </message>
++  <!-- end of ... by Gooroom TODO:need to use if-clause-->
+   <message name="IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION" desc="The section title of 'Protects you and your device from dangerous sites'">
+     Safe Browsing (protects you and your device from dangerous sites)
+   </message>
+diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
+index 7155c905d10d..7a543b8f5df7 100644
+--- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
++++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
+@@ -560,6 +560,13 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetWhitelistedKeys() {
+       settings_api::PrefType::PREF_TYPE_BOOLEAN;
+ #endif  // defined(GOOGLE_CHROME_BUILD)
+ 
++#if defined(GOOROOM_BUILD)
++  (*s_whitelist)[::prefs::kGooroomOptionWebsocketConfirm] =
++      settings_api::PrefType::PREF_TYPE_BOOLEAN;
++  (*s_whitelist)[::prefs::kGooroomOptionWebworkerConfirm] =
++      settings_api::PrefType::PREF_TYPE_BOOLEAN;
++#endif
++
+   // Media Remoting settings.
+   (*s_whitelist)[::prefs::kMediaRouterMediaRemotingEnabled] =
+       settings_api::PrefType::PREF_TYPE_BOOLEAN;
+@@ -572,6 +579,7 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetWhitelistedKeys() {
+       settings_api::PrefType::PREF_TYPE_BOOLEAN;
+ #endif
+ 
++
+   return *s_whitelist;
+ }
+ 
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index 41fce3a2fcf7..3632e43f39cb 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -119,6 +119,19 @@
+             label="$i18n{canMakePaymentToggleLabel}"
+             pref="{{prefs.payments.can_make_payment_enabled}}">
+         </settings-toggle-button>
++         <!-- gooroom-browser -->
++        <div hidden="[[!pageVisibility.websocketSettings]]">
++          <settings-toggle-button
++              pref="{{prefs.gooroom_option.websocket_confirm}}"
++              label="$i18n{websocketEnable}">
++          </settings-toggle-button>
++        </div>
++        <div hidden="[[!pageVisibility.webworkerSettings]]">
++          <settings-toggle-button
++              pref="{{prefs.gooroom_option.webworker_confirm}}"
++              label="$i18n{webworkerEnable}">
++          </settings-toggle-button>
++        </div>
+         <settings-toggle-button hidden="[[!pageVisibility.networkPrediction]]"
+             pref="{{prefs.net.network_prediction_options}}"
+             label="$i18n{networkPredictionEnabled}"
+diff --git a/chrome/browser/resources/settings/settings_ui/settings_ui.js b/chrome/browser/resources/settings/settings_ui/settings_ui.js
+index 02b96e439677..d2b875a2f084 100644
+--- a/chrome/browser/resources/settings/settings_ui/settings_ui.js
++++ b/chrome/browser/resources/settings/settings_ui/settings_ui.js
+@@ -163,6 +163,47 @@ Polymer({
+     };
+     // </if>
+ 
++    if (loadTimeData.getBoolean('isGuest')) {
++      this.pageVisibility_ = {
++        passwordsAndForms: false,
++        people: false,
++        onStartup: false,
++        reset: false,
++// <if expr="not chromeos">
++        appearance: false,
++        defaultBrowser: false,
++        advancedSettings: false,
++// </if>
++// <if expr="chromeos">
++        appearance: {
++          setWallpaper: false,
++          setTheme: false,
++          homeButton: false,
++          bookmarksBar: false,
++          pageZoom: false,
++        },
++        advancedSettings: true,
++        privacy: {
++          searchPrediction: false,
++          networkPrediction: false,
++        },
++        websocket: false,
++        downloads: {
++          googleDrive: false,
++        },
++// </if>
++      };
++    }
++    else
++    {
++     this.pageVisibility_ = {
++       privacy: {
++         websocketSettings: loadTimeData.getBoolean('enableGooroomWebsocketSettings'),
++         webworkerSettings: loadTimeData.getBoolean('enableGooroomWebworkerSettings'),
++        },
++      }
++    }
++
+     // The SplitSettings feature hides OS settings in the browser settings page.
+     // https://crbug.com/950007
+     const showOSSettings = loadTimeData.getBoolean('showOSSettings');
+diff --git a/chrome/browser/ui/prefs/pref_watcher.cc b/chrome/browser/ui/prefs/pref_watcher.cc
+index adec473633b6..83397fb70ad9 100644
+--- a/chrome/browser/ui/prefs/pref_watcher.cc
++++ b/chrome/browser/ui/prefs/pref_watcher.cc
+@@ -44,6 +44,10 @@ const char* const kWebPrefsToObserve[] = {
+     prefs::kWebkitTabsToLinks,
+     prefs::kWebKitTextAreasAreResizable,
+     prefs::kWebKitWebSecurityEnabled,
++#if defined(GOOROOM_BUILD)
++    prefs::kGooroomOptionWebsocketConfirm,
++    prefs::kGooroomOptionWebworkerConfirm,
++#endif
+ };
+ 
+ const int kWebPrefsToObserveLength = base::size(kWebPrefsToObserve);
+diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
+index 976e9e51317a..3726a40a464e 100644
+--- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
++++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
+@@ -418,6 +418,13 @@ void PrefsTabHelper::RegisterProfilePrefs(
+   RegisterLocalizedFontPref(registry, prefs::kWebKitMinimumLogicalFontSize,
+                             IDS_MINIMUM_LOGICAL_FONT_SIZE);
+ #endif
++#if defined(GOOROOM_BUILD)
++  registry->RegisterBooleanPref(prefs::kGooroomOptionWebsocketConfirm,
++                                pref_defaults.websocket_enabled == 1);
++  registry->RegisterBooleanPref(prefs::kGooroomOptionWebworkerConfirm,
++                                pref_defaults.webworker_enabled == 1);
++
++#endif
+ }
+ 
+ // static
+diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
+index fcb5f8078359..fcdaf8cc2eb2 100644
+--- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
++++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
+@@ -2141,6 +2141,8 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
+        IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION},
+       {"safeBrowsingEnableProtectionDesc",
+        IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION_DESC},
++      {"websocketEnable", IDS_OPTIONS_WEBSOCKET_ENABLE},
++      {"webworkerEnable", IDS_OPTIONS_WEBWORKER_ENABLE},
+       {"syncAndGoogleServicesPrivacyDescription",
+        IDS_SETTINGS_SYNC_AND_GOOGLE_SERVICES_PRIVACY_DESC_UNIFIED_CONSENT},
+       {"urlKeyedAnonymizedDataCollection",
+diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
+index c80633a98f18..df2c79bf54ec 100644
+--- a/chrome/browser/ui/webui/settings/settings_ui.cc
++++ b/chrome/browser/ui/webui/settings/settings_ui.cc
+@@ -144,6 +144,10 @@
+ #include "chrome/browser/ui/webui/settings/change_password_handler.h"
+ #endif
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/browser/gooroom_pref.h"
++#endif
++
+ namespace settings {
+ 
+ // static
+@@ -305,6 +309,11 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+   html_source->SetDefaultResource(IDR_SETTINGS_SETTINGS_HTML);
+ #endif
+ 
++#if defined(GOOROOM_BUILD)
++  html_source->AddBoolean("enableGooroomWebsocketSettings", gooroom::g_gooroom->useWebSocket());
++  html_source->AddBoolean("enableGooroomWebworkerSettings", gooroom::g_gooroom->useWebWorker());
++#endif
++
+   AddLocalizedStrings(html_source, profile);
+ 
+   DarkModeHandler::Initialize(web_ui, html_source);
+diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
+index 1b025930ad24..f0118600d9e1 100644
+--- a/chrome/common/pref_names.cc
++++ b/chrome/common/pref_names.cc
+@@ -2608,6 +2608,11 @@ const char kUserTriggeredIsolatedOrigins[] =
+ const char kWebDriverOverridesIncompatiblePolicies[] =
+     "webdriver.override_incompatible_policy";
+ 
++#if defined(GOOROOM_BUILD)
++const char kGooroomOptionWebsocketConfirm[] = "gooroom_option.websocket_confirm";
++const char kGooroomOptionWebworkerConfirm[] = "gooroom_option.webworker_confirm";
++#endif
++
+ #if !defined(OS_ANDROID)
+ // Boolean that specifies whether media (audio/video) autoplay is allowed.
+ const char kAutoplayAllowed[] = "media.autoplay_allowed";
+diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
+index 493241090527..523916fdcb9b 100644
+--- a/chrome/common/pref_names.h
++++ b/chrome/common/pref_names.h
+@@ -920,6 +920,11 @@ extern const char kSitePerProcess[];
+ extern const char kUserTriggeredIsolatedOrigins[];
+ extern const char kWebDriverOverridesIncompatiblePolicies[];
+ 
++#if defined(GOOROOM_BUILD)
++extern const char kGooroomOptionWebsocketConfirm[];
++extern const char kGooroomOptionWebworkerConfirm[];
++#endif
++
+ #if !defined(OS_ANDROID)
+ extern const char kAutoplayAllowed[];
+ extern const char kAutoplayWhitelist[];
+diff --git a/content/public/common/web_preferences.h b/content/public/common/web_preferences.h
+index 8ce980f50183..c5dd7897de1a 100644
+--- a/content/public/common/web_preferences.h
++++ b/content/public/common/web_preferences.h
+@@ -297,8 +297,8 @@ struct CONTENT_EXPORT WebPreferences {
+   bool do_not_update_selection_on_mutating_selection_range;
+ 
+ #if defined(GOOROOM_BUILD)
+-  bool websocket_enabled;
+-  bool webworker_enabled;
++  uint16_t websocket_enabled;
++  uint16_t webworker_enabled;
+ #endif
+ 
+   // Defines the current autoplay policy.
+diff --git a/content/renderer/render_view_impl.cc b/content/renderer/render_view_impl.cc
+index 47779369e27f..09046720be2a 100644
+--- a/content/renderer/render_view_impl.cc
++++ b/content/renderer/render_view_impl.cc
+@@ -1006,14 +1006,18 @@ void RenderView::ApplyWebPreferences(const WebPreferences& prefs,
+ #if defined(GOOROOM_BUILD)
+   if (prefs.websocket_enabled) {
+     WebRuntimeFeatures::EnableWebSocket(true);
++    WebRuntimeFeatures::EnableWebSocketConfirm(prefs.websocket_enabled == 1);
+   } else {
+     WebRuntimeFeatures::EnableWebSocket(false);
++    WebRuntimeFeatures::EnableWebSocketConfirm(false);
+   }
+ 
+-  if (!prefs.webworker_enabled) {
+-    WebRuntimeFeatures::EnableWebWorker(false);
+-  } else {
++  if (prefs.webworker_enabled) {
+     WebRuntimeFeatures::EnableWebWorker(true);
++    WebRuntimeFeatures::EnableWebWorkerConfirm(prefs.webworker_enabled == 1);
++  } else {
++    WebRuntimeFeatures::EnableWebWorker(false);
++    WebRuntimeFeatures::EnableWebWorkerConfirm(false);
+   }
+ #endif
+ 
+diff --git a/gooroom/WebKit/gooroom_enabled_features.cc b/gooroom/WebKit/gooroom_enabled_features.cc
+index 0c4ffa487fc5..3104913d56f7 100644
+--- a/gooroom/WebKit/gooroom_enabled_features.cc
++++ b/gooroom/WebKit/gooroom_enabled_features.cc
+@@ -4,5 +4,7 @@ namespace blink {
+ 
+ bool GooroomEnabledFeatures::isWebSocketEnabled = false;
+ bool GooroomEnabledFeatures::isWebWorkerEnabled = false;
++bool GooroomEnabledFeatures::isWebSocketConfirmEnabled = false;
++bool GooroomEnabledFeatures::isWebWorkerConfirmEnabled = false;
+ 
+ } // end of content namespace
+diff --git a/gooroom/WebKit/gooroom_enabled_features.h b/gooroom/WebKit/gooroom_enabled_features.h
+index 3929a3a9da0f..132dbbfc0b96 100644
+--- a/gooroom/WebKit/gooroom_enabled_features.h
++++ b/gooroom/WebKit/gooroom_enabled_features.h
+@@ -15,9 +15,18 @@ class PLATFORM_EXPORT GooroomEnabledFeatures {
+   static void SetWebWorkerEnabled(bool isEnabled) { isWebWorkerEnabled = isEnabled; }
+   static bool WebWorkerEnabled() { return isWebWorkerEnabled; }
+ 
++  static void SetWebSocketConfirmEnabled(bool isEnabled) { isWebSocketConfirmEnabled = isEnabled; }
++  static bool WebSocketConfirmEnabled() { return isWebSocketConfirmEnabled; }
++
++  static void SetWebWorkerConfirmEnabled(bool isEnabled) { isWebWorkerConfirmEnabled = isEnabled; }
++  static bool WebWorkerConfirmEnabled() { return isWebWorkerConfirmEnabled; }
++
+  private:
+   static bool isWebSocketEnabled;
+   static bool isWebWorkerEnabled;
++  static bool isWebSocketConfirmEnabled;
++  static bool isWebWorkerConfirmEnabled;
++
+ };
+ 
+ } // end of blink namespace
+diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
+index 44d63d22bf83..0c18a6f86f80 100644
+--- a/gooroom/browser/gooroom_pref.h
++++ b/gooroom/browser/gooroom_pref.h
+@@ -19,6 +19,11 @@ const char kPolicyGooroomWebSocket[] = "gooroom.policy.websocket";
+ /** webworker confirm policy */
+ const char kPolicyGooroomWebWorker[] = "gooroom.policy.webworker";
+ 
++/** websocket confirm enable/disable */
++const char kGooroomWebSocketConfirm[] = "gooroom.websocket.confirm";
++/** webwork confirm enable/disable */
++const char kGooroomWebWorkerConfirm[] = "gooroom.webworker.confirm";
++
+ class GooroomPref {
+  public:
+   GooroomPref();
+diff --git a/gooroom/content/gooroom_safety_policy_part.cc b/gooroom/content/gooroom_safety_policy_part.cc
+index 113fb359a53e..5f6d46a2c213 100644
+--- a/gooroom/content/gooroom_safety_policy_part.cc
++++ b/gooroom/content/gooroom_safety_policy_part.cc
+@@ -15,15 +15,19 @@ GooroomSafetyPolicyPart::~GooroomSafetyPolicyPart() {}
+ void GooroomSafetyPolicyPart::OverrideWebkitPrefs(
+     content::RenderViewHost* rvh,
+     content::WebPreferences* web_prefs) {
++  Profile* profile = g_browser_process->profile_manager()->GetLastUsedProfile();
++  PrefService* ps = profile->GetPrefs();
+ 
+   if (gooroom::g_gooroom->useWebSocket()) {
+-    web_prefs->websocket_enabled = true;
++    bool confirm = ps->GetBoolean("gooroom_option.websocket_confirm");
++    web_prefs->websocket_enabled = confirm ? 1 : 2;
+   } else {
+     web_prefs->websocket_enabled = false;
+   }
+ 
+   if (gooroom::g_gooroom->useWebWorker()) {
+-    web_prefs->webworker_enabled = true;
++    bool confirm = ps->GetBoolean("gooroom_option.webworker_confirm");
++    web_prefs->webworker_enabled = confirm ? 1 : 2;
+   } else {
+     web_prefs->webworker_enabled = false;
+   }
+diff --git a/third_party/blink/public/platform/web_runtime_features.h b/third_party/blink/public/platform/web_runtime_features.h
+index 7585fe3e66d7..4a3011248d9a 100644
+--- a/third_party/blink/public/platform/web_runtime_features.h
++++ b/third_party/blink/public/platform/web_runtime_features.h
+@@ -44,6 +44,8 @@ class WebRuntimeFeatures {
+ #if defined(GOOROOM_BUILD)
+   BLINK_PLATFORM_EXPORT static void EnableWebSocket(bool);
+   BLINK_PLATFORM_EXPORT static void EnableWebWorker(bool);
++  BLINK_PLATFORM_EXPORT static void EnableWebSocketConfirm(bool);
++  BLINK_PLATFORM_EXPORT static void EnableWebWorkerConfirm(bool);
+ #endif
+ 
+   // Enable or disable features with status=experimental listed in
+diff --git a/third_party/blink/renderer/core/workers/dedicated_worker.cc b/third_party/blink/renderer/core/workers/dedicated_worker.cc
+index 9c221ad625e1..45a8eab5f703 100644
+--- a/third_party/blink/renderer/core/workers/dedicated_worker.cc
++++ b/third_party/blink/renderer/core/workers/dedicated_worker.cc
+@@ -4,6 +4,19 @@
+ 
+ #include "third_party/blink/renderer/core/workers/dedicated_worker.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "base/syslog_logging.h"
++#include "chrome/grit/generated_resources.h"
++#include "third_party/blink/renderer/core/page/chrome_client.h"
++#include "third_party/blink/renderer/core/page/page.h"
++#include "third_party/blink/renderer/core/frame/local_dom_window.h"
++#include "ui/base/l10n/l10n_util.h"
++#include "url/gurl.h"
++
++#include "gooroom/WebKit/gooroom_enabled_features.h"
++#include "gooroom/base/gooroom_base.h"
++#endif
++
+ #include <utility>
+ #include "base/feature_list.h"
+ #include "services/network/public/mojom/fetch_api.mojom-blink.h"
+@@ -98,6 +111,22 @@ DedicatedWorker* DedicatedWorker::Create(ExecutionContext* context,
+                                          const WorkerOptions* options,
+                                          ExceptionState& exception_state) {
+   DCHECK(context->IsContextThread());
++
++#if defined(GOOROOM_BUILD)
++  if (!GooroomEnabledFeatures::WebWorkerEnabled() || !GooroomEnabledFeatures::WebWorkerConfirmEnabled()) {
++    SYSLOG(INFO) << "Using WebSocket is not permitted";
++    exception_state.ThrowDOMException(DOMExceptionCode::kInvalidAccessError,
++                                      "Using WebSocket is not permitted");
++
++    LocalFrame* frm = context->ExecutingWindow()->GetFrame();
++    Page* page = frm->GetPage();
++    // FIXME : care character encoding
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, WTF::String::FromUTF8("정책에 의해 외부 연결 시도가 차단되었습니다. 웹워커 설정을 확인해주세요."));
++
++    return nullptr;
++  }
++#endif
++
+   UseCounter::Count(context, WebFeature::kWorkerStart);
+   if (context->IsContextDestroyed()) {
+     exception_state.ThrowDOMException(DOMExceptionCode::kInvalidAccessError,
+diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+index a7bce277b010..457243592763 100644
+--- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
++++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+@@ -434,7 +434,7 @@ void DOMWebSocket::Connect(const String& url,
+   // url has scheme "wss://" (e.g., wss://echo.websocket.org?encoding=text)
+   // printf("Requested WebSocket : %s \n", gurl_.spec().data());
+ 
+-  if (!GooroomEnabledFeatures::WebSocketEnabled()) {
++  if (!GooroomEnabledFeatures::WebSocketEnabled() || !GooroomEnabledFeatures::WebSocketConfirmEnabled()) {
+     SYSLOG(INFO) << "Using WebSocket is not permitted";
+     exception_state.ThrowDOMException(DOMExceptionCode::kInvalidAccessError,
+                                       "Using WebSocket is not permitted");
+@@ -442,7 +442,7 @@ void DOMWebSocket::Connect(const String& url,
+     LocalFrame* frm = GetExecutionContext()->ExecutingWindow()->GetFrame();
+     Page* page = frm->GetPage();
+     // FIXME : care character encoding
+-    page->GetChromeClient().OpenJavaScriptConfirm(frm, WTF::String::FromUTF8("정책에 의해 외부 연결 시도가 차단되었습니다."));
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, WTF::String::FromUTF8("정책에 의해 외부 연결 시도가 차단되었습니다. 웹소켓 설정을 확인해주세요."));
+     //page->GetChromeClient().OpenJavaScriptAlert(
+     //    frm, "External connection attempts were blocked by policy.");
+  
+diff --git a/third_party/blink/renderer/platform/exported/web_runtime_features.cc b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
+index 7a83f86439e6..1a324b250bb9 100644
+--- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
++++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
+@@ -644,6 +644,14 @@ void WebRuntimeFeatures::EnableWebSocket(bool enable) {
+ void WebRuntimeFeatures::EnableWebWorker(bool enable) {
+   GooroomEnabledFeatures::SetWebWorkerEnabled(enable);
+ }
++
++void WebRuntimeFeatures::EnableWebSocketConfirm(bool enable) {
++  GooroomEnabledFeatures::SetWebSocketConfirmEnabled(enable);
++}
++
++void WebRuntimeFeatures::EnableWebWorkerConfirm(bool enable) {
++  GooroomEnabledFeatures::SetWebWorkerConfirmEnabled(enable);
++}
+ #endif
+ 
+ void WebRuntimeFeatures::EnableAutoplayIgnoresWebAudio(bool enable) {
+-- 
+2.20.1
+

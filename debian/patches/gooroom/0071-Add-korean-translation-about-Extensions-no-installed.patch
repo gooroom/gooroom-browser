@@ -1,0 +1,25 @@
+From 06a674ab60a115fca709a1e52c5043a1264c8ed7 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 6 Sep 2019 11:15:42 +0900
+Subject: [PATCH 71/78] Add korean translation about 'Extensions no-installed 
+ items..' in extension page
+
+---
+ chrome/app/gooroom/resources/generated_resources_ko.xtb | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+index 1cfa2fbf8fd9..4216281e07d9 100644
+--- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
++++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+@@ -1,6 +1,7 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE translationbundle>
+ <translationbundle lang="ko">
++<translation id="9075359497196380665">설치된 확장 프로그램이 없습니다.</translation>
+ <translation id="4316824388120694567">구름 플랫폼 포럼</translation>
+ <translation id="2273707414284427980">웹 소켓 사용 설정</translation>
+ <translation id="4851515493665413363">웹 워커 사용 설정</translation>
+-- 
+2.20.1
+

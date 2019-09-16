@@ -1,7 +1,7 @@
-From c6a2ec46e16f1b1b281a00587a573b8395b51b20 Mon Sep 17 00:00:00 2001
-From: JunSung Choi <junsungc@gooroom.kr>
-Date: Fri, 24 May 2019 20:29:47 +0900
-Subject: [PATCH 07/63] move GooroomBase and GooroomUrlFilter to base module
+From e0c8f179be9f4e65aaf27d06d01545f8a7f50cae Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 4 Sep 2019 20:20:33 +0900
+Subject: [PATCH 07/78] move GooroomBase and GooroomUrlFilter to base module
 
 ---
  base/BUILD.gn               | 9 +++++++++
@@ -10,10 +10,10 @@ Subject: [PATCH 07/63] move GooroomBase and GooroomUrlFilter to base module
  3 files changed, 12 insertions(+)
 
 diff --git a/base/BUILD.gn b/base/BUILD.gn
-index 60c4ba26e..8b41ef711 100644
+index 610e69eae24b..4316b0077181 100644
 --- a/base/BUILD.gn
 +++ b/base/BUILD.gn
-@@ -1071,6 +1071,15 @@ jumbo_component("base") {
+@@ -1127,6 +1127,15 @@ jumbo_component("base") {
      "win/wrapped_window_proc.h",
    ]
  
@@ -26,14 +26,14 @@ index 60c4ba26e..8b41ef711 100644
 +     ]
 +  }
 +
-   if (is_posix) {
-     sources += [
-       "debug/debugger_posix.cc",
+   # Various files that are unused in the Chromium build, but presumably here to
+   # make downstream's life easier. They are not included in the main sources
+   # list to avoid breaking GN formatting's auto-sorting.
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 87df3b6bb..8ed30660f 100644
+index e688f76fb63b..4c01bffacc45 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -219,6 +219,7 @@ if (!is_android && !is_mac) {
+@@ -216,6 +216,7 @@ if (!is_android && !is_mac) {
  
        data_deps += [
          "//chrome/browser/resources/media/mei_preload:component",
@@ -42,7 +42,7 @@ index 87df3b6bb..8ed30660f 100644
  
        if (is_multi_dll_chrome) {
 diff --git a/gooroom/base/gooroom_base.h b/gooroom/base/gooroom_base.h
-index c64ed691b..7547bc1cb 100644
+index c64ed691b678..7547bc1cb3bf 100644
 --- a/gooroom/base/gooroom_base.h
 +++ b/gooroom/base/gooroom_base.h
 @@ -16,6 +16,8 @@
@@ -55,5 +55,5 @@ index c64ed691b..7547bc1cb 100644
   public:
    GooroomBase();
 -- 
-2.11.0
+2.20.1
 

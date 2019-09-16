@@ -1,0 +1,1605 @@
+From 6fc97bf5130ec90a5ec9025e1df9fd9840fed520 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 5 Sep 2019 10:25:28 +0900
+Subject: [PATCH 17/78] Change korean .xtb files to translate english
+
+---
+ .../gooroom/resources/chromium_strings_ko.xtb | 476 +++++++++---------
+ .../resources/generated_resources_ko.xtb      | 242 ++++-----
+ chrome/app/gooroom/settings_strings.grdp      |  18 +-
+ 3 files changed, 375 insertions(+), 361 deletions(-)
+
+diff --git a/chrome/app/gooroom/resources/chromium_strings_ko.xtb b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
+index b106c5f37281..8bebf2d79431 100644
+--- a/chrome/app/gooroom/resources/chromium_strings_ko.xtb
++++ b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
+@@ -4,275 +4,275 @@
+ <translation id="1065672644894730302">환경설정을 읽을 수 없습니다.
+ 
+ 일부 기능을 사용할 수 없으며 환경설정의 변경사항이 저장되지 않습니다.</translation>
+-<translation id="1104942323762546749">Chromium에서 비밀번호를 내보내려고 합니다. 허용하려면 Windows 비밀번호를 입력하세요.</translation>
+-<translation id="1115445892567829615">Chromium에서 데이터를 동기화하지 못했습니다. 동기화 암호를 업데이트하시기 바랍니다.</translation>
+-<translation id="113122355610423240">Chromium이 기본 브라우저로 설정되어 있습니다.</translation>
+-<translation id="1170115874949214249">휴대전화에 Chromium을 설치하세요. 계정 복구 전화번호로 SMS를 보내 드리겠습니다.</translation>
+-<translation id="1174473354587728743">컴퓨터를 공유하시겠습니까? 이제 원하는 대로 Chromium을 설정할 수 있습니다.</translation>
+-<translation id="1185134272377778587">Chromium 정보</translation>
+-<translation id="1298199220304005244">Chromium OS 사용에 대한 도움말</translation>
+-<translation id="1396446129537741364">Chromium이 비밀번호를 표시하려고 합니다.</translation>
+-<translation id="1414495520565016063">Chromium에 로그인했습니다.</translation>
+-<translation id="1502360822835740515">Chromium을 기본 브라우저로 사용</translation>
+-<translation id="151962892725702025">내 도메인에서 동기화를 사용할 수 없으므로 Chromium OS에서 데이터를 동기화하지 못했습니다.</translation>
+-<translation id="1524282610922162960">Chromium 탭 공유</translation>
++<translation id="1104942323762546749">Gooroom browser에서 비밀번호를 내보내려고 합니다. 허용하려면 Windows 비밀번호를 입력하세요.</translation>
++<translation id="1115445892567829615">Gooroom browser에서 데이터를 동기화하지 못했습니다. 동기화 암호를 업데이트하시기 바랍니다.</translation>
++<translation id="113122355610423240">Gooroom browser이 기본 브라우저로 설정되어 있습니다.</translation>
++<translation id="1170115874949214249">휴대전화에 Gooroom browser을 설치하세요. 계정 복구 전화번호로 SMS를 보내 드리겠습니다.</translation>
++<translation id="1174473354587728743">컴퓨터를 공유하시겠습니까? 이제 원하는 대로 Gooroom browser을 설정할 수 있습니다.</translation>
++<translation id="1185134272377778587">Gooroom browser 정보</translation>
++<translation id="1298199220304005244">Gooroom browser OS 사용에 대한 도움말</translation>
++<translation id="1396446129537741364">Gooroom browser이 비밀번호를 표시하려고 합니다.</translation>
++<translation id="1414495520565016063">Gooroom browser에 로그인했습니다.</translation>
++<translation id="1502360822835740515">Gooroom browser을 기본 브라우저로 사용</translation>
++<translation id="151962892725702025">내 도메인에서 동기화를 사용할 수 없으므로 Gooroom browser OS에서 데이터를 동기화하지 못했습니다.</translation>
++<translation id="1524282610922162960">Gooroom browser 탭 공유</translation>
+ <translation id="1585657529869845941"><ph name="BEGIN_BOLD" />전환하기<ph name="END_BOLD" /> 버튼이 표시되면 클릭하세요</translation>
+-<translation id="1668054258064581266">Chromium에서 계정을 삭제한 후 열려 있는 탭을 새로고침해야 적용됩니다.</translation>
+-<translation id="1688750314291223739">맞춤설정한 브라우저 기능을 웹에 저장하고 모든 컴퓨터의 Chromium에서 액세스할 수 있도록 동기화를 설정합니다.</translation>
+-<translation id="1708666629004767631">새롭고 안전한 Chromium의 새 버전을 사용할 수 있습니다.</translation>
+-<translation id="1766096484055239003">관리자가 업데이트를 적용하려면 사용자가 반드시 Chromium을 다시 시작하도록 설정했습니다.</translation>
+-<translation id="1774152462503052664">백그라운드에서 Chromium을 실행</translation>
+-<translation id="1779356040007214683">Google에서는 Chromium의 보안을 강화하기 위해 <ph name="IDS_EXTENSION_WEB_STORE_TITLE" />에 표시되지 않고 사용자 모르게 추가되었을 수 있는 일부 확장 프로그램의 사용을 중지했습니다.</translation>
+-<translation id="1808667845054772817">Chromium 재설치</translation>
+-<translation id="1869480248812203386">Google에 발생할 수 있는 보안 문제의 세부정보를 자동으로 보고하도록 설정하면 Chromium을 더 안전하고 편리하게 사용할 수 있습니다.</translation>
+-<translation id="1881322772814446296">관리 계정으로 로그인하고 Chromium 프로필에 대한 관리자 제어권을 부여하려고 합니다. 앱, 북마크, 방문 기록, 비밀번호 및 기타 설정 등 Chromium 데이터가 <ph name="USER_NAME" /> 계정에 영구적으로 연결됩니다. 이후 이 데이터를 Google 계정 대시보드에서 삭제할 수는 있지만 다른 계정에 연결할 수는 없습니다. 기존 Chromium 데이터를 유지하려면 새 프로필을 만드는 방법이 있습니다. <ph name="LEARN_MORE" /></translation>
+-<translation id="1911763535808217981">이 기능을 사용 중지하면 Chromium에 로그인하지 않고도 Gmail 등의 Google 사이트에 로그인할 수 있습니다.</translation>
+-<translation id="1929939181775079593">Chromium이 응답하지 않습니다. 다시 시작하시겠습니까?</translation>
+-<translation id="1966382378801805537">Chromium에서 기본 브라우저를 확인하거나 설정할 수 없습니다.</translation>
+-<translation id="2008474315282236005">항목 1개가 기기에서 삭제됩니다. 나중에 데이터를 가져오려면 Chromium에 <ph name="USER_EMAIL" />(으)로 로그인하세요.</translation>
+-<translation id="2117378023188580026">관리자가 이 업데이트를 적용하려면 사용자가 Chromium을 다시 시작하도록 설정했습니다.</translation>
+-<translation id="2119636228670142020">Chromium OS 정보</translation>
+-<translation id="2178765360243863853">지금 Chromium을 다시 시작해야 합니다</translation>
+-<translation id="2241627712206172106">컴퓨터를 공유하는 경우 친구와 가족이 개별적으로 탐색하고 원하는 대로 Chromium을 설정할 수 있습니다.</translation>
+-<translation id="2265088490657775772">iPhone에 Chromium 다운로드하기</translation>
+-<translation id="2347108572062610441">Chromium을 시작하면 표시되는 페이지가 이 확장 프로그램으로 인해 변경되었습니다.</translation>
+-<translation id="2396765026452590966">Chromium을 시작하면 표시되는 페이지가 '<ph name="EXTENSION_NAME" />' 확장 프로그램으로 인해 변경되었습니다.</translation>
+-<translation id="2483889755041906834">Chromium에서</translation>
++<translation id="1668054258064581266">Gooroom browser에서 계정을 삭제한 후 열려 있는 탭을 새로고침해야 적용됩니다.</translation>
++<translation id="1688750314291223739">맞춤설정한 브라우저 기능을 웹에 저장하고 모든 컴퓨터의 Gooroom browser에서 액세스할 수 있도록 동기화를 설정합니다.</translation>
++<translation id="1708666629004767631">새롭고 안전한 Gooroom browser의 새 버전을 사용할 수 있습니다.</translation>
++<translation id="1766096484055239003">관리자가 업데이트를 적용하려면 사용자가 반드시 Gooroom browser을 다시 시작하도록 설정했습니다.</translation>
++<translation id="1774152462503052664">백그라운드에서 Gooroom browser을 실행</translation>
++<translation id="1779356040007214683">Google에서는 Gooroom browser의 보안을 강화하기 위해 <ph name="IDS_EXTENSION_WEB_STORE_TITLE" />에 표시되지 않고 사용자 모르게 추가되었을 수 있는 일부 확장 프로그램의 사용을 중지했습니다.</translation>
++<translation id="1808667845054772817">Gooroom browser 재설치</translation>
++<translation id="1869480248812203386">Google에 발생할 수 있는 보안 문제의 세부정보를 자동으로 보고하도록 설정하면 Gooroom browser을 더 안전하고 편리하게 사용할 수 있습니다.</translation>
++<translation id="1881322772814446296">관리 계정으로 로그인하고 Gooroom browser 프로필에 대한 관리자 제어권을 부여하려고 합니다. 앱, 북마크, 방문 기록, 비밀번호 및 기타 설정 등 Gooroom browser 데이터가 <ph name="USER_NAME" /> 계정에 영구적으로 연결됩니다. 이후 이 데이터를 Google 계정 대시보드에서 삭제할 수는 있지만 다른 계정에 연결할 수는 없습니다. 기존 Gooroom browser 데이터를 유지하려면 새 프로필을 만드는 방법이 있습니다. <ph name="LEARN_MORE" /></translation>
++<translation id="1911763535808217981">이 기능을 사용 중지하면 Gooroom browser에 로그인하지 않고도 Gmail 등의 Google 사이트에 로그인할 수 있습니다.</translation>
++<translation id="1929939181775079593">Gooroom browser이 응답하지 않습니다. 다시 시작하시겠습니까?</translation>
++<translation id="1966382378801805537">Gooroom browser에서 기본 브라우저를 확인하거나 설정할 수 없습니다.</translation>
++<translation id="2008474315282236005">항목 1개가 기기에서 삭제됩니다. 나중에 데이터를 가져오려면 Gooroom browser에 <ph name="USER_EMAIL" />(으)로 로그인하세요.</translation>
++<translation id="2117378023188580026">관리자가 이 업데이트를 적용하려면 사용자가 Gooroom browser을 다시 시작하도록 설정했습니다.</translation>
++<translation id="2119636228670142020">Gooroom browser OS 정보</translation>
++<translation id="2178765360243863853">지금 Gooroom browser을 다시 시작해야 합니다</translation>
++<translation id="2241627712206172106">컴퓨터를 공유하는 경우 친구와 가족이 개별적으로 탐색하고 원하는 대로 Gooroom browser을 설정할 수 있습니다.</translation>
++<translation id="2265088490657775772">iPhone에 Gooroom browser 다운로드하기</translation>
++<translation id="2347108572062610441">Gooroom browser을 시작하면 표시되는 페이지가 이 확장 프로그램으로 인해 변경되었습니다.</translation>
++<translation id="2396765026452590966">Gooroom browser을 시작하면 표시되는 페이지가 '<ph name="EXTENSION_NAME" />' 확장 프로그램으로 인해 변경되었습니다.</translation>
++<translation id="2483889755041906834">Gooroom browser에서</translation>
+ <translation id="2485422356828889247">제거</translation>
+-<translation id="2527042973354814951"><ph name="PLUGIN_NAME" />을(를) 사용하려면 Chromium을 다시 시작하세요.</translation>
+-<translation id="2535480412977113886">계정의 로그인 세부정보가 오래되어 Chromium OS에서 데이터를 동기화하지 못했습니다.</translation>
+-<translation id="2560420686485554789">파일을 다운로드하려면 Chromium에 저장소 액세스 권한이 있어야 합니다</translation>
+-<translation id="2572494885440352020">Chromium 도우미</translation>
+-<translation id="2587578672395088481">업데이트를 적용하려면 Chromium OS를 다시 시작해야 합니다.</translation>
+-<translation id="2647554856022461007">Chromium에서 사용자에게 더 나은 인터넷 사용 환경을 제공하기 위해 웹 서비스를 사용할 수 있습니다. 원하는 경우 서비스를 사용 중지하실 수 있습니다. <ph name="BEGIN_LINK" />자세히 알아보기<ph name="END_LINK" /></translation>
+-<translation id="2648074677641340862">설치 중 운영체제 오류가 발생했습니다. Chromium을 다시 다운로드하세요.</translation>
+-<translation id="2711502716910134313">Chromium 탭</translation>
+-<translation id="2718390899429598676">보안 강화를 위해 Chromium에서 사용자 데이터를 암호화합니다.</translation>
++<translation id="2527042973354814951"><ph name="PLUGIN_NAME" />을(를) 사용하려면 Gooroom browser을 다시 시작하세요.</translation>
++<translation id="2535480412977113886">계정의 로그인 세부정보가 오래되어 Gooroom browser OS에서 데이터를 동기화하지 못했습니다.</translation>
++<translation id="2560420686485554789">파일을 다운로드하려면 Gooroom browser에 저장소 액세스 권한이 있어야 합니다</translation>
++<translation id="2572494885440352020">Gooroom browser 도우미</translation>
++<translation id="2587578672395088481">업데이트를 적용하려면 Gooroom browser OS를 다시 시작해야 합니다.</translation>
++<translation id="2647554856022461007">Gooroom browser에서 사용자에게 더 나은 인터넷 사용 환경을 제공하기 위해 웹 서비스를 사용할 수 있습니다. 원하는 경우 서비스를 사용 중지하실 수 있습니다. <ph name="BEGIN_LINK" />자세히 알아보기<ph name="END_LINK" /></translation>
++<translation id="2648074677641340862">설치 중 운영체제 오류가 발생했습니다. Gooroom browser을 다시 다운로드하세요.</translation>
++<translation id="2711502716910134313">Gooroom browser 탭</translation>
++<translation id="2718390899429598676">보안 강화를 위해 Gooroom browser에서 사용자 데이터를 암호화합니다.</translation>
+ <translation id="2770231113462710648">다음으로 기본 브라우저 변경:</translation>
+ <translation id="2799223571221894425">다시 시작</translation>
+-<translation id="2838154144102149890">업데이트하려면 이 컴퓨터에서 Chromium 실행을 중단해야 합니다. 중단하면 이 컴퓨터에 로그인한 다른 사용자가 저장하지 않은 변경 사항을 잃을 수 있습니다.</translation>
+-<translation id="2847479871509788944">Chromium에서 제거...</translation>
+-<translation id="2886012850691518054">선택사항: 사용 통계 및 비정상 종료 보고서가 Google로 자동 전송되도록 선택하시면 Chromium을 개선하는 데 도움이 됩니다.</translation>
+-<translation id="2898082584336937987">휴대전화에 Chromium을 설치하세요. 다음 휴대전화로 SMS를 보내 드리겠습니다. <ph name="PHONE_NUMBER" /></translation>
+-<translation id="2910007522516064972">Chromium 정보</translation>
+-<translation id="2977470724722393594">Chromium이 최신 버전임</translation>
+-<translation id="3032787606318309379">Chromium에 추가하는 중...</translation>
+-<translation id="3046695367536568084">앱을 사용하려면 Chromium에 로그인해야 합니다. 로그인하면 Chromium이 기기 간에 앱, 북마크, 방문 기록, 비밀번호 및 기타 설정을 동기화할 수 있습니다.</translation>
+-<translation id="3068515742935458733">비정상 종료 보고서와 <ph name="UMA_LINK" />을(를) Google로 전송하여 Chromium 개선에 참여합니다.</translation>
+-<translation id="3103660991484857065">설치 프로그램이 보관 파일 압축 풀기에 실패했습니다. Chromium을 다시 다운로드하세요.</translation>
+-<translation id="3130323860337406239">Chromium이 마이크를 사용 중입니다.</translation>
+-<translation id="3155163173539279776">Chromium 다시 시작</translation>
+-<translation id="3179665906251668410">Chromium 시크릿 창에서 링크 열기(&amp;G)</translation>
+-<translation id="3190315855212034486">Chromium이 다운되었습니다. 다시 시작하시겠습니까?</translation>
+-<translation id="3229526316128325841">Chromium에서 비밀번호를 내보내려고 합니다.</translation>
+-<translation id="3256316712990552818">Chromium에 복사됨</translation>
+-<translation id="3258596308407688501">Chromium에서 데이터 디렉터리를 읽고 쓸 수 없습니다.
++<translation id="2838154144102149890">업데이트하려면 이 컴퓨터에서 Gooroom browser 실행을 중단해야 합니다. 중단하면 이 컴퓨터에 로그인한 다른 사용자가 저장하지 않은 변경 사항을 잃을 수 있습니다.</translation>
++<translation id="2847479871509788944">Gooroom browser에서 제거...</translation>
++<translation id="2886012850691518054">선택사항: 사용 통계 및 비정상 종료 보고서가 Google로 자동 전송되도록 선택하시면 Gooroom browser을 개선하는 데 도움이 됩니다.</translation>
++<translation id="2898082584336937987">휴대전화에 Gooroom browser을 설치하세요. 다음 휴대전화로 SMS를 보내 드리겠습니다. <ph name="PHONE_NUMBER" /></translation>
++<translation id="2910007522516064972">Gooroom browser 정보</translation>
++<translation id="2977470724722393594">Gooroom browser이 최신 버전임</translation>
++<translation id="3032787606318309379">Gooroom browser에 추가하는 중...</translation>
++<translation id="3046695367536568084">앱을 사용하려면 Gooroom browser에 로그인해야 합니다. 로그인하면 Gooroom browser이 기기 간에 앱, 북마크, 방문 기록, 비밀번호 및 기타 설정을 동기화할 수 있습니다.</translation>
++<translation id="3068515742935458733">비정상 종료 보고서와 <ph name="UMA_LINK" />을(를) Google로 전송하여 Gooroom browser 개선에 참여합니다.</translation>
++<translation id="3103660991484857065">설치 프로그램이 보관 파일 압축 풀기에 실패했습니다. Gooroom browser을 다시 다운로드하세요.</translation>
++<translation id="3130323860337406239">Gooroom browser이 마이크를 사용 중입니다.</translation>
++<translation id="3155163173539279776">Gooroom browser 다시 시작</translation>
++<translation id="3179665906251668410">Gooroom browser 시크릿 창에서 링크 열기(&amp;G)</translation>
++<translation id="3190315855212034486">Gooroom browser이 다운되었습니다. 다시 시작하시겠습니까?</translation>
++<translation id="3229526316128325841">Gooroom browser에서 비밀번호를 내보내려고 합니다.</translation>
++<translation id="3256316712990552818">Gooroom browser에 복사됨</translation>
++<translation id="3258596308407688501">Gooroom browser에서 데이터 디렉터리를 읽고 쓸 수 없습니다.
+ 
+ <ph name="USER_DATA_DIRECTORY" /></translation>
+-<translation id="328888136576916638">Google API 키가 누락되었습니다. Chromium의 일부 기능이 사용 중지됩니다.</translation>
+-<translation id="3296368748942286671">Chromium 종료 후에도 백그라운드 앱을 계속 실행</translation>
+-<translation id="331951419404882060">로그인 중 오류가 발생하여 Chromium OS에서 데이터를 동기화하지 못했습니다.</translation>
+-<translation id="3474745554856756813">항목 <ph name="ITEMS_COUNT" />개가 기기에서 삭제됩니다. 나중에 데이터를 가져오려면 Chromium에 <ph name="USER_EMAIL" />(으)로 로그인하세요.</translation>
++<translation id="328888136576916638">Google API 키가 누락되었습니다. Gooroom browser의 일부 기능이 사용 중지됩니다.</translation>
++<translation id="3296368748942286671">Gooroom browser 종료 후에도 백그라운드 앱을 계속 실행</translation>
++<translation id="331951419404882060">로그인 중 오류가 발생하여 Gooroom browser OS에서 데이터를 동기화하지 못했습니다.</translation>
++<translation id="3474745554856756813">항목 <ph name="ITEMS_COUNT" />개가 기기에서 삭제됩니다. 나중에 데이터를 가져오려면 Gooroom browser에 <ph name="USER_EMAIL" />(으)로 로그인하세요.</translation>
+ <translation id="3479552764303398839">나중에</translation>
+-<translation id="3509308970982693815">Chromium 창을 모두 닫고 다시 시도해 보세요.</translation>
+-<translation id="352783484088404971">Chromium에서 제거...</translation>
+-<translation id="3575459661164320785">컴퓨터에 유해한 소프트웨어가 있습니다. Chromium에서 유해한 소프트웨어를 삭제하고, 설정을 복원하고, 확장 프로그램을 사용 중지하여 브라우저가 다시 정상적으로 작동하도록 할 수 있습니다.</translation>
+-<translation id="3582788516608077514">Chromium 업데이트 중...</translation>
+-<translation id="358997566136285270">Chromium 로고</translation>
+-<translation id="3639635944603682591">선택한 사용자의 인터넷 사용 기록이 이 기기에서 삭제됩니다. 데이터를 복구하려면 <ph name="USER_EMAIL" />(으)로 Chromium에 로그인하세요.</translation>
+-<translation id="3713809861844741608">새 Chromium 탭에서 링크 열기(&amp;T)</translation>
+-<translation id="3728336900324680424">Chromium에서 내 드라이브에 액세스하여 주소 표시줄에 추천 검색어를 표시합니다.</translation>
+-<translation id="378917192836375108">Chromium을 사용하면 웹에서 전화번호를 클릭하여 Skype로 통화할 수 있습니다.</translation>
+-<translation id="3848258323044014972"><ph name="PAGE_TITLE" /> - Chromium</translation>
+-<translation id="3852700440713538496">Chromium을 작업 표시줄에 고정</translation>
+-<translation id="388648406173476553">Chromium을 맞춤설정 및 제어합니다. 확인이 필요한 항목이 있습니다. 클릭하여 세부정보를 보세요.</translation>
+-<translation id="3889543394854987837">Chromium을 열고 탐색을 시작하려면 내 이름을 클릭하세요.</translation>
++<translation id="3509308970982693815">Gooroom browser 창을 모두 닫고 다시 시도해 보세요.</translation>
++<translation id="352783484088404971">Gooroom browser에서 제거...</translation>
++<translation id="3575459661164320785">컴퓨터에 유해한 소프트웨어가 있습니다. Gooroom browser에서 유해한 소프트웨어를 삭제하고, 설정을 복원하고, 확장 프로그램을 사용 중지하여 브라우저가 다시 정상적으로 작동하도록 할 수 있습니다.</translation>
++<translation id="3582788516608077514">Gooroom browser 업데이트 중...</translation>
++<translation id="358997566136285270">Gooroom browser 로고</translation>
++<translation id="3639635944603682591">선택한 사용자의 인터넷 사용 기록이 이 기기에서 삭제됩니다. 데이터를 복구하려면 <ph name="USER_EMAIL" />(으)로 Gooroom browser에 로그인하세요.</translation>
++<translation id="3713809861844741608">새 Gooroom browser 탭에서 링크 열기(&amp;T)</translation>
++<translation id="3728336900324680424">Gooroom browser에서 내 드라이브에 액세스하여 주소 표시줄에 추천 검색어를 표시합니다.</translation>
++<translation id="378917192836375108">Gooroom browser을 사용하면 웹에서 전화번호를 클릭하여 Skype로 통화할 수 있습니다.</translation>
++<translation id="3848258323044014972"><ph name="PAGE_TITLE" /> - Gooroom browser</translation>
++<translation id="3852700440713538496">Gooroom browser을 작업 표시줄에 고정</translation>
++<translation id="388648406173476553">Gooroom browser을 맞춤설정 및 제어합니다. 확인이 필요한 항목이 있습니다. 클릭하여 세부정보를 보세요.</translation>
++<translation id="3889543394854987837">Gooroom browser을 열고 탐색을 시작하려면 내 이름을 클릭하세요.</translation>
+ <translation id="3898493977366060150">Google과 스마트하게 웹을 탐색하세요</translation>
+-<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 Chromium 개선에 참여</translation>
++<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 Gooroom browser 개선에 참여</translation>
+ <translation id="4050175100176540509">최신 버전에는 중요한 보안 개선사항 및 새로운 기능이 포함되어 있습니다.</translation>
+-<translation id="407254336480250557"><ph name="SMALL_PRODUCT_LOGO" /><ph name="BEGIN_BOLD" />Chromium<ph name="END_BOLD" /> 선택</translation>
+-<translation id="421369550622382712">Chromium에 유용한 앱, 게임, 확장 프로그램, 테마를 찾아보세요.</translation>
+-<translation id="4216212958613226427">Chromium UI가 이 언어로 표시됩니다.</translation>
+-<translation id="4222580632002216401">Chromium에 로그인했습니다! 관리자가 동기화를 사용 중지했습니다.</translation>
+-<translation id="4224199872375172890">Chromium이 최신 버전입니다.</translation>
+-<translation id="4230135487732243613">Chromium 데이터를 이 계정에 연결하시겠습니까?</translation>
+-<translation id="4271805377592243930">Chromium 도움말 보기</translation>
+-<translation id="4285930937574705105">확인되지 않은 오류로 설치에 실패했습니다. Chromium이 실행 중인 경우 종료한 후 다시 실행하세요.</translation>
+-<translation id="4407044323746248786">Chromium을 종료하시겠습니까?</translation>
+-<translation id="4415566066719264597">백그라운드에서 Chromium을 실행</translation>
+-<translation id="4423735387467980091">Chromium 맞춤설정 및 제어</translation>
++<translation id="407254336480250557"><ph name="SMALL_PRODUCT_LOGO" /><ph name="BEGIN_BOLD" />Gooroom browser<ph name="END_BOLD" /> 선택</translation>
++<translation id="421369550622382712">Gooroom browser에 유용한 앱, 게임, 확장 프로그램, 테마를 찾아보세요.</translation>
++<translation id="4216212958613226427">Gooroom browser UI가 이 언어로 표시됩니다.</translation>
++<translation id="4222580632002216401">Gooroom browser에 로그인했습니다! 관리자가 동기화를 사용 중지했습니다.</translation>
++<translation id="4224199872375172890">Gooroom browser이 최신 버전입니다.</translation>
++<translation id="4230135487732243613">Gooroom browser 데이터를 이 계정에 연결하시겠습니까?</translation>
++<translation id="4271805377592243930">Gooroom browser 도움말 보기</translation>
++<translation id="4285930937574705105">확인되지 않은 오류로 설치에 실패했습니다. Gooroom browser이 실행 중인 경우 종료한 후 다시 실행하세요.</translation>
++<translation id="4407044323746248786">Gooroom browser을 종료하시겠습니까?</translation>
++<translation id="4415566066719264597">백그라운드에서 Gooroom browser을 실행</translation>
++<translation id="4423735387467980091">Gooroom browser 맞춤설정 및 제어</translation>
+ <translation id="4567424176335768812"><ph name="USER_EMAIL_ADDRESS" />(으)로 로그인되어 있습니다. 이제 로그인한 모든 기기에서 북마크, 방문 기록 및 기타 설정에 액세스할 수 있습니다.</translation>
+-<translation id="459535195905078186">Chromium 앱</translation>
+-<translation id="4621240073146040695">업데이트가 거의 완료되었습니다. 업데이트를 완료하려면 Chromium을 다시 시작하세요.</translation>
+-<translation id="4677944499843243528">다른 컴퓨터(<ph name="HOST_NAME" />)의 다른 Chromium 프로세스(<ph name="PROCESS_ID" />)에서 프로필을 사용 중인 것 같습니다. 프로필이 손상되지 않도록 Chromium에서 잠금 설정했습니다. 다른 프로세스에서 프로필을 사용 중이지 않은 것이 확실한 경우 프로필을 잠금 해제하고 Chromium을 다시 시작하세요.</translation>
+-<translation id="469338717132742108">Chromium OS 도움말 보기</translation>
+-<translation id="4708774505295300557">다른 사용자가 이전에 이 컴퓨터에서 <ph name="ACCOUNT_EMAIL_LAST" />(으)로 Chromium에 로그인했습니다. 새로운 Chromium 사용자를 만들어 정보를 별도로 관리하세요.</translation>
+-<translation id="4714956846925717402">Chromium을 더 빠르게 사용해 보세요.</translation>
+-<translation id="4746050847053251315">Chromium을 종료하시겠습니까?</translation>
+-<translation id="4748217263233248895">Chromium 특별 보안 업데이트를 방금 적용했습니다. 다시 시작하면 탭이 복원됩니다.</translation>
++<translation id="459535195905078186">Gooroom browser 앱</translation>
++<translation id="4621240073146040695">업데이트가 거의 완료되었습니다. 업데이트를 완료하려면 Gooroom browser을 다시 시작하세요.</translation>
++<translation id="4677944499843243528">다른 컴퓨터(<ph name="HOST_NAME" />)의 다른 Gooroom browser 프로세스(<ph name="PROCESS_ID" />)에서 프로필을 사용 중인 것 같습니다. 프로필이 손상되지 않도록 Gooroom browser에서 잠금 설정했습니다. 다른 프로세스에서 프로필을 사용 중이지 않은 것이 확실한 경우 프로필을 잠금 해제하고 Gooroom browser을 다시 시작하세요.</translation>
++<translation id="469338717132742108">Gooroom browser OS 도움말 보기</translation>
++<translation id="4708774505295300557">다른 사용자가 이전에 이 컴퓨터에서 <ph name="ACCOUNT_EMAIL_LAST" />(으)로 Gooroom browser에 로그인했습니다. 새로운 Gooroom browser 사용자를 만들어 정보를 별도로 관리하세요.</translation>
++<translation id="4714956846925717402">Gooroom browser을 더 빠르게 사용해 보세요.</translation>
++<translation id="4746050847053251315">Gooroom browser을 종료하시겠습니까?</translation>
++<translation id="4748217263233248895">Gooroom browser 특별 보안 업데이트를 방금 적용했습니다. 다시 시작하면 탭이 복원됩니다.</translation>
+ <translation id="479167709087336770">Google 검색과 동일한 맞춤법 검사기가 사용됩니다. 브라우저에 입력되는 텍스트는 Google로 전송됩니다. 설정에서 언제든지 이 동작을 변경할 수 있습니다.</translation>
+-<translation id="4888717733111232871">Chromium이 mDNS 트래픽을 허용하는 인바운드 규칙입니다.</translation>
+-<translation id="4943838377383847465">Chromium이 백그라운드 모드로 실행 중입니다.</translation>
+-<translation id="4987820182225656817">게스트로 사용 기록을 남기지 않고 Chromium을 사용할 수 있습니다.</translation>
+-<translation id="4994636714258228724">Chromium에 본인 추가</translation>
+-<translation id="5045248521775609809">어디에서나 Chromium 사용</translation>
+-<translation id="5181952534059945058">페이지에서 너무 많은 메모리를 사용하므로 Chromium에서 일부 콘텐츠를 삭제했습니다.</translation>
+-<translation id="5277894862589591112">변경사항을 적용하려면 Chromium을 다시 실행하세요.</translation>
+-<translation id="5358375970380395591">관리 계정으로 로그인하고 Chromium 프로필에 대한 관리자 제어권을 부여하려고 합니다. 앱, 북마크, 방문 기록, 비밀번호 및 기타 설정 등 Chromium 데이터가 <ph name="USER_NAME" /> 계정에 영구적으로 연결됩니다. 이후 이 데이터를 Google 계정 대시보드에서 삭제할 수는 있지만 다른 계정에 연결할 수는 없습니다. <ph name="LEARN_MORE" /></translation>
+-<translation id="5386450000063123300">Chromium 업데이트 중(<ph name="PROGRESS_PERCENT" />)</translation>
+-<translation id="538767207339317086">Chromium 로그인 허용</translation>
+-<translation id="5398878173008909840">Chromium의 새 버전이 출시되었습니다.</translation>
+-<translation id="5416696090975899932">기본 제공되는 PDF 뷰어가 없으면 Chromium에서 인쇄 미리보기를 표시할 수 없습니다.</translation>
+-<translation id="5427571867875391349">Chromium을 기본 브라우저로 설정</translation>
+-<translation id="5438241569118040789"><ph name="PAGE_TITLE" /> - Chromium 베타</translation>
+-<translation id="5466153949126434691">Chromium이 자동으로 업데이트되므로 항상 최신 버전을 사용할 수 있습니다. 이 다운로드가 완료되면 Chromium이 다시 시작되며 계속 작업할 수 있습니다.</translation>
+-<translation id="5479196819031988440">Chromium OS에서 이 페이지를 열 수 없음</translation>
+-<translation id="5480860683791598150">이 사이트와 위치를 공유하려면 Chromium에 내 위치 액세스 권한이 있어야 합니다</translation>
+-<translation id="549669000822060376">Chromium에서 최신 시스템 업데이트를 설치하는 동안 잠시 기다려 주세요.</translation>
+-<translation id="5623402015214259806">{0,plural, =0{Chromium 업데이트 출시}=1{Chromium 업데이트 출시}other{Chromium 업데이트가 출시된 지 #일 지남}}</translation>
+-<translation id="5631814766731275228">Chromium 이름 및 사진</translation>
+-<translation id="5634636535844844681">Chromium은 Windows 7 이상 버전에서 사용할 수 있습니다.</translation>
+-<translation id="5680901439334282664">Chromium에 로그인</translation>
+-<translation id="5698481217667032250">이 언어로 Chromium 표시</translation>
+-<translation id="5756484659843248772">Chromium OS UI가 이 언어로 표시됩니다.</translation>
+-<translation id="5768914737813585044">이 언어로 Chromium OS 표시</translation>
+-<translation id="5796460469508169315">Chromium 준비가 거의 완료되었습니다.</translation>
+-<translation id="5820394555380036790">Chromium OS</translation>
+-<translation id="5862307444128926510">Chromium에 오신 것을 환영합니다.</translation>
++<translation id="4888717733111232871">Gooroom browser이 mDNS 트래픽을 허용하는 인바운드 규칙입니다.</translation>
++<translation id="4943838377383847465">Gooroom browser이 백그라운드 모드로 실행 중입니다.</translation>
++<translation id="4987820182225656817">게스트로 사용 기록을 남기지 않고 Gooroom browser을 사용할 수 있습니다.</translation>
++<translation id="4994636714258228724">Gooroom browser에 본인 추가</translation>
++<translation id="5045248521775609809">어디에서나 Gooroom browser 사용</translation>
++<translation id="5181952534059945058">페이지에서 너무 많은 메모리를 사용하므로 Gooroom browser에서 일부 콘텐츠를 삭제했습니다.</translation>
++<translation id="5277894862589591112">변경사항을 적용하려면 Gooroom browser을 다시 실행하세요.</translation>
++<translation id="5358375970380395591">관리 계정으로 로그인하고 Gooroom browser 프로필에 대한 관리자 제어권을 부여하려고 합니다. 앱, 북마크, 방문 기록, 비밀번호 및 기타 설정 등 Gooroom browser 데이터가 <ph name="USER_NAME" /> 계정에 영구적으로 연결됩니다. 이후 이 데이터를 Google 계정 대시보드에서 삭제할 수는 있지만 다른 계정에 연결할 수는 없습니다. <ph name="LEARN_MORE" /></translation>
++<translation id="5386450000063123300">Gooroom browser 업데이트 중(<ph name="PROGRESS_PERCENT" />)</translation>
++<translation id="538767207339317086">Gooroom browser 로그인 허용</translation>
++<translation id="5398878173008909840">Gooroom browser의 새 버전이 출시되었습니다.</translation>
++<translation id="5416696090975899932">기본 제공되는 PDF 뷰어가 없으면 Gooroom browser에서 인쇄 미리보기를 표시할 수 없습니다.</translation>
++<translation id="5427571867875391349">Gooroom browser을 기본 브라우저로 설정</translation>
++<translation id="5438241569118040789"><ph name="PAGE_TITLE" /> - Gooroom browser 베타</translation>
++<translation id="5466153949126434691">Gooroom browser이 자동으로 업데이트되므로 항상 최신 버전을 사용할 수 있습니다. 이 다운로드가 완료되면 Gooroom browser이 다시 시작되며 계속 작업할 수 있습니다.</translation>
++<translation id="5479196819031988440">Gooroom browser OS에서 이 페이지를 열 수 없음</translation>
++<translation id="5480860683791598150">이 사이트와 위치를 공유하려면 Gooroom browser에 내 위치 액세스 권한이 있어야 합니다</translation>
++<translation id="549669000822060376">Gooroom browser에서 최신 시스템 업데이트를 설치하는 동안 잠시 기다려 주세요.</translation>
++<translation id="5623402015214259806">{0,plural, =0{Gooroom browser 업데이트 출시}=1{Gooroom browser 업데이트 출시}other{Gooroom browser 업데이트가 출시된 지 #일 지남}}</translation>
++<translation id="5631814766731275228">Gooroom browser 이름 및 사진</translation>
++<translation id="5634636535844844681">Gooroom browser은 Windows 7 이상 버전에서 사용할 수 있습니다.</translation>
++<translation id="5680901439334282664">Gooroom browser에 로그인</translation>
++<translation id="5698481217667032250">이 언어로 Gooroom browser 표시</translation>
++<translation id="5756484659843248772">Gooroom browser OS UI가 이 언어로 표시됩니다.</translation>
++<translation id="5768914737813585044">이 언어로 Gooroom browser OS 표시</translation>
++<translation id="5796460469508169315">Gooroom browser 준비가 거의 완료되었습니다.</translation>
++<translation id="5820394555380036790">Gooroom browser OS</translation>
++<translation id="5862307444128926510">Gooroom browser에 오신 것을 환영합니다.</translation>
+ <translation id="5877064549588274448">채널이 변경되었습니다. 변경사항을 적용하려면 기기를 다시 시작하세요.</translation>
+ <translation id="5895138241574237353">다시 시작</translation>
+ <translation id="5906655207909574370">업데이트가 거의 완료되었습니다. 업데이트를 완료하려면 기기를 다시 시작하세요.</translation>
+-<translation id="5987687638152509985">동기화를 시작하려면 Chromium을 업데이트하세요.</translation>
+-<translation id="6013050204643758987"><ph name="BEGIN_LINK_LINUX_OSS" />Linux(베타)<ph name="END_LINK_LINUX_OSS" />와 마찬가지로, Chromium OS는 추가 <ph name="BEGIN_LINK_CROS_OSS" />오픈소스 소프트웨어<ph name="END_LINK_CROS_OSS" />를 사용하여 개발되었습니다.</translation>
++<translation id="5987687638152509985">동기화를 시작하려면 Gooroom browser을 업데이트하세요.</translation>
++<translation id="6013050204643758987"><ph name="BEGIN_LINK_LINUX_OSS" />Linux(베타)<ph name="END_LINK_LINUX_OSS" />와 마찬가지로, Gooroom browser OS는 추가 <ph name="BEGIN_LINK_CROS_OSS" />오픈소스 소프트웨어<ph name="END_LINK_CROS_OSS" />를 사용하여 개발되었습니다.</translation>
+ <translation id="6040143037577758943">닫기</translation>
+-<translation id="6055895534982063517">이전보다 더 빨라진 Chromium 새 버전을 사용할 수 있습니다.</translation>
+-<translation id="6063093106622310249">&amp;Chromium에서 열기</translation>
+-<translation id="6072279588547424923"><ph name="EXTENSION_NAME" />이(가) Chromium에 추가됨</translation>
+-<translation id="608189560609172163">로그인 중 오류가 발생하여 Chromium에서 데이터를 동기화하지 못했습니다.</translation>
+-<translation id="6096348254544841612">Chromium을 맞춤설정하고 제어하세요. 업데이트가 출시되었습니다.</translation>
+-<translation id="6120345080069858279">Chromium에서 내 Google 계정에 이 비밀번호를 저장하므로 기억하지 않아도 됩니다.</translation>
+-<translation id="6129621093834146363"><ph name="FILE_NAME" />은(는) 위험한 파일이므로 Chromium에서 차단했습니다.</translation>
+-<translation id="6212496753309875659">컴퓨터에 이미 최신 버전의 Chromium이 있습니다. 소프트웨어가 작동하지 않으면 Chromium의 설치를 제거한 뒤 다시 시도하세요.</translation>
+-<translation id="6219195342503754812">{0,plural, =0{곧 Chromium이 다시 시작됩니다}=1{1초 후 Chromium이 다시 시작됩니다}other{#초 후 Chromium이 다시 시작됩니다}}</translation>
+-<translation id="6248213926982192922">Chromium을 기본 브라우저로 설정</translation>
+-<translation id="6268381023930128611">Chromium에서 로그아웃</translation>
+-<translation id="6295779123002464101"><ph name="FILE_NAME" />은(는) 위험할 수 있으므로 Chromium에서 차단했습니다.</translation>
+-<translation id="6309712487085796862">Chromium이 카메라를 사용 중입니다.</translation>
+-<translation id="6333502561965082103">Chromium에서 다른 작업이 진행 중입니다. 나중에 다시 시도해 주세요.</translation>
+-<translation id="6334986366598267305">이제 Google 계정으로 공유 컴퓨터에서 Chromium을 손쉽게 사용할 수 있습니다.</translation>
+-<translation id="6373523479360886564">Chromium을 제거하시겠습니까?</translation>
+-<translation id="6400072781405947421">Mac OS X 10.9에서 더 이상 Chromium을 지원하지 않으므로 Chromium이 올바르게 작동하지 않을 수 있습니다.</translation>
+-<translation id="6403826409255603130">Chromium은 빠른 속도로 웹페이지와 애플리케이션을 실행하는 웹 브라우저입니다. 빠르고 안정적이며 사용하기에 편리합니다. Chromium에 내장된 멀웨어 및 악성 코드 방지 기능을 사용하여 더욱 안전하게 웹을 검색하세요.</translation>
+-<translation id="6434250628340475518">Chromium OS 시스템</translation>
+-<translation id="6457450909262716557">{SECONDS,plural, =1{1초 후에 Chromium이 다시 시작됩니다}other{#초 후에 Chromium이 다시 시작됩니다}}</translation>
+-<translation id="6475912303565314141">또한 Chromium을 시작할 때 표시되는 페이지를 설정합니다.</translation>
+-<translation id="6485906693002546646">Chromium 콘텐츠를 동기화하기 위해 <ph name="PROFILE_EMAIL" />을(를) 사용 중입니다. 동기화 환경설정을 업데이트하거나 Google 계정 없이 Chromium을 사용하려면 <ph name="SETTINGS_LINK" />(으)로 이동하세요.</translation>
+-<translation id="6510925080656968729">Chromium 설치 제거</translation>
+-<translation id="6570579332384693436">맞춤법 오류를 수정하기 위해 Chromium에서 사용자가 입력하는 텍스트를 Google로 전송합니다.</translation>
+-<translation id="6598877126913850652">Chromium 알림 설정으로 이동</translation>
++<translation id="6055895534982063517">이전보다 더 빨라진 Gooroom browser 새 버전을 사용할 수 있습니다.</translation>
++<translation id="6063093106622310249">&amp;Gooroom browser에서 열기</translation>
++<translation id="6072279588547424923"><ph name="EXTENSION_NAME" />이(가) Gooroom browser에 추가됨</translation>
++<translation id="608189560609172163">로그인 중 오류가 발생하여 Gooroom browser에서 데이터를 동기화하지 못했습니다.</translation>
++<translation id="6096348254544841612">Gooroom browser을 맞춤설정하고 제어하세요. 업데이트가 출시되었습니다.</translation>
++<translation id="6120345080069858279">Gooroom browser에서 내 Google 계정에 이 비밀번호를 저장하므로 기억하지 않아도 됩니다.</translation>
++<translation id="6129621093834146363"><ph name="FILE_NAME" />은(는) 위험한 파일이므로 Gooroom browser에서 차단했습니다.</translation>
++<translation id="6212496753309875659">컴퓨터에 이미 최신 버전의 Gooroom browser이 있습니다. 소프트웨어가 작동하지 않으면 Gooroom browser의 설치를 제거한 뒤 다시 시도하세요.</translation>
++<translation id="6219195342503754812">{0,plural, =0{곧 Gooroom browser이 다시 시작됩니다}=1{1초 후 Gooroom browser이 다시 시작됩니다}other{#초 후 Gooroom browser이 다시 시작됩니다}}</translation>
++<translation id="6248213926982192922">Gooroom browser을 기본 브라우저로 설정</translation>
++<translation id="6268381023930128611">Gooroom browser에서 로그아웃</translation>
++<translation id="6295779123002464101"><ph name="FILE_NAME" />은(는) 위험할 수 있으므로 Gooroom browser에서 차단했습니다.</translation>
++<translation id="6309712487085796862">Gooroom browser이 카메라를 사용 중입니다.</translation>
++<translation id="6333502561965082103">Gooroom browser에서 다른 작업이 진행 중입니다. 나중에 다시 시도해 주세요.</translation>
++<translation id="6334986366598267305">이제 Google 계정으로 공유 컴퓨터에서 Gooroom browser을 손쉽게 사용할 수 있습니다.</translation>
++<translation id="6373523479360886564">Gooroom browser을 제거하시겠습니까?</translation>
++<translation id="6400072781405947421">Mac OS X 10.9에서 더 이상 Gooroom browser을 지원하지 않으므로 Gooroom browser이 올바르게 작동하지 않을 수 있습니다.</translation>
++<translation id="6403826409255603130">Gooroom browser은 빠른 속도로 웹페이지와 애플리케이션을 실행하는 웹 브라우저입니다. 빠르고 안정적이며 사용하기에 편리합니다. Gooroom browser에 내장된 멀웨어 및 악성 코드 방지 기능을 사용하여 더욱 안전하게 웹을 검색하세요.</translation>
++<translation id="6434250628340475518">Gooroom browser OS 시스템</translation>
++<translation id="6457450909262716557">{SECONDS,plural, =1{1초 후에 Gooroom browser이 다시 시작됩니다}other{#초 후에 Gooroom browser이 다시 시작됩니다}}</translation>
++<translation id="6475912303565314141">또한 Gooroom browser을 시작할 때 표시되는 페이지를 설정합니다.</translation>
++<translation id="6485906693002546646">Gooroom browser 콘텐츠를 동기화하기 위해 <ph name="PROFILE_EMAIL" />을(를) 사용 중입니다. 동기화 환경설정을 업데이트하거나 Google 계정 없이 Gooroom browser을 사용하려면 <ph name="SETTINGS_LINK" />(으)로 이동하세요.</translation>
++<translation id="6510925080656968729">Gooroom browser 설치 제거</translation>
++<translation id="6570579332384693436">맞춤법 오류를 수정하기 위해 Gooroom browser에서 사용자가 입력하는 텍스트를 Google로 전송합니다.</translation>
++<translation id="6598877126913850652">Gooroom browser 알림 설정으로 이동</translation>
+ <translation id="6676384891291319759">인터넷 연결</translation>
+-<translation id="6717134281241384636">Chromium의 최신 버전을 사용하기 때문에 프로필을 사용할 수 없습니다.
++<translation id="6717134281241384636">Gooroom browser의 최신 버전을 사용하기 때문에 프로필을 사용할 수 없습니다.
+ 
+-일부 기능을 사용할 수 없습니다. 다른 프로필 디렉터리를 지정하거나 Chromium의 새로운 버전을 사용하시기 바랍니다.</translation>
+-<translation id="6734080038664603509">Chromium 업데이트</translation>
+-<translation id="6734291798041940871">모든 사용자가 사용할 수 있도록 컴퓨터에 Chromium이 이미 설치되어 있습니다.</translation>
+-<translation id="6810143991807788455">현재 설정을 보고하여 Chromium 개선에 참여</translation>
+-<translation id="6857782730669500492">Chromium - <ph name="PAGE_TITLE" /></translation>
+-<translation id="6863361426438995919">Google Pay(Chromium에 복사됨)</translation>
+-<translation id="6868056391275687737">다른 Chromium 버전이 실행 중입니다. 업데이트하려면 실행 중인 버전을 종료하세요.</translation>
+-<translation id="6893813176749746474">Chromium이 업데이트되었지만, 최소 30일 동안 사용하지 않았습니다.</translation>
+-<translation id="6964305034639999644">Chromium 시크릿 창에서 링크 열기(&amp;G)</translation>
++일부 기능을 사용할 수 없습니다. 다른 프로필 디렉터리를 지정하거나 Gooroom browser의 새로운 버전을 사용하시기 바랍니다.</translation>
++<translation id="6734080038664603509">Gooroom browser 업데이트</translation>
++<translation id="6734291798041940871">모든 사용자가 사용할 수 있도록 컴퓨터에 Gooroom browser이 이미 설치되어 있습니다.</translation>
++<translation id="6810143991807788455">현재 설정을 보고하여 Gooroom browser 개선에 참여</translation>
++<translation id="6857782730669500492">Gooroom browser - <ph name="PAGE_TITLE" /></translation>
++<translation id="6863361426438995919">Google Pay(Gooroom browser에 복사됨)</translation>
++<translation id="6868056391275687737">다른 Gooroom browser 버전이 실행 중입니다. 업데이트하려면 실행 중인 버전을 종료하세요.</translation>
++<translation id="6893813176749746474">Gooroom browser이 업데이트되었지만, 최소 30일 동안 사용하지 않았습니다.</translation>
++<translation id="6964305034639999644">Gooroom browser 시크릿 창에서 링크 열기(&amp;G)</translation>
+ <translation id="6970811910055250180">기기를 업데이트하는 중...</translation>
+-<translation id="6990124437352146030">이 사이트에서 마이크에 액세스하려면 Chromium에 권한이 필요합니다</translation>
+-<translation id="705851970750939768">Chromium 업데이트</translation>
+-<translation id="7066436765290594559">Chromium OS에서 데이터를 동기화하지 못했습니다. 동기화 암호를 업데이트하세요.</translation>
+-<translation id="7067091210845072982">이미지에 유용한 설명이 없으면 Chromium에서 자동으로 설명을 제공하려고 시도합니다. 설명을 생성하기 위해 이미지가 Google로 전송됩니다.</translation>
+-<translation id="7196312274710523067">Chromium을 실행할 수 없습니다. 다시 시도해 보세요.</translation>
+-<translation id="7205698830395646142">Chromium 메뉴에서 숨기기</translation>
+-<translation id="7223968959479464213">작업 관리자 - Chromium</translation>
++<translation id="6990124437352146030">이 사이트에서 마이크에 액세스하려면 Gooroom browser에 권한이 필요합니다</translation>
++<translation id="705851970750939768">Gooroom browser 업데이트</translation>
++<translation id="7066436765290594559">Gooroom browser OS에서 데이터를 동기화하지 못했습니다. 동기화 암호를 업데이트하세요.</translation>
++<translation id="7067091210845072982">이미지에 유용한 설명이 없으면 Gooroom browser에서 자동으로 설명을 제공하려고 시도합니다. 설명을 생성하기 위해 이미지가 Google로 전송됩니다.</translation>
++<translation id="7196312274710523067">Gooroom browser을 실행할 수 없습니다. 다시 시도해 보세요.</translation>
++<translation id="7205698830395646142">Gooroom browser 메뉴에서 숨기기</translation>
++<translation id="7223968959479464213">작업 관리자 - Gooroom browser</translation>
+ <translation id="731644333568559921">Chrome OS 업데이트</translation>
+-<translation id="731795002583552498">Chromium 업데이트 중</translation>
++<translation id="731795002583552498">Gooroom browser 업데이트 중</translation>
+ <translation id="7318036098707714271">환경설정 파일이 손상되었거나 잘못되었습니다.
+ 
+-Chromium에서 설정을 복구할 수 없습니다.</translation>
+-<translation id="7331920710658926971">휴대전화에 Chromium을 설치하세요. 휴대전화로 SMS를 보내 드리겠습니다.</translation>
+-<translation id="7337881442233988129">Chromium</translation>
++Gooroom browser에서 설정을 복구할 수 없습니다.</translation>
++<translation id="7331920710658926971">휴대전화에 Gooroom browser을 설치하세요. 휴대전화로 SMS를 보내 드리겠습니다.</translation>
++<translation id="7337881442233988129">Gooroom browser</translation>
+ <translation id="7339898014177206373">새 창</translation>
+-<translation id="734373864078049451">웹, 북마크 및 기타 Chromium 콘텐츠가 여기에 저장됩니다.</translation>
++<translation id="734373864078049451">웹, 북마크 및 기타 Gooroom browser 콘텐츠가 여기에 저장됩니다.</translation>
+ <translation id="7344413941077984497"><ph name="NEW_PROFILE_NAME" />님이 볼 수 있는 웹사이트를 설정하려면 <ph name="BEGIN_LINK_1" /><ph name="DISPLAY_LINK" /><ph name="END_LINK_1" />을(를) 방문하여 제한사항 및 설정을 지정하세요. 기본 설정을 변경하지 않으면 <ph name="NEW_PROFILE_NAME" />님이 웹에서 모든 사이트를 탐색할 수 있습니다.
+ 
+-<ph name="NEW_PROFILE_NAME" />님이 내 계정에 액세스하지 못하도록 하려면 Chromium을 사용하지 않을 때 프로필을 잠그세요. 이렇게 하려면 브라우저 오른쪽 상단에서 프로필 이름을 클릭하고 '종료 및 자녀 보호 잠금'을 선택하면 됩니다.
++<ph name="NEW_PROFILE_NAME" />님이 내 계정에 액세스하지 못하도록 하려면 Gooroom browser을 사용하지 않을 때 프로필을 잠그세요. 이렇게 하려면 브라우저 오른쪽 상단에서 프로필 이름을 클릭하고 '종료 및 자녀 보호 잠금'을 선택하면 됩니다.
+ <ph name="BEGIN_LINK_2" />자세히 알아보기<ph name="END_LINK_2" />
+ 
+ 자세한 안내를 보려면 <ph name="ACCOUNT_EMAIL" />에서 이메일을 확인하세요.</translation>
+-<translation id="7349591376906416160">시스템 관리자가 <ph name="TARGET_URL_HOSTNAME" /> 액세스를 위해 <ph name="ALTERNATIVE_BROWSER_NAME" />을(를) 열도록 Chromium을 구성했습니다.</translation>
+-<translation id="7448255348454382571">Chromium OS 다시 시작</translation>
+-<translation id="7449453770951226939"><ph name="PAGE_TITLE" /> - 개발자용 Chromium</translation>
+-<translation id="7451052299415159299">이 사이트에서 카메라에 액세스하려면 Chromium에 권한이 필요합니다</translation>
+-<translation id="7483335560992089831">이미 실행 중인 Chromium과 동일한 버전을 설치할 수 없습니다. Chromium을 종료한 뒤 다시 시도하세요.</translation>
+-<translation id="753534427205733210">{0,plural, =1{1분 후 Chromium이 다시 시작됩니다}other{#분 후 Chromium이 다시 시작됩니다}}</translation>
+-<translation id="7549178288319965365">Chromium OS 정보</translation>
+-<translation id="7561906087460245826">Chromium(<ph name="URL" />)에서도 데이터 삭제</translation>
+-<translation id="761356813943268536">Chromium이 카메라와 마이크를 사용 중입니다.</translation>
+-<translation id="7617377681829253106">더욱 업그레이드된 Chromium</translation>
+-<translation id="7686590090926151193">Chromium이 기본 브라우저로 설정되어 있지 않습니다</translation>
+-<translation id="7689606757190482937">모든 기기에서 Chromium을 동기화하고 맞춤설정하세요.</translation>
+-<translation id="7729447699958282447">도메인에서 동기화를 사용할 수 없어 Chromium에서 데이터를 동기화하지 못했습니다.</translation>
+-<translation id="7745317241717453663">인터넷 사용 기록이 기기에서 삭제됩니다. 나중에 데이터를 가져오려면 Chromium에 <ph name="USER_EMAIL" />(으)로 로그인하세요.</translation>
++<translation id="7349591376906416160">시스템 관리자가 <ph name="TARGET_URL_HOSTNAME" /> 액세스를 위해 <ph name="ALTERNATIVE_BROWSER_NAME" />을(를) 열도록 Gooroom browser을 구성했습니다.</translation>
++<translation id="7448255348454382571">Gooroom browser OS 다시 시작</translation>
++<translation id="7449453770951226939"><ph name="PAGE_TITLE" /> - 개발자용 Gooroom browser</translation>
++<translation id="7451052299415159299">이 사이트에서 카메라에 액세스하려면 Gooroom browser에 권한이 필요합니다</translation>
++<translation id="7483335560992089831">이미 실행 중인 Gooroom browser과 동일한 버전을 설치할 수 없습니다. Gooroom browser을 종료한 뒤 다시 시도하세요.</translation>
++<translation id="753534427205733210">{0,plural, =1{1분 후 Gooroom browser이 다시 시작됩니다}other{#분 후 Gooroom browser이 다시 시작됩니다}}</translation>
++<translation id="7549178288319965365">Gooroom browser OS 정보</translation>
++<translation id="7561906087460245826">Gooroom browser(<ph name="URL" />)에서도 데이터 삭제</translation>
++<translation id="761356813943268536">Gooroom browser이 카메라와 마이크를 사용 중입니다.</translation>
++<translation id="7617377681829253106">더욱 업그레이드된 Gooroom browser</translation>
++<translation id="7686590090926151193">Gooroom browser이 기본 브라우저로 설정되어 있지 않습니다</translation>
++<translation id="7689606757190482937">모든 기기에서 Gooroom browser을 동기화하고 맞춤설정하세요.</translation>
++<translation id="7729447699958282447">도메인에서 동기화를 사용할 수 없어 Gooroom browser에서 데이터를 동기화하지 못했습니다.</translation>
++<translation id="7745317241717453663">인터넷 사용 기록이 기기에서 삭제됩니다. 나중에 데이터를 가져오려면 Gooroom browser에 <ph name="USER_EMAIL" />(으)로 로그인하세요.</translation>
+ <translation id="7747138024166251722">설치 프로그램이 임시 디렉터리를 만들지 못했습니다. 디스크 공간 및 설치 권한을 확인해 보세요.</translation>
+-<translation id="7773960292263897147">경고: Chromium은 확장 프로그램이 인터넷 방문 기록을 저장하지 못하도록 할 수 없습니다. 시크릿 모드에서 이 확장 프로그램을 사용 중지하려면 옵션을 선택 취소하세요.</translation>
+-<translation id="7790626492778995050"><ph name="PAGE_TITLE" /> - Chromium Canary</translation>
+-<translation id="7867198900892795913">Chromium을 최신 버전으로 업데이트하지 못했기 때문에 새로운 기능과 보안 수정 사항이 적용되지 않았습니다.</translation>
+-<translation id="7901117350626490574">Chromium 업데이트가 있습니다. 다시 시작하면 바로 업데이트됩니다.</translation>
+-<translation id="7937630085815544518"><ph name="USER_EMAIL_ADDRESS" />(으)로 Chromium에 로그인되어 있습니다. 같은 계정으로 다시 로그인해 주세요.</translation>
+-<translation id="7962572577636132072">Chromium은 자동으로 업데이트되므로 항상 최신 버전을 사용할 수 있습니다.</translation>
+-<translation id="7975919845073681630">Chromium의 보조 설치이며 기본 브라우저로 설정할 수 없습니다.</translation>
+-<translation id="7979877361127045932">Chromium 메뉴에서 숨기기</translation>
+-<translation id="8013436988911883588">Chromium에 액세스 권한을 부여하면 웹사이트에서 액세스 권한을 요청할 수 있게 됩니다.</translation>
++<translation id="7773960292263897147">경고: Gooroom browser은 확장 프로그램이 인터넷 방문 기록을 저장하지 못하도록 할 수 없습니다. 시크릿 모드에서 이 확장 프로그램을 사용 중지하려면 옵션을 선택 취소하세요.</translation>
++<translation id="7790626492778995050"><ph name="PAGE_TITLE" /> - Gooroom browser Canary</translation>
++<translation id="7867198900892795913">Gooroom browser을 최신 버전으로 업데이트하지 못했기 때문에 새로운 기능과 보안 수정 사항이 적용되지 않았습니다.</translation>
++<translation id="7901117350626490574">Gooroom browser 업데이트가 있습니다. 다시 시작하면 바로 업데이트됩니다.</translation>
++<translation id="7937630085815544518"><ph name="USER_EMAIL_ADDRESS" />(으)로 Gooroom browser에 로그인되어 있습니다. 같은 계정으로 다시 로그인해 주세요.</translation>
++<translation id="7962572577636132072">Gooroom browser은 자동으로 업데이트되므로 항상 최신 버전을 사용할 수 있습니다.</translation>
++<translation id="7975919845073681630">Gooroom browser의 보조 설치이며 기본 브라우저로 설정할 수 없습니다.</translation>
++<translation id="7979877361127045932">Gooroom browser 메뉴에서 숨기기</translation>
++<translation id="8013436988911883588">Gooroom browser에 액세스 권한을 부여하면 웹사이트에서 액세스 권한을 요청할 수 있게 됩니다.</translation>
+ <translation id="8030318113982266900">기기를 <ph name="CHANNEL_NAME" /> 채널로 업데이트하는 중...</translation>
+-<translation id="81770708095080097">이 파일은 위험하므로 Chromium에서 차단했습니다.</translation>
+-<translation id="8222496066431494154">휴대전화에 Chromium을 설치하세요. 다음의 계정 복구 전화번호로 SMS를 보내 드리겠습니다. <ph name="PHONE_NUMBER" /></translation>
+-<translation id="8248265253516264921">이미지에 유용한 설명이 없으면 Chromium에서 자동으로 설명을 제공하려고 시도합니다. 설명을 생성하기 위해 이미지가 Google로 전송됩니다. 이 기능은 언제든지 설정에서 사용 중지할 수 있습니다.</translation>
+-<translation id="8269379391216269538">Chromium 개선에 참여</translation>
+-<translation id="8290862415967981663">이 파일은 위험할 수 있으므로 Chromium에서 차단했습니다.</translation>
+-<translation id="8330519371938183845">로그인하여 모든 기기에서 Chromium을 동기화하고 맞춤설정하세요.</translation>
+-<translation id="8340674089072921962"><ph name="USER_EMAIL_ADDRESS" />에서 이전에 Chromium을 사용한 적이 있음</translation>
+-<translation id="8375950122744241554">Chromium 70부터는 관리 대상 사용자 프로필을 사용할 수 없습니다.</translation>
+-<translation id="8417404458978023919">{0,plural, =1{1일 이내로 Chromium을 다시 시작해 주세요}other{#일 이내로 Chromium을 다시 시작해 주세요}}</translation>
+-<translation id="8453117565092476964">설치 프로그램 아카이브가 손상되었거나 잘못되었습니다. Chromium을 다시 다운로드하세요.</translation>
+-<translation id="8493179195440786826">Chromium이 이전 버전임</translation>
+-<translation id="85843667276690461">Chromium 사용에 대한 도움말</translation>
+-<translation id="8586442755830160949">Copyright <ph name="YEAR" /> The Chromium Authors. All rights reserved.</translation>
+-<translation id="8619360774459241877">Chromium 실행 중...</translation>
+-<translation id="8621669128220841554">알 수 없는 오류로 인해 설치에 실패했습니다. Chromium을 다시 다운로드하세요.</translation>
++<translation id="81770708095080097">이 파일은 위험하므로 Gooroom browser에서 차단했습니다.</translation>
++<translation id="8222496066431494154">휴대전화에 Gooroom browser을 설치하세요. 다음의 계정 복구 전화번호로 SMS를 보내 드리겠습니다. <ph name="PHONE_NUMBER" /></translation>
++<translation id="8248265253516264921">이미지에 유용한 설명이 없으면 Gooroom browser에서 자동으로 설명을 제공하려고 시도합니다. 설명을 생성하기 위해 이미지가 Google로 전송됩니다. 이 기능은 언제든지 설정에서 사용 중지할 수 있습니다.</translation>
++<translation id="8269379391216269538">Gooroom browser 개선에 참여</translation>
++<translation id="8290862415967981663">이 파일은 위험할 수 있으므로 Gooroom browser에서 차단했습니다.</translation>
++<translation id="8330519371938183845">로그인하여 모든 기기에서 Gooroom browser을 동기화하고 맞춤설정하세요.</translation>
++<translation id="8340674089072921962"><ph name="USER_EMAIL_ADDRESS" />에서 이전에 Gooroom browser을 사용한 적이 있음</translation>
++<translation id="8375950122744241554">Gooroom browser 70부터는 관리 대상 사용자 프로필을 사용할 수 없습니다.</translation>
++<translation id="8417404458978023919">{0,plural, =1{1일 이내로 Gooroom browser을 다시 시작해 주세요}other{#일 이내로 Gooroom browser을 다시 시작해 주세요}}</translation>
++<translation id="8453117565092476964">설치 프로그램 아카이브가 손상되었거나 잘못되었습니다. Gooroom browser을 다시 다운로드하세요.</translation>
++<translation id="8493179195440786826">Gooroom browser이 이전 버전임</translation>
++<translation id="85843667276690461">Gooroom browser 사용에 대한 도움말</translation>
++<translation id="8586442755830160949">Copyright <ph name="YEAR" /> The Gooroom browser Authors. All rights reserved.</translation>
++<translation id="8619360774459241877">Gooroom browser 실행 중...</translation>
++<translation id="8621669128220841554">알 수 없는 오류로 인해 설치에 실패했습니다. Gooroom browser을 다시 다운로드하세요.</translation>
+ <translation id="8667808506758191620"><ph name="DEVICE_TYPE" />이(가) 최신 버전입니다.</translation>
+-<translation id="8697124171261953979">또한 Chromium을 시작하거나 검색주소창에서 검색할 때 표시되는 페이지를 설정합니다.</translation>
+-<translation id="8704119203788522458">나만의 Chromium</translation>
+-<translation id="8748383401829947534">모든 Chromium 버전 종료</translation>
+-<translation id="8796602469536043152">이 사이트에서 카메라와 마이크에 액세스하려면 Chromium에 권한이 필요합니다</translation>
+-<translation id="8803635938069941624">Chromium OS 용어</translation>
+-<translation id="8821041990367117597">계정의 로그인 세부정보가 오래되어 Chromium에서 데이터를 동기화하지 못했습니다.</translation>
++<translation id="8697124171261953979">또한 Gooroom browser을 시작하거나 검색주소창에서 검색할 때 표시되는 페이지를 설정합니다.</translation>
++<translation id="8704119203788522458">나만의 Gooroom browser</translation>
++<translation id="8748383401829947534">모든 Gooroom browser 버전 종료</translation>
++<translation id="8796602469536043152">이 사이트에서 카메라와 마이크에 액세스하려면 Gooroom browser에 권한이 필요합니다</translation>
++<translation id="8803635938069941624">Gooroom browser OS 용어</translation>
++<translation id="8821041990367117597">계정의 로그인 세부정보가 오래되어 Gooroom browser에서 데이터를 동기화하지 못했습니다.</translation>
+ <translation id="8862326446509486874">시스템 수준의 설치 권한이 없습니다. 관리자 권한으로 설치 프로그램을 다시 실행해 보세요.</translation>
+-<translation id="8897323336392112261">또한 Chromium을 시작하거나 홈 버튼을 클릭할 때 표시되는 페이지를 설정합니다.</translation>
+-<translation id="8907580949721785412">Chromium에서 비밀번호를 표시하려고 합니다. 허용하려면 Windows 비밀번호를 입력하세요.</translation>
+-<translation id="8941642502866065432">Chromium을 업데이트하지 못함</translation>
++<translation id="8897323336392112261">또한 Gooroom browser을 시작하거나 홈 버튼을 클릭할 때 표시되는 페이지를 설정합니다.</translation>
++<translation id="8907580949721785412">Gooroom browser에서 비밀번호를 표시하려고 합니다. 허용하려면 Windows 비밀번호를 입력하세요.</translation>
++<translation id="8941642502866065432">Gooroom browser을 업데이트하지 못함</translation>
+ <translation id="8974095189086268230">Chrome OS는 추가 <ph name="BEGIN_LINK_CROS_OSS" />오픈소스 소프트웨어<ph name="END_LINK_CROS_OSS" />를 사용했습니다.</translation>
+-<translation id="8985587603644336029">다른 사용자가 이전에 이 컴퓨터에서 <ph name="ACCOUNT_EMAIL_LAST" />(으)로 Chromium에 로그인했습니다. 본인의 계정이 아닌 경우 새로운 Chromium 사용자를 만들어 정보를 분리하세요.
++<translation id="8985587603644336029">다른 사용자가 이전에 이 컴퓨터에서 <ph name="ACCOUNT_EMAIL_LAST" />(으)로 Gooroom browser에 로그인했습니다. 본인의 계정이 아닌 경우 새로운 Gooroom browser 사용자를 만들어 정보를 분리하세요.
+ 
+-로그인하면 북마크, 방문 기록 및 기타 설정과 같은 Chromium 정보가 <ph name="ACCOUNT_EMAIL_NEW" />에 병합됩니다.</translation>
+-<translation id="9019929317751753759">Google에서는 Chromium의 보안을 강화하기 위해 <ph name="IDS_EXTENSION_WEB_STORE_TITLE" />에 표시되지 않고 사용자가 모르게 추가되었을 수 있는 다음 확장 프로그램의 사용을 중지했습니다.</translation>
+-<translation id="9022552996538154597">Chromium에 로그인</translation>
+-<translation id="9025992965467895364">페이지에서 너무 많은 메모리를 사용하므로 Chromium에서 페이지를 일시중지했습니다.</translation>
+-<translation id="9036189287518468038">Chromium 앱 런처</translation>
+-<translation id="9089354809943900324">Chromium이 이전 버전임</translation>
+-<translation id="9093206154853821181">{0,plural, =1{1시간 후 Chromium이 다시 시작됩니다}other{#시간 후 Chromium이 다시 시작됩니다}}</translation>
+-<translation id="91086099826398415">새 Chromium 탭에서 링크 열기(&amp;T)</translation>
++로그인하면 북마크, 방문 기록 및 기타 설정과 같은 Gooroom browser 정보가 <ph name="ACCOUNT_EMAIL_NEW" />에 병합됩니다.</translation>
++<translation id="9019929317751753759">Google에서는 Gooroom browser의 보안을 강화하기 위해 <ph name="IDS_EXTENSION_WEB_STORE_TITLE" />에 표시되지 않고 사용자가 모르게 추가되었을 수 있는 다음 확장 프로그램의 사용을 중지했습니다.</translation>
++<translation id="9022552996538154597">Gooroom browser에 로그인</translation>
++<translation id="9025992965467895364">페이지에서 너무 많은 메모리를 사용하므로 Gooroom browser에서 페이지를 일시중지했습니다.</translation>
++<translation id="9036189287518468038">Gooroom browser 앱 런처</translation>
++<translation id="9089354809943900324">Gooroom browser이 이전 버전임</translation>
++<translation id="9093206154853821181">{0,plural, =1{1시간 후 Gooroom browser이 다시 시작됩니다}other{#시간 후 Gooroom browser이 다시 시작됩니다}}</translation>
++<translation id="91086099826398415">새 Gooroom browser 탭에서 링크 열기(&amp;T)</translation>
+ <translation id="911206726377975832">인터넷 사용 기록도 삭제하시겠습니까?</translation>
+-<translation id="9158494823179993217">시스템 관리자가 <ph name="TARGET_URL_HOSTNAME" /> 액세스를 위해 대체 브라우저를 열도록 Chromium을 구성했습니다.</translation>
+-<translation id="918373042641772655"><ph name="USERNAME" />의 연결을 해제하면 이 기기에 저장된 방문 기록, 북마크, 설정 및 Chromium 데이터가 삭제됩니다. Google 계정에 저장된 데이터는 삭제되지 않으며 <ph name="GOOGLE_DASHBOARD_LINK" />Google 대시보드<ph name="END_GOOGLE_DASHBOARD_LINK" />에서 관리될 수 있습니다.</translation>
+-<translation id="9190841055450128916">Chromium(mDNS-In)</translation>
+-<translation id="9197815481970649201">이제 Chromium에 로그인되었습니다.</translation>
+-<translation id="93478295209880648">Windows XP 또는 Windows Vista에서 더 이상 Chromium을 지원하지 않으므로 Chromium이 올바르게 작동하지 않을 수 있습니다</translation>
+-<translation id="95514773681268843">이 기기를 사용하기 전에 <ph name="DOMAIN" />에서 다음 서비스 약관을 읽고 동의해야 합니다. 이 약관은 Chromium OS 약관을 확장, 수정 또는 제한하지 않습니다.</translation>
+-<translation id="985602178874221306">The Chromium Authors</translation>
+-</translationbundle>
+\ No newline at end of file
++<translation id="9158494823179993217">시스템 관리자가 <ph name="TARGET_URL_HOSTNAME" /> 액세스를 위해 대체 브라우저를 열도록 Gooroom browser을 구성했습니다.</translation>
++<translation id="918373042641772655"><ph name="USERNAME" />의 연결을 해제하면 이 기기에 저장된 방문 기록, 북마크, 설정 및 Gooroom browser 데이터가 삭제됩니다. Google 계정에 저장된 데이터는 삭제되지 않으며 <ph name="GOOGLE_DASHBOARD_LINK" />Google 대시보드<ph name="END_GOOGLE_DASHBOARD_LINK" />에서 관리될 수 있습니다.</translation>
++<translation id="9190841055450128916">Gooroom browser(mDNS-In)</translation>
++<translation id="9197815481970649201">이제 Gooroom browser에 로그인되었습니다.</translation>
++<translation id="93478295209880648">Windows XP 또는 Windows Vista에서 더 이상 Gooroom browser을 지원하지 않으므로 Gooroom browser이 올바르게 작동하지 않을 수 있습니다</translation>
++<translation id="95514773681268843">이 기기를 사용하기 전에 <ph name="DOMAIN" />에서 다음 서비스 약관을 읽고 동의해야 합니다. 이 약관은 Gooroom browser OS 약관을 확장, 수정 또는 제한하지 않습니다.</translation>
++<translation id="985602178874221306">The Gooroom browser Authors</translation>
++</translationbundle>
+diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+index 79382c26a8ad..f54432c63838 100644
+--- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
++++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+@@ -54,7 +54,7 @@
+ <translation id="1067291318998134776">Linux(베타)</translation>
+ <translation id="1067922213147265141">다른 Google 서비스</translation>
+ <translation id="1070066693520972135">WEP</translation>
+-<translation id="1070377999570795893">컴퓨터의 다른 프로그램에서 Chrome 작동에 영향을 줄 수 있는 확장 프로그램을 추가했습니다. 
++<translation id="1070377999570795893">컴퓨터의 다른 프로그램에서 Gooroom browser 작동에 영향을 줄 수 있는 확장 프로그램을 추가했습니다. 
+ 
+ <ph name="EXTENSION_NAME" /></translation>
+ <translation id="1070705170564860382"><ph name="COUNTDOWN_SECONDS" />초 후 대체 브라우저에서 열림</translation>
+@@ -63,7 +63,7 @@
+ <translation id="1076698951459398590">테마 사용</translation>
+ <translation id="1076818208934827215">Microsoft Internet Explorer</translation>
+ <translation id="1079766198702302550">카메라 액세스 항상 차단</translation>
+-<translation id="1082398631555931481"><ph name="THIRD_PARTY_TOOL_NAME" />에서 Chrome 설정을 기본값으로 복원하려 합니다. 홈페이지, 새 탭 페이지, 검색엔진이 초기화되고, 확장 프로그램이 사용 중지되며, 모든 탭이 고정 해제됩니다. 쿠키, 콘텐츠 데이터, 사이트 데이터 등 기타 임시 데이터와 캐시된 데이터도 삭제됩니다.</translation>
++<translation id="1082398631555931481"><ph name="THIRD_PARTY_TOOL_NAME" />에서 Gooroom browser 설정을 기본값으로 복원하려 합니다. 홈페이지, 새 탭 페이지, 검색엔진이 초기화되고, 확장 프로그램이 사용 중지되며, 모든 탭이 고정 해제됩니다. 쿠키, 콘텐츠 데이터, 사이트 데이터 등 기타 임시 데이터와 캐시된 데이터도 삭제됩니다.</translation>
+ <translation id="1082725763867769612">오프라인 파일</translation>
+ <translation id="1084824384139382525">링크 주소 복사(&amp;E)</translation>
+ <translation id="1085697365578766383">가상 머신을 시작하는 동안 문제가 발생했습니다. 다시 시도해 주세요.</translation>
+@@ -80,7 +80,7 @@
+ <translation id="1112420131909513020">배경 탭에서 블루투스를 사용 중입니다.</translation>
+ <translation id="1114102982691049955"><ph name="PRINTER_MANUFACTURER" /> <ph name="PRINTER_MODEL" />(USB)</translation>
+ <translation id="1114202307280046356">다이아몬드</translation>
+-<translation id="1114335938027186412">컴퓨터에 TPM(신뢰할 수 있는 플랫폼 모듈) 보안 기기가 있습니다. 이 기기는 Chrome OS에서 여러 중요한 보안 기능을 구현하는 데 사용됩니다. 자세히 알아보려면 Chromebook 고객센터의 다음 페이지를 방문하세요. https://support.google.com/chromebook/?p=tpm</translation>
++<translation id="1114335938027186412">컴퓨터에 TPM(신뢰할 수 있는 플랫폼 모듈) 보안 기기가 있습니다. 이 기기는 Gooroom browser OS에서 여러 중요한 보안 기능을 구현하는 데 사용됩니다. 자세히 알아보려면 Chromebook 고객센터의 다음 페이지를 방문하세요. https://support.google.com/chromebook/?p=tpm</translation>
+ <translation id="1114525161406758033">덮개가 닫히면 절전 모드</translation>
+ <translation id="1116639326869298217">본인 여부를 확인할 수 없습니다.</translation>
+ <translation id="1116694919640316211">정보</translation>
+@@ -112,7 +112,7 @@
+ <translation id="1143142264369994168">인증서 서명자</translation>
+ <translation id="1145292499998999162">플러그인 차단됨</translation>
+ <translation id="1145532888383813076">기기, 앱, 웹에서 검색하세요.</translation>
+-<translation id="114721135501989771">Google로 Chrome을 더욱 스마트하게</translation>
++<translation id="114721135501989771">Google로 Gooroom browser을 더욱 스마트하게</translation>
+ <translation id="1149401351239820326">유효기간 월</translation>
+ <translation id="1150565364351027703">선글라스</translation>
+ <translation id="1151917987301063366"><ph name="HOST" />에서 센서에 액세스하도록 항상 허용</translation>
+@@ -227,7 +227,7 @@
+ <translation id="1316136264406804862">검색 중...</translation>
+ <translation id="1316495628809031177">동기화 일시중지됨</translation>
+ <translation id="1322046419516468189"><ph name="SAVED_PASSWORDS_STORE" />에 저장된 비밀번호 보기 및 관리</translation>
+-<translation id="1326317727527857210">다른 기기에서 탭을 가져오려면 Chrome에 로그인하세요.</translation>
++<translation id="1326317727527857210">다른 기기에서 탭을 가져오려면 Gooroom browser에 로그인하세요.</translation>
+ <translation id="1327074568633507428">Google 클라우드 프린트의 프린터</translation>
+ <translation id="1327977588028644528">게이트웨이</translation>
+ <translation id="1329584516321524826">조금 전 업데이트됨</translation>
+@@ -393,7 +393,7 @@
+ <translation id="1581962803218266616">Finder에서 보기</translation>
+ <translation id="1584990664401018068">사용 중인 Wi-Fi 네트워크(<ph name="NETWORK_ID" />)에서 인증을 요청할 수 있습니다.</translation>
+ <translation id="1585238069289523942">Chromebook에 앱을 설치하세요.</translation>
+-<translation id="1585717515139318619">컴퓨터의 다른 프로그램에서 Chrome 작동에 영향을 줄 수 있는 테마를 추가했습니다. 
++<translation id="1585717515139318619">컴퓨터의 다른 프로그램에서 Gooroom browser 작동에 영향을 줄 수 있는 테마를 추가했습니다. 
+ 
+ <ph name="EXTENSION_NAME" /></translation>
+ <translation id="1587275751631642843">자바스크립트 콘솔(&amp;J)</translation>
+@@ -430,7 +430,7 @@
+ <translation id="1637224376458524414">iPhone에서 이 북마크 이용하기</translation>
+ <translation id="1637765355341780467">프로필을 여는 동안 문제가 발생했습니다. 일부 기능을 사용할 수 없습니다.</translation>
+ <translation id="1639239467298939599">로드 중</translation>
+-<translation id="163993578339087550"><ph name="SERVICE_NAME" />에서 내가 사용 중인 Chrome OS 기기가 적합한지 확인하려고 합니다.</translation>
++<translation id="163993578339087550"><ph name="SERVICE_NAME" />에서 내가 사용 중인 Gooroom browser OS 기기가 적합한지 확인하려고 합니다.</translation>
+ <translation id="1640283014264083726">PKCS #1 MD4(RSA 암호화 사용)</translation>
+ <translation id="1642494467033190216">rootfs 보호를 삭제하고 다시 시작해야 다른 디버깅 기능을 사용 설정할 수 있습니다.</translation>
+ <translation id="1643050526526937107">동기화만 사용</translation>
+@@ -438,7 +438,7 @@
+ <translation id="1644574205037202324">방문 기록</translation>
+ <translation id="1645516838734033527">Smart Lock을 사용하려면 <ph name="DEVICE_TYPE" />의 보안 유지를 위해 휴대전화에 화면 잠금을 설정해야 합니다.</translation>
+ <translation id="1646982517418478057">이 인증서를 암호화하려면 비밀번호를 입력하세요.</translation>
+-<translation id="164814987133974965">관리 대상 사용자는 관리자가 정한 범위 내에서 웹을 탐색할 수 있습니다. 관리 대상 사용자의 관리자는 Chrome에서 다음을 수행할 수 있습니다.
++<translation id="164814987133974965">관리 대상 사용자는 관리자가 정한 범위 내에서 웹을 탐색할 수 있습니다. 관리 대상 사용자의 관리자는 Gooroom browser에서 다음을 수행할 수 있습니다.
+     특정 웹사이트 <ph name="BEGIN_BOLD" />허용 또는 금지<ph name="END_BOLD" />
+     관리 대상 사용자가 방문한 웹사이트 <ph name="BEGIN_BOLD" />검토<ph name="END_BOLD" />
+     기타 설정 <ph name="BEGIN_BOLD" />관리<ph name="END_BOLD" /></translation>
+@@ -470,7 +470,7 @@
+ <translation id="1688935057616748272">문자를 입력하세요</translation>
+ <translation id="168991973552362966">근처 프린터 추가</translation>
+ <translation id="1689945336726856614">&amp;URL 복사</translation>
+-<translation id="1692109533452028989">Chrome이 브라우저에서 입력되는 텍스트를 Google로 전송합니다.</translation>
++<translation id="1692109533452028989">Gooroom browser이 브라우저에서 입력되는 텍스트를 Google로 전송합니다.</translation>
+ <translation id="1692115862433274081">다른 계정 사용</translation>
+ <translation id="1692602667007917253">문제가 발생했습니다.</translation>
+ <translation id="1692799361700686467">여러 사이트의 쿠키를 허용했습니다.</translation>
+@@ -516,7 +516,7 @@
+ <translation id="1757301747492736405">제거 대기 중</translation>
+ <translation id="175772926354468439">테마 사용</translation>
+ <translation id="1758018619400202187">EAP-TLS</translation>
+-<translation id="17584710573359123">Chrome 웹 스토어에서 보기</translation>
++<translation id="17584710573359123">Gooroom browser 웹 스토어에서 보기</translation>
+ <translation id="176193854664720708">지문 센서는 전원 버튼에 있습니다. 손가락으로 가볍게 터치하세요.</translation>
+ <translation id="1763046204212875858">애플리케이션 바로가기 만들기</translation>
+ <translation id="1763108912552529023">계속 살펴보기</translation>
+@@ -559,7 +559,7 @@
+ <translation id="1818913467757368489">로그 업로드가 진행 중입니다.</translation>
+ <translation id="1819721979226826163">앱 알림 &gt; Google Play 서비스를 탭합니다.</translation>
+ <translation id="1820028137326691631">관리자가 제공한 비밀번호를 입력하세요.</translation>
+-<translation id="1822140782238030981">이미 Chrome을 사용 중이신가요? 로그인하세요.</translation>
++<translation id="1822140782238030981">이미 Gooroom browser을 사용 중이신가요? 로그인하세요.</translation>
+ <translation id="1826516787628120939">확인 중</translation>
+ <translation id="1828378091493947763">이 기기에서 지원되지 않는 플러그인입니다.</translation>
+ <translation id="1828901632669367785">시스템 대화상자를 사용하여 인쇄...</translation>
+@@ -695,7 +695,7 @@
+ <translation id="204497730941176055">Microsoft Certificate Template Name</translation>
+ <translation id="2045117674524495717">단축키 도움말</translation>
+ <translation id="2045969484888636535">쿠키 계속 차단</translation>
+-<translation id="204622017488417136">기기가 이전에 설치된 버전의 Chrome으로 돌아갑니다. 사용자 계정과 로컬 데이터가 모두 삭제됩니다. 이 작업은 취소할 수 없습니다.</translation>
++<translation id="204622017488417136">기기가 이전에 설치된 버전의 Gooroom browser으로 돌아갑니다. 사용자 계정과 로컬 데이터가 모두 삭제됩니다. 이 작업은 취소할 수 없습니다.</translation>
+ <translation id="2046702855113914483">라면</translation>
+ <translation id="2048182445208425546">네트워크 트래픽에 액세스</translation>
+ <translation id="2048653237708779538">실행할 수 없는 작업</translation>
+@@ -704,7 +704,7 @@
+ <translation id="205560151218727633">Google 어시스턴트 로고</translation>
+ <translation id="2058456167109518507">기기가 검색됨</translation>
+ <translation id="2059913712424898428">시간대</translation>
+-<translation id="2065405795449409761">Chrome이 자동화된 테스트 소프트웨어에 의해 제어되고 있습니다.</translation>
++<translation id="2065405795449409761">Gooroom browser이 자동화된 테스트 소프트웨어에 의해 제어되고 있습니다.</translation>
+ <translation id="2071393345806050157">로컬 로그 파일이 없습니다.</translation>
+ <translation id="2075474481720804517">배터리 <ph name="BATTERY_PERCENTAGE" />% 남음</translation>
+ <translation id="2075959085554270910">탭하여 클릭 및 탭 드래그를 사용/사용 중지하도록 허용합니다.</translation>
+@@ -716,14 +716,14 @@
+ <translation id="2079545284768500474">실행취소</translation>
+ <translation id="2080070583977670716">설정 더보기</translation>
+ <translation id="2087822576218954668">인쇄: <ph name="PRINT_NAME" /></translation>
+-<translation id="2089566709556890888">Chrome으로 안전하게 탐색</translation>
++<translation id="2089566709556890888">Gooroom browser으로 안전하게 탐색</translation>
+ <translation id="2089795179672254991">사이트에서 클립보드에 복사된 텍스트 및 이미지를 보려는 경우 확인(권장)</translation>
+ <translation id="2090165459409185032">계정 정보를 복구하려면 google.com/accounts/recovery 페이지로 이동하세요.</translation>
+ <translation id="2090876986345970080">시스템 보안 설정</translation>
+ <translation id="2091887806945687916">소리</translation>
+-<translation id="2097372108957554726">새 기기를 등록하려면 Chrome에 로그인하세요.</translation>
++<translation id="2097372108957554726">새 기기를 등록하려면 Gooroom browser에 로그인하세요.</translation>
+ <translation id="2098305189700762159">찾을 수 없음</translation>
+-<translation id="2099172618127234427">sshd 데몬을 설정하고 USB 드라이브에서 부팅하도록 사용 설정하는 Chrome OS 디버깅 기능을 사용 설정 중입니다.</translation>
++<translation id="2099172618127234427">sshd 데몬을 설정하고 USB 드라이브에서 부팅하도록 사용 설정하는 Gooroom browser OS 디버깅 기능을 사용 설정 중입니다.</translation>
+ <translation id="2099686503067610784">서버 인증서 '<ph name="CERTIFICATE_NAME" />'을(를) 삭제하시겠습니까?</translation>
+ <translation id="2100273922101894616">자동 로그인</translation>
+ <translation id="2101225219012730419">버전:</translation>
+@@ -781,7 +781,7 @@
+ <translation id="2178098616815594724"><ph name="PEPPER_PLUGIN_DOMAIN" />의 <ph name="PEPPER_PLUGIN_NAME" />에서 내 컴퓨터에 액세스하려고 합니다</translation>
+ <translation id="2178614541317717477">CA 손상</translation>
+ <translation id="218070003709087997">숫자로 인쇄 부수를 표시하세요(1부터 999까지).</translation>
+-<translation id="2184515124301515068">사이트의 소리 재생 여부를 Chrome이 결정(권장)</translation>
++<translation id="2184515124301515068">사이트의 소리 재생 여부를 Gooroom browser이 결정(권장)</translation>
+ <translation id="2187895286714876935">서버 인증서 가져오기 오류</translation>
+ <translation id="2187906491731510095">확장 프로그램 업데이트됨</translation>
+ <translation id="2188881192257509750"><ph name="APPLICATION" /> 열기</translation>
+@@ -793,9 +793,9 @@
+ <translation id="2193365732679659387">신뢰 설정</translation>
+ <translation id="2195729137168608510">이메일 보호</translation>
+ <translation id="2199298570273670671">오류</translation>
+-<translation id="2199719347983604670">Chrome 동기화 데이터</translation>
++<translation id="2199719347983604670">Gooroom browser 동기화 데이터</translation>
+ <translation id="2200094388063410062">이메일</translation>
+-<translation id="2200356397587687044">계속하려면 Chrome에 권한이 필요함</translation>
++<translation id="2200356397587687044">계속하려면 Gooroom browser에 권한이 필요함</translation>
+ <translation id="220138918934036434">버튼 숨기기</translation>
+ <translation id="2202898655984161076">프린터를 나열하는 데 문제가 발생했습니다. <ph name="CLOUD_PRINT_NAME" />에 성공적으로 등록되지 못한 프린터가 있을 수 있습니다.</translation>
+ <translation id="2203682048752833055"><ph name="BEGIN_LINK" />주소 표시줄<ph name="END_LINK" />에서 사용되는 검색엔진</translation>
+@@ -808,7 +808,7 @@
+ <translation id="2214893006758804920">{LINE_COUNT,plural, =1{&lt;1줄이 표시되지 않음&gt;}other{&lt;<ph name="NUMBER_OF_LINES" />줄이 표시되지 않음&gt;}}</translation>
+ <translation id="2217501013957346740">이름 만들기 -</translation>
+ <translation id="2218019600945559112">마우스 및 터치패드</translation>
+-<translation id="2218320521449013367">Chrome에서 유해한 소프트웨어를 제거하는 중에 오류가 발생했습니다.</translation>
++<translation id="2218320521449013367">Gooroom browser에서 유해한 소프트웨어를 제거하는 중에 오류가 발생했습니다.</translation>
+ <translation id="2218515861914035131">일반 텍스트로 붙여넣기</translation>
+ <translation id="221872881068107022">역방향 스크롤</translation>
+ <translation id="2220409419896228519">즐겨찾는 Google 앱에 책갈피를 추가합니다.</translation>
+@@ -910,7 +910,7 @@
+ <translation id="2352810082280059586">잠금 화면 메모는 자동으로 <ph name="LOCK_SCREEN_APP_NAME" />에 저장됩니다. 가장 최근 메모는 잠금 화면에 계속 표시됩니다.</translation>
+ <translation id="2353297238722298836">카메라 및 마이크 허용됨</translation>
+ <translation id="2356070529366658676">확인</translation>
+-<translation id="2357949918965361754">이 기능을 사용하면 TV 또는 다른 기기에 Chrome의 콘텐츠를 표시할 수 있습니다.</translation>
++<translation id="2357949918965361754">이 기능을 사용하면 TV 또는 다른 기기에 Gooroom browser의 콘텐츠를 표시할 수 있습니다.</translation>
+ <translation id="2359345697448000899">도구 메뉴에서 확장 프로그램을 클릭하여 확장 프로그램을 관리할 수 있습니다.</translation>
+ <translation id="2359808026110333948">계속</translation>
+ <translation id="236117173274098341">최적화</translation>
+@@ -948,7 +948,7 @@
+ <translation id="2428510569851653187">탭이 다운되었을 때 무엇을 하고 계셨는지 설명해 주세요.</translation>
+ <translation id="2431027948063157455">Google 어시스턴트를 로드할 수 없습니다. 네트워크 연결 상태를 확인하고 다시 시도해 보세요.</translation>
+ <translation id="2432753757290432042">Linux(베타) 업데이트 필요</translation>
+-<translation id="2433452467737464329">URL에 다음 검색어 매개변수를 추가하여 페이지를 자동으로 새로고침: chrome://network/?refresh=&lt;sec&gt;</translation>
++<translation id="2433452467737464329">URL에 다음 검색어 매개변수를 추가하여 페이지를 자동으로 새로고침: gooroom://network/?refresh=&lt;sec&gt;</translation>
+ <translation id="2433507940547922241">모양</translation>
+ <translation id="2433836460518180625">기기 잠금 해제만</translation>
+ <translation id="2435248616906486374">네트워크 연결 끊김</translation>
+@@ -1052,7 +1052,7 @@
+ <translation id="2571655996835834626">쿠키, 자바스크립트, 플러그인, 위치정보, 마이크, 카메라 등의 기능에 대한 웹사이트의 액세스 권한을 관리하는 설정을 변경합니다.</translation>
+ <translation id="2572032849266859634"><ph name="VOLUME_NAME" />에 대한 읽기 전용 액세스가 허용되었습니다.</translation>
+ <translation id="2575247648642144396">현재 페이지에서 확장 프로그램을 실행할 수 있으면 아이콘이 표시됩니다. 아이콘을 클릭하거나 <ph name="EXTENSION_SHORTCUT" />을(를) 눌러 확장 프로그램을 사용합니다.</translation>
+-<translation id="257779572837908839">Chromebox 화상회의 시스템으로 설정</translation>
++<translation id="257779572837908839">Gooroom browserbox 화상회의 시스템으로 설정</translation>
+ <translation id="2580889980133367162"><ph name="HOST" />에서 여러 파일을 다운로드할 수 있도록 항상 허용</translation>
+ <translation id="2580924999637585241">합계: <ph name="NUMBER_OF_SHEETS" /><ph name="SHEETS_LABEL" /></translation>
+ <translation id="258095186877893873">길게</translation>
+@@ -1061,7 +1061,7 @@
+ <translation id="2586657967955657006">클립보드</translation>
+ <translation id="2586672484245266891">더 짧은 URL을 입력하세요.</translation>
+ <translation id="2587922270115112871">관리 대상 사용자를 생성해도 Google 계정이 생성되지 않으며, 해당 사용자의 설정
+-    및 데이터는 Chrome 동기화를 통해 다른 기기에 동기화되지 않습니다. 관리 대상 사용자는 이 기기에만 적용됩니다.</translation>
++    및 데이터는 Gooroom browser 동기화를 통해 다른 기기에 동기화되지 않습니다. 관리 대상 사용자는 이 기기에만 적용됩니다.</translation>
+ <translation id="2588636910004461974"><ph name="VENDOR_NAME" />의 기기</translation>
+ <translation id="258932246702879617"><ph name="BEGIN_BOLD" />작업 표시줄에 고정<ph name="END_BOLD" /> 선택</translation>
+ <translation id="2594999711683503743">Google에서 검색하거나 URL을 입력하세요.</translation>
+@@ -1092,7 +1092,7 @@
+ <translation id="2633764681656412085">FIDO</translation>
+ <translation id="2635094637295383009">Twitter</translation>
+ <translation id="2635276683026132559">서명</translation>
+-<translation id="2636625531157955190">Chrome에서 이미지에 액세스할 수 없습니다.</translation>
++<translation id="2636625531157955190">Gooroom browser에서 이미지에 액세스할 수 없습니다.</translation>
+ <translation id="2637400434494156704">잘못된 PIN입니다. 앞으로 1번 더 시도할 수 있습니다.</translation>
+ <translation id="2638087589890736295">동기화를 시작하려면 암호가 필요합니다.</translation>
+ <translation id="2642111877055905627">축구공</translation>
+@@ -1108,14 +1108,14 @@
+ <translation id="2660779039299703961">이벤트</translation>
+ <translation id="266079277508604648">프린터에 연결할 수 없습니다. 프린터가 켜져 있으며 Wi-Fi 또는 USB를 통해 Chromebook에 연결되어 있는지 확인하세요.</translation>
+ <translation id="2661714428027871023">라이트 모드를 사용하여 더 빠르게 탐색하고 데이터를 절약하세요. 자세한 내용을 확인하려면 클릭하세요.</translation>
+-<translation id="2662876636500006917">Chrome Web Store</translation>
++<translation id="2662876636500006917">Gooroom browser Web Store</translation>
+ <translation id="2663302507110284145">언어</translation>
+ <translation id="2665394472441560184">새 단어 추가</translation>
+ <translation id="2665717534925640469">페이지가 현재 전체화면으로 전환되었으며 마우스 커서를 사용 중지했습니다.</translation>
+ <translation id="2665919335226618153">포맷 중에 오류가 발생했습니다.</translation>
+ <translation id="2666990579225592931">게스트 창 열기</translation>
+ <translation id="2667463864537187133">맞춤법 검사 관리</translation>
+-<translation id="2670102641511624474"><ph name="APP_NAME" />이(가) Chrome 탭을 공유합니다.</translation>
++<translation id="2670102641511624474"><ph name="APP_NAME" />이(가) Gooroom browser 탭을 공유합니다.</translation>
+ <translation id="2670429602441959756">이 페이지에는 아직 VR에서 지원되지 않는 기능이 있습니다. 종료합니다...</translation>
+ <translation id="2671451824761031126">북마크와 설정을 가져왔습니다.</translation>
+ <translation id="2672142220933875349">잘못된 crx 파일입니다. 압축을 해제하지 못했습니다.</translation>
+@@ -1134,7 +1134,7 @@
+ <translation id="2693176596243495071">죄송합니다. 알 수 없는 오류가 발생했습니다. 나중에 다시 시도하거나 문제가 계속되는 경우 관리자에게 문의하세요.</translation>
+ <translation id="2695749433451188613">인터넷 인쇄 프로토콜(HTTPS)</translation>
+ <translation id="2699911226086014512">PIN 작업에 실패했습니다. 오류 코드는 <ph name="RETRIES" />입니다.</translation>
+-<translation id="270358213449696159">Google Chrome OS 이용약관 내용</translation>
++<translation id="270358213449696159">Google Gooroom browser OS 이용약관 내용</translation>
+ <translation id="2704184184447774363">Microsoft Document Signing</translation>
+ <translation id="270516211545221798">터치패드 속도</translation>
+ <translation id="2705736684557713153">화면 하단으로 스크롤하여 인스턴트 테더링이 표시되면 사용 설정합니다. 표시되지 않으면 설정이 완료된 것입니다.</translation>
+@@ -1254,9 +1254,9 @@
+ <translation id="2871813825302180988">이 기기에서 이미 사용하고 있는 계정입니다.</translation>
+ <translation id="287286579981869940"><ph name="PROVIDER_NAME" /> 추가...</translation>
+ <translation id="2872961005593481000">종료</translation>
+-<translation id="2874343608108773609">어느 기기에서나 내 비밀번호를 사용하려면 Chrome에 로그인하세요.</translation>
++<translation id="2874343608108773609">어느 기기에서나 내 비밀번호를 사용하려면 Gooroom browser에 로그인하세요.</translation>
+ <translation id="2874939134665556319">이전 트랙</translation>
+-<translation id="2875698561019555027">(Chrome 오류 페이지)</translation>
++<translation id="2875698561019555027">(Gooroom browser 오류 페이지)</translation>
+ <translation id="2876336351874743617">손가락 2</translation>
+ <translation id="2876369937070532032">보안상의 위험이 있을 때 일부 방문 페이지의 URL을 Google로 전송함</translation>
+ <translation id="288042212351694283">Universal 2nd Factor 기기에 액세스</translation>
+@@ -1307,7 +1307,7 @@
+ <translation id="29488703364906173">최신 웹에 맞게 구축된 빠르고 단순하며 안전한 웹 브라우저입니다.</translation>
+ <translation id="2949289451367477459">위치를 사용합니다. 위치 정보 액세스 권한이 있는 앱 및 서비스가 이 기기의 위치를 사용하도록 허용합니다. Google에서는 위치 정확도와 위치 기반 서비스를 개선하기 위해 위치 데이터를 주기적으로 수집하여 익명으로 사용할 수 있습니다. <ph name="BEGIN_LINK1" />자세히 알아보기<ph name="END_LINK1" /></translation>
+ <translation id="2958721676848865875">확장 프로그램 패키지 경고</translation>
+-<translation id="296026337010986570">유해한 소프트웨어 삭제가 완료되었습니다. 확장 프로그램을 다시 사용 설정하려면 &lt;a href="chrome://extensions"&gt;확장 프로그램&lt;/a&gt;으로 이동하세요.</translation>
++<translation id="296026337010986570">유해한 소프트웨어 삭제가 완료되었습니다. 확장 프로그램을 다시 사용 설정하려면 &lt;a href="gooroom://extensions"&gt;확장 프로그램&lt;/a&gt;으로 이동하세요.</translation>
+ <translation id="2961090598421146107"><ph name="CERTIFICATE_NAME" />(확장 프로그램에서 제공)</translation>
+ <translation id="2961695502793809356">클릭하면 다음 페이지로 가고 누르고 있으면 방문 기록이 나타납니다.</translation>
+ <translation id="2963151496262057773">다음 플러그인에서 응답이 없습니다. <ph name="PLUGIN_NAME" />을(를) 중단하시겠습니까?</translation>
+@@ -1387,7 +1387,7 @@
+ <translation id="3082780749197361769">이 탭은 카메라 또는 마이크를 사용 중입니다.</translation>
+ <translation id="3083193146044397360">보안을 위해 일시적으로 차단됨</translation>
+ <translation id="3084548735795614657">드롭하여 설치</translation>
+-<translation id="3084771660770137092">Chrome에 메모리가 부족하거나 웹페이지 프로세싱이 다른 이유로 종료되었습니다. 계속하려면 새로고침하거나 다른 페이지로 이동하세요.</translation>
++<translation id="3084771660770137092">Gooroom browser에 메모리가 부족하거나 웹페이지 프로세싱이 다른 이유로 종료되었습니다. 계속하려면 새로고침하거나 다른 페이지로 이동하세요.</translation>
+ <translation id="3085412380278336437">사이트에서 카메라를 사용할 수 있습니다.</translation>
+ <translation id="3085752524577180175">SOCKS 호스트</translation>
+ <translation id="3088052000289932193">사이트에서 MIDI를 사용합니다.</translation>
+@@ -1424,7 +1424,7 @@
+ 
+     설명:
+     <ph name="LINUX_DESCRIPTION" /></translation>
+-<translation id="3149510190863420837">Chrome 앱</translation>
++<translation id="3149510190863420837">Gooroom browser 앱</translation>
+ <translation id="3150927491400159470">강력 새로고침</translation>
+ <translation id="315116470104423982">모바일 데이터</translation>
+ <translation id="3151539355209957474">시작 시간</translation>
+@@ -1433,7 +1433,7 @@
+ <translation id="3153862085237805241">카드 저장</translation>
+ <translation id="3154351730702813399">기기 관리자가 탐색 활동을 모니터링할 수 있습니다.</translation>
+ <translation id="3154429428035006212">1달 이상 오프라인 상태</translation>
+-<translation id="3156531245809797194">Chrome을 사용하려면 로그인하세요</translation>
++<translation id="3156531245809797194">Gooroom browser을 사용하려면 로그인하세요</translation>
+ <translation id="3157931365184549694">복구</translation>
+ <translation id="3158033540161634471">지문 설정</translation>
+ <translation id="3160842278951476457"><ph name="ISSUED_BY" /> [<ph name="ISSUED_TO" />](하드웨어에 백업됨)</translation>
+@@ -1499,9 +1499,9 @@
+ <translation id="3279230909244266691">이 과정은 몇 분 정도 소요될 수 있습니다. 가상 머신을 시작합니다.</translation>
+ <translation id="3279741024917655738">다음에서 동영상을 전체화면으로 표시</translation>
+ <translation id="3280237271814976245">다른 이름으로 저장(&amp;A)...</translation>
+-<translation id="3280243678470289153">Chrome 사용 계속하기</translation>
++<translation id="3280243678470289153">Gooroom browser 사용 계속하기</translation>
+ <translation id="3281892622610078515">스팸 격리 저장소에 보관할 파일 및 프로그램:</translation>
+-<translation id="3282568296779691940">Chrome에 로그인</translation>
++<translation id="3282568296779691940">Gooroom browser에 로그인</translation>
+ <translation id="3285322247471302225">새 탭(&amp;T)</translation>
+ <translation id="3288047731229977326">개발자 모드로 실행 중인 확장 프로그램은 컴퓨터에 해를 줄 수 있습니다. 개발자가 아닌 경우 컴퓨터를 안전하게 사용하려면 개발자 모드로 실행 중인 확장 프로그램을 사용 중지해야 합니다.</translation>
+ <translation id="3289856944988573801">업데이트를 확인하려면 이더넷 또는 Wi-Fi를 사용하세요.</translation>
+@@ -1681,7 +1681,7 @@
+ <translation id="354602065659584722">유해한 소프트웨어가 삭제됨</translation>
+ <translation id="3547495624659668105">PRL 버전</translation>
+ <translation id="3547954654003013442">프록시 설정</translation>
+-<translation id="3550915441744863158">Chrome은 자동으로 업데이트되므로 항상 최신 버전을 사용할 수 있습니다.</translation>
++<translation id="3550915441744863158">Gooroom browser은 자동으로 업데이트되므로 항상 최신 버전을 사용할 수 있습니다.</translation>
+ <translation id="3551320343578183772">탭 닫기</translation>
+ <translation id="3552780134252864554">종료 시 삭제됨</translation>
+ <translation id="3555812735919707620">확장 프로그램 삭제</translation>
+@@ -1763,10 +1763,10 @@
+ <translation id="3660234220361471169">신뢰할 수 없음</translation>
+ <translation id="3661172646479098821">현재 Android 기기만 지원됩니다.</translation>
+ <translation id="3664511988987167893">확장 프로그램 아이콘</translation>
+-<translation id="3665589677786828986">Chrome에서 다른 프로그램이 브라우저 설정을 일부 손상시키고 원래 기본값으로 재설정했음을 감지했습니다.</translation>
++<translation id="3665589677786828986">Gooroom browser에서 다른 프로그램이 브라우저 설정을 일부 손상시키고 원래 기본값으로 재설정했음을 감지했습니다.</translation>
+ <translation id="3668570675727296296">언어 설정</translation>
+ <translation id="366867565525278777">저장공간이 부족하여 설치할 수 없습니다. 최소 <ph name="INSTALL_SIZE" />의 여유 공간이 필요합니다. 저장공간을 확보하려면 기기 저장소에서 파일을 삭제하세요.</translation>
+-<translation id="3668801437375206837">블루투스 문제를 더 효과적으로 진단하기 위해 Google 직원이 의견 보고서에 추가 블루투스 로그를 포함할 수 있습니다. 이 옵션을 선택하면 보고서에 현재 세션의 btsnoop 및 HCI 로그가 포함됩니다. 이 로그는 개인 식별 정보가 가능한 한 적게 포함되도록 정리되며, Listnr의 Chrome OS 제품 그룹 관리자만 액세스할 수 있습니다. 해당 로그는 90일 후에 삭제됩니다.</translation>
++<translation id="3668801437375206837">블루투스 문제를 더 효과적으로 진단하기 위해 Google 직원이 의견 보고서에 추가 블루투스 로그를 포함할 수 있습니다. 이 옵션을 선택하면 보고서에 현재 세션의 btsnoop 및 HCI 로그가 포함됩니다. 이 로그는 개인 식별 정보가 가능한 한 적게 포함되도록 정리되며, Listnr의 Gooroom browser OS 제품 그룹 관리자만 액세스할 수 있습니다. 해당 로그는 90일 후에 삭제됩니다.</translation>
+ <translation id="3668823961463113931">핸들러</translation>
+ <translation id="3670113805793654926">모든 공급업체의 기기</translation>
+ <translation id="3670229581627177274">블루투스 켜기</translation>
+@@ -1808,7 +1808,7 @@
+ <translation id="3719826155360621982">홈페이지</translation>
+ <translation id="3720996970802414353">무시하고 전환</translation>
+ <translation id="3722108462506185496">가상 머신 서비스를 시작하지 못했습니다. 다시 시도해 주세요.</translation>
+-<translation id="3723158278575423087">Chromium의 전송 환경에 오신 것을 환영합니다!</translation>
++<translation id="3723158278575423087">Gooroom browser의 전송 환경에 오신 것을 환영합니다!</translation>
+ <translation id="3725367690636977613">쪽</translation>
+ <translation id="3726137731714254362">여기에서 폴더를 삭제하면 공유가 중지되지만 파일이 삭제되지는 않습니다.</translation>
+ <translation id="3727148787322499904">이 설정을 변경하면 공유한 모든 네트워크에 영향을 줍니다.</translation>
+@@ -1849,7 +1849,7 @@
+ <translation id="3771294271822695279">동영상 파일</translation>
+ <translation id="3775432569830822555">SSL 서버 인증서</translation>
+ <translation id="3775705724665058594">기기로 전송</translation>
+-<translation id="3776796446459804932">이 확장 프로그램은 Chrome 웹 스토어 정책을 위반합니다.</translation>
++<translation id="3776796446459804932">이 확장 프로그램은 Gooroom browser 웹 스토어 정책을 위반합니다.</translation>
+ <translation id="3777806571986431400">확장 프로그램을 사용하도록 설정됨</translation>
+ <translation id="3778152852029592020">다운로드가 취소되었습니다.</translation>
+ <translation id="3778208826288864398">잘못된 PIN을 너무 여러 번 입력하여 보안 키가 잠겼습니다. 보안 키를 재설정해야 합니다.</translation>
+@@ -1878,8 +1878,8 @@
+ <translation id="3810973564298564668">관리</translation>
+ <translation id="381202950560906753">다른 지문 추가</translation>
+ <translation id="3812525830114410218">잘못된 인증서</translation>
+-<translation id="3813296892522778813">원하는 자료를 찾지 못했다면 <ph name="BEGIN_LINK_CHROMIUM" />Chrome 도움말<ph name="END_LINK_CHROMIUM" />을 참조하세요.</translation>
+-<translation id="3816118180265633665">Chrome 색상</translation>
++<translation id="3813296892522778813">원하는 자료를 찾지 못했다면 <ph name="BEGIN_LINK_CHROMIUM" />Gooroom browser 도움말<ph name="END_LINK_CHROMIUM" />을 참조하세요.</translation>
++<translation id="3816118180265633665">Gooroom browser 색상</translation>
+ <translation id="3817579325494460411">입력하지 않음</translation>
+ <translation id="3819257035322786455">백업</translation>
+ <translation id="3819261658055281761">시스템에서 이 기기의 장기 API 액세스 토큰을 저장하지 못했습니다.</translation>
+@@ -1916,9 +1916,9 @@
+ <translation id="3857807444929313943">손가락을 뗀 후 다시 터치</translation>
+ <translation id="3860104611854310167"><ph name="PROFILE_NAME" />: 동기화 중지됨</translation>
+ <translation id="3861241522664181545">페이지가 일시중지되었습니다.</translation>
+-<translation id="3862134173397075045">Chrome의 전송 환경에 오신 것을 환영합니다.</translation>
++<translation id="3862134173397075045">Gooroom browser의 전송 환경에 오신 것을 환영합니다.</translation>
+ <translation id="3862693525629180217">내장 센서를 통해 인증</translation>
+-<translation id="3862788408946266506">'kiosk_only' 매니페스트 속성을 사용하는 앱은 Chrome OS 키오스크 모드에 설치해야 합니다</translation>
++<translation id="3862788408946266506">'kiosk_only' 매니페스트 속성을 사용하는 앱은 Gooroom browser OS 키오스크 모드에 설치해야 합니다</translation>
+ <translation id="3865414814144988605">해상도</translation>
+ <translation id="3866249974567520381">설명</translation>
+ <translation id="3867944738977021751">인증서 필드</translation>
+@@ -1935,7 +1935,7 @@
+ <translation id="3888550877729210209"><ph name="LOCK_SCREEN_APP_NAME" />(으)로 메모 작성</translation>
+ <translation id="3892414795099177503">OpenVPN/L2TP 추가...</translation>
+ <translation id="3893536212201235195">접근성 설정 확인 및 변경</translation>
+-<translation id="3893630138897523026">ChromeVox(음성 피드백)</translation>
++<translation id="3893630138897523026">Gooroom browserVox(음성 피드백)</translation>
+ <translation id="3893764153531140319"><ph name="DOWNLOADED_SIZE" />/<ph name="DOWNLOAD_SIZE" /></translation>
+ <translation id="3894123633473837029">Sherlog를 통해 최근 어시스턴트 기록을 포함합니다. ID, 위치 및 디버그 정보가 포함될 수 있습니다. <ph name="BEGIN_LINK" />자세히 알아보기<ph name="END_LINK" /></translation>
+ <translation id="3894427358181296146">폴더 추가</translation>
+@@ -1958,7 +1958,7 @@
+ <translation id="3919145445993746351">어느 컴퓨터에서나 내 확장 프로그램을 사용하려면 동기화를 사용 설정하세요.</translation>
+ <translation id="391999873395511996">가상 머신을 다운로드하고 있습니다.</translation>
+ <translation id="3920504717067627103">인증서 정책</translation>
+-<translation id="392089482157167418">ChromeVox(음성 피드백) 사용</translation>
++<translation id="392089482157167418">Gooroom browserVox(음성 피드백) 사용</translation>
+ <translation id="3924145049010392604">Meta</translation>
+ <translation id="3925573269917483990">카메라:</translation>
+ <translation id="3925842537050977900">임시보관함에서 고정 해제</translation>
+@@ -2031,7 +2031,7 @@
+ <translation id="4022426551683927403">사전에 추가(&amp;A)</translation>
+ <translation id="4023146161712577481">기기 설정을 확인합니다.</translation>
+ <translation id="4027804175521224372">(로그인하지 않음 - <ph name="IDS_SYNC_PROMO_NOT_SIGNED_IN_STATUS_LINK" />)</translation>
+-<translation id="4027951648498485763">Chrome을 종료할 때까지 Flash 설정이 유지됩니다.</translation>
++<translation id="4027951648498485763">Gooroom browser을 종료할 때까지 Flash 설정이 유지됩니다.</translation>
+ <translation id="4031179711345676612">마이크 허용됨</translation>
+ <translation id="4031527940632463547">센서 차단됨</translation>
+ <translation id="4033471457476425443">새 폴더 추가</translation>
+@@ -2040,7 +2040,7 @@
+ <translation id="4036778507053569103">서버에서 다운로드한 정책이 올바르지 않습니다.</translation>
+ <translation id="4037084878352560732">말</translation>
+ <translation id="4037889604535939429">사용자 수정</translation>
+-<translation id="4042264909745389898">Google Chrome OS 이용약관</translation>
++<translation id="4042264909745389898">Google Gooroom browser OS 이용약관</translation>
+ <translation id="4042863763121826131">{NUM_PAGES,plural, =1{페이지 나가기}other{페이지 나가기}}</translation>
+ <translation id="4044612648082411741">인증서 비밀번호를 입력하세요.</translation>
+ <translation id="404493185430269859">기본 검색엔진</translation>
+@@ -2188,7 +2188,7 @@
+ <translation id="4289540628985791613">개요</translation>
+ <translation id="4291934469232591280">버전: <ph name="VERSION" /></translation>
+ <translation id="4295072614469448764">단말기에서 앱을 사용할 수 있습니다. 런처에 아이콘이 있을 수도 있습니다.</translation>
+-<translation id="4295979599050707005">웹사이트, 앱, Chrome 확장 프로그램 및 Google Play에서 계정(<ph name="USER_EMAIL" />)을 사용하도록 확인하려면 다시 로그인하세요. 계정을 삭제할 수도 있습니다. <ph name="LINK_BEGIN" />자세히 알아보기<ph name="LINK_END" /></translation>
++<translation id="4295979599050707005">웹사이트, 앱, Gooroom browser 확장 프로그램 및 Google Play에서 계정(<ph name="USER_EMAIL" />)을 사용하도록 확인하려면 다시 로그인하세요. 계정을 삭제할 수도 있습니다. <ph name="LINK_BEGIN" />자세히 알아보기<ph name="LINK_END" /></translation>
+ <translation id="4296575653627536209">관리 대상 사용자 추가</translation>
+ <translation id="4297219207642690536">다시 시작 및 재설정</translation>
+ <translation id="4297322094678649474">언어 변경</translation>
+@@ -2286,7 +2286,7 @@
+ <translation id="4462159676511157176">맞춤 이름 서버</translation>
+ <translation id="4469477701382819144">방해가 되거나 사용자를 현혹하는 광고를 표시하는 사이트에서 광고가 차단됩니다.</translation>
+ <translation id="4470957202018033307">외부 저장소 환경설정</translation>
+-<translation id="447252321002412580">Chrome의 기능 및 성능 개선에 참여</translation>
++<translation id="447252321002412580">Gooroom browser의 기능 및 성능 개선에 참여</translation>
+ <translation id="4472575034687746823">시작하기</translation>
+ <translation id="4474155171896946103">모든 탭 북마크...</translation>
+ <translation id="4475552974751346499">다운로드 검색</translation>
+@@ -2296,7 +2296,7 @@
+ <translation id="4479424953165245642">키오스크 애플리케이션 관리</translation>
+ <translation id="4479639480957787382">이더넷</translation>
+ <translation id="4479877282574735775">가상 머신을 구성하고 있습니다. 몇 분 정도 소요될 수 있습니다.</translation>
+-<translation id="4480590691557335796">Chrome이 컴퓨터에서 유해한 소프트웨어를 찾아 삭제할 수 있습니다.</translation>
++<translation id="4480590691557335796">Gooroom browser이 컴퓨터에서 유해한 소프트웨어를 찾아 삭제할 수 있습니다.</translation>
+ <translation id="4481530544597605423">페어링 해제된 기기</translation>
+ <translation id="4482194545587547824">검색 및 다른 Google 서비스를 맞춤설정하기 위하여 Google에서 인터넷 사용 기록을 사용할 수 있습니다.</translation>
+ <translation id="4495419450179050807">이 페이지에 표시하지 않음</translation>
+@@ -2332,7 +2332,7 @@
+ <translation id="4545028762441890696">다시 사용 설정하려면 새 권한을 수락하세요.</translation>
+ <translation id="454547174531670764">다른 계정에 동기화</translation>
+ <translation id="4545759655004063573">권한이 부족하여 저장할 수 없습니다. 다른 위치에 저장하세요.</translation>
+-<translation id="4546308221697447294">Chrome으로 빠르게 탐색</translation>
++<translation id="4546308221697447294">Gooroom browser으로 빠르게 탐색</translation>
+ <translation id="4547659257713117923">다른 기기의 탭 없음</translation>
+ <translation id="4547672827276975204">자동 설정</translation>
+ <translation id="4551763574344810652">실행취소하려면 <ph name="MODIFIER_KEY_DESCRIPTION" />을(를) 누르세요.</translation>
+@@ -2389,7 +2389,7 @@
+ <translation id="4633003931260532286">확장 프로그램은 최소 버전 '<ph name="IMPORT_VERSION" />'의 '<ph name="IMPORT_NAME" />'을(를) 요구하지만 '<ph name="INSTALLED_VERSION" />' 버전만 설치되었습니다</translation>
+ <translation id="4634771451598206121">다시 로그인...</translation>
+ <translation id="4635398712689569051">게스트 사용자는 <ph name="PAGE_NAME" />을(를) 사용할 수 없음</translation>
+-<translation id="4641539339823703554">Chrome에서 시스템 시간을 설정할 수 없습니다. 아래에서 시간을 확인한 다음 필요한 경우 수정해 주세요.</translation>
++<translation id="4641539339823703554">Gooroom browser에서 시스템 시간을 설정할 수 없습니다. 아래에서 시간을 확인한 다음 필요한 경우 수정해 주세요.</translation>
+ <translation id="4643612240819915418">새 탭에서 동영상 열기(&amp;O)</translation>
+ <translation id="4645676300727003670">계속(&amp;K)</translation>
+ <translation id="4647090755847581616">탭 닫기(&amp;C)</translation>
+@@ -2457,7 +2457,7 @@
+ <translation id="4744981231093950366">{NUM_TABS,plural, =1{사이트 숨기기 취소}other{사이트 숨기기 취소}}</translation>
+ <translation id="4746351372139058112">메시지</translation>
+ <translation id="4746971725921104503">해당 이름으로 이미 사용자를 관리 중입니다. <ph name="LINK_START" /><ph name="USER_DISPLAY_NAME" />을(를) 이 기기로 가져오시겠습니까<ph name="LINK_END" />?</translation>
+-<translation id="4748762018725435655">Chrome 웹 스토어의 확장 프로그램 필요</translation>
++<translation id="4748762018725435655">Gooroom browser 웹 스토어의 확장 프로그램 필요</translation>
+ <translation id="4750394297954878236">추천</translation>
+ <translation id="475088594373173692">첫 번째 사용자</translation>
+ <translation id="4751476147751820511">모션 또는 조도 센서</translation>
+@@ -2503,7 +2503,7 @@
+ <translation id="4829768588131278040">PIN 설정</translation>
+ <translation id="4830502475412647084">OS 업데이트 설치 중</translation>
+ <translation id="4830573902900904548"><ph name="DEVICE_TYPE" />에서 <ph name="NETWORK_NAME" /> 네트워크를 사용하여 인터넷에 연결할 수 없습니다. 다른 네트워크를 선택하세요. <ph name="LEARN_MORE_LINK_START" />자세히 알아보기<ph name="LEARN_MORE_LINK_END" /></translation>
+-<translation id="4835385943915508971">Chrome에서 요청된 리소스에 액세스할 권한이 없습니다.</translation>
++<translation id="4835385943915508971">Gooroom browser에서 요청된 리소스에 액세스할 권한이 없습니다.</translation>
+ <translation id="4835836146030131423">로그인하는 동안 오류가 발생했습니다.</translation>
+ <translation id="4837926214103741331">더 이상 이 기기를 사용할 권한이 없습니다. 기기 소유자에게 로그인 권한에 대해 문의하세요.</translation>
+ <translation id="4837952862063191349">로컬 데이터를 잠금 해제하고 복원하려면 이전 <ph name="DEVICE_TYPE" /> 비밀번호 입력</translation>
+@@ -2530,7 +2530,7 @@
+ <translation id="48704129375571883">추가 기능 추가</translation>
+ <translation id="4870758487381879312">구성 정보를 가져오려면 관리자가 제공한 비밀번호를 입력하세요.</translation>
+ <translation id="4870903493621965035">페어링된 기기가 없습니다.</translation>
+-<translation id="4871308555310586478">Chrome 웹 스토어에서 설치되지 않았습니다.</translation>
++<translation id="4871308555310586478">Gooroom browser 웹 스토어에서 설치되지 않았습니다.</translation>
+ <translation id="4871322859485617074">PIN에 잘못된 문자가 포함되었습니다.</translation>
+ <translation id="4871370605780490696">북마크 추가</translation>
+ <translation id="4873312501243535625">미디어 파일 검사기</translation>
+@@ -2600,7 +2600,7 @@
+ <translation id="4964455510556214366">배열</translation>
+ <translation id="4964673849688379040">확인 중...</translation>
+ <translation id="4965808351167763748">이 기기를 설정하여 행아웃 Meet를 실행하시겠습니까?</translation>
+-<translation id="496888482094675990">파일 앱을 사용하면 Google 드라이브, 외부 저장소, Chrome OS 기기에 저장한 파일에 신속하게 액세스할 수 있습니다.</translation>
++<translation id="496888482094675990">파일 앱을 사용하면 Google 드라이브, 외부 저장소, Gooroom browser OS 기기에 저장한 파일에 신속하게 액세스할 수 있습니다.</translation>
+ <translation id="4971412780836297815">완료되면 열기</translation>
+ <translation id="4972129977812092092">프린터 수정</translation>
+ <translation id="4972164225939028131">잘못된 비밀번호</translation>
+@@ -2817,7 +2817,7 @@
+ <translation id="5311304534597152726">다음으로 로그인</translation>
+ <translation id="5315873049536339193">주소</translation>
+ <translation id="5317780077021120954">저장</translation>
+-<translation id="5319359161174645648">Google에서 추천하는 Chrome</translation>
++<translation id="5319359161174645648">Google에서 추천하는 Gooroom browser</translation>
+ <translation id="532247166573571973">서버 접속이 불가능할 수 있습니다. 나중에 다시 시도해 주세요.</translation>
+ <translation id="5324780743567488672">사용자 위치를 사용하여 자동으로 시간대 설정</translation>
+ <translation id="5327248766486351172">이름</translation>
+@@ -2837,7 +2837,7 @@
+ <translation id="5341980496415249280">잠시 기다려 주세요. 압축 중입니다...</translation>
+ <translation id="5342091991439452114">PIN은 <ph name="MINIMUM" />자리 이상이어야 합니다.</translation>
+ <translation id="5352033265844765294">시간 기록</translation>
+-<translation id="5353252989841766347">Chrome에서 비밀번호 내보내기</translation>
++<translation id="5353252989841766347">Gooroom browser에서 비밀번호 내보내기</translation>
+ <translation id="5355099869024327351">어시스턴트에서 알림을 표시할 수 있도록 허용</translation>
+ <translation id="5355926466126177564">검색주소창에서 검색하면 표시되는 페이지가 '<ph name="EXTENSION_NAME" />' 확장 프로그램으로 인해 변경되었습니다.</translation>
+ <translation id="5360150013186312835">툴바에서 보기</translation>
+@@ -2943,7 +2943,7 @@
+ <translation id="5511379779384092781">아주 작게</translation>
+ <translation id="5511823366942919280">이 기기를 'Shark'로 설정하시겠습니까?</translation>
+ <translation id="5512653252560939721">사용자 인증서를 하드웨어에 백업해야 합니다.</translation>
+-<translation id="5516183516694518900">Google 계정으로 Chrome에 로그인하고 모든 기기의 북마크, 방문 기록, 비밀번호, 기타 설정을 가져오세요.</translation>
++<translation id="5516183516694518900">Google 계정으로 Gooroom browser에 로그인하고 모든 기기의 북마크, 방문 기록, 비밀번호, 기타 설정을 가져오세요.</translation>
+ <translation id="551752069230578406">계정에 프린터를 추가하고 있습니다. 잠시만 기다려 주세요...</translation>
+ <translation id="5518219166343146486">사이트에서 클립보드에 복사된 텍스트 및 이미지를 보려는 경우 확인</translation>
+ <translation id="5518584115117143805">이메일 암호화 인증서</translation>
+@@ -3029,14 +3029,14 @@
+ <translation id="5624120631404540903">비밀번호 관리</translation>
+ <translation id="5626134646977739690">이름:</translation>
+ <translation id="5627086634964711283">또한 홈 버튼을 클릭할 때 표시되는 페이지를 설정합니다.</translation>
+-<translation id="5627676517703583263">Chrome으로 편리하게 탐색</translation>
++<translation id="5627676517703583263">Gooroom browser으로 편리하게 탐색</translation>
+ <translation id="562935524653278697">관리자가 북마크, 방문 기록, 비밀번호 및 기타 설정의 동기화를 사용 중지했습니다.</translation>
+ <translation id="5632566673632479864"><ph name="EMAIL" /> 계정이 더 이상 기본 계정으로 허용되지 않습니다. 이 계정은 <ph name="DOMAIN" />에 의해 관리되므로 북마크, 방문 기록, 비밀번호 및 기타 설정이 기기에서 삭제됩니다.</translation>
+ <translation id="5632592977009207922">다운로드 중, <ph name="PERCENT_REMAINING" />% 남음</translation>
+ <translation id="563535393368633106">액세스하기 전에 확인(권장)</translation>
+ <translation id="5636996382092289526"><ph name="NETWORK_ID" />을(를) 사용하려면 먼저 몇 초 뒤에 자동으로 열리는 <ph name="LINK_START" />네트워크 로그인 페이지로 이동<ph name="LINK_END" />해야 합니다. 네트워크 로그인 페이지가 자동으로 열리지 않으면 네트워크를 사용할 수 없습니다.</translation>
+ <translation id="5637476008227280525">모바일 데이터 사용</translation>
+-<translation id="5638309510554459422"><ph name="BEGIN_LINK" />Chrome 웹 스토어<ph name="END_LINK" />에서 확장 프로그램과 테마를 찾아보세요</translation>
++<translation id="5638309510554459422"><ph name="BEGIN_LINK" />Gooroom browser 웹 스토어<ph name="END_LINK" />에서 확장 프로그램과 테마를 찾아보세요</translation>
+ <translation id="5639549361331209298">옵션을 더 보려면 이 페이지를 새로고친 다음 누르기</translation>
+ <translation id="5640133431808313291">보안 키 관리</translation>
+ <translation id="5642508497713047">CRL 서명자</translation>
+@@ -3045,7 +3045,7 @@
+ <translation id="5646558797914161501">사업가</translation>
+ <translation id="5648166631817621825">지난 7일</translation>
+ <translation id="5649053991847567735">자동 다운로드</translation>
+-<translation id="5657667036353380798">외부 확장 프로그램을 사용하려면 Chrome 버전 <ph name="MINIMUM_CHROME_VERSION" /> 이상이 설치되어 있어야 합니다.</translation>
++<translation id="5657667036353380798">외부 확장 프로그램을 사용하려면 Gooroom browser 버전 <ph name="MINIMUM_CHROME_VERSION" /> 이상이 설치되어 있어야 합니다.</translation>
+ <translation id="5658415415603568799">보안을 강화하기 위해 Smart Lock에서 20시간 후에 비밀번호를 입력하라는 메시지를 표시합니다.</translation>
+ <translation id="5659593005791499971">이메일</translation>
+ <translation id="5659833766619490117">페이지를 번역할 수 없음</translation>
+@@ -3077,7 +3077,7 @@
+ <translation id="5704875434923668958">다음에 동기화</translation>
+ <translation id="5707185214361380026">다음 위치에서 확장 프로그램을 로드하지 못했습니다.</translation>
+ <translation id="5708171344853220004">Microsoft Principal Name</translation>
+-<translation id="5709557627224531708">Chrome을 기본 브라우저로 설정</translation>
++<translation id="5709557627224531708">Gooroom browser을 기본 브라우저로 설정</translation>
+ <translation id="5711983031544731014">잠금 해제할 수 없습니다. 비밀번호를 입력하세요.</translation>
+ <translation id="5715711091495208045">플러그인 중개인: <ph name="PLUGIN_NAME" /></translation>
+ <translation id="5719603411793408026">기본 검색엔진</translation>
+@@ -3113,7 +3113,7 @@
+ <translation id="5774295353725270860">파일 열기 앱</translation>
+ <translation id="5774515636230743468">매니페스트:</translation>
+ <translation id="577624874850706961">쿠키 검색</translation>
+-<translation id="5777468213129569553">Chrome 열기</translation>
++<translation id="5777468213129569553">Gooroom browser 열기</translation>
+ <translation id="5778747455497889540">다음은 임의로 생성된 후 내 컴퓨터에 할당된 보안 모듈 비밀번호입니다.</translation>
+ <translation id="5780011244986845107">선택한 폴더에 민감한 파일이 포함되어 있습니다. 이 폴더에 '<ph name="APP_NAME" />' 영구 읽기 액세스 권한을 부여하시겠습니까?</translation>
+ <translation id="5780973441651030252">프로세스 우선순위</translation>
+@@ -3123,13 +3123,13 @@
+ <translation id="5783221160790377646">오류로 인해 관리 대상 사용자가 생성되지 않았습니다. 나중에 다시 시도해 주세요.</translation>
+ <translation id="5783602409389152506">기기를 검색할 때...</translation>
+ <translation id="57838592816432529">음소거</translation>
+-<translation id="5785583009707899920">Chrome 파일 유틸리티</translation>
++<translation id="5785583009707899920">Gooroom browser 파일 유틸리티</translation>
+ <translation id="5787146423283493983">키 계약</translation>
+ <translation id="5788367137662787332">죄송합니다. 기기(<ph name="DEVICE_LABEL" />)에 있는 하나 이상의 파티션을 마운트하지 못했습니다.</translation>
+ <translation id="5792728279623964091">전원 버튼을 탭하세요.</translation>
+ <translation id="5793339252089865437">모바일 네트워크를 통해 업데이트를 다운로드하면 요금이 과도하게 부과될 수 있습니다.</translation>
+ <translation id="5794414402486823030">항상 시스템 뷰어로 열기</translation>
+-<translation id="5794786537412027208">모든 Chrome 앱 종료</translation>
++<translation id="5794786537412027208">모든 Gooroom browser 앱 종료</translation>
+ <translation id="5797070761912323120">Google에서 내 방문 기록을 사용하여 Google 검색, 광고 및 다른 Google 서비스를 맞춤설정할 수 있습니다.</translation>
+ <translation id="5799508265798272974">Linux 가상 머신: <ph name="LINUX_VM_NAME" /></translation>
+ <translation id="5800020978570554460">마지막 다운로드 이후 대상 파일이 잘렸거나 삭제되었습니다.</translation>
+@@ -3214,13 +3214,13 @@
+ <translation id="5916664084637901428">사용</translation>
+ <translation id="59174027418879706">사용 설정됨</translation>
+ <translation id="5920543303088087579">관리자가 이 네트워크에 연결할 수 없도록 설정했습니다.</translation>
+-<translation id="5920835625712313205">Chrome OS 시스템 이미지 작성기</translation>
++<translation id="5920835625712313205">Gooroom browser OS 시스템 이미지 작성기</translation>
+ <translation id="5924047253200400718">도움말 보기<ph name="SCANNING_STATUS" /></translation>
+ <translation id="5924527146239595929">새로운 사진을 찍거나 기존 사진 또는 아이콘을 선택하세요.
+     <ph name="LINE_BREAK" />
+     이 사진이 Chromebook 로그인 화면과 잠금 화면에 표시됩니다.</translation>
+ <translation id="5925147183566400388">인증 업무 준칙 URI</translation>
+-<translation id="592880897588170157">Chrome에서 PDF 파일을 자동으로 여는 대신 다운로드</translation>
++<translation id="592880897588170157">Gooroom browser에서 PDF 파일을 자동으로 여는 대신 다운로드</translation>
+ <translation id="5931146425219109062">방문하는 웹사이트의 전체 데이터 조회 및 변경</translation>
+ <translation id="5932224571077948991">사이트에서 방해가 되거나 사용자를 현혹하는 광고를 표시함</translation>
+ <translation id="59324397759951282"><ph name="MANUFACTURER_NAME" />의 USB 기기</translation>
+@@ -3276,7 +3276,7 @@
+ <translation id="6016972670657536680">언어 및 키보드 버튼을 선택하세요. 현재 선택된 언어는 <ph name="LANGUAGE" />입니다.</translation>
+ <translation id="6020431688553761150">서버에서 승인하지 않아 이 리소스에 액세스할 수 없습니다.</translation>
+ <translation id="6022526133015258832">전체화면 열기</translation>
+-<translation id="6022659036123304283">나만의 Chrome 만들기</translation>
++<translation id="6022659036123304283">나만의 Gooroom browser 만들기</translation>
+ <translation id="6022705094403139349">보안 키를 페어링할 준비가 되었나요?</translation>
+ <translation id="6023643151125006053"><ph name="SAML_DOMAIN" /> 관리자가 이 기기(SN: <ph name="SERIAL_NUMBER" />)를 잠갔습니다.</translation>
+ <translation id="6025215716629925253">스택 추적</translation>
+@@ -3295,8 +3295,8 @@
+ <translation id="6041155700700864984">전체화면 종료</translation>
+ <translation id="604124094241169006">자동</translation>
+ <translation id="6042308850641462728">더보기</translation>
+-<translation id="6043317578411397101"><ph name="APP_NAME" />에서 <ph name="TAB_NAME" />와(과) Chrome 탭을 공유 중입니다.</translation>
+-<translation id="6044805581023976844"><ph name="APP_NAME" />에서 <ph name="TAB_NAME" />와(과) Chrome 탭과 오디오를 공유 중입니다.</translation>
++<translation id="6043317578411397101"><ph name="APP_NAME" />에서 <ph name="TAB_NAME" />와(과) Gooroom browser 탭을 공유 중입니다.</translation>
++<translation id="6044805581023976844"><ph name="APP_NAME" />에서 <ph name="TAB_NAME" />와(과) Gooroom browser 탭과 오디오를 공유 중입니다.</translation>
+ <translation id="6045021379489914695">Chromebook과 Android 휴대전화를 같이 사용하면 더욱 좋습니다. 컴퓨터에서 문자 메시지를 보내고 휴대전화의 인터넷 연결을 공유하고 Chromebook 화면을 잠금 해제할 수 있도록 Chromebook과 Android 휴대전화를 연결하세요.<ph name="FOOTNOTE_POINTER" /> <ph name="LINK_BEGIN" />자세히 알아보기<ph name="LINK_END" /></translation>
+ <translation id="6049004884579590341">전체화면을 종료하려면 |<ph name="ACCELERATOR" />|을(를) 길게 누르기</translation>
+ <translation id="6049065490165456785">내부 카메라의 사진</translation>
+@@ -3357,7 +3357,7 @@
+ <translation id="6124650939968185064">이 확장 프로그램에 종속되는 확장 프로그램:</translation>
+ <translation id="6124698108608891449">추가 권한이 필요한 사이트입니다.</translation>
+ <translation id="6125479973208104919">이 <ph name="DEVICE_TYPE" />에 계정을 다시 추가해야 합니다.</translation>
+-<translation id="6129691635767514872">선택한 데이터가 Chrome 및 동기화된 기기에서 삭제되었습니다. <ph name="BEGIN_LINK" />myactivity.google.com<ph name="END_LINK" />에서 검색이나 기타 Google 서비스에서의 활동 등 내 Google 계정에 있는 다른 형식의 탐색 기록을 확인할 수 있습니다.</translation>
++<translation id="6129691635767514872">선택한 데이터가 Gooroom browser 및 동기화된 기기에서 삭제되었습니다. <ph name="BEGIN_LINK" />myactivity.google.com<ph name="END_LINK" />에서 검색이나 기타 Google 서비스에서의 활동 등 내 Google 계정에 있는 다른 형식의 탐색 기록을 확인할 수 있습니다.</translation>
+ <translation id="6129938384427316298">Netscape Certificate Comment</translation>
+ <translation id="6135622770221372891">채널 ID</translation>
+ <translation id="6136114942382973861">다운로드바 닫기</translation>
+@@ -3382,7 +3382,7 @@
+ <translation id="6163522313638838258">모두 펼치기...</translation>
+ <translation id="6164005077879661055">관리 대상 사용자를 제거하면 해당 관리 대상 사용자와 연결되어 있는 모든 파일 및 로컬 데이터가 영구적으로 삭제됩니다. 하지만 관리자는 관리 대상 사용자의 방문한 웹사이트 및 설정을 <ph name="MANAGEMENT_URL" /> 페이지에서 계속 볼 수 있습니다.</translation>
+ <translation id="6165508094623778733">자세히 알아보기</translation>
+-<translation id="6166185671393271715">Chrome으로 비밀번호 가져오기</translation>
++<translation id="6166185671393271715">Gooroom browser으로 비밀번호 가져오기</translation>
+ <translation id="6169040057125497443">마이크를 확인하세요.</translation>
+ <translation id="6169666352732958425">데스크톱을 전송할 수 없음</translation>
+ <translation id="6170470584681422115">샌드위치</translation>
+@@ -3419,7 +3419,7 @@
+ <translation id="6226777517901268232">비공개 키 파일(선택사항)</translation>
+ <translation id="6228691855869374890">이 사이트는 MIDI 기기를 완전히 제어할 수 있습니다.</translation>
+ <translation id="6229890768313448549">Google Play 서비스 약관을 로드할 수 없습니다. 다시 시도해 주세요.</translation>
+-<translation id="6231881193380278751">검색어 매개변수를 URL에 추가하여 다음 페이지를 자동으로 새로고침하세요. chrome://device-log/?refresh=&lt;sec&gt;</translation>
++<translation id="6231881193380278751">검색어 매개변수를 URL에 추가하여 다음 페이지를 자동으로 새로고침하세요. gooroom://device-log/?refresh=&lt;sec&gt;</translation>
+ <translation id="6232017090690406397">배터리</translation>
+ <translation id="6232116551750539448"><ph name="NAME" /> 연결이 끊어졌습니다.</translation>
+ <translation id="6233154960150021497">키보드 대신 음성 사용을 기본값으로 설정</translation>
+@@ -3460,7 +3460,7 @@
+ <translation id="6285120908535925801">{NUM_PRINTER,plural, =1{네트워크에 새로운 프린터 있음}other{네트워크에 새로운 프린터 있음}}</translation>
+ <translation id="6286708577777130801">저장된 암호 세부정보</translation>
+ <translation id="6289452883081499048">Play 등 Google 서비스 맞춤설정</translation>
+-<translation id="6290556621549272952">이 기능을 사용하면 TV 또는 다른 기기에 Chromium의 콘텐츠를 표시할 수 있습니다.</translation>
++<translation id="6290556621549272952">이 기능을 사용하면 TV 또는 다른 기기에 Gooroom browser의 콘텐츠를 표시할 수 있습니다.</translation>
+ <translation id="6291949900244949761">사이트에서 USB 기기에 액세스하려고 할 때 확인(권장)</translation>
+ <translation id="6291953229176937411">Finder에서 보기(&amp;S)</translation>
+ <translation id="6295158916970320988">모든 사이트</translation>
+@@ -3472,7 +3472,7 @@
+ <translation id="6307990684951724544">시스템 사용 중</translation>
+ <translation id="6308937455967653460">다른 이름으로 링크 저장(&amp;K)...</translation>
+ <translation id="6309510305002439352">마이크 사용 중지됨</translation>
+-<translation id="6311220991371174222">프로필을 여는 동안 문제가 발생했기 때문에 Chrome을 시작할 수 없습니다. Chrome을 다시 시작해 보세요.</translation>
++<translation id="6311220991371174222">프로필을 여는 동안 문제가 발생했기 때문에 Gooroom browser을 시작할 수 없습니다. Gooroom browser을 다시 시작해 보세요.</translation>
+ <translation id="6312403991423642364">알려지지 않은 네트워크 오류</translation>
+ <translation id="6313641880021325787">VR 종료</translation>
+ <translation id="6314819609899340042">이 <ph name="IDS_SHORT_PRODUCT_NAME" /> 기기에서 디버깅 기능을 사용 설정했습니다.</translation>
+@@ -3484,7 +3484,7 @@
+ <translation id="6322653941595359182">Chromebook으로 SMS 보내고 받기</translation>
+ <translation id="6324916366299863871">바로가기 수정</translation>
+ <translation id="6325191661371220117">자동 실행 사용 안함</translation>
+-<translation id="6326175484149238433">Chrome에서 삭제</translation>
++<translation id="6326175484149238433">Gooroom browser에서 삭제</translation>
+ <translation id="6326855256003666642">프로그램 사용자 수</translation>
+ <translation id="6327785803543103246">웹 프록시 자동검색</translation>
+ <translation id="6333064448949140209">디버깅을 위해 파일이 Google로 전송됩니다.</translation>
+@@ -3548,7 +3548,7 @@
+     '다음'을 클릭하여 <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> 계정에 로그인하세요.</translation>
+ <translation id="6419546358665792306">압축해제된 확장 프로그램을 로드합니다.</translation>
+ <translation id="642469772702851743">소유자가 이 기기(SN: <ph name="SERIAL_NUMBER" />)를 잠갔습니다.</translation>
+-<translation id="6426200009596957090">ChromeVox 설정 열기</translation>
++<translation id="6426200009596957090">Gooroom browserVox 설정 열기</translation>
+ <translation id="6429384232893414837">업데이트 오류</translation>
+ <translation id="6430814529589430811">Base64-인코딩 ASCII, 단일 인증서</translation>
+ <translation id="6431347207794742960"><ph name="PRODUCT_NAME" />에서 이 컴퓨터의 모든 사용자에 대해 자동 업데이트를 설정합니다.</translation>
+@@ -3602,7 +3602,7 @@
+ <translation id="6508248480704296122"><ph name="NAME_PH" /> 관련</translation>
+ <translation id="6508261954199872201">애플리케이션:<ph name="APP_NAME" /></translation>
+ <translation id="6509207748479174212">미디어 라이선스</translation>
+-<translation id="6513247462497316522">다른 네트워크에 연결되어 있지 않을 경우 Chrome은 모바일 데이터를 사용합니다.</translation>
++<translation id="6513247462497316522">다른 네트워크에 연결되어 있지 않을 경우 Gooroom browser은 모바일 데이터를 사용합니다.</translation>
+ <translation id="6514010653036109809">사용할 수 있는 기기:</translation>
+ <translation id="6514565641373682518">이 페이지에서 마우스 커서를 사용 중지했습니다.</translation>
+ <translation id="6518014396551869914">이미지 복사(&amp;Y)</translation>
+@@ -3613,7 +3613,7 @@
+         <ph name="EVENT_NAME" /></translation>
+ <translation id="6527303717912515753">공유</translation>
+ <translation id="6528513914570774834">이 기기의 다른 사용자가 이 네트워크를 사용하도록 허용</translation>
+-<translation id="652948702951888897">Chrome 방문 기록</translation>
++<translation id="652948702951888897">Gooroom browser 방문 기록</translation>
+ <translation id="6530186581263215931">이 설정은 관리자가 시행합니다.</translation>
+ <translation id="6531282281159901044">위험한 파일 보관</translation>
+ <translation id="6532101170117367231">Google 드라이브에 저장</translation>
+@@ -3690,13 +3690,13 @@
+ <translation id="6649563841575838401">보관 파일 형식이 지원되지 않거나 파일이 손상되었습니다.</translation>
+ <translation id="665061930738760572">새 창에서 열기(&amp;N)</translation>
+ <translation id="6651237644330755633">웹사이트를 식별하기 위해 이 인증서 신뢰</translation>
+-<translation id="665355505818177700">Chrome <ph name="MS_AD_NAME" /> 통합은 x86_64 플랫폼에서만 지원됩니다. ARM 또는 x86 플랫폼에서 구축된 Chromebook은 이 기능을 지원하지 않습니다.</translation>
++<translation id="665355505818177700">Gooroom browser <ph name="MS_AD_NAME" /> 통합은 x86_64 플랫폼에서만 지원됩니다. ARM 또는 x86 플랫폼에서 구축된 Chromebook은 이 기능을 지원하지 않습니다.</translation>
+ <translation id="6655190889273724601">개발자 모드</translation>
+ <translation id="6655458902729017087">계정 숨기기</translation>
+ <translation id="6657585470893396449">비밀번호</translation>
+ <translation id="6659213950629089752">이 페이지는 '<ph name="NAME" />' 확장 프로그램으로 확대/축소되었습니다.</translation>
+ <translation id="6659594942844771486">탭</translation>
+-<translation id="6664237456442406323">컴퓨터가 잘못된 형식의 하드웨어 ID로 구성되어 있습니다. 이렇게 하면 Chrome OS가 최신 보안 수정사항을 업데이트할 수 없으며 컴퓨터가<ph name="BEGIN_BOLD" />악의적인 공격에 취약해 집니다<ph name="END_BOLD" />.</translation>
++<translation id="6664237456442406323">컴퓨터가 잘못된 형식의 하드웨어 ID로 구성되어 있습니다. 이렇게 하면 Gooroom browser OS가 최신 보안 수정사항을 업데이트할 수 없으며 컴퓨터가<ph name="BEGIN_BOLD" />악의적인 공격에 취약해 집니다<ph name="END_BOLD" />.</translation>
+ <translation id="6664774537677393800">프로필을 여는 동안 문제가 발생했습니다. 로그아웃했다가 다시 로그인하세요.</translation>
+ <translation id="6673391612973410118"><ph name="PRINTER_MAKE_OR_MODEL" />(USB)</translation>
+ <translation id="667517062706956822">Google에서 이 페이지를 <ph name="SOURCE_LANGUAGE" />에서 <ph name="TARGET_LANGUAGE" />로 번역할까요?</translation>
+@@ -3719,7 +3719,7 @@
+ <translation id="6697492270171225480">페이지를 찾을 수 없을 때 비슷한 페이지 제안 표시</translation>
+ <translation id="6697690052557311665">공유하려면 Files 앱에서 마우스 오른쪽 버튼으로 폴더를 클릭한 다음 'Linux와 공유'를 선택하세요.</translation>
+ <translation id="6698810901424468597"><ph name="WEBSITE_1" /> 및 <ph name="WEBSITE_2" />의 데이터를 읽고 변경</translation>
+-<translation id="6699883973579689168">이제 한 곳에서 모든 Google 계정을 관리할 수 있습니다. 앱, 웹사이트, Chrome 확장 프로그램, Google Play에 제공한 액세스 및 권한이 이제 로그인한 모든 계정에 적용됩니다. <ph name="LINK_BEGIN" />자세히 알아보기<ph name="LINK_END" /></translation>
++<translation id="6699883973579689168">이제 한 곳에서 모든 Google 계정을 관리할 수 있습니다. 앱, 웹사이트, Gooroom browser 확장 프로그램, Google Play에 제공한 액세스 및 권한이 이제 로그인한 모든 계정에 적용됩니다. <ph name="LINK_BEGIN" />자세히 알아보기<ph name="LINK_END" /></translation>
+ <translation id="6700480081846086223"><ph name="HOST_NAME" /> 전송</translation>
+ <translation id="6701535245008341853">프로필을 가져올 수 없습니다.</translation>
+ <translation id="6702639462873609204">수정(&amp;E)...</translation>
+@@ -3792,7 +3792,7 @@
+ <translation id="6812841287760418429">변경사항 유지</translation>
+ <translation id="6817174620439930047">사이트에서 시스템 전용 메시지를 사용하여 MIDI 기기에 액세스하려는 경우 확인(권장)</translation>
+ <translation id="682123305478866682">데스크톱 전송</translation>
+-<translation id="6823506025919456619">기기를 보려면 Chrome에 로그인하세요.</translation>
++<translation id="6823506025919456619">기기를 보려면 Gooroom browser에 로그인하세요.</translation>
+ <translation id="6824564591481349393">이메일 주소 복사(&amp;E)</translation>
+ <translation id="6824584962142919697">요소 검사(&amp;I)</translation>
+ <translation id="6825184156888454064">이름순 정렬</translation>
+@@ -3812,7 +3812,7 @@
+ <translation id="6841186874966388268">오류</translation>
+ <translation id="6843423766595476978">Ok Google 설정 완료</translation>
+ <translation id="6845038076637626672">최대화 상태로 열기</translation>
+-<translation id="6845325883481699275">Chrome 보안 강화 개선에 참여하기</translation>
++<translation id="6845325883481699275">Gooroom browser 보안 강화 개선에 참여하기</translation>
+ <translation id="6848388270925200958">현재 이 기기에서만 사용할 수 있는 카드가 있습니다.</translation>
+ <translation id="6851497530878285708">앱 사용 설정됨</translation>
+ <translation id="6853388645642883916">업데이터 절전 모드</translation>
+@@ -3969,7 +3969,7 @@
+ <translation id="708060913198414444">오디오 주소 복사(&amp;O)</translation>
+ <translation id="7081952801286122383">시크릿 모드를 사용 중입니다.</translation>
+ <translation id="708278670402572152">검색하려면 연결 해제하세요</translation>
+-<translation id="7085389578340536476">Chrome에서 오디오를 녹음하도록 허용하시겠습니까?</translation>
++<translation id="7085389578340536476">Gooroom browser에서 오디오를 녹음하도록 허용하시겠습니까?</translation>
+ <translation id="7088434364990739311">업데이트 확인을 시작하지 못했습니다(오류 코드: <ph name="ERROR" />).</translation>
+ <translation id="7088561041432335295">Zip Archiver - 파일 앱에서 ZIP 파일을 열고 압축합니다.</translation>
+ <translation id="7088674813905715446">이 기기는 관리자에 의해 사용 중단 상태로 설정되었습니다. 기기를 등록에 사용하려면 관리자에게 기기를 대기 상태로 전환해 달라고 요청해야 합니다.</translation>
+@@ -4058,7 +4058,7 @@
+ <translation id="722055596168483966">Google 서비스 맞춤설정</translation>
+ <translation id="7221855153210829124">알림 표시</translation>
+ <translation id="7221869452894271364">페이지 새로고침</translation>
+-<translation id="7222204278952406003">Chrome이 기본 브라우저로 설정되어 있습니다.</translation>
++<translation id="7222204278952406003">Gooroom browser이 기본 브라우저로 설정되어 있습니다.</translation>
+ <translation id="7222232353993864120">이메일 주소</translation>
+ <translation id="7225179976675429563">네트워크 유형이 없습니다.</translation>
+ <translation id="7227028316978186866"><ph name="DEVICE_NAME" />(공급업체: <ph name="VENDOR_ID" />, 제품: <ph name="PRODUCT_ID" />)</translation>
+@@ -4101,7 +4101,7 @@
+ <translation id="727441411541283857"><ph name="PERCENTAGE" />% - 충전 완료까지 <ph name="TIME" /> 남음</translation>
+ <translation id="727952162645687754">다운로드 오류</translation>
+ <translation id="7279701417129455881">쿠키 차단 관리...</translation>
+-<translation id="7280041992884344566">Chrome에서 유해한 소프트웨어를 검색하는 중에 오류가 발생했습니다.</translation>
++<translation id="7280041992884344566">Gooroom browser에서 유해한 소프트웨어를 검색하는 중에 오류가 발생했습니다.</translation>
+ <translation id="7280649757394340890">TTS 음성 설정</translation>
+ <translation id="7280877790564589615">권한 요청됨</translation>
+ <translation id="7282992757463864530">정보 표시줄</translation>
+@@ -4118,7 +4118,7 @@
+ <translation id="7297443947353982503">사용자 이름 또는 비밀번호가 잘못되었거나 EAP 인증에 실패했습니다.</translation>
+ <translation id="729761647156315797">언어 및 키보드 선택</translation>
+ <translation id="7299337219131431707">게스트로 로그인 허용</translation>
+-<translation id="730289542559375723">{NUM_APPLICATIONS,plural, =1{이 애플리케이션으로 인해 Chrome이 제대로 작동하지 않을 수 있습니다.}other{이 애플리케이션으로 인해 Chrome이 제대로 작동하지 않을 수 있습니다.}}</translation>
++<translation id="730289542559375723">{NUM_APPLICATIONS,plural, =1{이 애플리케이션으로 인해 Gooroom browser이 제대로 작동하지 않을 수 있습니다.}other{이 애플리케이션으로 인해 Gooroom browser이 제대로 작동하지 않을 수 있습니다.}}</translation>
+ <translation id="7303281435234579599">데모 모드를 설정하는 동안 문제가 발생했습니다.</translation>
+ <translation id="7303900363563182677">이 사이트는 클립보드에 복사된 텍스트 및 이미지에 액세스할 수 없습니다.</translation>
+ <translation id="7305123176580523628">USB 프린터 연결됨</translation>
+@@ -4170,7 +4170,7 @@
+ <translation id="7377169924702866686">Caps Lock이 켜져 있습니다.</translation>
+ <translation id="7377451353532943397">계속해서 센서 액세스 차단</translation>
+ <translation id="7378627244592794276">안함</translation>
+-<translation id="73786666777299047">Chrome 웹 스토어 열기</translation>
++<translation id="73786666777299047">Gooroom browser 웹 스토어 열기</translation>
+ <translation id="7378812711085314936">데이터 연결 가져오기</translation>
+ <translation id="7380768571499464492"><ph name="PRINTER_NAME" /> 업데이트됨</translation>
+ <translation id="7385854874724088939">인쇄를 시도하는 동안 문제가 발생했습니다. 프린터를 점검한 다음 다시 시도해 보세요.</translation>
+@@ -4282,7 +4282,7 @@
+ <translation id="756445078718366910">브라우저 창 열기</translation>
+ <translation id="7564847347806291057">프로세스 종료</translation>
+ <translation id="7566118625369982896">Play 앱 링크 관리</translation>
+-<translation id="756809126120519699">Chrome 데이터 삭제됨</translation>
++<translation id="756809126120519699">Gooroom browser 데이터 삭제됨</translation>
+ <translation id="7568790562536448087">업데이트</translation>
+ <translation id="7571643774869182231">저장용량이 부족하여 업데이트할 수 없음</translation>
+ <translation id="7573172247376861652">배터리 충전</translation>
+@@ -4294,7 +4294,7 @@
+ <translation id="7581462281756524039">정리도구</translation>
+ <translation id="7582582252461552277">이 네트워크를 사용</translation>
+ <translation id="7583948862126372804">득표 수</translation>
+-<translation id="7586498138629385861">Chrome 앱이 열려 있을 때 Chrome이 계속 실행됩니다.</translation>
++<translation id="7586498138629385861">Gooroom browser 앱이 열려 있을 때 Gooroom browser이 계속 실행됩니다.</translation>
+ <translation id="7589461650300748890">주의하세요.</translation>
+ <translation id="7591957897535945411">페이지가 번역되었습니다.</translation>
+ <translation id="7595453277607160340">Android 앱을 사용하고 <ph name="DEVICE_TYPE" /> 기기가 제대로 작동하도록 하려면 다시 로그인하고 업데이트하세요.</translation>
+@@ -4351,7 +4351,7 @@
+ <translation id="767127784612208024">터치하여 초기화 여부 확인</translation>
+ <translation id="7672520070349703697"><ph name="PAGE_TITLE" />에 포함된 <ph name="HUNG_IFRAME_URL" /></translation>
+ <translation id="7676867886086876795">모든 텍스트 입력란에서 음성기록 기능을 지원하기 위해 Google에 음성이 전송됩니다.</translation>
+-<translation id="7678280409648629969">시크릿 모드를 종료하면 Chrome에 로그인 데이터가 저장됩니다. 이 데이터를 통해 나중에 이 웹사이트에서 Touch ID를 사용할 수 있습니다.</translation>
++<translation id="7678280409648629969">시크릿 모드를 종료하면 Gooroom browser에 로그인 데이터가 저장됩니다. 이 데이터를 통해 나중에 이 웹사이트에서 Touch ID를 사용할 수 있습니다.</translation>
+ <translation id="7681095912841365527">사이트에서 블루투스를 사용할 수 있습니다.</translation>
+ <translation id="7683373461016844951">계속하려면 확인을 클릭한 다음 사용자 추가를 클릭하여 <ph name="DOMAIN" /> 이메일 주소로 새로운 프로필을 만드세요.</translation>
+ <translation id="7684212569183643648">관리자가 설치함</translation>
+@@ -4397,7 +4397,7 @@
+ <translation id="7732111077498238432">네트워크는 정책을 통해 제어됩니다</translation>
+ <translation id="7737238973539693982">Linux(베타) 삭제</translation>
+ <translation id="7740996059027112821">표준</translation>
+-<translation id="7746457520633464754">Chrome은 위험한 앱 및 사이트를 감지하기 위해 일부 방문 페이지의 URL, 제한적인 시스템 정보, 페이지 콘텐츠 일부를 Google로 전송합니다.</translation>
++<translation id="7746457520633464754">Gooroom browser은 위험한 앱 및 사이트를 감지하기 위해 일부 방문 페이지의 URL, 제한적인 시스템 정보, 페이지 콘텐츠 일부를 Google로 전송합니다.</translation>
+ <translation id="7750228210027921155">PIP 모드</translation>
+ <translation id="7751260505918304024">전체 보기</translation>
+ <translation id="7754704193130578113">다운로드 전에 각 파일의 저장 위치 확인</translation>
+@@ -4426,7 +4426,7 @@
+ <translation id="7786207843293321886">게스트 세션 종료</translation>
+ <translation id="7786889348652477777">앱 새로고침(&amp;R)</translation>
+ <translation id="7787308148023287649">다른 화면에 표시</translation>
+-<translation id="7788298548579301890">컴퓨터의 다른 프로그램에서 Chrome 작동에 영향을 줄 수 있는 앱을 추가했습니다.
++<translation id="7788298548579301890">컴퓨터의 다른 프로그램에서 Gooroom browser 작동에 영향을 줄 수 있는 앱을 추가했습니다.
+ 
+ 
+ <ph name="EXTENSION_NAME" /></translation>
+@@ -4449,7 +4449,7 @@
+ <translation id="7815680994978050279">위험한 다운로드가 차단됨</translation>
+ <translation id="7818135753970109980">새 테마가 추가됨(<ph name="EXTENSION_NAME" />)</translation>
+ <translation id="7819857487979277519">PSK(WPA 또는 RSN)</translation>
+-<translation id="7819992334107904369">Chrome 동기화</translation>
++<translation id="7819992334107904369">Gooroom browser 동기화</translation>
+ <translation id="782057141565633384">동영상 주소 복사(&amp;O)</translation>
+ <translation id="7824864914877854148">오류로 인해 백업을 완료할 수 없습니다.</translation>
+ <translation id="782590969421016895">현재 페이지 사용</translation>
+@@ -4465,7 +4465,7 @@
+       <ph name="LIST_ITEM" />기기에서 직접 SSH를 진행할 수 있도록 개발자 및 시스템 루트 로그인 비밀번호를 맞춤 값으로 설정
+     <ph name="END_LIST" />
+     <ph name="BR" />
+-    일단 사용 설정되면 기업 관리 기기에서 Powerwash를 진행하거나 데이터를 삭제한 후에도 대부분의 디버그 기능이 사용 설정 상태로 유지됩니다. 모든 디버그 기능을 완전히 사용 중지하려면 Chrome OS 복구 절차를 완료하세요(https://support.google.com/chromebook/answer/1080595).
++    일단 사용 설정되면 기업 관리 기기에서 Powerwash를 진행하거나 데이터를 삭제한 후에도 대부분의 디버그 기능이 사용 설정 상태로 유지됩니다. 모든 디버그 기능을 완전히 사용 중지하려면 Gooroom browser OS 복구 절차를 완료하세요(https://support.google.com/chromebook/answer/1080595).
+     <ph name="BR" />
+     <ph name="BR" />
+     디버깅 기능에 관한 자세한 내용은 다음 페이지를 참조하세요.<ph name="BR" />
+@@ -4503,7 +4503,7 @@
+ <translation id="786957569166715433"><ph name="DEVICE_NAME" /> - 페어링됨</translation>
+ <translation id="7870730066603611552">설정 후 동기화 옵션 검토</translation>
+ <translation id="7870790288828963061">새로운 버전의 Kiosk 앱을 찾을 수 없습니다. 업데이트할 대상이 없습니다. USB 메모리를 제거하세요.</translation>
+-<translation id="7874257161694977650">Chrome 배경</translation>
++<translation id="7874257161694977650">Gooroom browser 배경</translation>
+ <translation id="7877451762676714207">알 수 없는 서버 오류입니다. 다시 시도하거나 서버 관리자에게 문의하시기 바랍니다.</translation>
+ <translation id="7877680364634660272">둘러보기</translation>
+ <translation id="7878562273885520351">비밀번호가 도용될 수도 있음</translation>
+@@ -4607,7 +4607,7 @@
+ <translation id="8008356846765065031">인터넷 연결이 끊겼습니다. 인터넷 연결을 확인하세요.</translation>
+ <translation id="8009225694047762179">비밀번호 관리</translation>
+ <translation id="8012382203418782830">페이지가 번역되었습니다.</translation>
+-<translation id="8013993649590906847">이미지에 유용한 설명이 없으면 Chrome에서 자동으로 설명을 제공하려고 시도합니다. 설명을 생성하기 위해 이미지가 Google로 전송됩니다.</translation>
++<translation id="8013993649590906847">이미지에 유용한 설명이 없으면 Gooroom browser에서 자동으로 설명을 제공하려고 시도합니다. 설명을 생성하기 위해 이미지가 Google로 전송됩니다.</translation>
+ <translation id="8014154204619229810">업데이터가 현재 실행 중입니다. 잠시 후에 새로고침하여 다시 확인해 주세요.</translation>
+ <translation id="8014206674403687691"><ph name="IDS_SHORT_PRODUCT_NAME" />을(를) 이전에 설치한 버전으로 되돌릴 수 없습니다. 대신 기기를 Powerwash해 보세요.</translation>
+ <translation id="8014210335923519270">시스템 정보와 사용 기록을 Google에 전송하여 <ph name="IDS_SHORT_PRODUCT_NAME" /> 및 보안 개선</translation>
+@@ -4678,7 +4678,7 @@
+ <translation id="8113043281354018522">라이선스 유형 선택</translation>
+ <translation id="8116972784401310538">북마크 관리자(&amp;B)</translation>
+ <translation id="8117620576188476503">상태 표시줄에서 연결, 업데이트, 설정을 관리하세요. 키보드를 사용하여 이동하려면 Alt + Shift + S를 누르면 됩니다.</translation>
+-<translation id="8118362518458010043">Chrome에서 사용 중지했습니다. 이 확장 프로그램은 안전하지 않을 수 있습니다.</translation>
++<translation id="8118362518458010043">Gooroom browser에서 사용 중지했습니다. 이 확장 프로그램은 안전하지 않을 수 있습니다.</translation>
+ <translation id="8118488170956489476">조직에서 <ph name="BEGIN_LINK" />관리하는 브라우저<ph name="END_LINK" />입니다.</translation>
+ <translation id="8118860139461251237">다운로드 관리</translation>
+ <translation id="8123590694679414600"><ph name="TIME" />에 데이터가 동기화 암호로 암호화되었습니다.
+@@ -4709,7 +4709,7 @@
+ <translation id="8174047975335711832">기기 정보</translation>
+ <translation id="8174876712881364124">Google 드라이브에 백업합니다. 언제든지 간편하게 데이터를 복원하거나 다른 기기로 전환하세요. 백업에는 앱 데이터가 포함됩니다. 백업 항목은 Google에 업로드되며 자녀의 Google 계정 비밀번호를 사용하여 암호화됩니다. <ph name="BEGIN_LINK1" />자세히 알아보기<ph name="END_LINK1" /></translation>
+ <translation id="8177196903785554304">네트워크 세부정보</translation>
+-<translation id="8178208419593390223">로그인한 Google 계정을 관리하세요. 웹사이트, 앱, Chrome 확장 프로그램 및 Google Play에서 이 계정을 사용하여 권한에 따라 사용자 환경을 맞춤설정할 수 있습니다.</translation>
++<translation id="8178208419593390223">로그인한 Google 계정을 관리하세요. 웹사이트, 앱, Gooroom browser 확장 프로그램 및 Google Play에서 이 계정을 사용하여 권한에 따라 사용자 환경을 맞춤설정할 수 있습니다.</translation>
+ <translation id="8179976553408161302">Enter</translation>
+ <translation id="8180239481735238521">페이지</translation>
+ <translation id="8180294223783876911">사용 및 진단 데이터를 보냅니다. 이 기기는 현재 진단, 기기 및 앱 사용 데이터를 Google에 자동으로 보내고 있습니다. 이 데이터는 시스템 및 앱 안정성 등을 개선하는 데 활용됩니다. 일부 수집 데이터는 Google 앱과 파트너(Android 개발자 등)에게도 도움을 줍니다. 추가 웹 및 앱 활동이 사용 설정되어 있다면 이 데이터가 Google 계정에 저장될 수 있습니다. <ph name="BEGIN_LINK1" />자세히 알아보기<ph name="END_LINK1" /></translation>
+@@ -4734,7 +4734,7 @@
+ <translation id="8206354486702514201">이 설정은 관리자가 강제로 설정해 놓았습니다.</translation>
+ <translation id="8206581664590136590">사용 및 진단 데이터를 보냅니다. 진단, 기기, 앱 사용 데이터를 Google에 자동으로 보내 자녀의 Android 사용 환경 개선에 참여합니다. 이 데이터는 자녀를 식별하는 용도로 사용되지 않으며, 시스템 및 앱 안정성 등을 개선하는 데 활용됩니다. 일부 수집 데이터는 Google 앱과 파트너(Android 개발자 등)에게도 도움을 줍니다. 자녀의 추가 웹 및 앱 활동이 사용 설정되어 있다면 이 데이터가 자녀의 Google 계정에 저장될 수 있습니다. <ph name="BEGIN_LINK1" />자세히 알아보기<ph name="END_LINK1" /></translation>
+ <translation id="8206745257863499010">음악</translation>
+-<translation id="8209677645716428427">관리 대상 사용자는 내가 정한 범위 내에서 웹을 탐색할 수 있습니다. 관리 대상 사용자의 관리자는 Chrome에서 다음을 수행할 수 있습니다.</translation>
++<translation id="8209677645716428427">관리 대상 사용자는 내가 정한 범위 내에서 웹을 탐색할 수 있습니다. 관리 대상 사용자의 관리자는 Gooroom browser에서 다음을 수행할 수 있습니다.</translation>
+ <translation id="8212008074015601248">{NUM_DOWNLOAD,plural, =1{다운로드 진행 중}other{다운로드 진행 중}}</translation>
+ <translation id="8213449224684199188">사진 모드 시작됨</translation>
+ <translation id="8213577208796878755">사용 가능한 다른 기기가 1개 있습니다.</translation>
+@@ -4883,7 +4883,7 @@
+ <translation id="845627346958584683">만료 시간</translation>
+ <translation id="845702320058262034">연결할 수 없습니다. 휴대전화의 블루투스가 켜져 있는지 확인하세요.</translation>
+ <translation id="8457451314607652708">북마크 가져오기</translation>
+-<translation id="8460336040822756677"><ph name="DEVICE_TYPE" />용 Smart Lock을 사용 중지하면 휴대전화를 사용하여 Chrome 기기를 잠금 해제할 수 없으며 비밀번호를 입력해야 합니다.</translation>
++<translation id="8460336040822756677"><ph name="DEVICE_TYPE" />용 Smart Lock을 사용 중지하면 휴대전화를 사용하여 Gooroom browser 기기를 잠금 해제할 수 없으며 비밀번호를 입력해야 합니다.</translation>
+ <translation id="8461329675984532579">홈 공급자 이름</translation>
+ <translation id="84613761564611563">네트워크 구성 UI를 요청했습니다. 잠시만 기다려 주세요.</translation>
+ <translation id="8461914792118322307">프록시</translation>
+@@ -4899,7 +4899,7 @@
+ <translation id="8470513973197838199"><ph name="ORIGIN" />의 저장된 비밀번호</translation>
+ <translation id="8472623782143987204">하드웨어 지원</translation>
+ <translation id="8473863474539038330">주소 및 기타</translation>
+-<translation id="8475313423285172237">컴퓨터의 다른 프로그램에서 Chrome 작동에 영향을 줄 수 있는 확장 프로그램을 추가했습니다.</translation>
++<translation id="8475313423285172237">컴퓨터의 다른 프로그램에서 Gooroom browser 작동에 영향을 줄 수 있는 확장 프로그램을 추가했습니다.</translation>
+ <translation id="8477241577829954800">대체됨</translation>
+ <translation id="8477384620836102176">일반(&amp;G)</translation>
+ <translation id="8480082892550707549">이전에 이 사이트에서 파일을 다운로드한 경우에도 사이트가 일시적으로 안전하지 않을(해킹됨) 수 있습니다. 나중에 다운로드하세요.</translation>
+@@ -4912,7 +4912,7 @@
+ <translation id="8496717697661868878">이 플러그인 실행</translation>
+ <translation id="8497219075884839166">Windows 유틸리티</translation>
+ <translation id="8498214519255567734">어두운 곳에서 화면을 보거나 읽기 편하도록 설정합니다.</translation>
+-<translation id="8498395510292172881">Chrome에서 계속 읽기</translation>
++<translation id="8498395510292172881">Gooroom browser에서 계속 읽기</translation>
+ <translation id="8502536196501630039">Google Play의 앱을 사용하려면 먼저 앱을 복원해야 합니다. 일부 데이터가 삭제되었을 수 있습니다.</translation>
+ <translation id="8503813439785031346">사용자이름</translation>
+ <translation id="850875081535031620">유해한 소프트웨어가 발견되지 않음</translation>
+@@ -4970,7 +4970,7 @@
+ <translation id="8597845839771543242">속성 형식:</translation>
+ <translation id="8598453409908276158">샌드박스 처리되지 않은 플러그인이 차단됨</translation>
+ <translation id="8601206103050338563">TLS WWW 클라이언트 인증</translation>
+-<translation id="8602851771975208551">컴퓨터의 다른 프로그램에서 Chrome 작동에 영향을 줄 수 있는 앱을 추가했습니다.</translation>
++<translation id="8602851771975208551">컴퓨터의 다른 프로그램에서 Gooroom browser 작동에 영향을 줄 수 있는 앱을 추가했습니다.</translation>
+ <translation id="8605428685123651449">SQLite 메모리</translation>
+ <translation id="8606726445206553943">MIDI 기기를 사용합니다.</translation>
+ <translation id="8609465669617005112">위로 이동</translation>
+@@ -4979,7 +4979,7 @@
+ <translation id="8619892228487928601"><ph name="CERTIFICATE_NAME" />: <ph name="ERROR" /></translation>
+ <translation id="8620617069779373398">로밍 상태</translation>
+ <translation id="8620765578342452535">네트워크 연결 구성</translation>
+-<translation id="8621866727807194849">컴퓨터에 유해한 소프트웨어가 있습니다. Chrome이 유해한 소프트웨어를 삭제하고, 설정을 복원하고, 확장 프로그램을 사용 중지하는 중입니다. 이 작업이 끝나면 브라우저가 다시 정상적으로 작동합니다.</translation>
++<translation id="8621866727807194849">컴퓨터에 유해한 소프트웨어가 있습니다. Gooroom browser이 유해한 소프트웨어를 삭제하고, 설정을 복원하고, 확장 프로그램을 사용 중지하는 중입니다. 이 작업이 끝나면 브라우저가 다시 정상적으로 작동합니다.</translation>
+ <translation id="8621979332865976405">전체 화면 공유</translation>
+ <translation id="862542460444371744">확장 프로그램(&amp;E)</translation>
+ <translation id="8627151598708688654">소스 선택</translation>
+@@ -4988,7 +4988,7 @@
+ <translation id="8627795981664801467">보안 연결만</translation>
+ <translation id="8630903300770275248">관리 대상 사용자 가져오기</translation>
+ <translation id="8631032106121706562">꽃잎</translation>
+-<translation id="8637542770513281060">컴퓨터에 보안 모듈이 있습니다. 보안 모듈은 Chrome OS에서 여러 중요한 보안 기능을 구현하는 데 사용됩니다. 자세히 알아보려면 Chromebook 고객센터의 다음 페이지를 방문하세요. https://support.google.com/chromebook/?p=sm</translation>
++<translation id="8637542770513281060">컴퓨터에 보안 모듈이 있습니다. 보안 모듈은 Gooroom browser OS에서 여러 중요한 보안 기능을 구현하는 데 사용됩니다. 자세히 알아보려면 Chromebook 고객센터의 다음 페이지를 방문하세요. https://support.google.com/chromebook/?p=sm</translation>
+ <translation id="8637688295594795546">시스템 업데이트 사용가능. 다운로드 준비 중…</translation>
+ <translation id="8639047128869322042">유해한 소프트웨어 확인 중...</translation>
+ <translation id="8642171459927087831">액세스 토큰</translation>
+@@ -5015,7 +5015,7 @@
+ <translation id="8662795692588422978">사용자</translation>
+ <translation id="8662811608048051533">대부분의 사이트에서 로그아웃됩니다.</translation>
+ <translation id="8662911384982557515">다음으로 홈페이지 변경: <ph name="HOME_PAGE" /></translation>
+-<translation id="8662978096466608964">Chrome에서 배경화면을 설정할 수 없습니다.</translation>
++<translation id="8662978096466608964">Gooroom browser에서 배경화면을 설정할 수 없습니다.</translation>
+ <translation id="8663099077749055505"><ph name="HOST" />에서 여러 항목을 자동으로 다운로드하지 않도록 항상 차단</translation>
+ <translation id="8664389313780386848">페이지 소스 보기(&amp;V)</translation>
+ <translation id="8665180165765946056">백업 완료</translation>
+@@ -5092,7 +5092,7 @@
+ <translation id="8759753423332885148">자세히 알아보기</translation>
+ <translation id="8762886931014513155"><ph name="DEVICE_TYPE" /> 업데이트 필요</translation>
+ <translation id="8763927697961133303">USB 기기</translation>
+-<translation id="8767621466733104912">모든 사용자의 Chrome 자동 업데이트</translation>
++<translation id="8767621466733104912">모든 사용자의 Gooroom browser 자동 업데이트</translation>
+ <translation id="8770406935328356739">확장 프로그램 루트 디렉터리</translation>
+ <translation id="8770507190024617908">사용자 관리</translation>
+ <translation id="8771300903067484968">시작 페이지 배경화면이 기본 배경화면으로 재설정되었습니다.</translation>
+@@ -5187,7 +5187,7 @@
+ <translation id="8899851313684471736">새 창에서 링크 열기(&amp;W)</translation>
+ <translation id="8902667442496790482">텍스트 읽어주기 설정 열기</translation>
+ <translation id="8903263458134414071">로그인 계정 선택</translation>
+-<translation id="8904976895050290827">Chrome 동기화</translation>
++<translation id="8904976895050290827">Gooroom browser 동기화</translation>
+ <translation id="890616557918890486">소스 변경</translation>
+ <translation id="8909833622202089127">사이트에서 내 위치를 추적하고 있습니다.</translation>
+ <translation id="8910146161325739742">화면 공유하기</translation>
+@@ -5246,7 +5246,7 @@
+ <translation id="899403249577094719">Netscape Certificate Base URL</translation>
+ <translation id="8995603266996330174">관리자: <ph name="DOMAIN" /></translation>
+ <translation id="8996526648899750015">계정 추가...</translation>
+-<translation id="899657321862108550">어디에서나 나만의 Chrome을 사용하세요</translation>
++<translation id="899657321862108550">어디에서나 나만의 Gooroom browser을 사용하세요</translation>
+ <translation id="9003647077635673607">모든 웹사이트에서 허용</translation>
+ <translation id="9003704114456258138">주파수</translation>
+ <translation id="9004952710076978168">알 수 없는 프린터에 대한 알림을 받았습니다.</translation>
+@@ -5285,7 +5285,7 @@
+ <translation id="9050666287014529139">암호</translation>
+ <translation id="9052208328806230490"><ph name="EMAIL" /> 계정을 사용하여 프린터를 <ph name="CLOUD_PRINT_NAME" />에 등록했습니다.</translation>
+ <translation id="9052404922357793350">차단 계속</translation>
+-<translation id="9053091947372579468">기기에 Chrome 라이선스가 포함되어 있지만 사용자 이름이 관리 콘솔과 연결되어 있지 않습니다. 등록을 계속하려면 관리 콘솔 계정을 만드세요. 참고: 내 도메인을 사용해 새로운 관리 콘솔 계정을 만들려면 가입 후 도메인 확인 절차를 완료해야 합니다. https://g.co/ChromeEnterpriseAccount</translation>
++<translation id="9053091947372579468">기기에 Gooroom browser 라이선스가 포함되어 있지만 사용자 이름이 관리 콘솔과 연결되어 있지 않습니다. 등록을 계속하려면 관리 콘솔 계정을 만드세요. 참고: 내 도메인을 사용해 새로운 관리 콘솔 계정을 만들려면 가입 후 도메인 확인 절차를 완료해야 합니다. https://g.co/Gooroom browserEnterpriseAccount</translation>
+ <translation id="9053563360605707198">양면에 인쇄</translation>
+ <translation id="9053893665344928494">내 선택 기억하기</translation>
+ <translation id="9055636786322918818">RC4 암호화를 적용합니다. RC4 암호화는 안전하지 않으므로 이 옵션을 사용하면 보안 위험도가 높아집니다.</translation>
+@@ -5355,7 +5355,7 @@
+ <translation id="916964310188958970">이러한 추천이 표시된 이유는 무엇인가요?</translation>
+ <translation id="9169931577761441333">홈 화면에 <ph name="APP_NAME" /> 추가</translation>
+ <translation id="9170848237812810038">실행 취소(&amp;U)</translation>
+-<translation id="9170884462774788842">컴퓨터의 다른 프로그램에서 Chrome 작동에 영향을 줄 수 있는 테마를 추가했습니다.</translation>
++<translation id="9170884462774788842">컴퓨터의 다른 프로그램에서 Gooroom browser 작동에 영향을 줄 수 있는 테마를 추가했습니다.</translation>
+ <translation id="9173995187295789444">블루투스 기기 검색 중...</translation>
+ <translation id="9176476835295860688">사용 및 진단 데이터를 보냅니다. 이 기기는 현재 진단, 기기 및 앱 사용 데이터를 Google에 자동으로 보내고 있습니다. 이 데이터는 시스템 및 앱 안정성 등을 개선하는 데 활용됩니다. 일부 수집 데이터는 Google 앱과 파트너(Android 개발자 등)에게도 도움을 줍니다. 이 <ph name="BEGIN_LINK1" />설정<ph name="END_LINK1" />은 소유자가 지정합니다. 추가 웹 및 앱 활동이 사용 설정되어 있다면 이 데이터가 Google 계정에 저장될 수 있습니다. <ph name="BEGIN_LINK2" />자세히 알아보기<ph name="END_LINK2" /></translation>
+ <translation id="9176611096776448349"><ph name="WINDOW_TITLE" /> - 블루투스 기기 연결됨</translation>
+@@ -5384,7 +5384,7 @@
+ <translation id="932508678520956232">인쇄를 시작할 수 없습니다.</translation>
+ <translation id="93343527085570547">법적인 이유로 콘텐츠 변경을 요청하려면 <ph name="BEGIN_LINK1" />법률 도움말 페이지<ph name="END_LINK1" />로 이동하세요. 일부 계정 및 시스템 정보가 Google에 전송될 수 있습니다. Google에서는 제공해 주신 정보를 <ph name="BEGIN_LINK2" />개인정보처리방침<ph name="END_LINK2" /> 및 <ph name="BEGIN_LINK3" />서비스 약관<ph name="END_LINK3" />에 따라 사용하여 기술적인 문제를 해결하고 서비스를 개선합니다.</translation>
+ <translation id="93393615658292258">비밀번호만</translation>
+-<translation id="934503638756687833">필요한 경우 여기에 표시되지 않은 항목도 삭제됩니다. Chrome 개인정보 보호 백서에서 &lt;a href="<ph name="URL" />"&gt;원치 않는 소프트웨어 보호&lt;/a&gt;에 관해 자세히 알아보세요.</translation>
++<translation id="934503638756687833">필요한 경우 여기에 표시되지 않은 항목도 삭제됩니다. Gooroom browser 개인정보 보호 백서에서 &lt;a href="<ph name="URL" />"&gt;원치 않는 소프트웨어 보호&lt;/a&gt;에 관해 자세히 알아보세요.</translation>
+ <translation id="935490618240037774">북마크, 방문 기록, 비밀번호, 기타 설정이 Google 계정에 동기화되므로 모든 기기에서 사용할 수 있습니다.</translation>
+ <translation id="935854577147268200">Smart Lock 휴대전화가 변경되었습니다. Smart Lock을 업데이트하려면 비밀번호를 입력하세요. 다음번에는 휴대전화를 통해 <ph name="DEVICE_TYPE" />이(가) 잠금 해제됩니다. 설정에서 Smart Lock을 사용 중지할 수 있습니다.</translation>
+ <translation id="936801553271523408">시스템 진단 데이터</translation>
+@@ -5395,7 +5395,7 @@
+ <translation id="939519157834106403">SSID</translation>
+ <translation id="939598580284253335">암호 입력</translation>
+ <translation id="939736085109172342">새 폴더</translation>
+-<translation id="942532530371314860"><ph name="APP_NAME" />에서 Chrome 탭과 오디오를 공유 중입니다.</translation>
++<translation id="942532530371314860"><ph name="APP_NAME" />에서 Gooroom browser 탭과 오디오를 공유 중입니다.</translation>
+ <translation id="945522503751344254">의견 보내기</translation>
+ <translation id="947329552760389097">요소 검사(&amp;I)</translation>
+ <translation id="952992212772159698">활성화되지 않음</translation>
+@@ -5404,7 +5404,7 @@
+ <translation id="960719561871045870">운영자 코드</translation>
+ <translation id="960987915827980018">약 1시간 남음</translation>
+ <translation id="962802172452141067">북마크 폴더 구조</translation>
+-<translation id="964286338916298286">IT 관리자가 내 기기에서 Chrome Goodies를 이용할 수 없도록 설정했습니다.</translation>
++<translation id="964286338916298286">IT 관리자가 내 기기에서 Gooroom browser Goodies를 이용할 수 없도록 설정했습니다.</translation>
+ <translation id="964439421054175458">{NUM_APLLICATIONS,plural, =1{애플리케이션}other{애플리케이션}}</translation>
+ <translation id="967007123645306417">Google 계정에서 로그아웃됩니다. 북마크, 방문 기록, 비밀번호, 기타 설정이 더 이상 Google 계정에 동기화되지 않습니다. 하지만 기존 데이터는 Google 계정에 계속 저장되며 <ph name="BEGIN_LINK" />Google 대시보드<ph name="END_LINK" />에서 관리할 수 있습니다.</translation>
+ <translation id="967624055006145463">저장된 데이터</translation>
+@@ -5424,10 +5424,10 @@
+ <translation id="987897973846887088">사용 가능한 이미지 없음</translation>
+ <translation id="988978206646512040">암호를 빈칸으로 두어서는 안 됩니다.</translation>
+ <translation id="992032470292211616">확장 프로그램, 앱 및 테마는 기기를 손상시킬 수 있습니다. 계속하시겠습니까?</translation>
+-<translation id="992592832486024913">ChromeVox(음성 피드백) 사용 중지</translation>
++<translation id="992592832486024913">Gooroom browserVox(음성 피드백) 사용 중지</translation>
+ <translation id="993540765962421562">설치 진행 중</translation>
+ <translation id="994289308992179865">루프(&amp;L)</translation>
+ <translation id="995782501881226248">YouTube</translation>
+ <translation id="996250603853062861">안전한 연결 설정 중...</translation>
+ <translation id="998747458861718449">검사(&amp;N)</translation>
+-</translationbundle>
+\ No newline at end of file
++</translationbundle>
+diff --git a/chrome/app/gooroom/settings_strings.grdp b/chrome/app/gooroom/settings_strings.grdp
+index 65b3d68ec84d..6cc5b41e6b44 100644
+--- a/chrome/app/gooroom/settings_strings.grdp
++++ b/chrome/app/gooroom/settings_strings.grdp
+@@ -2668,6 +2668,20 @@
+   <message name="IDS_SETTINGS_NETWORK_PREDICTION_ENABLED_DESC_UNIFIED_CONSENT" desc="In the advanced options tab, the secondary text next to the checkbox that enables prediction of network actions.">
+     Uses cookies to remember your preferences, even if you don’t visit those pages
+   </message>
++  <!-- by Gooroom TODO:need to use if-clause-->
++  <message name="IDS_OPTIONS_WEBSOCKET_ENABLE" desc="Websocket confirm enable.">
++    Enable Websocket
++  </message>
++  <message name="IDS_OPTIONS_WEBWORKER_ENABLE" desc="Webworker confirm enable">
++    Enable Webworker
++  </message>
++  <message name="IDS_OPTIONS_WEBSOCKET_CONFIRM_MESSAGE" desc="Websocket confirm">
++    Allow Websocket
++  </message>
++  <message name="IDS_OPTIONS_WEBWORKER_CONFIRM_MESSAGE" desc="Webworker confirm">
++    Allow Webworker
++  </message>
++  <!-- end of ... by Gooroom TODO:need to use if-clause-->
+   <message name="IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION" desc="The section title of 'Protects you and your device from dangerous sites'">
+     Safe Browsing (protects you and your device from dangerous sites)
+   </message>
+@@ -3029,7 +3043,7 @@
+     PDF documents
+   </message>
+   <message name="IDS_SETTINGS_SITE_SETTINGS_PDF_DOWNLOAD_PDFS" desc="Label for downloading PDF documents instead of automatically opening them in Chrome.">
+-    Download PDF files instead of automatically opening them in Chrome
++    Download PDF files instead of automatically opening them in Gooroom-browser
+   </message>
+   <message name="IDS_SETTINGS_SITE_SETTINGS_POPUPS" desc="Label for the pop-ups and redirects site settings.">
+     Pop-ups and redirects
+@@ -3148,7 +3162,7 @@
+     Block sites from running Flash (recommended)
+   </message>
+   <message name="IDS_SETTINGS_SITE_SETTINGS_FLASH_PERMISSIONS_ARE_EPHEMERAL" desc="The notice that Flash permissions are ephemeral, at the top of the Flash settings page.">
+-    Your Flash settings will be kept until you quit Chrome.
++    Your Flash settings will be kept until you quit Gooroom-browser.
+   </message>
+   <message name="IDS_SETTINGS_SITE_SETTINGS_ALLOW_RECENTLY_CLOSED_SITES" desc="The allow label for background sync in site settings.">
+     Allow recently closed sites to finish sending and receiving data
+-- 
+2.20.1
+

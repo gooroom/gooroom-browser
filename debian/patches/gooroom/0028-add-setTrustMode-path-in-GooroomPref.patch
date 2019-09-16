@@ -1,0 +1,30 @@
+From 7b22d7d50e33b585ee478bc826f514b84ff01f51 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 5 Sep 2019 11:58:07 +0900
+Subject: [PATCH 28/78] add 'setTrustMode()' path in GooroomPref
+
+---
+ gooroom/browser/gooroom_pref.cc | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 2c240ec3bd73..5210e3356583 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -86,6 +86,13 @@ void GooroomPref::setup() {
+     if (command.find("--user-data-dir") !=
+         std::string::npos) {  // exist --user-data-dir
+       use_user_data_dir = true;
++
++      // bug patch, setting trust mode when the browser launched without any url.
++      if(command == untrust_user_data_dir_option)
++        base::GetGooroomBase()->setTrustMode(false);
++      else
++        base::GetGooroomBase()->setTrustMode(true);
++
+       break;
+     }
+     if (GURL(*it).is_valid() == true) {
+-- 
+2.20.1
+

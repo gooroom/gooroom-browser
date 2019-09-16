@@ -1,0 +1,37 @@
+diff --git a/build/config/linux/gtk2/BUILD.gn b/build/config/linux/gtk2/BUILD.gn
+index a58a4b6..4d696c2 100644
+--- a/build/config/linux/gtk2/BUILD.gn
++++ b/build/config/linux/gtk2/BUILD.gn
+@@ -28,6 +28,7 @@ group("gtk2") {
+   visibility = [
+     "//build/config/linux/gtk",
+     "//chrome/browser/ui/libgtkui:*",
++    "//gooroom/browser:gooroom_browser",
+   ]
+   public_configs = [ ":gtk2_internal_config" ]
+ }
+diff --git a/build/config/linux/gtk/gtk.gni b/build/config/linux/gtk/gtk.gni
+index 64de5c3..d5cc70a 100644
+--- a/build/config/linux/gtk/gtk.gni
++++ b/build/config/linux/gtk/gtk.gni
+@@ -9,7 +9,7 @@ declare_args() {
+   use_gtk = is_desktop_linux && !is_chromeos && !is_chromecast && !use_ozone
+
+   # The (major) version of GTK to build against.
+-  gtk_version = 3
++  gtk_version = 2
+ }
+
+ assert(gtk_version >= 2 && gtk_version <= 4)
+diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
+index 4c4edf6..dddc52e 100644
+--- a/gooroom/browser/BUILD.gn
++++ b/gooroom/browser/BUILD.gn
+@@ -33,6 +33,6 @@ static_library("gooroom_browser") {
+   public_configs = [ ":signverify" ]
+   deps = [
+     "//chrome/browser:browser",
+-    "//build/config/linux/gtk",
++    "//build/config/linux/gtk2",
+   ]
+ }

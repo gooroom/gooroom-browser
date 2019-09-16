@@ -1,0 +1,27 @@
+From c7974f2b17cf3f686c309f0a636450acc6fd36d4 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 10 Sep 2019 11:55:23 +0900
+Subject: [PATCH 76/78] set gooroom-browser using DefaultTheme #3
+
+---
+ chrome/browser/themes/theme_service_aurax11.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/chrome/browser/themes/theme_service_aurax11.cc b/chrome/browser/themes/theme_service_aurax11.cc
+index d72163ba18d3..4b3c2b0fbf1b 100644
+--- a/chrome/browser/themes/theme_service_aurax11.cc
++++ b/chrome/browser/themes/theme_service_aurax11.cc
+@@ -113,6 +113,10 @@ bool ThemeServiceAuraX11::UsingSystemTheme() const {
+ void ThemeServiceAuraX11::FixInconsistentPreferencesIfNeeded() {
+   PrefService* prefs = profile()->GetPrefs();
+ 
++#if defined(GOOROOM_BUILD)
++  prefs->SetBoolean(prefs::kUsesSystemTheme, false);
++#endif
++
+   // When using the system theme, the theme ID should match the default. Give
+   // precedence to the non-default theme specified.
+   if (GetThemeID() != ThemeService::kDefaultThemeID &&
+-- 
+2.20.1
+

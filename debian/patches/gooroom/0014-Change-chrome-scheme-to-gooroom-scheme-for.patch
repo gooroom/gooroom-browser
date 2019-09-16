@@ -1,0 +1,43 @@
+From a00f9c80a2891a313bd617bbb8ed9c02e98190b0 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 4 Sep 2019 22:18:43 +0900
+Subject: [PATCH 14/78] Change chrome:// scheme to gooroom:// scheme for 
+ extensions.chrome_url_overrides
+
+---
+ chrome/browser/extensions/extension_web_ui.cc | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/chrome/browser/extensions/extension_web_ui.cc b/chrome/browser/extensions/extension_web_ui.cc
+index 7e5d418a5cae..8a1a2b6b1a4c 100644
+--- a/chrome/browser/extensions/extension_web_ui.cc
++++ b/chrome/browser/extensions/extension_web_ui.cc
+@@ -357,8 +357,13 @@ void ExtensionWebUI::RegisterProfilePrefs(
+ bool ExtensionWebUI::HandleChromeURLOverride(
+     GURL* url,
+     content::BrowserContext* browser_context) {
++#if defined(GOOROOM_BUILD)
++  if (!url->SchemeIs(content::kGooroomUIScheme))
++    return false;
++#else
+   if (!url->SchemeIs(content::kChromeUIScheme))
+     return false;
++#endif
+ 
+   Profile* profile = Profile::FromBrowserContext(browser_context);
+   const base::DictionaryValue* overrides =
+@@ -449,7 +454,11 @@ bool ExtensionWebUI::HandleChromeURLOverrideReverse(
+         continue;
+       if (base::StartsWith(url->spec(), override,
+                            base::CompareCase::SENSITIVE)) {
++#if defined(GOOROOM_BUILD)
++        GURL original_url(content::kGooroomUIScheme + std::string("://") +
++#else
+         GURL original_url(content::kChromeUIScheme + std::string("://") +
++#endif
+                           dict_iter.key() +
+                           url->spec().substr(override.length()));
+         *url = original_url;
+-- 
+2.20.1
+

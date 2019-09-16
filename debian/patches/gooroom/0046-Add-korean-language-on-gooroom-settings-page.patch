@@ -1,0 +1,55 @@
+From b7af9f434f59f0c0bfe9f685cc6c29da0d25abe3 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 5 Sep 2019 16:19:44 +0900
+Subject: [PATCH 46/78] Add korean language on gooroom://settings page.
+
+---
+ chrome/app/gooroom/resources/generated_resources_ko.xtb      | 1 +
+ chrome/app/gooroom/settings_strings.grdp                     | 2 +-
+ .../ui/webui/settings/settings_localized_strings_provider.cc | 5 ++---
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+index a7743bbb22a8..58510271b31d 100644
+--- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
++++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+@@ -3,6 +3,7 @@
+ <translationbundle lang="ko">
+ <translation id="2273707414284427980">웹 소켓 사용 설정</translation>
+ <translation id="4851515493665413363">웹 워커 사용 설정</translation>
++<translation id="8451170594022250242">Gooroom-browser를 종료할 때까지 Flash 설정이 유지됩니다.</translation>
+ <translation id="1002469766576243227">이 인증 서비스는 <ph name="EXTENSION_NAME" />에서 호스팅합니다</translation>
+ <translation id="1003088604756913841">새 <ph name="APP" /> 창에서 링크 열기</translation>
+ <translation id="1004218526896219317">사이트 액세스</translation>
+diff --git a/chrome/app/gooroom/settings_strings.grdp b/chrome/app/gooroom/settings_strings.grdp
+index 6cc5b41e6b44..57303c467f3c 100644
+--- a/chrome/app/gooroom/settings_strings.grdp
++++ b/chrome/app/gooroom/settings_strings.grdp
+@@ -2820,7 +2820,7 @@
+     </message>
+   </if>
+   <message name="IDS_SETTINGS_SEARCH_EXPLANATION" desc="Explanation for the search engine dropdown setting.">
+-    Search engine used in the <ph name="BEGIN_LINK">&lt;a target="_blank" href="$1"&gt;</ph>address bar<ph name="END_LINK">&lt;/a&gt;</ph>
++    Search engine used in the address bar
+   </message>
+   <message name="IDS_SETTINGS_SEARCH_MANAGE_SEARCH_ENGINES" desc="Label for the Manage Search Engines button.">
+     Manage search engines
+diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
+index fcdaf8cc2eb2..66e9537cbd8a 100644
+--- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
++++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
+@@ -2276,9 +2276,8 @@ void AddSearchStrings(content::WebUIDataSource* html_source, Profile* profile) {
+   };
+   AddLocalizedStringsBulk(html_source, localized_strings,
+                           base::size(localized_strings));
+-  base::string16 search_explanation_text = l10n_util::GetStringFUTF16(
+-      IDS_SETTINGS_SEARCH_EXPLANATION,
+-      base::ASCIIToUTF16(chrome::kOmniboxLearnMoreURL));
++  base::string16 search_explanation_text = l10n_util::GetStringUTF16(
++      IDS_SETTINGS_SEARCH_EXPLANATION);
+   html_source->AddString("searchExplanation", search_explanation_text);
+ #if defined(OS_CHROMEOS)
+   html_source->AddBoolean("isAssistantAllowed", is_assistant_allowed);
+-- 
+2.20.1
+

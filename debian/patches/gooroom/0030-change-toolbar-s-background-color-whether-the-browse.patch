@@ -1,0 +1,87 @@
+From 6e9143a5904d2930bcdc8a70e5a00e82139871de Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 5 Sep 2019 11:59:21 +0900
+Subject: [PATCH 30/78] change toolbar's background color whether the browser's
+  type is trust or untrust
+
+---
+ chrome/browser/themes/theme_properties.cc | 45 +++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/chrome/browser/themes/theme_properties.cc b/chrome/browser/themes/theme_properties.cc
+index 8529fa6cc223..4e7f1760397f 100644
+--- a/chrome/browser/themes/theme_properties.cc
++++ b/chrome/browser/themes/theme_properties.cc
+@@ -19,6 +19,10 @@
+ #include <windows.h>
+ #endif
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/base/gooroom_base.h"
++#endif
++
+ namespace {
+ 
+ // Strings used in alignment properties.
+@@ -34,6 +38,22 @@ constexpr char kTilingRepeatX[] = "repeat-x";
+ constexpr char kTilingRepeatY[] = "repeat-y";
+ constexpr char kTilingRepeat[] = "repeat";
+ 
++#if defined(GOOROOM_BUILD)
++const SkColor kDefaultColorFrameUntrust = SkColorSetRGB(0xb2, 0x2f, 0x00);
++const SkColor kDefaultColorFrameTrust = SkColorSetRGB(0x00, 0x60, 0xb5);
++
++const SkColor kDefaultColorFrameInactiveUntrust = SkColorSetRGB(0x93, 0x27, 0x00);
++const SkColor kDefaultColorFrameInactiveTrust = SkColorSetRGB(0x00, 0x51, 0x99);
++
++const SkColor kDefaultColorFrameIncognitoUntrust = SkColorSetRGB(111, 0, 0);
++const SkColor kDefaultColorFrameIncognitoTrust = SkColorSetRGB(0, 111, 0);
++
++const SkColor kDefaultColorFrameIncognitoInactiveUntrust =
++    SkColorSetRGB(175, 64, 64);
++const SkColor kDefaultColorFrameIncognitoInactiveTrust =
++    SkColorSetRGB(64, 175, 64);
++#endif
++
+ base::Optional<SkColor> GetIncognitoColor(int id) {
+   switch (id) {
+     case ThemeProperties::COLOR_FRAME:
+@@ -211,10 +231,35 @@ SkColor ThemeProperties::GetDefaultColor(int id, bool incognito) {
+     // increment the version number in browser_theme_pack.cc.
+     case COLOR_FRAME:
+     case COLOR_BACKGROUND_TAB:
++#if defined(GOOROOM_BUILD)
++      if (base::GetGooroomBase()->isTrustMode()) {
++        return incognito ? kDefaultColorFrameIncognitoTrust
++                         : kDefaultColorFrameTrust;
++                         }
++      else {
++        return incognito ? kDefaultColorFrameIncognitoUntrust
++                         : kDefaultColorFrameUntrust;
++                         }
++      // NOT REACHED
+       return SkColorSetRGB(0xDE, 0xE1, 0xE6);
++#else
++      return incognito ? kDefaultColorFrameIncognito : kDefaultColorFrame;
++#endif
+     case COLOR_FRAME_INACTIVE:
+     case COLOR_BACKGROUND_TAB_INACTIVE:
++#if defined(GOOROOM_BUILD)
++      if (base::GetGooroomBase()->isTrustMode())
++        return incognito ? kDefaultColorFrameIncognitoInactiveTrust
++                         : kDefaultColorFrameInactiveTrust;
++      else
++        return incognito ? kDefaultColorFrameIncognitoInactiveUntrust
++                         : kDefaultColorFrameInactiveUntrust;
++      // NOT REACHED
+       return SkColorSetRGB(0xE7, 0xEA, 0xED);
++#else
++      return incognito ? kDefaultColorFrameIncognitoInactive
++                       : kDefaultColorFrameInactive;
++#endif
+     case COLOR_DOWNLOAD_SHELF:
+     case COLOR_INFOBAR:
+     case COLOR_TOOLBAR:
+-- 
+2.20.1
+
