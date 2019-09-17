@@ -11,6 +11,7 @@ Rules-Requires-Root: no
 Build-Depends:
  debhelper (>= 11),
  devscripts (>= 2.18.9),
+ git,
  python3,
  pkg-config,
  ninja-build,
