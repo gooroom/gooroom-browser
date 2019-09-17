@@ -7423,29 +7423,6 @@ diff --git a/components/infobars/core/infobar_delegate.cc b/components/infobars/
 index 59ae71e43437..73a846e5960e 100644
 --- a/components/infobars/core/infobar_delegate.cc
 +++ b/components/infobars/core/infobar_delegate.cc
-@@ -17,6 +17,10 @@
- #include "ui/gfx/paint_vector_icon.h"
- #endif
- 
-+#if defined(GOOROOM_BUILD)
-+#include "chrome/grit/theme_resources.h"
-+#endif
-+
- namespace infobars {
- 
- const int InfoBarDelegate::kNoIconID = 0;
-@@ -30,7 +34,11 @@ InfoBarDelegate::InfoBarAutomationType
- }
- 
- int InfoBarDelegate::GetIconId() const {
-+#if defined(GOOROOM_BUILD)
-+  return IDR_PRODUCT_LOGO_22;
-+#else
-   return kNoIconID;
-+#endif
- }
- 
- const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
 @@ -39,7 +47,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
  }
  
