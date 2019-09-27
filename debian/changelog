@@ -1,3 +1,16 @@
+gooroom-browser (2.3.0-1+grm1u2) stretch; urgency=medium
+  
+  * Change gooroom-browser logo
+  * BugTrackingSystem
+    - 1555 : Voice search is not supported on gooroom-browser
+    - 1643 : Remove route to enter incognito  mode from bookmarks
+    - 1644 : Prevents most-visited output from changing to none.
+    - 1656 : 'devtools://' scheme is excluded from trust/untrust judgment
+    - 1692 : Change Gooroom logo tooltip on newtab page
+    - 1693 : Remove route to enter incognito mode from link
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 27 Sep 2019 15:51:00 +0900
+
 gooroom-browser (2.3.0-1+grm1u1) stretch; urgency=medium
 
   * Init Gooroom browser version (2.3.0-1+grm1u1)
