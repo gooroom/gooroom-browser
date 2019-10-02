@@ -176,3 +176,12 @@ gooroom/0081-BugTrackingSystem.patch
 gooroom/0082-BugTrackingSystem.patch
 gooroom/0083-BugTrackingSystem.patch
 gooroom/0084-BugTrackingSystem.patch
+gooroom/CVE-2019-13687.patch
+gooroom/CVE-2019-13688.patch
+gooroom/CVE-2019-13691.patch
+gooroom/CVE-2019-5871.patch
+gooroom/CVE-2019-5872.patch
+gooroom/CVE-2019-5874.patch
+gooroom/CVE-2019-5875.patch
+gooroom/CVE-2019-5876.patch
+
