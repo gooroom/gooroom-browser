@@ -1,3 +1,23 @@
+gooroom-browser (2.2.0-1+grm1u12) stretch; urgency=medium
+
+  * BugTrackingSystem
+    - 1675 : Remove [Continue running background apps
+             after Gooroom-browser shutdown] tab.
+    - 1646 : Gooroom browser does not support tabs from
+             other devices.
+    - 1492 : Add allow process on PageSourceViewEnabled
+             policy
+    - 1656 : 'devtools://' scheme is excluded
+             from trust/untrust judgment
+    - 1643 : Remove route to enter incognito
+             mode from bookmarks
+    - 1692 : Change Gooroom logo tooltip on
+             newtab page
+    - 1693 : Remove route to enter incognito
+             mode from link
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 7 Oct 2019 14:08:00 +0900
+
 gooroom-browser (2.2.0-1+grm1u11) stretch; urgency=medium
 
   * VerfySign module works only when checksign option is present.

@@ -1,0 +1,33 @@
+From 7b37146e21c9f895abb67cadc408142aba64f5a3 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 26 Sep 2019 19:17:10 +0900
+Subject: [PATCH 6/6] BugTrackingSystem 1693 : Remove route to enter incognito
+ mode from link
+
+---
+ .../renderer_context_menu/render_view_context_menu.cc    | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+index 5343f4f53cb8..20d5007d1d3f 100644
+--- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
++++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+@@ -1157,10 +1157,11 @@ void RenderViewContextMenu::AppendLinkItems() {
+       AppendProtocolHandlerSubMenu();
+     }
+ 
+-    menu_model_.AddItemWithStringId(
+-        IDC_CONTENT_CONTEXT_OPENLINKOFFTHERECORD,
+-        in_app ? IDS_CONTENT_CONTEXT_OPENLINKOFFTHERECORD_INAPP
+-               : IDS_CONTENT_CONTEXT_OPENLINKOFFTHERECORD);
++// Remove route to enter incognito mode from link
++//    menu_model_.AddItemWithStringId(
++//        IDC_CONTENT_CONTEXT_OPENLINKOFFTHERECORD,
++//        in_app ? IDS_CONTENT_CONTEXT_OPENLINKOFFTHERECORD_INAPP
++//               : IDS_CONTENT_CONTEXT_OPENLINKOFFTHERECORD);
+ 
+     AppendOpenInBookmarkAppLinkItems();
+     AppendOpenWithLinkItems();
+-- 
+2.20.1
+
