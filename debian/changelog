@@ -1,3 +1,16 @@
+gooroom-browser (2.3.0-1+grm1u3) stretch; urgency=medium
+  
+  * Security patch
+    - CVE-2019-13687, CVE-2019-13688, CVE-2019-13691, CVE-2019-5871
+    - CVE-2019-5872, CVE-2019-5874, CVE-2019-5875, CVE-2019-5876
+  * BugTrackingSystem
+    - 1642 : Modify Extensions to exposure (calculator, note)
+    - 1492 : Add allow process on PageSourceViewEnabled policy
+    - 1646 : Gooroom browser does not support tabs from other devices.
+    - 1675 : Remove [Continue running background apps after Gooroom-browser shutdown] tab. 
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 07 Oct 2019 11:42:00 +0900
+
 gooroom-browser (2.3.0-1+grm1u2) stretch; urgency=medium
   
   * Change gooroom-browser logo

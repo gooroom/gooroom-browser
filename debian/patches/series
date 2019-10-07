@@ -184,4 +184,6 @@ gooroom/CVE-2019-5872.patch
 gooroom/CVE-2019-5874.patch
 gooroom/CVE-2019-5875.patch
 gooroom/CVE-2019-5876.patch
-
+gooroom/BTS-1492-Add-allow-process-on-PageSourceViewEnabled-.patch
+gooroom/BTS-1646-Gooroom-browser-does-not-support-tabs-from-.patch
+gooroom/BTS-1675-Remove-Continue-running-background-apps-aft.patch
