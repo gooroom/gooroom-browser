@@ -1,3 +1,26 @@
+gooroom-browser (2.2.0-1+grm1u13) stretch; urgency=medium
+
+  * Security patch
+    - CVE-2019-13687
+    - CVE-2019-13688
+    - CVE-2019-13691
+    - CVE-2019-13694
+    - CVE-2019-13695
+    - CVE-2019-13698
+    - CVE-2019-5807
+    - CVE-2019-5808
+    - CVE-2019-5809
+    - CVE-2019-5824
+    - CVE-2019-5826
+    - CVE-2019-5842
+    - CVE-2019-5850
+    - CVE-2019-5851
+    - CVE-2019-5859
+    - CVE-2019-5872
+    - CVE-2019-5874
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 8 Sep 2019 10:51:00 +0900
+
 gooroom-browser (2.2.0-1+grm1u12) stretch; urgency=medium
 
   * BugTrackingSystem
