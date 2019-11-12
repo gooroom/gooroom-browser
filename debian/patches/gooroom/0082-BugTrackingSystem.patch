@@ -27,16 +27,15 @@ index abbdf650f67e..cdabb49dccbe 100644
        }
  
        // Listener for updating the key capture state.
-@@ -1346,7 +1347,8 @@ function createIframes() {
+@@ -1345,8 +1345,9 @@ function createIframes() {
      };
  
      if (configData.hideShortcuts) {
 -      $(IDS.TILES).style.display = 'none';
+-      clIframeDialog.style.display = 'none';
 +// Prevents most-visited ouput from changing to none.
 +//      $(IDS.TILES).style.display = 'none';
-       clIframeDialog.style.display = 'none';
++//      clIframeDialog.style.display = 'none';
      }
    }
--- 
-2.20.1
-
+ 
