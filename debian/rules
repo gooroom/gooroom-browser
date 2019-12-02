@@ -144,7 +144,7 @@ override_dh_auto_configure:
 	./debian/scripts/unbundle
 
 override_dh_auto_build-arch: out/Release/gn
-	git apply debian/patches/gooroom/*
+	git apply debian/patches/gooroom/0010-Put-gooroom-logo-into-the-browser.patch
 	./out/Release/gn gen out/Release --args="$(defines)"
 	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox
 	cp out/Release/chrome_sandbox out/Release/chrome-sandbox
