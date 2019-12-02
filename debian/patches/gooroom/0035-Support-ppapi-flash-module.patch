@@ -1,0 +1,44 @@
+From 57778a2e40977cacad08753d6fd9f565842604e8 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 28 Nov 2019 10:55:23 +0900
+Subject: [PATCH 35/58] Support ppapi-flash module
+
+---
+ gooroom/browser/gooroom_pref.cc | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index ae91b7f036be..f99165641f52 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -80,6 +80,9 @@ void GooroomPref::setup() {
+   std::string untrust_user_data_dir_option =
+       "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
+       "/.config/gooroom/untrust";
++  //TODO need to get the flash version dynamically.
++  std::string flash_dir = "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so";
++  std::string flash_version = "--ppapi-flash-version=31.0.0.153";
+ 
+   bool use_user_data_dir = false;
+   for (base::CommandLine::StringVector::const_iterator it = argv.begin();
+@@ -107,7 +110,7 @@ void GooroomPref::setup() {
+           exit(0);
+         } else {
+           execl(exe_path.c_str(), "gooroom-browser",
+-                trust_user_data_dir_option.c_str(), GURL(*it).spec().c_str(),
++                trust_user_data_dir_option.c_str(), flash_dir.c_str(), flash_version.c_str(), GURL(*it).spec().c_str(),
+                 NULL);
+           exit(0);
+         }
+@@ -117,7 +120,7 @@ void GooroomPref::setup() {
+           exit(0);
+         } else {
+           execl(exe_path.c_str(), "gooroom-browser",
+-                untrust_user_data_dir_option.c_str(), GURL(*it).spec().c_str(),
++                untrust_user_data_dir_option.c_str(),flash_dir.c_str(), flash_version.c_str(), GURL(*it).spec().c_str(),
+                 NULL);
+           exit(0);
+         }
+-- 
+2.20.1
+

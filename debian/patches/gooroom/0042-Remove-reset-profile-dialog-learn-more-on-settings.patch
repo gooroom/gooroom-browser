@@ -1,0 +1,31 @@
+From dc4640d2f22b70e0b8b67e15bf93f71dff8555ca Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 29 Nov 2019 15:21:47 +0900
+Subject: [PATCH 42/58] Remove reset-profile-dialog 'learn more' on settings 
+ page
+
+---
+ .../resources/settings/reset_page/reset_profile_dialog.html   | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+index 5c5863d80edc..5f7efcf95195 100644
+--- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
++++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+@@ -32,9 +32,13 @@
+       <div id="dialog-body" slot="body">
+         <span>
+           [[getExplanationText_(isTriggered_, triggeredResetToolName_)]]
++<!--
++<if expr="not _gooroom">
+           <a href="$i18nRaw{resetPageLearnMoreUrl}" target="_blank">
+             $i18n{learnMore}
+           </a>
++</if>
++-->
+         </span>
+       </div>
+       <div slot="button-container">
+-- 
+2.20.1
+

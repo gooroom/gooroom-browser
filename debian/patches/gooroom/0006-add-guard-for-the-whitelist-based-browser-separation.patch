@@ -1,7 +1,7 @@
-From 333de93ac3ab94c56c4f2f4bc2a22df119f48a86 Mon Sep 17 00:00:00 2001
+From fd19a48f2103742fa3fc29270024e96a1e8362e9 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 4 Sep 2019 20:18:47 +0900
-Subject: [PATCH 06/78] add guard for the whitelist based browser separation
+Date: Wed, 20 Nov 2019 20:29:45 +0900
+Subject: [PATCH 06/58] add guard for the whitelist based browser separation
 
 ---
  build/config/chrome_build.gni   | 1 +

@@ -1,0 +1,33 @@
+From 74e74591b567f28322c701858471d594d1900695 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 29 Nov 2019 15:55:34 +0900
+Subject: [PATCH 53/58] BugTrackingSystem
+
+507 : Disable 'Open as window' on making shortcut app popup
+---
+ .../ui/views/extensions/bookmark_app_confirmation_view.cc       | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/ui/views/extensions/bookmark_app_confirmation_view.cc b/chrome/browser/ui/views/extensions/bookmark_app_confirmation_view.cc
+index e7cf92fff431..2e8e78a81846 100644
+--- a/chrome/browser/ui/views/extensions/bookmark_app_confirmation_view.cc
++++ b/chrome/browser/ui/views/extensions/bookmark_app_confirmation_view.cc
+@@ -84,6 +84,7 @@ BookmarkAppConfirmationView::BookmarkAppConfirmationView(
+   layout->AddPaddingRow(
+       views::GridLayout::kFixedSize,
+       layout_provider->GetDistanceMetric(DISTANCE_CONTROL_LIST_VERTICAL));
++#if !defined(GOOROOM_BUILD) //Disable open as window checkbox on gooroom-browser
+   auto open_as_window_checkbox = std::make_unique<views::Checkbox>(
+       l10n_util::GetStringUTF16(IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_WINDOW));
+   open_as_window_checkbox->SetChecked(web_app_info_->open_as_window);
+@@ -91,6 +92,7 @@ BookmarkAppConfirmationView::BookmarkAppConfirmationView(
+   layout->SkipColumns(1);
+   open_as_window_checkbox_ =
+       layout->AddView(std::move(open_as_window_checkbox));
++#endif
+ 
+   title_tf_->SelectAll(true);
+   chrome::RecordDialogCreation(
+-- 
+2.20.1
+

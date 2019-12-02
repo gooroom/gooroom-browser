@@ -1,0 +1,1105 @@
+From 697c2c38974725a646a0337a32be2fd70de89b2d Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 20 Nov 2019 19:02:10 +0900
+Subject: [PATCH 01/58] add /gooroom and configs to build gooroom-browser 
+ binary
+
+---
+ BUILD.gn                                      |   2 +
+ build/config/compiler/BUILD.gn                |   3 +
+ .../browser/chrome_content_browser_client.h   |   4 +-
+ gooroom/BUILD.gn                              | 453 ++++++++++++++++++
+ gooroom/app/gooroom_exe_main_aura.cc          |  22 +
+ gooroom/app/gooroom_main.cc                   | 117 +++++
+ gooroom/app/gooroom_main_delegate.cc          |  95 ++++
+ gooroom/app/gooroom_main_delegate.h           |  48 ++
+ gooroom/browser/BUILD.gn                      |  20 +
+ .../browser/gooroom_content_browser_client.cc | 163 +++++++
+ .../browser/gooroom_content_browser_client.h  |  29 ++
+ gooroom/browser/gooroom_content_client.cc     |   1 +
+ gooroom/browser/gooroom_content_client.h      |  13 +
+ 13 files changed, 969 insertions(+), 1 deletion(-)
+ create mode 100644 gooroom/BUILD.gn
+ create mode 100644 gooroom/app/gooroom_exe_main_aura.cc
+ create mode 100644 gooroom/app/gooroom_main.cc
+ create mode 100644 gooroom/app/gooroom_main_delegate.cc
+ create mode 100644 gooroom/app/gooroom_main_delegate.h
+ create mode 100644 gooroom/browser/BUILD.gn
+ create mode 100644 gooroom/browser/gooroom_content_browser_client.cc
+ create mode 100644 gooroom/browser/gooroom_content_browser_client.h
+ create mode 100644 gooroom/browser/gooroom_content_client.cc
+ create mode 100644 gooroom/browser/gooroom_content_client.h
+
+diff --git a/BUILD.gn b/BUILD.gn
+index 5e2f6b9b0f41..e964c0ad3886 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -152,6 +152,8 @@ group("gn_all") {
+       "//tools/polymer:polymer_tools_python_unittests",
+       "//ui/accessibility:accessibility_unittests",
+       "//ui/accessibility/extensions",
++      "//gooroom:gooroom-browser",
++      "//gooroom/browser:gooroom_browser",
+     ]
+   }
+ 
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 352cb646dd51..82da46cd38d1 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -224,6 +224,9 @@ config("compiler") {
+   defines = []
+   configs = []
+ 
++# TODO move into gooroom's and check ^^^^^ by gooroom
++  defines += [ "GOOROOM_BUILD" ]
++
+   # System-specific flags. If your compiler flags apply to one of the
+   # categories here, add it to the associated file to keep this shared config
+   # smaller.
+diff --git a/chrome/browser/chrome_content_browser_client.h b/chrome/browser/chrome_content_browser_client.h
+index 6bb50192ce17..658d371c1240 100644
+--- a/chrome/browser/chrome_content_browser_client.h
++++ b/chrome/browser/chrome_content_browser_client.h
+@@ -633,6 +633,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+                                  content::BrowserContext* browser_context);
+   virtual const ui::NativeTheme* GetWebTheme() const;  // For testing.
+ 
++  // [GOOROOM] Changed from private to protected for inheritance.
++  StartupData* startup_data_;
++
+  private:
+   friend class DisableWebRtcEncryptionFlagTest;
+   friend class InProcessBrowserTest;
+@@ -705,7 +708,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+                                               const url::Origin&>>
+       worker_interfaces_parameterized_;
+ 
+-  StartupData* startup_data_;
+ 
+ #if !defined(OS_ANDROID)
+   std::unique_ptr<ChromeSerialDelegate> serial_delegate_;
+diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
+new file mode 100644
+index 000000000000..386ae3bca6f6
+--- /dev/null
++++ b/gooroom/BUILD.gn
+@@ -0,0 +1,453 @@
++# Copyright 2014 The Chromium Authors. All rights reserved.
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++
++import("//build/config/chrome_build.gni")
++import("//build/config/compiler/compiler.gni")
++import("//build/config/compiler/pgo/pgo.gni")
++import("//build/config/linux/pangocairo/pangocairo.gni")
++import("//build/config/locales.gni")
++import("//build/config/sanitizers/sanitizers.gni")
++import("//build/config/ui.gni")
++import("//build/config/win/console_app.gni")
++import("//build/config/win/manifest.gni")
++import("//build/toolchain/toolchain.gni")
++import("//chrome/chrome_paks.gni")
++import("//chrome/common/features.gni")
++import("//chrome/process_version_rc_template.gni")
++import("//components/nacl/features.gni")
++import("//media/media_options.gni")
++import("//third_party/widevine/cdm/widevine.gni")
++import("//tools/resources/generate_resource_whitelist.gni")
++import("//v8/gni/v8.gni")
++
++if (is_android) {
++  import("//build/config/android/rules.gni")
++} else if (is_mac) {
++  import("//build/compiled_action.gni")
++  import("//build/config/mac/rules.gni")
++  import("//build/config/mac/symbols.gni")
++  import("//build/mac/tweak_info_plist.gni")
++  import("//build/util/branding.gni")
++  import("//build/util/version.gni")
++  import("//media/cdm/ppapi/cdm_paths.gni")
++  import("//third_party/icu/config.gni")
++}
++
++assert(!is_ios, "Chromium/iOS shouldn't use anything in //chrome")
++
++if (enable_resource_whitelist_generation) {
++  chrome_resource_whitelist = "$target_gen_dir/chrome_resource_whitelist.txt"
++}
++
++# This target exists above chrome and it's main components in the dependency
++# tree as a central place to put assert_no_deps annotations. Since this depends
++# on Chrome and the main DLLs it uses, it will transitively assert that those
++# targets also have no deps on disallowed things.
++group("assert_no_deps") {
++  deps = []
++
++  if (is_android) {
++    deps += [ "//chrome/android:chrome_public_apk" ]
++  } else {
++    #deps += [ ":chrome" ]
++    deps += [ "//chrome:chrome" ]
++  }
++
++  if (is_win) {
++    deps += [
++      ":chrome_dll",
++      ":main_dll",
++    ]
++  }
++
++  # This should not pull in installer strings. This is will bloat the binary
++  # for no reason and is easy to mess up. See the comment at the top of
++  # //chrome/installer/util/BUILD.gn.
++  assert_no_deps = [ "//chrome/installer/util:strings" ]
++}
++
++if (!is_android && !is_mac) {
++  #group("chrome") {
++  group("gooroom-browser") {
++    public_deps = [
++      #":chrome_initial",
++      ":gooroom_initial",
++    ]
++    data_deps = [
++      #":chrome_initial",
++      ":gooroom_initial",
++    ]
++    if (is_win) {
++      public_deps += [ ":reorder_imports" ]
++    }
++    if (is_chromeos) {
++      data_deps += [ "//sandbox/linux:chrome_sandbox" ]
++    }
++  }
++
++  #template("chrome_binary") {
++  template("gooroom_binary") {
++    executable(target_name) {
++      output_name = invoker.output_name
++      sources = invoker.sources
++      if (defined(invoker.deps)) {
++        deps = invoker.deps
++      } else {
++        deps = []
++      }
++      if (defined(invoker.data)) {
++        data = invoker.data
++      } else {
++        data = []
++      }
++
++      if (!is_win || is_clang) {
++        # Normally, we need to pass specific flags to the linker to
++        # create an executable that gathers profile data. However, when
++        # using MSVC, we need to make sure we *don't* pass /GENPROFILE
++        # when linking without generating any code, or else the linker
++        # will give us fatal error LNK1264. So we add the PGO flags
++        # on all configurations, execpt MSVC on Windows.
++        configs += [ "//build/config/compiler/pgo:default_pgo_flags" ]
++      }
++
++      # Because the sources list varies so significantly per-platform, generally
++      # each platform lists its own files rather than relying on filtering or
++      # removing unused files.
++      sources += [ "app/chrome_exe_resource.h" ]
++      defines = []
++      public_deps = []
++
++      data += [ "$root_out_dir/resources.pak" ]
++      if (is_linux || is_win) {
++        data += [
++          "$root_out_dir/chrome_100_percent.pak",
++          "$root_out_dir/locales/en-US.pak",
++          "$root_out_dir/locales/fr.pak",
++        ]
++      }
++
++      data_deps = []
++
++      if (is_linux) {
++        sources += [
++          #"app/chrome_dll_resource.h",
++          #"app/chrome_main.cc",
++          #"app/chrome_main_delegate.cc",
++          #"app/chrome_main_delegate.h",
++          "//chrome/app/chrome_dll_resource.h",
++          "//chrome/app/chrome_main.cc",
++          "//chrome/app/chrome_main_delegate.cc",
++          "//chrome/app/chrome_main_delegate.h",
++          
++          # Gooroom source code
++          "app/gooroom_exe_main_aura.cc",
++          "app/gooroom_main.cc",
++          "app/gooroom_main_delegate.h",
++          "app/gooroom_main_delegate.cc",
++        ]
++
++        deps += [
++          # On Linux, link the dependencies (libraries) that make up actual
++          # Chromium functionality directly into the executable.
++          #"//chrome:browser_dependencies",
++          #"//chrome:child_dependencies",
++          "//chrome:browser_dependencies",
++          "//chrome:child_dependencies",
++
++          # For the sampling profiler.
++          "//chrome/common/profiler",
++
++          # Needed to use the master_preferences functions
++          "//chrome/installer/util:with_no_strings",
++          "//content/public/app:both",
++          "//content/public/common:service_names",
++
++          # For headless mode.
++          "//headless:headless_shell_lib",
++          "//services/service_manager/embedder",
++
++          # For Gooroom build
++          "//gooroom/browser:gooroom_browser",
++        ]
++
++        public_deps = [
++          #":xdg_mime",  # Needs to be public for installer to consume files.
++          "//chrome:xdg_mime",  # Needs to be public for installer to consume files.
++          "//chrome/common:buildflags",
++        ]
++
++        ldflags = []
++
++        # Chrome OS debug builds for arm need to pass --long-plt to the linker.
++        # See https://bugs.chromium.org/p/chromium/issues/detail?id=583532
++        if (is_chromeos && is_debug && target_cpu == "arm") {
++          ldflags += [ "-Wl,--long-plt" ]
++        }
++
++        if (is_desktop_linux && !is_component_build && !using_sanitizer) {
++          version_script = "//build/linux/chrome.map"
++          inputs = [
++            version_script,
++          ]
++          ldflags += [ "-Wl,--version-script=" +
++                       rebase_path(version_script, root_build_dir) ]
++        }
++
++        if (use_x11) {
++          configs += [
++            "//build/config/linux:x11",
++            "//build/config/linux:xext",
++          ]
++        }
++      }
++
++      # These files are used by the installer so we need a public dep.
++      #public_deps += [ "packed_resources" ]
++      public_deps += [ "//chrome:packed_resources" ]
++
++      # Only ChromeOS has precompiled Flash that needs to get copied to the output
++      # directory. On other platforms, Flash is either component-updated only or
++      # not supported at all.
++      if (is_chromeos) {
++        deps += [ "//third_party/adobe/flash:flapper_binaries" ]
++      }
++
++      data_deps += [
++        "//chrome/browser/resources/media/mei_preload:component",
++      ]
++
++      if (is_multi_dll_chrome) {
++        defines += [ "CHROME_MULTIPLE_DLL" ]
++        data_deps += [ ":chrome_child" ]
++      }
++    }
++  }
++
++  #chrome_binary("chrome_initial") {
++  gooroom_binary("gooroom_initial") {
++    if (is_win) {
++      #output_name = "initialexe/chrome"
++      output_name = "initialexe/gooroom-browser"
++    } else {
++      #output_name = "chrome"
++      output_name = "gooroom-browser"
++    }
++
++    sources = []
++    if (!is_win && use_aura) {
++      # Non-Windows aura entrypoint.
++      sources += [ #"//chrome/app/chrome_exe_main_aura.cc" ]
++
++        # Gooroom source code
++        
++        # for commit #1, glue commit #3, #5
++        "browser/gooroom_content_browser_client.cc",
++        "browser/gooroom_content_browser_client.h",
++        "browser/gooroom_content_client.cc",
++        "browser/gooroom_content_client.h",
++      ]
++    }
++  }
++}  # !is_android && !is_mac
++
++group("browser_dependencies") {
++  public_deps = [
++    "//chrome/browser",
++    "//chrome/common",
++    "//components/sync",
++  ]
++  if (enable_plugins) {
++    public_deps += [ "//ppapi/host" ]
++  }
++
++  if (enable_basic_printing || enable_print_preview) {
++    public_deps += [ "//printing" ]
++    if (enable_print_preview && !is_chromeos) {
++      public_deps += [ "//chrome/service" ]
++    }
++  }
++
++  if (!is_component_build) {
++    assert_no_deps = [
++      # Blink should not be used in the browser process. In component build this
++      # is OK because all of content is linked into one library. Note that the
++      # blink_headers target is OK, so we can't do a wildcard for all blink
++      # targets.
++      "//third_party/WebKit/public:blink",
++    ]
++
++    if (is_win) {
++      assert_no_deps += [
++        # V8/Gin should not be used in the browser DLL on Windows.
++        "//gin",
++        "//tools/v8_context_snapshot",
++        "//v8",
++      ]
++    }
++  }
++}
++
++group("child_dependencies") {
++  public_deps = [
++    "//chrome/browser/devtools",
++    "//chrome/child",
++    "//chrome/common",
++    "//chrome/gpu",
++    "//chrome/renderer",
++    "//chrome/utility",
++    "//components/sync",
++    "//content/public/child",
++    "//pdf",
++    "//third_party/blink/public:blink_devtools_frontend_resources_files",
++  ]
++
++  if (enable_nacl) {
++    public_deps += [ "//components/nacl/renderer/plugin:nacl_trusted_plugin" ]
++  }
++}
++
++group("resources") {
++  public_deps = [
++    "//chrome/browser:resources",
++    "//chrome/common:resources",
++    "//chrome/renderer:resources",
++  ]
++}
++
++group("extra_resources") {
++  # Deps should be same as those in chrome_extra_paks() within chrome_paks.gni.
++  public_deps = [
++    "//chrome/browser/resources:invalidations_resources",
++    "//chrome/browser/resources:net_internals_resources",
++    "//chrome/browser/resources:quota_internals_resources",
++    "//chrome/browser/resources:webapks_ui_resources",
++  ]
++
++  if (!is_android) {
++    public_deps += [
++      "//chrome/browser/resources:component_extension_resources",
++      "//chrome/browser/resources:downloads_resources",
++      "//chrome/browser/resources:local_ntp_resources",
++      "//chrome/browser/resources:settings_resources",
++    ]
++  }
++
++  if (is_chromeos) {
++    public_deps += [
++      "//chrome/browser/resources/chromeos/chromevox",
++      "//chrome/browser/resources/chromeos/select_to_speak",
++      "//chrome/browser/resources/chromeos/switch_access",
++    ]
++  }
++
++  if (enable_extensions) {
++    public_deps += [
++      "//chrome/browser/resources:extensions_resources",
++      "//chrome/browser/resources:sync_file_system_internals_resources",
++    ]
++  }
++
++  if (enable_print_preview) {
++    public_deps += [ "//chrome/browser/resources:print_preview_resources" ]
++  }
++}
++
++if (is_chrome_branded && !is_android) {
++  if (!is_mac) {
++    _default_apps_target_type = "copy"
++  } else {
++    _default_apps_target_type = "bundle_data"
++  }
++
++  target(_default_apps_target_type, "default_apps") {
++    visibility = [ ":packed_resources" ]
++    if (is_mac) {
++      visibility += [
++        ":chrome_framework",
++        ":chrome_framework_shared_library",
++      ]
++    }
++
++    sources = [
++      "browser/resources/default_apps/docs.crx",
++      "browser/resources/default_apps/drive.crx",
++      "browser/resources/default_apps/external_extensions.json",
++      "browser/resources/default_apps/gmail.crx",
++      "browser/resources/default_apps/youtube.crx",
++    ]
++
++    if (!is_mac) {
++      outputs = [
++        "$root_out_dir/default_apps/{{source_file_part}}",
++      ]
++    } else {
++      outputs = [
++        "{{bundle_contents_dir}}/Default Apps/{{source_file_part}}",
++      ]
++    }
++
++    # Force anybody that depends on this to get the default apps as data files.
++    data = process_file_template(sources, outputs)
++  }
++}
++
++group("strings") {
++  public_deps = [
++    "//chrome/app:chromium_strings",
++    "//chrome/app:generated_resources",
++    "//chrome/app:google_chrome_strings",
++    "//chrome/app/resources:locale_settings",
++  ]
++}
++
++if (enable_resource_whitelist_generation) {
++  generate_resource_whitelist("resource_whitelist") {
++    deps = [
++      "//chrome/android:libchrome",
++    ]
++    input = "$root_out_dir/libchrome$shlib_extension.whitelist"
++    output = chrome_resource_whitelist
++  }
++}
++
++if (is_linux) {
++  if (is_official_build) {
++    action("linux_symbols") {
++      script = "//build/linux/dump_app_syms.py"
++
++      dump_syms_label = "//third_party/breakpad:dump_syms($host_toolchain)"
++      dump_syms_binary =
++          get_label_info(dump_syms_label, "root_out_dir") + "/" + "dump_syms"
++
++      chrome_binary = "$root_out_dir/chrome"
++      if (current_cpu == "x86") {
++        # GYP used "ia32" so keep that naming for back-compat.
++        symbol_file = "$root_out_dir/chrome.breakpad.ia32"
++      } else {
++        symbol_file = "$root_out_dir/chrome.breakpad.$current_cpu"
++      }
++
++      inputs = [
++        chrome_binary,
++        dump_syms_binary,
++      ]
++      outputs = [
++        symbol_file,
++      ]
++
++      args = [
++        "./" + rebase_path(dump_syms_binary, root_build_dir),
++        "0",  # strip_binary = false
++        rebase_path(chrome_binary, root_build_dir),
++        rebase_path(symbol_file, root_build_dir),
++      ]
++
++      deps = [
++        ":chrome",
++        dump_syms_label,
++      ]
++    }
++  }
++}
+diff --git a/gooroom/app/gooroom_exe_main_aura.cc b/gooroom/app/gooroom_exe_main_aura.cc
+new file mode 100644
+index 000000000000..50053010c311
+--- /dev/null
++++ b/gooroom/app/gooroom_exe_main_aura.cc
+@@ -0,0 +1,22 @@
++// Copyright (c) 2011 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include <stdlib.h>
++#include <string.h>
++
++#include "build/build_config.h"
++#include "base/syslog_logging.h"
++
++// The entry point for all invocations of Chromium, browser and renderer. On
++// windows, this does nothing but load chrome.dll and invoke its entry point in
++// order to make it easy to update the app from GoogleUpdate. We don't need
++// that extra layer with on linux.
++
++extern "C" {
++int GooroomMain(int argc, const char** argv);
++}
++
++int main(int argc, const char** argv) {
++  return GooroomMain(argc, argv);
++}
+diff --git a/gooroom/app/gooroom_main.cc b/gooroom/app/gooroom_main.cc
+new file mode 100644
+index 000000000000..3b42cd15673c
+--- /dev/null
++++ b/gooroom/app/gooroom_main.cc
+@@ -0,0 +1,117 @@
++// Copyright (c) 2012 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include <stdint.h>
++
++#include "gooroom_main_delegate.h"
++
++#include "base/command_line.h"
++#include "base/time/time.h"
++#include "build/build_config.h"
++#include "chrome/app/chrome_main_delegate.h"
++#include "chrome/common/chrome_switches.h"
++#include "chrome/common/profiler/main_thread_stack_sampling_profiler.h"
++#include "chrome/common/buildflags.h"
++#include "content/app/content_service_manager_main_delegate.h"
++#include "content/public/common/content_switches.h"
++#include "headless/public/headless_shell.h"
++#include "services/service_manager/embedder/main.h"
++#include "ui/gfx/switches.h"
++
++#if defined(OS_MACOSX)
++#include "chrome/app/chrome_main_mac.h"
++#endif
++
++#if defined(OS_WIN)
++#include "base/debug/dump_without_crashing.h"
++#include "base/win/win_util.h"
++#include "chrome/common/chrome_constants.h"
++#include "chrome/install_static/initialize_from_primary_module.h"
++#include "chrome/install_static/install_details.h"
++
++#define DLLEXPORT __declspec(dllexport)
++
++// We use extern C for the prototype DLLEXPORT to avoid C++ name mangling.
++extern "C" {
++DLLEXPORT int __cdecl GooroomMain(HINSTANCE instance,
++                                  sandbox::SandboxInterfaceInfo* sandbox_info,
++                                  int64_t exe_entry_point_ticks);
++}
++#elif defined(OS_POSIX)
++extern "C" {
++__attribute__((visibility("default"))) int GooroomMain(int argc,
++                                                       const char** argv);
++}
++#endif
++
++#if defined(OS_WIN)
++DLLEXPORT int __cdecl GooroomMain(HINSTANCE instance,
++                                  sandbox::SandboxInterfaceInfo* sandbox_info,
++                                  int64_t exe_entry_point_ticks) {
++#elif defined(OS_POSIX)
++int GooroomMain(int argc, const char** argv) {
++  int64_t exe_entry_point_ticks = 0;
++#endif
++
++#if defined(OS_WIN)
++  install_static::InitializeFromPrimaryModule();
++#endif
++
++  GooroomMainDelegate gooroom_main_delegate(
++      base::TimeTicks::FromInternalValue(exe_entry_point_ticks));
++  ChromeMainDelegate chrome_main_delegate(
++      base::TimeTicks::FromInternalValue(exe_entry_point_ticks));
++
++  content::ContentMainParams params(&gooroom_main_delegate);
++
++#if defined(OS_WIN)
++  // The process should crash when going through abnormal termination.
++  base::win::SetShouldCrashOnProcessDetach(true);
++  base::win::SetAbortBehaviorForCrashReporting();
++  params.instance = instance;
++  params.sandbox_info = sandbox_info;
++
++  // SetDumpWithoutCrashingFunction must be passed the DumpProcess function
++  // from chrome_elf and not from the DLL in order for DumpWithoutCrashing to
++  // function correctly.
++  typedef void(__cdecl * DumpProcessFunction)();
++  DumpProcessFunction DumpProcess = reinterpret_cast<DumpProcessFunction>(
++      ::GetProcAddress(::GetModuleHandle(chrome::kChromeElfDllName),
++                       "DumpProcessWithoutCrash"));
++  CHECK(DumpProcess);
++  base::debug::SetDumpWithoutCrashingFunction(DumpProcess);
++
++  // Verify that chrome_elf and this module (chrome.dll and chrome_child.dll)
++  // have the same version.
++  if (install_static::InstallDetails::Get().VersionMismatch())
++    base::debug::DumpWithoutCrashing();
++#else
++  params.argc = argc;
++  params.argv = argv;
++  base::CommandLine::Init(params.argc, params.argv);
++#endif  // defined(OS_WIN)
++  base::CommandLine::Init(0, nullptr);
++  const base::CommandLine* command_line(base::CommandLine::ForCurrentProcess());
++  ALLOW_UNUSED_LOCAL(command_line);
++#if defined(OS_MACOSX)
++  SetUpBundleOverrides();
++#endif
++
++  // Start the sampling profiler as early as possible - namely, once the command
++  // line data is available. Allocated as an object on the stack to ensure that
++  // the destructor runs on shutdown, which is important to avoid the profiler
++  // thread's destruction racing with main thread destruction.
++  MainThreadStackSamplingProfiler scoped_sampling_profiler;
++
++  // Chrome-specific process modes.
++#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN)
++  if (command_line->HasSwitch(switches::kHeadless)) {
++    return headless::HeadlessShellMain(params);
++  }
++#endif  // defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN)
++
++  int rv = content::ContentMain(params);
++
++  return rv;
++}
+diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
+new file mode 100644
+index 000000000000..5d131b1e1b9a
+--- /dev/null
++++ b/gooroom/app/gooroom_main_delegate.cc
+@@ -0,0 +1,95 @@
++// Copyright (c) 2012 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include "gooroom/app/gooroom_main_delegate.h"
++#include "base/lazy_instance.h"
++#include "base/logging.h"
++#include "gooroom/browser/gooroom_content_browser_client.h"
++#include "chrome/browser/chrome_resource_bundle_helper.h"
++#include "chrome/common/chrome_features.h"
++
++
++#include "chrome/browser/metrics/chrome_feature_list_creator.h"
++#include "chrome/browser/startup_data.h"
++#include "components/startup_metric_utils/browser/startup_metric_utils.h"
++
++
++#include <stddef.h>
++#include <iostream>
++#include <istream>
++#include <ostream>
++#include <string>
++#include <locale.h>
++
++
++#if !defined(CHROME_MULTIPLE_DLL_CHILD)
++base::LazyInstance<GooroomContentBrowserClient>::DestructorAtExit
++    g_gooroom_content_browser_client = LAZY_INSTANCE_INITIALIZER;
++#endif
++
++GooroomMainDelegate::GooroomMainDelegate(base::TimeTicks exe_entry_point_ticks)
++    : ChromeMainDelegate(exe_entry_point_ticks) {}
++
++void GooroomMainDelegate::PreSandboxStartup() {
++  ChromeMainDelegate::PreSandboxStartup();
++}
++
++bool GooroomMainDelegate::BasicStartupComplete(int* exit_code) {
++  bool result = ChromeMainDelegate::BasicStartupComplete(exit_code);
++
++  if (!result) {
++    content::SetContentClient(&gooroom_content_client_);
++    DLOG(INFO) << "BasicStartupComplete() this = " << this;
++  }
++
++  return result;
++}
++
++void GooroomMainDelegate::PostEarlyInitialization(bool is_running_tests) {
++  // Chrome disallows cookies by default. All code paths that want to use
++  // cookies need to go through one of Chrome's URLRequestContexts which have
++  // a ChromeNetworkDelegate attached that selectively allows cookies again.
++  net::URLRequest::SetDefaultCookiePolicyToBlock();
++
++#if defined(OS_CHROMEOS)
++  // The feature list depends on BrowserPolicyConnectorChromeOS which depends
++  // on DBus, so initialize it here. Some D-Bus clients may depend on feature
++  // list, so initialize them separately later at the end of this function.
++  chromeos::InitializeDBus();
++#endif
++
++  DCHECK(startup_data_);
++  auto* chrome_feature_list_creator =
++      startup_data_->chrome_feature_list_creator();
++  chrome_feature_list_creator->CreateFeatureList();
++  PostFieldTrialInitialization();
++
++  // Initializes the resource bundle and determines the locale.
++  std::string actual_locale =
++      LoadLocalState(chrome_feature_list_creator, is_running_tests);
++  chrome_feature_list_creator->SetApplicationLocale(actual_locale);
++  chrome_feature_list_creator->OverrideCachedUIStrings();
++
++#if defined(OS_CHROMEOS)
++  // Initialize D-Bus clients that depend on feature list.
++  chromeos::InitializeFeatureListDependentDBus();
++#endif
++}
++
++
++content::ContentBrowserClient*
++GooroomMainDelegate::CreateContentBrowserClient() {
++#if defined(CHROME_MULTIPLE_DLL_CHILD)
++  return NULL;
++#else
++  if (chrome_content_browser_client_ == nullptr) {
++    DCHECK(!startup_data_);
++    startup_data_ = std::make_unique<StartupData>();
++
++    chrome_content_browser_client_ =
++        std::make_unique<GooroomContentBrowserClient>(startup_data_.get());
++  }
++  return chrome_content_browser_client_.get();
++#endif
++}
+diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
+new file mode 100644
+index 000000000000..9a0b3ba48e10
+--- /dev/null
++++ b/gooroom/app/gooroom_main_delegate.h
+@@ -0,0 +1,48 @@
++// Copyright (c) 2011 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef GOOROOM_APP_GOOROOM_MAIN_DELEGATE_H_
++#define GOOROOM_APP_GOOROOM_MAIN_DELEGATE_H_
++
++#include <iostream>
++#include <istream>
++#include <ostream>
++
++#include "base/logging.h"
++
++#include "base/time/time.h"
++#include "chrome/app/chrome_main_delegate.h"
++#include "content/public/app/content_main_delegate.h"
++#include "gooroom/browser/gooroom_content_client.h"
++
++namespace base {
++class CommandLine;
++}
++
++// Chrome implementation of ContentMainDelegate.
++class GooroomMainDelegate : public ChromeMainDelegate {
++ public:
++  explicit GooroomMainDelegate(base::TimeTicks exe_entry_point_ticks);
++
++ protected:
++  void PostEarlyInitialization(bool is_running_tests) override;
++
++  void PreSandboxStartup() override;
++
++  bool BasicStartupComplete(int* exit_code) override;
++
++  content::ContentBrowserClient* CreateContentBrowserClient() override;
++
++
++  GooroomContentClient gooroom_content_client_;
++
++#if !defined(CHROME_MULTIPLE_DLL_CHILD)
++  std::unique_ptr<StartupData> startup_data_;
++#endif
++
++
++  DISALLOW_COPY_AND_ASSIGN(GooroomMainDelegate);
++};
++
++#endif  // CHROME_APP_CHROME_MAIN_DELEGATE_H_
+diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
+new file mode 100644
+index 000000000000..4a87b03520b4
+--- /dev/null
++++ b/gooroom/browser/BUILD.gn
+@@ -0,0 +1,20 @@
++# Copyright 2014 The Chromium Authors. All rights reserved.
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++
++import("//chrome/chrome_paks.gni")
++import("//build/util/branding.gni")
++
++static_library("gooroom_browser") {
++  sources = [
++    "gooroom_content_browser_client.h",
++    "gooroom_content_browser_client.cc",
++    "gooroom_content_client.cc",
++    "gooroom_content_client.h",
++
++  ]
++
++  deps = [
++    "//chrome/browser:browser",
++  ]
++}
+diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
+new file mode 100644
+index 000000000000..949513260eab
+--- /dev/null
++++ b/gooroom/browser/gooroom_content_browser_client.cc
+@@ -0,0 +1,163 @@
++// Copyright (c) 2012 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include "gooroom/browser/gooroom_content_browser_client.h"
++
++#include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux_x11.h"
++#include "chrome/browser/performance_manager/chrome_browser_main_extra_parts_performance_manager.h"
++#include "chrome/browser/profiling_host/chrome_browser_main_extra_parts_profiling.h"
++
++#include "chrome/browser/chrome_browser_main.h"
++#include "chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.h"
++#include "chrome/browser/profiles/chrome_browser_main_extra_parts_profiles.h"
++
++#include "chrome/common/buildflags.h"
++
++#if defined(TOOLKIT_VIEWS)
++#include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views.h"
++#endif
++
++#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
++#include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux.h"
++#endif
++
++#if defined(USE_ASH)
++#include "chrome/browser/ui/views/ash/chrome_browser_main_extra_parts_ash.h"
++#endif
++
++#if defined(USE_X11)
++#include "chrome/browser/chrome_browser_main_extra_parts_x11.h"
++#endif
++
++#if defined(OS_WIN)
++#include "base/strings/string_tokenizer.h"
++#include "chrome/browser/chrome_browser_main_win.h"
++#include "chrome/browser/conflicts/module_database_win.h"
++#include "chrome/browser/conflicts/module_event_sink_impl_win.h"
++#include "sandbox/win/src/sandbox_policy.h"
++#elif defined(OS_MACOSX)
++#include "chrome/browser/chrome_browser_main_mac.h"
++#elif defined(OS_CHROMEOS)
++#include "ash/public/interfaces/constants.mojom.h"
++#include "chrome/browser/chromeos/arc/arc_util.h"
++#include "chrome/browser/chromeos/arc/fileapi/arc_content_file_system_backend_delegate.h"
++#include "chrome/browser/chromeos/arc/fileapi/arc_documents_provider_backend_delegate.h"
++#include "chrome/browser/chromeos/arc/intent_helper/arc_navigation_throttle.h"
++#include "chrome/browser/chromeos/attestation/platform_verification_impl.h"
++#include "chrome/browser/chromeos/chrome_browser_main_chromeos.h"
++#include "chrome/browser/chromeos/drive/fileapi/file_system_backend_delegate.h"
++#include "chrome/browser/chromeos/file_manager/app_id.h"
++#include "chrome/browser/chromeos/file_system_provider/fileapi/backend_delegate.h"
++#include "chrome/browser/chromeos/fileapi/file_system_backend.h"
++#include "chrome/browser/chromeos/fileapi/mtp_file_system_backend_delegate.h"
++#include "chrome/browser/chromeos/login/signin/merge_session_navigation_throttle.h"
++#include "chrome/browser/chromeos/login/signin/merge_session_throttling_utils.h"
++#include "chrome/browser/chromeos/login/startup_utils.h"
++#include "chrome/browser/chromeos/policy/browser_policy_connector_chromeos.h"
++#include "chrome/browser/chromeos/system/input_device_settings.h"
++#include "chrome/browser/profiles/profile_manager.h"
++#include "chrome/browser/ui/ash/ash_util.h"
++#include "chrome/browser/ui/browser_commands.h"
++#include "chrome/browser/ui/browser_dialogs.h"
++#include "chrome/browser/ui/browser_finder.h"
++#include "chromeos/chromeos_constants.h"
++#include "chromeos/chromeos_switches.h"
++#include "components/user_manager/user_manager.h"
++#include "mash/public/interfaces/launchable.mojom.h"
++#include "services/service_manager/public/interfaces/interface_provider_spec.mojom.h"
++#elif defined(OS_LINUX)
++#include "chrome/browser/chrome_browser_main_linux.h"
++#elif defined(OS_ANDROID)
++#include "chrome/browser/android/app_hooks.h"
++#include "chrome/browser/chrome_browser_main_android.h"
++#include "chrome/common/descriptors_android.h"
++#include "components/crash/content/browser/crash_dump_manager_android.h"
++#include "components/navigation_interception/intercept_navigation_delegate.h"
++#include "ui/base/resource/resource_bundle_android.h"
++#elif defined(OS_POSIX)
++#include "chrome/browser/chrome_browser_main_posix.h"
++#endif
++
++GooroomContentBrowserClient::GooroomContentBrowserClient(
++    StartupData* startup_data)
++    : startup_data_(startup_data),
++      weak_factory_(this) {
++}
++
++GooroomContentBrowserClient::~GooroomContentBrowserClient() {
++}
++
++std::unique_ptr<content::BrowserMainParts>
++GooroomContentBrowserClient::CreateBrowserMainParts(
++    const content::MainFunctionParams& parameters) {
++  std::unique_ptr<ChromeBrowserMainParts> main_parts;
++#if defined(OS_WIN)
++  main_parts =
++      std::make_unique<ChromeBrowserMainPartsWin>(parameters, startup_data_);
++#elif defined(OS_MACOSX)
++  main_parts =
++      std::make_unique<ChromeBrowserMainPartsMac>(parameters, startup_data_);
++#elif defined(OS_CHROMEOS)
++  main_parts = std::make_unique<chromeos::ChromeBrowserMainPartsChromeos>(
++      parameters, startup_data_);
++#elif defined(OS_LINUX)
++  main_parts =
++      std::make_unique<ChromeBrowserMainPartsLinux>(parameters, startup_data_);
++#elif defined(OS_ANDROID)
++  main_parts = std::make_unique<ChromeBrowserMainPartsAndroid>(parameters,
++                                                               startup_data_);
++#elif defined(OS_POSIX)
++  main_parts =
++      std::make_unique<ChromeBrowserMainPartsPosix>(parameters, startup_data_);
++#else
++  NOTREACHED();
++  main_parts =
++      std::make_unique<ChromeBrowserMainParts>(parameters, startup_data_);
++#endif
++
++  bool add_profiles_extra_parts = true;
++#if defined(OS_ANDROID)
++  if (startup_data_->HasBuiltProfilePrefService())
++    add_profiles_extra_parts = false;
++#endif
++  if (add_profiles_extra_parts)
++    chrome::AddProfilesExtraParts(main_parts.get());
++
++    // Construct additional browser parts. Stages are called in the order in
++    // which they are added.
++#if defined(TOOLKIT_VIEWS)
++#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
++#if defined(USE_X11)
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsViewsLinuxX11());
++#else
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsViewsLinux());
++#endif  // USE_X11
++#else
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsViews());
++#endif
++#endif
++
++#if defined(OS_CHROMEOS)
++  // TODO(jamescook): Combine with ChromeBrowserMainPartsChromeos.
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsAsh());
++#endif
++
++#if defined(USE_X11)
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsX11());
++#endif
++
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsPerformanceManager);
++
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsProfiling);
++
++  chrome::AddMetricsExtraParts(main_parts.get());
++
++  return main_parts;
++}
++
++void GooroomContentBrowserClient::OnNetworkServiceCreated(
++    network::mojom::NetworkService* network_service) {
++  ChromeContentBrowserClient::OnNetworkServiceCreated(network_service);
++}
++
+diff --git a/gooroom/browser/gooroom_content_browser_client.h b/gooroom/browser/gooroom_content_browser_client.h
+new file mode 100644
+index 000000000000..14b0973b67dc
+--- /dev/null
++++ b/gooroom/browser/gooroom_content_browser_client.h
+@@ -0,0 +1,29 @@
++// Copyright (c) 2012 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef GOOROOM_BROWSER_CHROME_CONTENT_BROWSER_CLIENT_H_
++#define GOOROOM_BROWSER_CHROME_CONTENT_BROWSER_CLIENT_H_
++
++#include "chrome/browser/chrome_content_browser_client.h"
++#include "content/public/browser/content_browser_client.h"
++
++class GooroomContentBrowserClient : public ChromeContentBrowserClient {
++ public:
++  explicit GooroomContentBrowserClient(StartupData* startup_data = nullptr);
++  ~GooroomContentBrowserClient() override;
++
++  std::unique_ptr<content::BrowserMainParts> CreateBrowserMainParts(
++      const content::MainFunctionParams& parameters) override;
++
++  void OnNetworkServiceCreated(
++      network::mojom::NetworkService* network_service) override;
++
++ protected:
++  StartupData* startup_data_;
++
++ private:
++  base::WeakPtrFactory<ChromeContentBrowserClient> weak_factory_;
++};
++
++#endif  // CHROME_BROWSER_CHROME_CONTENT_BROWSER_CLIENT_H_
+diff --git a/gooroom/browser/gooroom_content_client.cc b/gooroom/browser/gooroom_content_client.cc
+new file mode 100644
+index 000000000000..e5a79cdf3834
+--- /dev/null
++++ b/gooroom/browser/gooroom_content_client.cc
+@@ -0,0 +1 @@
++#include "gooroom_content_client.h"
+diff --git a/gooroom/browser/gooroom_content_client.h b/gooroom/browser/gooroom_content_client.h
+new file mode 100644
+index 000000000000..242ba77e419e
+--- /dev/null
++++ b/gooroom/browser/gooroom_content_client.h
+@@ -0,0 +1,13 @@
++// Copyright (c) 2012 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef GOOROOM_CONTENT_CLIENT_H_
++#define GOOROOM_CONTENT_CLIENT_H_
++
++#include "chrome/common/chrome_content_client.h"
++
++class GooroomContentClient : public ChromeContentClient {
++};
++
++#endif  // CHROME_COMMON_CHROME_CONTENT_CLIENT_H_
+-- 
+2.20.1
+

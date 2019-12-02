@@ -1,0 +1,25 @@
+From 1a4aa23cd0c9b72491415e4a8e087ae191c2b4b1 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 29 Nov 2019 15:57:35 +0900
+Subject: [PATCH 55/58] Remove 'Offer to translate page' toggle button
+
+---
+ .../resources/settings/languages_page/languages_page.html       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/settings/languages_page/languages_page.html b/chrome/browser/resources/settings/languages_page/languages_page.html
+index ada3c5bc0b47..12c0f5a70528 100644
+--- a/chrome/browser/resources/settings/languages_page/languages_page.html
++++ b/chrome/browser/resources/settings/languages_page/languages_page.html
+@@ -252,7 +252,7 @@
+           </div>
+           <settings-toggle-button id="offerTranslateOtherLanguages"
+               class="first" pref="{{prefs.translate.enabled}}"
+-              label="$i18n{offerToEnableTranslate}">
++              label="$i18n{offerToEnableTranslate}" hidden>
+           </settings-toggle-button>
+         </iron-collapse>
+ <if expr="chromeos">
+-- 
+2.20.1
+

@@ -1,0 +1,45 @@
+From a00ac9e5ecf88e6cd36e2eb515f07832046a5bf5 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 25 Nov 2019 18:32:23 +0900
+Subject: [PATCH 28/58] disable chrome login shortcut(ctrl+shift+m) and hide 
+ login icon
+
+---
+ chrome/browser/ui/browser_command_controller.cc | 3 +++
+ chrome/browser/ui/views/toolbar/toolbar_view.cc | 4 ++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
+index 28291fa01d32..3d0768f6a39b 100644
+--- a/chrome/browser/ui/browser_command_controller.cc
++++ b/chrome/browser/ui/browser_command_controller.cc
+@@ -722,8 +722,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+       break;
+ #if !defined(OS_CHROMEOS)
+     case IDC_SHOW_SIGNIN:
++#if !defined(GOOROOM_BUILD)
++//Disable chrome login shortcut (ctrl + shift + m) on gooroom-browser
+       ShowBrowserSigninOrSettings(
+           browser_, signin_metrics::AccessPoint::ACCESS_POINT_MENU);
++#endif
+       break;
+ #endif
+     case IDC_DISTILL_PAGE:
+diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
+index d09e6019f1b4..ef02e68b6dc4 100644
+--- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
++++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
+@@ -273,6 +273,10 @@ void ToolbarView::Init() {
+   }
+ 
+   std::unique_ptr<AvatarToolbarButton> avatar;
++#if defined(GOOROOM_BUILD)
++//Hide show_avatar_toolbar_button
++  show_avatar_toolbar_button = false;
++#endif
+   if (show_avatar_toolbar_button)
+     avatar = std::make_unique<AvatarToolbarButton>(browser_);
+ 
+-- 
+2.20.1
+

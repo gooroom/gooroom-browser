@@ -1,0 +1,26 @@
+From 42988cc867740e409f271005ccd88253538f64ed Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 29 Nov 2019 15:12:15 +0900
+Subject: [PATCH 39/58] Remove 'Cast...'
+
+---
+ chrome/browser/media/router/media_router_feature.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/chrome/browser/media/router/media_router_feature.cc b/chrome/browser/media/router/media_router_feature.cc
+index 13f8c0149911..ccd97c92d602 100644
+--- a/chrome/browser/media/router/media_router_feature.cc
++++ b/chrome/browser/media/router/media_router_feature.cc
+@@ -56,6 +56,9 @@ const PrefService::Preference* GetMediaRouterPref(
+ #endif  // defined(OS_ANDROID) || BUILDFLAG(ENABLE_EXTENSIONS)
+ 
+ bool MediaRouterEnabled(content::BrowserContext* context) {
++#if defined(GOOROOM_BUILD)
++  return false;
++#endif
+ #if defined(OS_ANDROID) || BUILDFLAG(ENABLE_EXTENSIONS)
+   const PrefService::Preference* pref = GetMediaRouterPref(context);
+   // Only use the pref value if it set from a mandatory policy.
+-- 
+2.20.1
+

@@ -1,0 +1,54 @@
+From a67f3aa68af931856e43eefb7b4e6f1da660552c Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 29 Nov 2019 15:23:11 +0900
+Subject: [PATCH 44/58] Remove Incognito mode in gooroom-browser
+
+---
+ chrome/browser/resources/bookmarks/command_manager.js | 1 -
+ chrome/browser/ui/browser_command_controller.cc       | 2 ++
+ chrome/browser/ui/toolbar/app_menu_model.cc           | 3 +++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/bookmarks/command_manager.js b/chrome/browser/resources/bookmarks/command_manager.js
+index 3d83ab732f61..00a002425f5c 100644
+--- a/chrome/browser/resources/bookmarks/command_manager.js
++++ b/chrome/browser/resources/bookmarks/command_manager.js
+@@ -706,7 +706,6 @@ cr.define('bookmarks', function() {
+             // <hr>
+             Command.OPEN_NEW_TAB,
+             Command.OPEN_NEW_WINDOW,
+-            Command.OPEN_INCOGNITO,
+           ];
+         case MenuSource.TOOLBAR:
+           return [
+diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
+index 3d0768f6a39b..2d474ea66880 100644
+--- a/chrome/browser/ui/browser_command_controller.cc
++++ b/chrome/browser/ui/browser_command_controller.cc
+@@ -385,7 +385,9 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+       NewWindow(browser_);
+       break;
+     case IDC_NEW_INCOGNITO_WINDOW:
++#if !defined(GOOROOM_BUILD)
+       NewIncognitoWindow(profile());
++#endif
+       break;
+     case IDC_CLOSE_WINDOW:
+       base::RecordAction(base::UserMetricsAction("CloseWindowByKey"));
+diff --git a/chrome/browser/ui/toolbar/app_menu_model.cc b/chrome/browser/ui/toolbar/app_menu_model.cc
+index be02403a02de..beed0ba15fcb 100644
+--- a/chrome/browser/ui/toolbar/app_menu_model.cc
++++ b/chrome/browser/ui/toolbar/app_menu_model.cc
+@@ -910,6 +910,9 @@ void AppMenuModel::UpdateZoomControls() {
+ }
+ 
+ bool AppMenuModel::ShouldShowNewIncognitoWindowMenuItem() {
++#if defined(GOOROOM_BUILD)
++  return false;
++#endif
+   if (browser_->profile()->IsGuestSession())
+     return false;
+ 
+-- 
+2.20.1
+

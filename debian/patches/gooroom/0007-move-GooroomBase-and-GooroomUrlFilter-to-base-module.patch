@@ -1,19 +1,19 @@
-From e0c8f179be9f4e65aaf27d06d01545f8a7f50cae Mon Sep 17 00:00:00 2001
+From da5dd14392c41f3cd1121b5eba0ad1d1d9cfaecd Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 4 Sep 2019 20:20:33 +0900
-Subject: [PATCH 07/78] move GooroomBase and GooroomUrlFilter to base module
+Date: Wed, 20 Nov 2019 20:43:40 +0900
+Subject: [PATCH 07/58] move GooroomBase and GooroomUrlFilter to base module
 
 ---
  base/BUILD.gn               | 9 +++++++++
- gooroom/BUILD.gn            | 1 +
+ gooroom/BUILD.gn            | 5 +----
  gooroom/base/gooroom_base.h | 2 ++
- 3 files changed, 12 insertions(+)
+ 3 files changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/base/BUILD.gn b/base/BUILD.gn
-index 610e69eae24b..4316b0077181 100644
+index c093596dba09..52324d7b2760 100644
 --- a/base/BUILD.gn
 +++ b/base/BUILD.gn
-@@ -1127,6 +1127,15 @@ jumbo_component("base") {
+@@ -1134,6 +1134,15 @@ jumbo_component("base") {
      "win/wrapped_window_proc.h",
    ]
  
@@ -30,7 +30,7 @@ index 610e69eae24b..4316b0077181 100644
    # make downstream's life easier. They are not included in the main sources
    # list to avoid breaking GN formatting's auto-sorting.
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index e688f76fb63b..4c01bffacc45 100644
+index 053cde4c1127..23c79cf23143 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -216,6 +216,7 @@ if (!is_android && !is_mac) {
@@ -41,6 +41,17 @@ index e688f76fb63b..4c01bffacc45 100644
        ]
  
        if (is_multi_dll_chrome) {
+@@ -253,10 +254,6 @@ if (!is_android && !is_mac) {
+         "browser/gooroom_browser_extra_parts_security.h",
+ 
+         # for commit #4
+-        "base/gooroom_base.cc",
+-        "base/gooroom_base.h",
+-        "base/gooroom_url_filter.cc",
+-        "base/gooroom_url_filter.h",
+         "browser/gooroom_pref.cc",
+         "browser/gooroom_pref.h",
+         "browser/gooroom_url_filter_impl.cc",
 diff --git a/gooroom/base/gooroom_base.h b/gooroom/base/gooroom_base.h
 index c64ed691b678..7547bc1cb3bf 100644
 --- a/gooroom/base/gooroom_base.h

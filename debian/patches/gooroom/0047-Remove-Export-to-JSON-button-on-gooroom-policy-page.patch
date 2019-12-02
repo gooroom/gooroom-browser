@@ -1,0 +1,41 @@
+From 16950d4c89f89942a9cd0477fc11a03ba7e12e52 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 29 Nov 2019 15:35:29 +0900
+Subject: [PATCH 47/58] Remove 'Export to JSON' button on gooroom://policy page
+    [Gooroom Bug Tracking System - 0000560] Change 'Chrome policies' to 
+ 'Gooroom   policies' string on gooroom://policy page
+
+---
+ chrome/browser/resources/policy/policy.html  | 2 +-
+ chrome/browser/ui/webui/policy_ui_handler.cc | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/chrome/browser/resources/policy/policy.html b/chrome/browser/resources/policy/policy.html
+index efcbbe51d735..8570cb4b7892 100644
+--- a/chrome/browser/resources/policy/policy.html
++++ b/chrome/browser/resources/policy/policy.html
+@@ -26,7 +26,7 @@
+     </div>
+     <div class="header-row">
+       <button id="reload-policies">$i18n{reloadPolicies}</button>
+-      <button id="export-policies">$i18n{exportPoliciesJSON}</button>
++      <button id="export-policies" hidden>$i18n{exportPoliciesJSON}</button>
+       <div id="show-unset-container" class="show-unset-checkbox">
+         <label>
+           <input id="show-unset" type="checkbox">
+diff --git a/chrome/browser/ui/webui/policy_ui_handler.cc b/chrome/browser/ui/webui/policy_ui_handler.cc
+index 22075e1d920e..c89d3f9c40f8 100644
+--- a/chrome/browser/ui/webui/policy_ui_handler.cc
++++ b/chrome/browser/ui/webui/policy_ui_handler.cc
+@@ -888,7 +888,7 @@ base::Value PolicyUIHandler::GetPolicyNames() const {
+     chrome_policy_names->GetList().push_back(base::Value(it.key()));
+   }
+   auto chrome_values = std::make_unique<base::DictionaryValue>();
+-  chrome_values->SetString("name", "Chrome Policies");
++  chrome_values->SetString("name", "Gooroom Policies");
+   chrome_values->SetList("policyNames", std::move(chrome_policy_names));
+   names.Set("chrome", std::move(chrome_values));
+ 
+-- 
+2.20.1
+

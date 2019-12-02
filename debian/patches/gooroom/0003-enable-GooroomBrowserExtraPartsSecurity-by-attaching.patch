@@ -1,31 +1,31 @@
-From b81c8defb1032969cfafa21bc316403825a2fc84 Mon Sep 17 00:00:00 2001
+From 213c631a57386cd43d585c6fe18a4e4761e39769 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 4 Sep 2019 18:33:47 +0900
-Subject: [PATCH 03/78] enable GooroomBrowserExtraPartsSecurity by attaching it
-  to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
+Date: Wed, 20 Nov 2019 19:06:35 +0900
+Subject: [PATCH 03/58] enable GooroomBrowserExtraPartsSecurity by attaching it
+    to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
 
 ---
- gooroom/BUILD.gn                                  | 4 ++--
+ gooroom/BUILD.gn                                  | 4 ++++
  gooroom/browser/gooroom_content_browser_client.cc | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ 2 files changed, 7 insertions(+)
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index fb727ec7730c..ede99f6cd1bf 100644
+index 386ae3bca6f6..9c4ef021bd93 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -249,8 +249,8 @@ if (!is_android && !is_mac) {
+@@ -247,6 +247,10 @@ if (!is_android && !is_mac) {
+         "browser/gooroom_content_browser_client.h",
+         "browser/gooroom_content_client.cc",
          "browser/gooroom_content_client.h",
- 
-         # for commit #2
--        #"browser/gooroom_browser_extra_parts_security.cc",
--        #"browser/gooroom_browser_extra_parts_security.h",
++
++         # for commit #3
 +        "browser/gooroom_browser_extra_parts_security.cc",
 +        "browser/gooroom_browser_extra_parts_security.h",
        ]
      }
    }
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
-index 5753d86e31c7..45f6d501b34a 100644
+index 949513260eab..1d858624d61c 100644
 --- a/gooroom/browser/gooroom_content_browser_client.cc
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
 @@ -3,6 +3,7 @@
@@ -36,15 +36,15 @@ index 5753d86e31c7..45f6d501b34a 100644
  
  #include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux_x11.h"
  #include "chrome/browser/performance_manager/chrome_browser_main_extra_parts_performance_manager.h"
-@@ -157,6 +158,8 @@ GooroomContentBrowserClient::CreateBrowserMainParts(
+@@ -153,6 +154,8 @@ GooroomContentBrowserClient::CreateBrowserMainParts(
  
    chrome::AddMetricsExtraParts(main_parts.get());
  
 +  main_parts->AddParts(new GooroomBrowserExtraPartsSecurity());
 +
-   main_parts->AddParts(ChromeService::GetInstance()->CreateExtraParts());
- 
    return main_parts;
+ }
+ 
 -- 
 2.20.1
 

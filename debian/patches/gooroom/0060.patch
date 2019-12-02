@@ -1,0 +1,37 @@
+diff --git a/chrome/app/gooroom/generated_resources.grd b/chrome/app/gooroom/generated_resources.grd
+index 44ff074..f826a53 100644
+--- a/chrome/app/gooroom/generated_resources.grd
++++ b/chrome/app/gooroom/generated_resources.grd
+@@ -6100,6 +6100,9 @@ the Bookmarks menu.">
+         <message name="IDS_TAB_CXMENU_CLOSETAB" desc="The label of the tab context menu item for closing one or more tabs.">
+           Close
+         </message>
++        <message name="IDS_TAB_CXMENU_CLOSEOTHERTABS" desc="In Title Case: The label of the 'Close Other Tabs' Tab context menu item.">
++          Close Other Tabs
++        </message>
+         <message name="IDS_TAB_CXMENU_CLOSETABSTORIGHT" desc="The label of the 'Close Tabs to the Right' Tab context menu item.">
+           Close tabs to the right
+         </message>
+@@ -6144,6 +6147,9 @@ the Bookmarks menu.">
+         <message name="IDS_TAB_CXMENU_CLOSETAB" desc="In Title Case: The label of the tab context menu item for closing one or more tabs.">
+           Close
+         </message>
++        <message name="IDS_TAB_CXMENU_CLOSEOTHERTABS" desc="In Title Case: The label of the 'Close Other Tabs' Tab context menu item.">
++          Close Other Tabs
++        </message>
+         <message name="IDS_TAB_CXMENU_CLOSETABSTORIGHT" desc="In Title Case: The label of the 'Close Tabs to the Right' Tab context menu item.">
+           Close Tabs to the Right
+         </message>
+diff --git a/gooroom/browser/verify_signature.cc b/gooroom/browser/verify_signature.cc
+index 0c0354f..d6f5297 100644
+--- a/gooroom/browser/verify_signature.cc
++++ b/gooroom/browser/verify_signature.cc
+@@ -258,7 +258,7 @@ do_task(const char *task)
+ 	Py_DECREF(args);
+ 	if (!value) goto ERR_CALL;
+ 
+-	char_value = PyUnicode_AsUTF8AndSize(value, &value_size);
++	char_value = (char *)PyUnicode_AsUTF8AndSize(value, &value_size);
+ 	return_value = (char *)calloc(1, value_size+1);
+ 	memcpy(return_value, char_value, value_size);
+ 
