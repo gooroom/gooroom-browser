@@ -165,10 +165,10 @@ index e99a2c958833..333ab49467df 100644
    ]
  }
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index e962b01f0c52..537736918b9d 100644
+index e962b01f0c52..68559f3f2332 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
-@@ -1,5 +1,8 @@
+@@ -1,5 +1,9 @@
  #include "gooroom_pref.h"
  
 +#include <fstream>
@@ -178,7 +178,7 @@ index e962b01f0c52..537736918b9d 100644
  #include "gooroom/base/gooroom_base.h"
  #include "gooroom/browser/gooroom_url_filter_impl.h"
  #include "gooroom/flash/flash_version.h"
-@@ -19,8 +22,239 @@
+@@ -19,8 +23,239 @@
  #include "components/prefs/pref_service.h"
  #include "components/prefs/pref_service_factory.h"
  
@@ -418,7 +418,7 @@ index e962b01f0c52..537736918b9d 100644
  GooroomPref* g_gooroom = NULL;
  
  GooroomPref::GooroomPref() {}
-@@ -143,7 +377,14 @@ void GooroomPref::setup() {
+@@ -143,7 +378,14 @@ void GooroomPref::setup() {
      execv(exe_path.c_str(), (char**)restartoption);
      exit(0);
    }
