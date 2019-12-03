@@ -140,5 +140,14 @@ gooroom/0055-Remove-Offer-to-translate-page-toggle-button.patch
 gooroom/0056-Add-korean-translation-about-Extensions-no-installed.patch
 gooroom/0057-Add-AdobeFlash-Version-Reader-module.patch
 gooroom/0058-Remove-ont-google-on-newtab-page.patch
-gooroom/0059.patch
-gooroom/0060.patch
+gooroom/0059-Verify-sign.patch
+gooroom/0060-to-buster-build.patch
+gooroom/0061-BugTrackingSystem-1656-devtools-scheme-is-excluded.patch
+gooroom/0062-BugTrackingSystem-1643-Remove-route-to-enter-incogni.patch
+gooroom/0063-BugTrackingSystem-1555-Voice-search-is-not-supported.patch
+gooroom/0064-BugTrackingSystem-1692-Change-Gooroom-logo-tooltip-o.patch
+gooroom/0065-BugTrackingSystem-1693-Remove-route-to-enter-incogni.patch
+gooroom/0066-BTS-1492-Add-allow-process-on-PageSourceViewEnabled.patch
+gooroom/0067-BTS-1646-Gooroom-browser-does-not-support-tabs-from.patch
+gooroom/0068-BTS-1675-Remove-Continue-running-background-apps.patch
+gooroom/0069-BTS-1811-Change-schema-chrome-to-gooroom-on-tab_hove.patch

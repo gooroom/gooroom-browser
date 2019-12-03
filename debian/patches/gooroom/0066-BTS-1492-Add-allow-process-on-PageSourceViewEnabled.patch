@@ -1,0 +1,26 @@
+From e85e70a930a7cd30cfe9e3103436b6f62268ef48 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 3 Dec 2019 10:44:01 +0900
+Subject: [PATCH 6/9] [BTS] 1492 : Add allow process on PageSourceViewEnabled 
+ policy
+
+---
+ components/policy/core/browser/configuration_policy_handler.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
+index c44fd1aa50bc..c89e8072c68a 100644
+--- a/components/policy/core/browser/configuration_policy_handler.cc
++++ b/components/policy/core/browser/configuration_policy_handler.cc
+@@ -381,6 +381,8 @@ void PageSourceViewPolicyHandler::ProcessPolicy(const policy::PolicyMap& policie
+   if(policies.GetValue(policy::key::kPageSourceViewEnabled))
+     if(!policies.GetValue(policy::key::kPageSourceViewEnabled)->GetBool())
+       PageSourceViewPolicyHandler::enabled = false;
++    else
++      PageSourceViewPolicyHandler::enabled = true;
+   return;
+ }
+ 
+-- 
+2.20.1
+

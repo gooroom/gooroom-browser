@@ -1,0 +1,31 @@
+From 56efa9d5f5fbf8b720bce917b642137ce556502e Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 3 Dec 2019 10:41:15 +0900
+Subject: [PATCH 3/9] BugTrackingSystem 1555 : Voice search is not supported on
+  gooroom-browser
+
+---
+ chrome/browser/resources/local_ntp/local_ntp.js | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
+index 46c944aa5c66..d715afd43abe 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.js
++++ b/chrome/browser/resources/local_ntp/local_ntp.js
+@@ -693,9 +693,10 @@ function init() {
+         configData.translatedStrings.searchboxPlaceholder;
+ 
+     if (!iframesAndVoiceSearchDisabledForTesting) {
+-      speech.init(
+-          configData.googleBaseUrl, configData.translatedStrings,
+-          $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
++// Voice search is not supported on gooroom-browser
++//        speech.init(
++//            configData.googleBaseUrl, configData.translatedStrings,
++//            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
+     }
+ 
+     // Listener for updating the key capture state.
+-- 
+2.20.1
+
