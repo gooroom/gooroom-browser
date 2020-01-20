@@ -151,3 +151,5 @@ gooroom/0066-BTS-1492-Add-allow-process-on-PageSourceViewEnabled.patch
 gooroom/0067-BTS-1646-Gooroom-browser-does-not-support-tabs-from.patch
 gooroom/0068-BTS-1675-Remove-Continue-running-background-apps.patch
 gooroom/0069-BTS-1811-Change-schema-chrome-to-gooroom-on-tab_hove.patch
+gooroom/BTS-1812-close-other-tabs-translation.patch
+gooroom/BTS-1877-option-with-url-bug.patch

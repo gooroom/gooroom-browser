@@ -1,0 +1,37 @@
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index e962b01f0c52..c4437b4d972c 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -105,32 +105,6 @@ void GooroomPref::setup() {
+ 
+       break;
+     }
+-    if (GURL(*it).is_valid() == true) {
+-      bool trusted = pfilterImpl->isTrustUrl(*it);
+-      base::GetGooroomBase()->setTrustMode(trusted);
+-      int pid;
+-      if (trusted) {
+-        pid = fork();
+-        if (pid != 0) {
+-          exit(0);
+-        } else {
+-          execl(exe_path.c_str(), "gooroom-browser",
+-                trust_user_data_dir_option.c_str(), flash_dir.c_str(), GURL(*it).spec().c_str(),
+-                NULL);
+-          exit(0);
+-        }
+-      } else {
+-        pid = fork();
+-        if (pid != 0) {
+-          exit(0);
+-        } else {
+-          execl(exe_path.c_str(), "gooroom-browser",
+-                untrust_user_data_dir_option.c_str(),flash_dir.c_str(), GURL(*it).spec().c_str(),
+-                NULL);
+-          exit(0);
+-        }
+-      }
+-    }
+   }
+   if (!use_user_data_dir) {
+     const char** restartoption = new const char*[argv.size() + 2];
