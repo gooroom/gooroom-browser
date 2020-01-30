@@ -153,3 +153,4 @@ gooroom/0068-BTS-1675-Remove-Continue-running-background-apps.patch
 gooroom/0069-BTS-1811-Change-schema-chrome-to-gooroom-on-tab_hove.patch
 gooroom/BTS-1812-close-other-tabs-translation.patch
 gooroom/BTS-1877-option-with-url-bug.patch
+gooroom/BTS-1909-Remove-upgrade-alarm.patch

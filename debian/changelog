@@ -1,3 +1,10 @@
+gooroom-browser (2.4.0-1+grm2u4) stretch; urgency=medium
+
+  * BugTrackingSystem
+    - 1909 : Remove upgrade alarm on gooroom-browser
+
+ -- Choi J.S. <junsungc91@gmail.com>  Thu, 30 Jan 2020 19:07:00 +0900
+
 gooroom-browser (2.4.0-1+grm2u3) stretch; urgency=medium
 
   * BugTrackingSystem

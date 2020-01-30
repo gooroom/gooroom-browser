@@ -1,0 +1,14 @@
+diff --git a/chrome/browser/upgrade_detector/upgrade_detector_impl.cc b/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
+index 5b53d0704776..9280a6e00c89 100644
+--- a/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
++++ b/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
+@@ -168,6 +168,9 @@ UpgradeDetectorImpl::UpgradeDetectorImpl(const base::Clock* clock,
+   // - kSimulateCriticalUpdate has precedence over kSimulateOutdated.
+   // - kSimulateOutdatedNoAU has precedence over kSimulateOutdated.
+   // - kSimulateOutdated[NoAu] can work on its own, or with a specified date.
++#if defined(GOOROOM_BUILD)
++  return;
++#endif
+   if (cmd_line.HasSwitch(switches::kDisableBackgroundNetworking))
+     return;
+   if (cmd_line.HasSwitch(switches::kSimulateUpgrade)) {
