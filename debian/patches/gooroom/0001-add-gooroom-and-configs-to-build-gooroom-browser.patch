@@ -1,7 +1,7 @@
-From 697c2c38974725a646a0337a32be2fd70de89b2d Mon Sep 17 00:00:00 2001
+From 000ea57a473f7588f66b8f46c46911236aebf52d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 20 Nov 2019 19:02:10 +0900
-Subject: [PATCH 01/58] add /gooroom and configs to build gooroom-browser 
+Subject: [PATCH 01/66] add /gooroom and configs to build gooroom-browser 
  binary
 
 ---
@@ -31,10 +31,10 @@ Subject: [PATCH 01/58] add /gooroom and configs to build gooroom-browser
  create mode 100644 gooroom/browser/gooroom_content_client.h
 
 diff --git a/BUILD.gn b/BUILD.gn
-index 5e2f6b9b0f41..e964c0ad3886 100644
+index 75ea1abd8317..1316f999f5cc 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
-@@ -152,6 +152,8 @@ group("gn_all") {
+@@ -149,6 +149,8 @@ group("gn_all") {
        "//tools/polymer:polymer_tools_python_unittests",
        "//ui/accessibility:accessibility_unittests",
        "//ui/accessibility/extensions",
@@ -44,10 +44,10 @@ index 5e2f6b9b0f41..e964c0ad3886 100644
    }
  
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 352cb646dd51..82da46cd38d1 100644
+index 93ad68a613b3..1959d25a61bb 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -224,6 +224,9 @@ config("compiler") {
+@@ -239,6 +239,9 @@ config("compiler") {
    defines = []
    configs = []
  
@@ -58,10 +58,10 @@ index 352cb646dd51..82da46cd38d1 100644
    # categories here, add it to the associated file to keep this shared config
    # smaller.
 diff --git a/chrome/browser/chrome_content_browser_client.h b/chrome/browser/chrome_content_browser_client.h
-index 6bb50192ce17..658d371c1240 100644
+index b80edc76b14f..bbd7b86b4608 100644
 --- a/chrome/browser/chrome_content_browser_client.h
 +++ b/chrome/browser/chrome_content_browser_client.h
-@@ -633,6 +633,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+@@ -649,6 +649,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
                                   content::BrowserContext* browser_context);
    virtual const ui::NativeTheme* GetWebTheme() const;  // For testing.
  
@@ -71,7 +71,7 @@ index 6bb50192ce17..658d371c1240 100644
   private:
    friend class DisableWebRtcEncryptionFlagTest;
    friend class InProcessBrowserTest;
-@@ -705,7 +708,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+@@ -718,7 +721,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
                                                const url::Origin&>>
        worker_interfaces_parameterized_;
  

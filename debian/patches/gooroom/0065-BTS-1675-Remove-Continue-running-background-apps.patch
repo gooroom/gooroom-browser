@@ -1,0 +1,30 @@
+From dd6336c161b7adfc6866ad42a31ccef9524f4087 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 3 Dec 2019 10:46:00 +0900
+Subject: [PATCH 65/66] [BTS} 1675 : Remove [Continue running background apps 
+ after Gooroom-browser shutdown] tab.
+
+---
+ chrome/browser/resources/settings/system_page/system_page.html | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
+index 2c1247c22d17..a92d7dbaa68d 100644
+--- a/chrome/browser/resources/settings/system_page/system_page.html
++++ b/chrome/browser/resources/settings/system_page/system_page.html
+@@ -14,10 +14,12 @@
+   <template>
+     <style include="settings-shared"></style>
+ <if expr="not is_macosx">
++<if expr="not _gooroom">
+     <settings-toggle-button class="first"
+         pref="{{prefs.background_mode.enabled}}"
+         label="$i18n{backgroundAppsLabel}">
+     </settings-toggle-button>
++</if>
+ </if>
+     <settings-toggle-button id="hardwareAcceleration"
+         pref="{{prefs.hardware_acceleration_mode.enabled}}"
+-- 
+2.20.1
+

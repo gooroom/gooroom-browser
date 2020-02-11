@@ -1,7 +1,7 @@
-From 2cb767355a3fdf45f56e262ebce2bba90896d514 Mon Sep 17 00:00:00 2001
+From 8a51752dd969672e554efe989dc66331d5ed8565 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 22 Nov 2019 18:29:07 +0900
-Subject: [PATCH 20/58] make chromium_strings fit to gooroom-browser
+Subject: [PATCH 20/66] make chromium_strings fit to gooroom-browser
 
 ---
  chrome/app/gooroom/chromium_strings.grd              | 2 +-

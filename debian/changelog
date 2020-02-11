@@ -1,77 +1,184 @@
-gooroom-browser (2.4.0-1+grm2u4) stretch; urgency=medium
+gooroom-browser (2.5.0-1+grm1u1) stretch; urgency=medium
 
-  * BugTrackingSystem
-    - 1909 : Remove upgrade alarm on gooroom-browser
+  * Init Gooroom browser 79 version (2.5.0-1+grm1u1)
 
- -- Choi J.S. <junsungc91@gmail.com>  Thu, 30 Jan 2020 19:07:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 11 Feb 2020 10:49:00 +0900
 
-gooroom-browser (2.4.0-1+grm2u3) stretch; urgency=medium
+chromium (79.0.3945.130-1~deb10u1) buster-security; urgency=medium
 
-  * BugTrackingSystem
-    - 1812 : Add korean translation about 'Close Other Tabs'
-    - 1877 : Fixed bug where option doesn't apply if browser's option contains url.
+  * New upstream security release.
+    - CVE-2020-6377: Use after free in audio. Reported by Zhe Jin
+    - CVE-2020-6378: Use-after-free in speech recognizer. Reported by Antti
+      Levomäki and Christian Jalio
+    - CVE-2020-6379: Use-after-free in speech recognizer. Reported by Guang
+      Gong
+    - CVE-2020-6380: Extension message verification error. Reported by Sergei
+      Glazunov
+    - CVE-2019-13725: Use after free in Bluetooth. Reported by Gengming Liu and
+      Jianyu Chen
+    - CVE-2019-13726: Heap buffer overflow in password manager. Reported by
+      Sergei Glazunov
+    - CVE-2019-13727: Insufficient policy enforcement in WebSockets. Reported
+      by @piochu
+    - CVE-2019-13728: Out of bounds write in V8. Reported by Rong Jian and
+      Guang Gong
+    - CVE-2019-13729: Use after free in WebSockets. Reported by Zhe Jin
+    - CVE-2019-13730: Type Confusion in V8. Reported by Soyeon Park and Wen Xu
+    - CVE-2019-13732: Use after free in WebAudio. Reported by Sergei Glazunov
+    - CVE-2019-13734: Out of bounds write in SQLite. Reported by Wenxiang Qian
+    - CVE-2019-13735: Out of bounds write in V8. Reported by Gengming Liu and
+      Zhen Feng
+    - CVE-2019-13764: Type Confusion in V8. Reported by Soyeon Park and Wen Xu
+    - CVE-2019-13736: Integer overflow in PDFium. Reported by Anonymous
+    - CVE-2019-13737: Insufficient policy enforcement in autocomplete. Reported
+      by Mark Amery
+    - CVE-2019-13738: Insufficient policy enforcement in navigation. Reported
+      by Johnathan Norman and Daniel Clark
+    - CVE-2019-13739: Incorrect security UI in Omnibox. Reported by xisigr
+    - CVE-2019-13740: Incorrect security UI. Reported by Khalil Zhani
+    - CVE-2019-13741: Insufficient validation of untrusted input in Blink.
+      Reported by Michał Bentkowski
+    - CVE-2019-13742: Incorrect security UI in Omnibox. Reported by Khalil
+      Zhani
+    - CVE-2019-13743: Incorrect security UI in external protocol handling.
+      Reported by Zhiyang Zeng
+    - CVE-2019-13744: Insufficient policy enforcement in cookies. Reported by
+      Prakash
+    - CVE-2019-13745: Insufficient policy enforcement in audio. Reported by
+      Luan Herrera
+    - CVE-2019-13746: Insufficient policy enforcement in Omnibox. Reported by
+      David Erceg
+    - CVE-2019-13747: Uninitialized Use in rendering. Reported by Ivan
+      Popelyshev and André Bonatti
+    - CVE-2019-13748: Insufficient policy enforcement in developer tools.
+      Reported by David Erceg
+    - CVE-2019-13749: Incorrect security UI in Omnibox. Reported by Khalil
+      Zhani
+    - CVE-2019-13750: Insufficient data validation in SQLite. Reported by
+      Wenxiang Qian
+    - CVE-2019-13751: Uninitialized Use in SQLite. Reported by Wenxiang Qian
+    - CVE-2019-13752: Out of bounds read in SQLite. Reported by Wenxiang Qian
+    - CVE-2019-13753: Out of bounds read in SQLite. Reported by Wenxiang Qian
+    - CVE-2019-13754: Insufficient policy enforcement in extensions. Reported
+      by Cody Crews
+    - CVE-2019-13755: Insufficient policy enforcement in extensions. Reported
+      by Masato Kinugawa
+    - CVE-2019-13756: Incorrect security UI in printing. Reported by Khalil
+      Zhani
+    - CVE-2019-13757: Incorrect security UI in Omnibox. Reported by Khalil
+      Zhani
+    - CVE-2019-13758: Insufficient policy enforcement in navigation. Reported
+      by Khalil Zhani
+    - CVE-2019-13759: Incorrect security UI. Reported by Wenxu Wu
+    - CVE-2019-13761: Incorrect security UI in Omnibox. Reported by Khalil
+      Zhani
+    - CVE-2019-13762: Insufficient policy enforcement in downloads. Reported by
+      csanuragjain
+    - CVE-2019-13763: Insufficient policy enforcement in payments. Reported by
+      weiwangpp93
+    - CVE-2019-13767: Use after free in media picker. Reported by Sergei
+      Glazunov
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 20 Jan 2020 11:09:00 +0900
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 19 Jan 2020 15:22:38 +0000
 
-gooroom-browser (2.4.0-1+grm2u2) stretch; urgency=medium
+chromium (78.0.3904.108-1~deb10u1) buster-security; urgency=medium
 
-  * Apply missing 76 version patches
+  * New upstream security release.
+    - CVE-2019-13723: Use-after-free in Bluetooth. Reported by Yuxiang Li
+    - CVE-2019-13724: Out-of-bounds in Bluetooth. Reported by Yuxiang Li
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 3 Dec 2019 14:42:00 +0900
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 22 Nov 2019 01:09:41 +0000
 
-gooroom-browser (2.4.0-1+grm2u1) stretch; urgency=medium
+chromium (78.0.3904.97-1~deb10u1) buster-security; urgency=medium
 
-  * Init Gooroom browser 78 version (2.4.0-1+grm2u1)
+  * New upstream stable release.
+    - CVE-2019-5869: Use-after-free in Blink. Reported by Zhe Jin
+    - CVE-2019-5870: Use-after-free in media. Reported by Guang Gong
+    - CVE-2019-5871: Heap overflow in Skia. Reported by Anonymous
+    - CVE-2019-5872: Use-after-free in Mojo. Reported by Zhe Jin
+    - CVE-2019-5874: External URIs may trigger other browsers. Reported by
+      James Lee
+    - CVE-2019-5875: URL bar spoof. Reported by Khalil
+      Zhani
+    - CVE-2019-5876: Use-after-free in media. Reported by Man Yue Mo
+    - CVE-2019-5877: Out-of-bounds access in V8. Reported by Guang Gong
+    - CVE-2019-5878: Use-after-free in V8. Reported by Guang Gong
+    - CVE-2019-5879: Extensions can read some local files. Reported by Jinseo
+      Kim
+    - CVE-2019-5880: SameSite cookie bypass. Reported by Jun Kokatsu
+    - CVE-2019-13659: URL spoof. Reported by Lnyas Zhang
+    - CVE-2019-13660: Full screen notification overlap. Reported by Wenxu Wu
+    - CVE-2019-13661: Full screen notification spoof. Reported by Wenxu Wu
+    - CVE-2019-13662: CSP bypass. Reported by David Erceg
+    - CVE-2019-13663: IDN spoof. Reported by Lnyas Zhang
+    - CVE-2019-13664: CSRF bypass. Reported by thomas "zemnmez" shadwell
+    - CVE-2019-13665: Multiple file download protection bypass. Reported by
+      Jun Kokatsu
+    - CVE-2019-13666: Side channel using storage size estimate. Reported by
+      Tom Van Goethem
+    - CVE-2019-13667: URI bar spoof when using external app URIs. Reported by
+      Khalil Zhani
+    - CVE-2019-13668: Global window leak via console. Reported by David Erceg
+    - CVE-2019-13669: HTTP authentication spoof. Reported by Khalil Zhani
+    - CVE-2019-13670: V8 memory corruption in regex. Reported by Guang Gong
+    - CVE-2019-13671: Dialog box fails to show origin. Reported by xisigr
+    - CVE-2019-13673: Cross-origin information leak using devtools. Reported
+      by David Erceg
+    - CVE-2019-13674: IDN spoofing. Reported by Khalil Zhani
+    - CVE-2019-13675: Extensions can be disabled by trailing slash. Reported
+      by Jun Kokatsu
+    - CVE-2019-13676: Google URI shown for certificate warning. Reported by
+      Wenxu Wu
+    - CVE-2019-13677: Chrome web store origin needs to be isolated. Reported
+      by Jun Kokatsu
+    - CVE-2019-13678: Download dialog spoofing. Reported by Ronni Skansing
+    - CVE-2019-13679: User gesture needed for printing. Reported by Conrad
+      Irwin
+    - CVE-2019-13680: IP address spoofing to servers. Reported by Thijs
+      Alkemade
+    - CVE-2019-13681: Bypass on download restrictions. Reported by David Erceg
+    - CVE-2019-13682: Site isolation bypass. Reported by Jun Kokatsu
+    - CVE-2019-13683: Exceptions leaked by devtools. Reported by David Erceg
+    - CVE-2019-13685: Use-after-free in UI. Reported by Khalil Zhani
+    - CVE-2019-13686: Use-after-free in offline pages. Reported by Brendon
+    - CVE-2019-13687: Use-after-free in media. Reported by Man Yue Mo
+    - CVE-2019-13688: Use-after-free in media. Reported by Man Yue Mo
+      Tiszka
+    - CVE-2019-13691: Omnibox spoof. Reported by David Erceg
+    - CVE-2019-13692: SOP bypass. Reported by Jun Kokatsu
+    - CVE-2019-13693: Use-after-free in IndexedDB. Reported by Guang Gong
+    - CVE-2019-13694: Use-after-free in WebRTC. Reported by banananapenguin
+    - CVE-2019-13695: Use-after-free in audio. Reported by Man Yue Mo
+    - CVE-2019-13696: Use-after-free in V8. Reported by Guang Gong
+    - CVE-2019-13697: Cross-origin size leak. Reported by Luan Herrera
+    - CVE-2019-13699: Use-after-free in media. Reported by Man Yue Mo
+    - CVE-2019-13700: Buffer overrun in Blink. Reported by Man Yue Mo
+    - CVE-2019-13701: URL spoof in navigation. Reported by David Erceg
+    - CVE-2019-13702: Privilege elevation in Installer. Reported by Phillip
+      Langlois and Edward Torkington
+    - CVE-2019-13703: URL bar spoofing. Reported by Khalil Zhani
+    - CVE-2019-13704: CSP bypass. Reported by Jun Kokatsu
+    - CVE-2019-13705: Extension permission bypass. Reported by Luan Herrera
+    - CVE-2019-13706: Out-of-bounds read in PDFium. Reported by pdknsk
+    - CVE-2019-13707: File storage disclosure. Reported by Andrea Palazzo
+    - CVE-2019-13708: HTTP authentication spoof. Reported by Khalil Zhani
+    - CVE-2019-13709: File download protection bypass. Reported by Zhong
+      Zhaochen
+    - CVE-2019-13710: File download protection bypass. Reported by
+      bernardo.mrod
+    - CVE-2019-13711: Cross-context information leak. Reported by David Erceg
+    - CVE-2019-13713: Cross-origin data leak. Reported by David Erceg
+    - CVE-2019-13714: CSS injection. Reported by Jun Kokatsu
+    - CVE-2019-13715: Address bar spoofing. Reported by xisigr
+    - CVE-2019-13716: Service worker state error. Reported by Barron Hagerman
+    - CVE-2019-13717: Notification obscured. Reported by xisigr
+    - CVE-2019-13718: IDN spoof. Reported by Khalil Zhani
+    - CVE-2019-13719: Notification obscured. Reported by Khalil Zhani
+    - CVE-2019-13720: Use-after-free in audio. Reported by Anton Ivanov and
+      Alexey Kulaev
+    - CVE-2019-13721: Use-after-free in PDFium. Reported by banananapenguin
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 2 Dec 2019 18:56:00 +0900
-
-gooroom-browser (2.3.0-1+grm2u1) stretch; urgency=medium
-
-  * Change Version
-
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 20 Nov 2019 10:25:00 +0900
-
-gooroom-browser (2.3.0-1+grm1u4) stretch; urgency=medium
-
-  * Security patch
-    - CVE-2019-13720
-  * BugTrackingSystem
-    - 1729 : gooroom-browser (version 76) use gtk3. Remove gtk2 component.
-    - 1769 : Fix [Add shortcut] bug on newtab page.
-
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 12 Nov 2019 11:01:00 +0900
-
-gooroom-browser (2.3.0-1+grm1u3) stretch; urgency=medium
-  
-  * Security patch
-    - CVE-2019-13687, CVE-2019-13688, CVE-2019-13691, CVE-2019-5871
-    - CVE-2019-5872, CVE-2019-5874, CVE-2019-5875, CVE-2019-5876
-  * BugTrackingSystem
-    - 1642 : Modify Extensions to exposure (calculator, note)
-    - 1492 : Add allow process on PageSourceViewEnabled policy
-    - 1646 : Gooroom browser does not support tabs from other devices.
-    - 1675 : Remove [Continue running background apps after Gooroom-browser shutdown] tab. 
-
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 07 Oct 2019 11:42:00 +0900
-
-gooroom-browser (2.3.0-1+grm1u2) stretch; urgency=medium
-  
-  * Change gooroom-browser logo
-  * BugTrackingSystem
-    - 1555 : Voice search is not supported on gooroom-browser
-    - 1643 : Remove route to enter incognito  mode from bookmarks
-    - 1644 : Prevents most-visited output from changing to none.
-    - 1656 : 'devtools://' scheme is excluded from trust/untrust judgment
-    - 1692 : Change Gooroom logo tooltip on newtab page
-    - 1693 : Remove route to enter incognito mode from link
-
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 27 Sep 2019 15:51:00 +0900
-
-gooroom-browser (2.3.0-1+grm1u1) stretch; urgency=medium
-
-  * Init Gooroom browser version (2.3.0-1+grm1u1)
-
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 16 Sep 2019 16:49:00 +0900
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 09 Nov 2019 19:01:23 +0000
 
 chromium (76.0.3809.100-1~deb10u1) buster-security; urgency=medium
 

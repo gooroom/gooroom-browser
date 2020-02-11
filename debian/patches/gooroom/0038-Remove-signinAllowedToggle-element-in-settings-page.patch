@@ -1,14 +1,14 @@
-From 7c03438875f55d90a15373d10089c7d5789fbb8c Mon Sep 17 00:00:00 2001
+From 032ddd05b774fee8974ec48691f9118c146f7cbc Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:11:48 +0900
-Subject: [PATCH 38/58] Remove 'signinAllowedToggle' element in settings page
+Subject: [PATCH 38/66] Remove 'signinAllowedToggle' element in settings page
 
 ---
  .../browser/resources/settings/privacy_page/privacy_page.html   | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 5781b1f79a0e..19581c0f42b2 100644
+index 0e06cbfcaeec..30fdc0fe5041 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 @@ -95,6 +95,7 @@

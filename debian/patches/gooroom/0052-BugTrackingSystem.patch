@@ -1,7 +1,7 @@
-From 48563c709e5e079658cd34c226faaeb4652dde3b Mon Sep 17 00:00:00 2001
+From 9e81852b17ca4d53c7fe6ed30c71860b59ef882d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:54:03 +0900
-Subject: [PATCH 52/58] BugTrackingSystem
+Subject: [PATCH 52/66] BugTrackingSystem
 
 650 - Client redirection URL does not apply Trust/Untrust judgement module.
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 52/58] BugTrackingSystem
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index a7537ba64458..c982ff301ad1 100644
+index 415d2582902e..dc3d33175aab 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -4592,7 +4592,9 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -4671,7 +4671,9 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
    }
  */
  //If browser is switched, the current page is closed.

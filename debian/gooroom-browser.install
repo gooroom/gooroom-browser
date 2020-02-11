@@ -16,3 +16,9 @@ debian/setups/eioepogmdbhnfgojefoamgepcakoolhe.json usr/share/gooroom/browser/ex
 debian/setups/jkhilhbacecnjpokpknjonfadkoocabl.json usr/share/gooroom/browser/extensions
 debian/setups/gooroom-browser-setup.sh usr/lib/gooroom-browser
 debian/setups/mainpref.json usr/lib/gooroom-browser
+
+debian/etc/README etc/gooroom-browser.d
+debian/etc/apikeys etc/gooroom-browser.d
+debian/etc/extensions etc/gooroom-browser.d
+debian/etc/default-flags etc/gooroom-browser.d
+debian/etc/master_preferences etc/gooroom-browser

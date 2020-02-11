@@ -1,7 +1,7 @@
-From 213c631a57386cd43d585c6fe18a4e4761e39769 Mon Sep 17 00:00:00 2001
+From 972a7907e93903c8941439b6399f04117a4e58bb Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 20 Nov 2019 19:06:35 +0900
-Subject: [PATCH 03/58] enable GooroomBrowserExtraPartsSecurity by attaching it
+Subject: [PATCH 03/66] enable GooroomBrowserExtraPartsSecurity by attaching it
     to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
 
 ---

@@ -21,8 +21,8 @@ usage () {
   echo "        --enable-remote-extensions Allow extensions from remote sites"
   echo
   echo " Other supported options are:"
-  MANWIDTH=80 man chromium | sed -e '1,/OPTIONS/d; /ENVIRONMENT/,$d'
-  echo " See 'man chromium' for more details"
+  MANWIDTH=80 man gooroom-browser | sed -e '1,/OPTIONS/d; /ENVIRONMENT/,$d'
+  echo " See 'man gooroom-browser' for more details"
 }
 
 nosse2="\
@@ -42,8 +42,8 @@ case `uname -m` in
 esac
 
 # Source additional settings
-#for file in /etc/chromium.d/*; do
-#  test $file = /etc/chromium.d/README || expr $file : .*\.dpkg > /dev/null || . $file
+#for file in /etc/gooroom-browser.d/*; do
+#  test $file = /etc/gooroom-browser.d/README || expr $file : .*\.dpkg > /dev/null || . $file
 #done
 
 # Use the /usr/bin helper script for generated launchers

@@ -1,0 +1,194 @@
+diff --git a/chrome/app/BUILD.gn b/chrome/app/BUILD.gn
+index 82de71a30..f5f71c087 100644
+--- a/chrome/app/BUILD.gn
++++ b/chrome/app/BUILD.gn
+@@ -116,11 +116,7 @@ if (is_android) {
+ }
+ 
+ grit("generated_resources") {
+-if (is_gooroom) {
+-  source = "gooroom/generated_resources.grd"
+-} else {
+   source = "generated_resources.grd"
+-}
+   defines = chrome_grit_defines
+   output_dir = "$root_gen_dir/chrome"
+   outputs = [
+@@ -261,11 +257,7 @@ grit("google_chrome_strings") {
+ }
+ 
+ grit("chromium_strings") {
+-if (is_gooroom) {
+-  source = "gooroom/chromium_strings.grd"
+-} else {
+   source = "chromium_strings.grd"
+-}
+   defines = chrome_grit_defines
+   output_dir = "$root_gen_dir/chrome"
+   outputs = [
+diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
+index edf70f746..7b8a2fd6b 100644
+--- a/chrome/app/chromium_strings.grd
++++ b/chrome/app/chromium_strings.grd
+@@ -126,26 +126,12 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
+         <part file="settings_chromium_strings.grdp" />
+       </if>
+ 
+-      <message name="IDS_PROFILES_DISCONNECT_MANAGED_PROFILE_TEXT" desc="Message explaining to the user what will happen if they disconnect the managed profile.">
+-        Disconnecting <ph name="USERNAME">$1<ex>someone@example.com</ex></ph> will clear your history, bookmarks, settings, and other Chromium data stored on this device. Data stored in your Google Account will not be cleared and can be managed on <ph name="GOOGLE_DASHBOARD_LINK">&lt;a target="_blank" href="$2"&gt;</ph>Google Dashboard<ph name="END_GOOGLE_DASHBOARD_LINK">&lt;/a&gt;</ph>.
+-      </message>
+-      <if expr="_gooroom">
+-        <!-- String "Gooroom" immediately after Gooroom protocol logo -->
+-        <message name="IDS_PRODUCT_NAME" desc="The Gooroom Browser application name">
+-          Gooroom Browser
+-        </message>
+-        <message name="IDS_SHORT_PRODUCT_NAME" desc="The Gooroom Browser application short name.">
+-          Gooroom
+-        </message>
+-      </if>
+-      <if expr="not _gooroom">
+       <message name="IDS_PRODUCT_NAME" desc="The Chrome application name">
+         Chromium
+       </message>
+       <message name="IDS_SHORT_PRODUCT_NAME" desc="The Chrome application short name.">
+         Chromium
+       </message>
+-      </if>
+       <if expr="is_win">
+         <message name="IDS_SXS_SHORTCUT_NAME" desc="Unused in Chromium builds" translateable="false">
+         </message>
+@@ -537,7 +523,7 @@ Chromium is unable to recover your settings.
+ 
+       <if expr="use_titlecase and not chromeos">
+         <message name="IDS_ABOUT" desc="In Title Case: The text label of the About Chrome menu item">
+-          About &amp;Gooroom Browser
++          About &amp;Chromium
+         </message>
+         <message name="IDS_UPDATE_NOW" desc="In Title Case: The text label of the Update Chrome Now menu item">
+           Update &amp;Chromium
+@@ -545,7 +531,7 @@ Chromium is unable to recover your settings.
+       </if>
+       <if expr="not use_titlecase and not chromeos">
+         <message name="IDS_ABOUT" desc="The text label of the About Chrome menu item">
+-          About &amp;Gooroom Browser
++          About &amp;Chromium
+         </message>
+         <message name="IDS_UPDATE_NOW" desc="The text label of the Update Chrome Now menu item">
+           Update &amp;Chromium
+diff --git a/chrome/app/resources/locale_settings.grd b/chrome/app/resources/locale_settings.grd
+index 285e0a6ef..83aea7046 100644
+--- a/chrome/app/resources/locale_settings.grd
++++ b/chrome/app/resources/locale_settings.grd
+@@ -157,9 +157,6 @@
+       <message name="IDS_WEBSTORE_URL" translateable="false">
+         https://chrome.google.com/webstore?hl=[GRITLANGCODE]
+       </message>
+-      <message name="IDS_GOOROOM_URL" translateable="false">
+-        https://www.gooroom.kr
+-      </message>
+ 
+       <!-- The URLs for Adobe Flash settings. We cannot rely on -->
+       <!-- the automatic expansion of GRITLANGCODE here because Adobe does -->
+diff --git a/chrome/app/resources/manpage.1.in b/chrome/app/resources/manpage.1.in
+index 48992ea1c..b9c99a11f 100644
+--- a/chrome/app/resources/manpage.1.in
++++ b/chrome/app/resources/manpage.1.in
+@@ -3,16 +3,16 @@
+ .TH @@PACKAGE@@ 1 "" "" "USER COMMANDS"
+ 
+ .SH NAME
+-@@PACKAGE@@ \- the web browser from Gooroom
++@@PACKAGE@@ \- the web browser from Google
+ 
+ .SH SYNOPSIS
+ .B @@PACKAGE@@
+ [\fIOPTION\fR] [\fIPATH\fR|\fIURL\fR]
+ 
+ .SH DESCRIPTION
+-See the Gooroom help center for help on using the browser.
++See the Google Chrome help center for help on using the browser.
+ .IP
+-<https://www.gooroom.kr/>
++<https://support.google.com/chrome/>
+ .PP
+ This manpage only describes invocation, environment, and arguments.
+ 
+@@ -168,11 +168,11 @@ Comma separated list of hosts or patterns to bypass proxying.
+ 
+ .SH FILES
+ .TP
+-.I $HOME/.config/gooroom
++.I $HOME/.config/@@PACKAGE@@
+ Default directory for configuration data.
+ 
+ .TP
+-.I $HOME/.cache/gooroom
++.I $HOME/.cache/@@PACKAGE@@
+ Default directory for cache data.  (Why?  See
+ <http://standards.freedesktop.org/basedir-spec/latest/> .)
+ 
+diff --git a/chrome/app/settings_chromium_strings.grdp b/chrome/app/settings_chromium_strings.grdp
+index c7f7cda18..262da5dc1 100644
+--- a/chrome/app/settings_chromium_strings.grdp
++++ b/chrome/app/settings_chromium_strings.grdp
+@@ -3,7 +3,7 @@
+ <grit-part>
+   <!-- About Page -->
+   <message name="IDS_SETTINGS_ABOUT_PROGRAM" desc="Menu title for the About Chromium page.">
+-    About Gooroom-browser
++    About Chromium
+   </message>
+   <message name="IDS_SETTINGS_GET_HELP_USING_CHROME" desc="Text of the button which takes the user to the Chrome help page.">
+     Get help with Chromium
+@@ -75,7 +75,7 @@
+ 
+   <!-- Privacy Page -->
+   <message name="IDS_SETTINGS_IMPROVE_BROWSING_EXPERIENCE" desc="The text in the options panel that describes how we use web services to improve browsing experience.">
+-    Gooroom-browser may use web services to improve your browsing experience. You may optionally disable these services.
++    Chromium may use web services to improve your browsing experience. You may optionally disable these services. <ph name="BEGIN_LINK">&lt;a target="_blank" href="$1"&gt;</ph>Learn more<ph name="END_LINK">&lt;/a&gt;<ex>&lt;/a&gt;</ex></ph>
+   </message>
+   <message name="IDS_SETTINGS_SPELLING_DESCRIPTION_UNIFIED_CONSENT" desc="Description of using a web serviced to help resolve spelling errors. It is important to convey that what the user types will be sent to Google.">
+     To fix spelling errors, Chromium sends the text you type in text fields to Google
+diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
+index 86a3afbdd..2bfef2d0c 100644
+--- a/chrome/app/settings_strings.grdp
++++ b/chrome/app/settings_strings.grdp
+@@ -23,7 +23,7 @@
+ 
+   <!-- About Page -->
+   <message name="IDS_SETTINGS_ABOUT_PAGE_BROWSER_VERSION" desc="The text label describing the version of the browser, example: Version 57.0.2937.0 (Developer Build) unknown (64-bit)">
+-    Version <ph name="PRODUCT_VERSION">$1<ex>15.0.865.0</ex></ph> (<ph name="PRODUCT_CHANNEL">$2<ex>Developer Build</ex></ph>)
++    Version <ph name="PRODUCT_VERSION">$1<ex>15.0.865.0</ex></ph> (<ph name="PRODUCT_CHANNEL">$2<ex>Developer Build</ex></ph>) <ph name="PRODUCT_MODIFIER">$3</ph> <ph name="PRODUCT_VERSION_BITS">$4</ph>
+   </message>
+   <if expr="chromeos">
+     <message name="IDS_SETTINGS_ABOUT_PAGE_DETAILED_BUILD_INFO" desc="Label describing the section that shows detailed information about the current Chrome build.">
+@@ -2932,20 +2932,6 @@
+   <message name="IDS_SETTINGS_NETWORK_PREDICTION_ENABLED_DESC_UNIFIED_CONSENT" desc="In the advanced options tab, the secondary text next to the checkbox that enables prediction of network actions.">
+     Uses cookies to remember your preferences, even if you don’t visit those pages
+   </message>
+-  <!-- by Gooroom TODO:need to use if-clause-->
+-  <message name="IDS_OPTIONS_WEBSOCKET_ENABLE" desc="Websocket confirm enable.">
+-    Enable Websocket
+-  </message>
+-  <message name="IDS_OPTIONS_WEBWORKER_ENABLE" desc="Webworker confirm enable">
+-    Enable Webworker 
+-  </message>
+-  <message name="IDS_OPTIONS_WEBSOCKET_CONFIRM_MESSAGE" desc="Websocket confirm">
+-    Allow Websocket
+-  </message>
+-  <message name="IDS_OPTIONS_WEBWORKER_CONFIRM_MESSAGE" desc="Webworker confirm">
+-    Allow Webworker
+-  </message>
+-  <!-- end of ... by Gooroom TODO:need to use if-clause-->
+   <message name="IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION" desc="The section title of 'Protects you and your device from dangerous sites'">
+     Safe Browsing (protects you and your device from dangerous sites)
+   </message>
+@@ -3087,7 +3073,7 @@
+     </message>
+   </if>
+   <message name="IDS_SETTINGS_SEARCH_EXPLANATION" desc="Explanation for the search engine dropdown setting.">
+-    Search engine used in the address bar
++    Search engine used in the <ph name="BEGIN_LINK">&lt;a target="_blank" href="$1"&gt;</ph>address bar<ph name="END_LINK">&lt;/a&gt;</ph>
+   </message>
+   <message name="IDS_SETTINGS_SEARCH_MANAGE_SEARCH_ENGINES" desc="Label for the Manage Search Engines button.">
+     Manage search engines

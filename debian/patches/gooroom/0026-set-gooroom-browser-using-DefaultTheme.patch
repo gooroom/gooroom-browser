@@ -1,7 +1,7 @@
-From 9b1212e3d725f2391578ce59d8140932f57cd651 Mon Sep 17 00:00:00 2001
+From d6cc90fc0f81057a06ec40cd3466051b738c5615 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 25 Nov 2019 14:49:20 +0900
-Subject: [PATCH 26/58] set gooroom-browser using DefaultTheme
+Subject: [PATCH 26/66] set gooroom-browser using DefaultTheme
 
 ---
  chrome/browser/themes/theme_service_aura_linux.cc | 4 ++++

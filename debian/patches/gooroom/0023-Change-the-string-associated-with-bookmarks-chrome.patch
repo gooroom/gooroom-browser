@@ -1,7 +1,7 @@
-From 97278261ed1036601973db9c39e094d237694a2c Mon Sep 17 00:00:00 2001
+From 961b1bd0cf648a0e7dc4ef88c3e0e87cff08f8bf Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 25 Nov 2019 14:17:39 +0900
-Subject: [PATCH 23/58] Change the string associated with bookmarks (chrome:// 
+Subject: [PATCH 23/66] Change the string associated with bookmarks (chrome:// 
  to gooroom://)
 
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH 23/58] Change the string associated with bookmarks (chrome://
  2 files changed, 25 insertions(+)
 
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
-index 7fb95c0502e6..c57b19d54b27 100644
+index 79914c538a62..4c02f2c132ab 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
-@@ -261,6 +261,14 @@ class BookmarkButton : public BookmarkButtonBase {
+@@ -252,6 +252,14 @@ class BookmarkButton : public BookmarkButtonBase {
        tooltip_text_ = BookmarkBarView::CreateToolTipForURLAndTitle(
            max_tooltip_width_, tooltip_manager->GetFontList(), url_, GetText());
      }
@@ -29,7 +29,7 @@ index 7fb95c0502e6..c57b19d54b27 100644
    }
  
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
-index 9d6a177b9427..6c8cac0fedd4 100644
+index d6c8fe50196f..ff2f73545a41 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
 @@ -373,7 +373,17 @@ void BookmarkEditorView::Init() {

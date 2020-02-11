@@ -1,14 +1,14 @@
-From 451c29994f8a0135ba4a95a84ebf301f8f7e04ca Mon Sep 17 00:00:00 2001
+From 63441e8745a47996de8b7bba8ea0ec331e4e9189 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 28 Nov 2019 10:54:41 +0900
-Subject: [PATCH 34/58] fix gooroom-policy-dir bugs
+Subject: [PATCH 34/66] fix gooroom-policy-dir bugs
 
 ---
  chrome/common/chrome_paths.cc | 17 ++++++++++-------
  1 file changed, 10 insertions(+), 7 deletions(-)
 
 diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
-index a2f4d3ec6d3e..79291bdbfc57 100644
+index 012fc0e3c607..d4f98a98ca8f 100644
 --- a/chrome/common/chrome_paths.cc
 +++ b/chrome/common/chrome_paths.cc
 @@ -6,6 +6,8 @@
@@ -20,7 +20,7 @@ index a2f4d3ec6d3e..79291bdbfc57 100644
  #endif
  #include "base/files/file_util.h"
  #include "base/logging.h"
-@@ -492,15 +494,16 @@ bool PathProvider(int key, base::FilePath* result) {
+@@ -505,15 +507,16 @@ bool PathProvider(int key, base::FilePath* result) {
  //change gooroom policies path
        base::FilePath home_path_dir;
        base::PathService::Get(base::DIR_HOME, &home_path_dir);

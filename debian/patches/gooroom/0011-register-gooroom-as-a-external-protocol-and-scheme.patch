@@ -1,7 +1,7 @@
-From 53b7d4d5a3d98a0753ac6e93106b540bce3c3ffd Mon Sep 17 00:00:00 2001
+From 610e5d81cce2316dfad0c893d9fdbe38b45d9862 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 21 Nov 2019 10:07:06 +0900
-Subject: [PATCH 11/58] register /gooroom/ as a external protocol and scheme
+Subject: [PATCH 11/66] register /gooroom/ as a external protocol and scheme
 
 ---
  chrome/browser/profiles/profile_io_data.cc | 4 ++++
@@ -11,10 +11,10 @@ Subject: [PATCH 11/58] register /gooroom/ as a external protocol and scheme
  4 files changed, 10 insertions(+)
 
 diff --git a/chrome/browser/profiles/profile_io_data.cc b/chrome/browser/profiles/profile_io_data.cc
-index 33d88f924607..230cc900e16d 100644
+index b33706fda2a1..1200fb76b04a 100644
 --- a/chrome/browser/profiles/profile_io_data.cc
 +++ b/chrome/browser/profiles/profile_io_data.cc
-@@ -352,6 +352,10 @@ bool ProfileIOData::IsHandledProtocol(const std::string& scheme) {
+@@ -347,6 +347,10 @@ bool ProfileIOData::IsHandledProtocol(const std::string& scheme) {
      extensions::kExtensionScheme,
  #endif
      content::kChromeUIScheme,

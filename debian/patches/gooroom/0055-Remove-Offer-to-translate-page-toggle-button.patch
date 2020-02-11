@@ -1,7 +1,7 @@
-From 1a4aa23cd0c9b72491415e4a8e087ae191c2b4b1 Mon Sep 17 00:00:00 2001
+From ff9ca22b7466e5b139d1655f1822775a82add083 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:57:35 +0900
-Subject: [PATCH 55/58] Remove 'Offer to translate page' toggle button
+Subject: [PATCH 55/66] Remove 'Offer to translate page' toggle button
 
 ---
  .../resources/settings/languages_page/languages_page.html       | 2 +-

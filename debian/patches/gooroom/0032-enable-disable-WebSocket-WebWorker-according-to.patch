@@ -1,7 +1,7 @@
-From 6621be26f80034ea3f9cfa1f2a91f769b35880ab Mon Sep 17 00:00:00 2001
+From cfaa46844220a0feb8bb32f545ec90b66d656ab7 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 27 Nov 2019 14:12:47 +0900
-Subject: [PATCH 32/58] enable/disable WebSocket & WebWorker according to 
+Subject: [PATCH 32/66] enable/disable WebSocket & WebWorker according to 
  policy and settings page
 
 ---
@@ -13,7 +13,7 @@ Subject: [PATCH 32/58] enable/disable WebSocket & WebWorker according to
  chrome/browser/ui/prefs/pref_watcher.cc       |  4 ++
  chrome/browser/ui/prefs/prefs_tab_helper.cc   |  7 ++++
  .../settings_localized_strings_provider.cc    |  2 +
- .../browser/ui/webui/settings/settings_ui.cc  |  9 ++++
+ .../browser/ui/webui/settings/settings_ui.cc  |  8 ++++
  chrome/common/pref_names.cc                   |  5 +++
  chrome/common/pref_names.h                    |  5 +++
  content/public/common/web_preferences.h       |  4 +-
@@ -26,7 +26,7 @@ Subject: [PATCH 32/58] enable/disable WebSocket & WebWorker according to
  .../renderer/core/workers/dedicated_worker.cc | 29 +++++++++++++
  .../modules/websockets/dom_websocket.cc       |  4 +-
  .../platform/exported/web_runtime_features.cc |  8 ++++
- 21 files changed, 182 insertions(+), 9 deletions(-)
+ 21 files changed, 181 insertions(+), 9 deletions(-)
 
 diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
 index ef259aba7bf0..fa092d65dfd3 100644
@@ -42,10 +42,10 @@ index ef259aba7bf0..fa092d65dfd3 100644
  <translation id="1003088604756913841">새 <ph name="APP" /> 창에서 링크 열기</translation>
  <translation id="1004218526896219317">사이트 액세스</translation>
 diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
-index 24a03e8858af..1d0215cf629a 100644
+index 2bfef2d0c90a..7b8f6bef7410 100644
 --- a/chrome/app/settings_strings.grdp
 +++ b/chrome/app/settings_strings.grdp
-@@ -2925,6 +2925,20 @@
+@@ -2932,6 +2932,20 @@
    <message name="IDS_SETTINGS_NETWORK_PREDICTION_ENABLED_DESC_UNIFIED_CONSENT" desc="In the advanced options tab, the secondary text next to the checkbox that enables prediction of network actions.">
      Uses cookies to remember your preferences, even if you don’t visit those pages
    </message>
@@ -67,10 +67,10 @@ index 24a03e8858af..1d0215cf629a 100644
      Safe Browsing (protects you and your device from dangerous sites)
    </message>
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index 40e299858d27..fec5ade37678 100644
+index a4878a09ca6f..e687f3557b97 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -632,6 +632,13 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetWhitelistedKeys() {
+@@ -638,6 +638,13 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetWhitelistedKeys() {
        settings_api::PrefType::PREF_TYPE_BOOLEAN;
  #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
  
@@ -84,7 +84,7 @@ index 40e299858d27..fec5ade37678 100644
    // Media Remoting settings.
    (*s_whitelist)[::prefs::kMediaRouterMediaRemotingEnabled] =
        settings_api::PrefType::PREF_TYPE_BOOLEAN;
-@@ -644,6 +651,7 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetWhitelistedKeys() {
+@@ -650,6 +657,7 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetWhitelistedKeys() {
        settings_api::PrefType::PREF_TYPE_BOOLEAN;
  #endif
  
@@ -93,7 +93,7 @@ index 40e299858d27..fec5ade37678 100644
  }
  
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 1ad29354d5cc..e06353b42e63 100644
+index 9b9618c956d3..e125ed065e63 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 @@ -119,6 +119,19 @@
@@ -117,10 +117,10 @@ index 1ad29354d5cc..e06353b42e63 100644
              pref="{{prefs.net.network_prediction_options}}"
              label="$i18n{networkPredictionEnabled}"
 diff --git a/chrome/browser/resources/settings/settings_ui/settings_ui.js b/chrome/browser/resources/settings/settings_ui/settings_ui.js
-index fdbbef286d5f..b02afaf13c5e 100644
+index f3b8d60d8613..c52afede6ed0 100644
 --- a/chrome/browser/resources/settings/settings_ui/settings_ui.js
 +++ b/chrome/browser/resources/settings/settings_ui/settings_ui.js
-@@ -162,6 +162,47 @@ Polymer({
+@@ -166,6 +166,47 @@ Polymer({
      };
      // </if>
  
@@ -184,10 +184,10 @@ index a738dc8bbf36..bf64b031e6bf 100644
  
  const int kWebPrefsToObserveLength = base::size(kWebPrefsToObserve);
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index 4db5bb4ce1da..8ca01e603f29 100644
+index 29d35b29a730..571ef1a8e3e9 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-@@ -419,6 +419,13 @@ void PrefsTabHelper::RegisterProfilePrefs(
+@@ -422,6 +422,13 @@ void PrefsTabHelper::RegisterProfilePrefs(
    RegisterLocalizedFontPref(registry, prefs::kWebKitMinimumLogicalFontSize,
                              IDS_MINIMUM_LOGICAL_FONT_SIZE);
  #endif
@@ -202,10 +202,10 @@ index 4db5bb4ce1da..8ca01e603f29 100644
  
  // static
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index 3ff5f45c78b4..4f1d9835ed96 100644
+index 01411db9371b..ee7b213ba7b4 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-@@ -2450,6 +2450,8 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
+@@ -2489,6 +2489,8 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
         IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION},
        {"safeBrowsingEnableProtectionDesc",
         IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION_DESC},
@@ -215,11 +215,11 @@ index 3ff5f45c78b4..4f1d9835ed96 100644
         IDS_SETTINGS_SYNC_AND_GOOGLE_SERVICES_PRIVACY_DESC_UNIFIED_CONSENT},
        {"urlKeyedAnonymizedDataCollection",
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 3ea47f5691e4..67af1341d978 100644
+index 374bc9896daa..bdc441c815e1 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -152,6 +152,10 @@
- #include "chrome/browser/ui/webui/settings/change_password_handler.h"
+@@ -151,6 +151,10 @@
+ #include "chrome/browser/ui/webui/settings/printing_handler.h"
  #endif
  
 +#if defined(GOOROOM_BUILD)
@@ -229,23 +229,22 @@ index 3ea47f5691e4..67af1341d978 100644
  namespace settings {
  // static
  void SettingsUI::RegisterProfilePrefs(
-@@ -334,6 +338,11 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
-   html_source->SetDefaultResource(IDR_SETTINGS_SETTINGS_HTML);
+@@ -327,6 +331,10 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
  #endif
  
+   AddLocalizedStrings(html_source, profile, web_ui->GetWebContents());
 +#if defined(GOOROOM_BUILD)
 +  html_source->AddBoolean("enableGooroomWebsocketSettings", gooroom::g_gooroom->useWebSocket());
 +  html_source->AddBoolean("enableGooroomWebworkerSettings", gooroom::g_gooroom->useWebWorker());
 +#endif
-+
-   AddLocalizedStrings(html_source, profile);
  
    ManagedUIHandler::Initialize(web_ui, html_source);
+ 
 diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index 962ef673e288..c6f4e71cc0b1 100644
+index 86cfea5d7cd6..dd60bc9e6d2e 100644
 --- a/chrome/common/pref_names.cc
 +++ b/chrome/common/pref_names.cc
-@@ -2685,6 +2685,11 @@ const char kUserTriggeredIsolatedOrigins[] =
+@@ -2747,6 +2747,11 @@ const char kUserTriggeredIsolatedOrigins[] =
  const char kWebDriverOverridesIncompatiblePolicies[] =
      "webdriver.override_incompatible_policy";
  
@@ -258,10 +257,10 @@ index 962ef673e288..c6f4e71cc0b1 100644
  // Boolean that specifies whether media (audio/video) autoplay is allowed.
  const char kAutoplayAllowed[] = "media.autoplay_allowed";
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index f9429ebbc952..325d81f01452 100644
+index 7ea87bfb8c23..a5013fa584d0 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -939,6 +939,11 @@ extern const char kSitePerProcess[];
+@@ -962,6 +962,11 @@ extern const char kSitePerProcess[];
  extern const char kUserTriggeredIsolatedOrigins[];
  extern const char kWebDriverOverridesIncompatiblePolicies[];
  
@@ -274,10 +273,10 @@ index f9429ebbc952..325d81f01452 100644
  extern const char kAutoplayAllowed[];
  extern const char kAutoplayWhitelist[];
 diff --git a/content/public/common/web_preferences.h b/content/public/common/web_preferences.h
-index 27ea5da2dd34..b8765d961cdf 100644
+index 5d5a2a124c68..aec89cfcb4ad 100644
 --- a/content/public/common/web_preferences.h
 +++ b/content/public/common/web_preferences.h
-@@ -312,8 +312,8 @@ struct CONTENT_EXPORT WebPreferences {
+@@ -311,8 +311,8 @@ struct CONTENT_EXPORT WebPreferences {
    bool do_not_update_selection_on_mutating_selection_range;
  
  #if defined(GOOROOM_BUILD)
@@ -289,10 +288,10 @@ index 27ea5da2dd34..b8765d961cdf 100644
  
    // Defines the current autoplay policy.
 diff --git a/content/renderer/render_view_impl.cc b/content/renderer/render_view_impl.cc
-index 52ce5593e08a..f8b830b252fe 100644
+index ecb8f985d315..f1a80fa54364 100644
 --- a/content/renderer/render_view_impl.cc
 +++ b/content/renderer/render_view_impl.cc
-@@ -994,14 +994,18 @@ void RenderView::ApplyWebPreferences(const WebPreferences& prefs,
+@@ -1014,14 +1014,18 @@ void RenderView::ApplyWebPreferences(const WebPreferences& prefs,
  #if defined(GOOROOM_BUILD)
    if (prefs.websocket_enabled) {
      WebRuntimeFeatures::EnableWebSocket(true);
@@ -392,7 +391,7 @@ index 113fb359a53e..5f6d46a2c213 100644
      web_prefs->webworker_enabled = false;
    }
 diff --git a/third_party/blink/public/platform/web_runtime_features.h b/third_party/blink/public/platform/web_runtime_features.h
-index 2a4c7f2dcc80..a40d60cb088a 100644
+index e3bf004b5a3f..caa1eb2cabb9 100644
 --- a/third_party/blink/public/platform/web_runtime_features.h
 +++ b/third_party/blink/public/platform/web_runtime_features.h
 @@ -44,6 +44,8 @@ class WebRuntimeFeatures {
@@ -405,7 +404,7 @@ index 2a4c7f2dcc80..a40d60cb088a 100644
  
    // Enable or disable features with status=experimental listed in
 diff --git a/third_party/blink/renderer/core/workers/dedicated_worker.cc b/third_party/blink/renderer/core/workers/dedicated_worker.cc
-index eabed31b6236..62f680996411 100644
+index b0d498d03b7e..74af6b9baec6 100644
 --- a/third_party/blink/renderer/core/workers/dedicated_worker.cc
 +++ b/third_party/blink/renderer/core/workers/dedicated_worker.cc
 @@ -4,6 +4,19 @@
@@ -428,7 +427,7 @@ index eabed31b6236..62f680996411 100644
  #include <utility>
  #include "base/feature_list.h"
  #include "mojo/public/cpp/bindings/pending_remote.h"
-@@ -99,6 +112,22 @@ DedicatedWorker* DedicatedWorker::Create(ExecutionContext* context,
+@@ -100,6 +113,22 @@ DedicatedWorker* DedicatedWorker::Create(ExecutionContext* context,
                                           const WorkerOptions* options,
                                           ExceptionState& exception_state) {
    DCHECK(context->IsContextThread());
@@ -474,10 +473,10 @@ index a3caead3e64a..bf64d64007c0 100644
      //    frm, "External connection attempts were blocked by policy.");
   
 diff --git a/third_party/blink/renderer/platform/exported/web_runtime_features.cc b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-index d406f51b5f07..83076b3437d4 100644
+index 9a0588982304..3774430e093a 100644
 --- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 +++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-@@ -625,6 +625,14 @@ void WebRuntimeFeatures::EnableWebSocket(bool enable) {
+@@ -621,6 +621,14 @@ void WebRuntimeFeatures::EnableWebSocket(bool enable) {
  void WebRuntimeFeatures::EnableWebWorker(bool enable) {
    GooroomEnabledFeatures::SetWebWorkerEnabled(enable);
  }

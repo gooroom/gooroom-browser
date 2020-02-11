@@ -1,7 +1,7 @@
-From bface2b16736ee27d800899f93903c0316b6023e Mon Sep 17 00:00:00 2001
+From c9bb19386a2118507f0553742b7d90d5317d05df Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:24:26 +0900
-Subject: [PATCH 45/58] Add extension webstore wording 'compatible'
+Subject: [PATCH 45/66] Add extension webstore wording 'compatible'
 
 ---
  chrome/app/gooroom/resources/generated_resources_ko.xtb | 4 ++--

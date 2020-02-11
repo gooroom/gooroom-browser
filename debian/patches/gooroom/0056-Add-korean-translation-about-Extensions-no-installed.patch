@@ -1,7 +1,7 @@
-From 60ca98557956d1e781a9ba3fc1e71cb599ad8d18 Mon Sep 17 00:00:00 2001
+From 043cf4b7b96a093406fe5611b23c1c7225380170 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:57:57 +0900
-Subject: [PATCH 56/58] Add korean translation about 'Extensions no-installed 
+Subject: [PATCH 56/66] Add korean translation about 'Extensions no-installed 
  items..' in extension page
 
 ---

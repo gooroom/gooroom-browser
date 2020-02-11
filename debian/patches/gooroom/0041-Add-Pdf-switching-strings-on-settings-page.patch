@@ -1,7 +1,7 @@
-From 5273e31db942f2bff614f277a2790b3e63078d7e Mon Sep 17 00:00:00 2001
+From ed33fa4c4cb588b3dfb2d7fe3fb0a8609a68053b Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:20:21 +0900
-Subject: [PATCH 41/58] Add Pdf switching strings on settings page
+Subject: [PATCH 41/66] Add Pdf switching strings on settings page
 
 ---
  .../resources/generated_resources_ko.xtb       |  2 ++
@@ -98,10 +98,10 @@ index 66f61a6db59b..cd0e79ac6bd5 100644
 +
  });
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index ef81dd45c0b2..c1808af8fcdf 100644
+index b20a732738e6..a7cce8986b6c 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-@@ -2790,6 +2790,8 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -2838,6 +2838,8 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
      {"siteSettingsPdfDocuments", IDS_SETTINGS_SITE_SETTINGS_PDF_DOCUMENTS},
      {"siteSettingsPdfDownloadPdfs",
       IDS_SETTINGS_SITE_SETTINGS_PDF_DOWNLOAD_PDFS},

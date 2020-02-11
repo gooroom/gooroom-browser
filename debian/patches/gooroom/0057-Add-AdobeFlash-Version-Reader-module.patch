@@ -1,7 +1,7 @@
-From 380ecebb731d06830626f56f07112bad4b3aa99d Mon Sep 17 00:00:00 2001
+From 47a1d7514ab0f7eab23866736e79d8f6600762a4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 16:01:04 +0900
-Subject: [PATCH 57/58] Add AdobeFlash-Version Reader module
+Subject: [PATCH 57/66] Add AdobeFlash-Version Reader module
 
 ---
  .../browser/web_contents/web_contents_impl.cc |  6 ++--
@@ -14,10 +14,10 @@ Subject: [PATCH 57/58] Add AdobeFlash-Version Reader module
  create mode 100644 gooroom/flash/flash_version.h
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index c982ff301ad1..2e5e914dbd9d 100644
+index dc3d33175aab..bef251848f6f 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -4419,9 +4419,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4482,9 +4482,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
        "/.config/gooroom/untrust";
  
@@ -27,7 +27,7 @@ index c982ff301ad1..2e5e914dbd9d 100644
  
    int pid;
    //TODO do not discard other options when exec
-@@ -4431,7 +4429,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4494,7 +4492,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        return true;  // true is blank.. false is continue.
      } else {
        execl(exe_path.c_str(), "gooroom-browser",
@@ -36,7 +36,7 @@ index c982ff301ad1..2e5e914dbd9d 100644
        exit(0);
      }
    } else {
-@@ -4440,7 +4438,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4503,7 +4501,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        return true;
      } else {
        execl(exe_path.c_str(), "gooroom-browser",

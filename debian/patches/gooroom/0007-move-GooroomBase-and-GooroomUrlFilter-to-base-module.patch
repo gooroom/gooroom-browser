@@ -1,7 +1,7 @@
-From da5dd14392c41f3cd1121b5eba0ad1d1d9cfaecd Mon Sep 17 00:00:00 2001
+From 3fec271782fc8636d4927d2eb9b593e16a2756ca Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 20 Nov 2019 20:43:40 +0900
-Subject: [PATCH 07/58] move GooroomBase and GooroomUrlFilter to base module
+Subject: [PATCH 07/66] move GooroomBase and GooroomUrlFilter to base module
 
 ---
  base/BUILD.gn               | 9 +++++++++
@@ -10,10 +10,10 @@ Subject: [PATCH 07/58] move GooroomBase and GooroomUrlFilter to base module
  3 files changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/base/BUILD.gn b/base/BUILD.gn
-index c093596dba09..52324d7b2760 100644
+index 200b8daecfbe..19fe81fd9696 100644
 --- a/base/BUILD.gn
 +++ b/base/BUILD.gn
-@@ -1134,6 +1134,15 @@ jumbo_component("base") {
+@@ -1141,6 +1141,15 @@ jumbo_component("base") {
      "win/wrapped_window_proc.h",
    ]
  

@@ -1,7 +1,7 @@
-From ac5610d547ef48cd33f086b75ffa315559970074 Mon Sep 17 00:00:00 2001
+From 0a254d1776f842921f488b7de450ed90ddb85ffd Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:42:13 +0900
-Subject: [PATCH 49/58] BugTrackingSystem
+Subject: [PATCH 49/66] BugTrackingSystem
 
 746 : Change string Chromium to Gooroom Browser on gooroom://flags page
 743 : Remove Translate option on settings language page
@@ -156,10 +156,10 @@ index 9dc7d5254509..bbfdd0687956 100644
  </body>
  </html>
 diff --git a/chrome/browser/resources/print_preview/ui/destination_dialog.html b/chrome/browser/resources/print_preview/ui/destination_dialog.html
-index a941dae7276b..69b612c67d1e 100644
+index a9f917682680..b929dbb5f895 100644
 --- a/chrome/browser/resources/print_preview/ui/destination_dialog.html
 +++ b/chrome/browser/resources/print_preview/ui/destination_dialog.html
-@@ -189,31 +189,6 @@
+@@ -190,31 +190,6 @@
            $i18n{cancel}
          </cr-button>
        </div>
@@ -192,7 +192,7 @@ index a941dae7276b..69b612c67d1e 100644
    </template>
    <script src="destination_dialog.js"></script>
 diff --git a/chrome/browser/resources/print_preview/ui/destination_dialog.js b/chrome/browser/resources/print_preview/ui/destination_dialog.js
-index 5c30560c0505..9500d439ee54 100644
+index 06dabe3874a2..ca2f9a935941 100644
 --- a/chrome/browser/resources/print_preview/ui/destination_dialog.js
 +++ b/chrome/browser/resources/print_preview/ui/destination_dialog.js
 @@ -91,16 +91,6 @@ Polymer({
@@ -234,7 +234,7 @@ index 2cc7d7d74b39..ada3c5bc0b47 100644
                    on-click="onMoveToTopTap_"
                    hidden="[[isNthLanguage_(
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 19581c0f42b2..6c8689bc252c 100644
+index 30fdc0fe5041..4c67a43d9ae2 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 @@ -83,6 +83,7 @@
@@ -282,7 +282,7 @@ index ed9be35ea949..e95b414ed3b6 100644
      int count = chrome::OpenCount(parent_window_, selection_);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 0a0927745017..1fc52376b6ae 100644
+index 1b121472a309..1f9c72a1e057 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -22,6 +22,7 @@

@@ -1,14 +1,14 @@
-From 18ca54660a2f5a6c120b6d6946a9e4ee8e0fcb88 Mon Sep 17 00:00:00 2001
+From c2e18afbf715ae70369e8642d653964f32955a1c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 20 Nov 2019 20:44:36 +0900
-Subject: [PATCH 08/58] Insert URL judgement module when observer the browser.
+Subject: [PATCH 08/66] Insert URL judgement module when observer the browser.
 
 ---
- .../browser/web_contents/web_contents_impl.cc | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
+ .../browser/web_contents/web_contents_impl.cc | 100 ++++++++++++++++++
+ 1 file changed, 100 insertions(+)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index fbc1dc348385..6debeaa3774f 100644
+index aa2aeccdf7b2..c9f2fddee25a 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -10,6 +10,11 @@
@@ -23,7 +23,7 @@ index fbc1dc348385..6debeaa3774f 100644
  #include "base/bind.h"
  #include "base/command_line.h"
  #include "base/debug/dump_without_crashing.h"
-@@ -4345,6 +4350,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
+@@ -4408,6 +4413,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
    }
  }
  
@@ -119,11 +119,10 @@ index fbc1dc348385..6debeaa3774f 100644
  void WebContentsImpl::DidRedirectNavigation(
      NavigationHandle* navigation_handle) {
    TRACE_EVENT1("navigation", "WebContentsImpl::DidRedirectNavigation",
-@@ -4457,6 +4551,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
-       navigation_handle->GetURL() != url::kAboutBlankURL) {
-     should_focus_location_bar_by_default_ = false;
+@@ -4537,6 +4631,12 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+     // Navigation has completed in main frame. Reset |max_frame_count_| to 1.
+     max_frame_count_ = 1;
    }
-+
 +#if BUILDFLAG(ENABLE_GOOROOM)
 +//If browser is switched, the current page is closed.
 +  if (navigation_handle->IsInMainFrame() && RequestCurrentUserDataDir(navigation_handle->GetURL())) {

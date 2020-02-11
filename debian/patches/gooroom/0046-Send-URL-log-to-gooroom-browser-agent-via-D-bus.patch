@@ -1,7 +1,7 @@
-From b7161eb20cf42e326aa22d92a7004abbebe0cb9c Mon Sep 17 00:00:00 2001
+From fca1e191ed7f92bc9425f9fac8b1f39ab511aa6e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:32:51 +0900
-Subject: [PATCH 46/58] Send URL-log to gooroom-browser-agent via D-bus
+Subject: [PATCH 46/66] Send URL-log to gooroom-browser-agent via D-bus
 
 ---
  content/browser/BUILD.gn                      |  1 +
@@ -9,7 +9,7 @@ Subject: [PATCH 46/58] Send URL-log to gooroom-browser-agent via D-bus
  2 files changed, 35 insertions(+)
 
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index 1a9039ac5bf9..ba5a818a7c26 100644
+index f45ab79f2da7..06480441f4dd 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
 @@ -250,6 +250,7 @@ jumbo_source_set("browser") {
@@ -21,7 +21,7 @@ index 1a9039ac5bf9..ba5a818a7c26 100644
  
    sources = [
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 6debeaa3774f..0a0927745017 100644
+index c9f2fddee25a..1b121472a309 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -9,10 +9,17 @@
@@ -42,9 +42,9 @@ index 6debeaa3774f..0a0927745017 100644
  #endif
  
  #include "base/bind.h"
-@@ -4553,6 +4560,33 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -4632,6 +4639,33 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+     max_frame_count_ = 1;
    }
- 
  #if BUILDFLAG(ENABLE_GOOROOM)
 +/* Delete temporarily
 +  // browser-agent IPC use dbus

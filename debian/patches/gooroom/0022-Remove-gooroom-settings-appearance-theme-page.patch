@@ -1,7 +1,7 @@
-From 764ab2d51d6c90cf8673423204c38db0de93fac8 Mon Sep 17 00:00:00 2001
+From e023859c527b982b0a98a3b178300a8e9ccc2320 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 25 Nov 2019 14:09:02 +0900
-Subject: [PATCH 22/58] Remove gooroom://settings appearance theme page
+Subject: [PATCH 22/66] Remove gooroom://settings appearance theme page
 
 ---
  .../resources/settings/appearance_page/appearance_page.html     | 2 +-

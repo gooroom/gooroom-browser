@@ -1,7 +1,7 @@
-From a00ac9e5ecf88e6cd36e2eb515f07832046a5bf5 Mon Sep 17 00:00:00 2001
+From 8ebf2be6e13246a5184b2968158ebb547ee0fca1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 25 Nov 2019 18:32:23 +0900
-Subject: [PATCH 28/58] disable chrome login shortcut(ctrl+shift+m) and hide 
+Subject: [PATCH 28/66] disable chrome login shortcut(ctrl+shift+m) and hide 
  login icon
 
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH 28/58] disable chrome login shortcut(ctrl+shift+m) and hide
  2 files changed, 7 insertions(+)
 
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index 28291fa01d32..3d0768f6a39b 100644
+index 066739ae965e..83ed71e62c36 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
-@@ -722,8 +722,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+@@ -733,8 +733,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
        break;
  #if !defined(OS_CHROMEOS)
      case IDC_SHOW_SIGNIN:
@@ -26,10 +26,10 @@ index 28291fa01d32..3d0768f6a39b 100644
  #endif
      case IDC_DISTILL_PAGE:
 diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-index d09e6019f1b4..ef02e68b6dc4 100644
+index 3cef6a495b16..35ee96d6095a 100644
 --- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
 +++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-@@ -273,6 +273,10 @@ void ToolbarView::Init() {
+@@ -282,6 +282,10 @@ void ToolbarView::Init() {
    }
  
    std::unique_ptr<AvatarToolbarButton> avatar;

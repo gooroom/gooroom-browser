@@ -1,7 +1,7 @@
-From 39afee8bfeb2e33da1cadc6f7c65d8b3282fa8c7 Mon Sep 17 00:00:00 2001
+From b5d6782517c94cd6ca42da93022ff17561c17c2c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 28 Nov 2019 10:53:58 +0900
-Subject: [PATCH 33/58] Add PageSourceViewEnabled policy to  control 
+Subject: [PATCH 33/66] Add PageSourceViewEnabled policy to  control 
  page-source-view
 
 ---
@@ -18,7 +18,7 @@ Subject: [PATCH 33/58] Add PageSourceViewEnabled policy to  control
  10 files changed, 125 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/policy/configuration_policy_handler_list_factory.cc b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
-index 58ff5f80dd17..3709bca7c4e2 100644
+index 86c3bf105ebd..2b8b5a85138c 100644
 --- a/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 +++ b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 @@ -10,6 +10,10 @@
@@ -44,7 +44,7 @@ index 58ff5f80dd17..3709bca7c4e2 100644
    { key::kHomepageIsNewTabPage,
      prefs::kHomePageIsNewTabPage,
      base::Value::Type::BOOLEAN },
-@@ -1566,7 +1575,9 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
+@@ -1676,7 +1685,9 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
  #if BUILDFLAG(ENABLE_PLUGINS)
    handlers->AddHandler(std::make_unique<PluginPolicyHandler>());
  #endif  // BUILDFLAG(ENABLE_PLUGINS)
@@ -56,7 +56,7 @@ index 58ff5f80dd17..3709bca7c4e2 100644
  }
  
 diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index c6f4e71cc0b1..b85144968137 100644
+index dd60bc9e6d2e..d593e0840435 100644
 --- a/chrome/common/pref_names.cc
 +++ b/chrome/common/pref_names.cc
 @@ -23,6 +23,10 @@ namespace prefs {
@@ -71,7 +71,7 @@ index c6f4e71cc0b1..b85144968137 100644
  // successfully checked via ChildAccountService.
  const char kChildAccountStatusKnown[] = "child_account_status_known";
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index 325d81f01452..f5ff6de1cfd1 100644
+index a5013fa584d0..ca1a5c3d679c 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
 @@ -22,6 +22,9 @@ namespace prefs {
@@ -85,7 +85,7 @@ index 325d81f01452..f5ff6de1cfd1 100644
  extern const char kDefaultApps[];
  extern const char kSafeBrowsingForTrustedSourcesEnabled[];
 diff --git a/components/policy/core/browser/BUILD.gn b/components/policy/core/browser/BUILD.gn
-index bf4ee73af841..73823671fb36 100644
+index 36497d4d67c4..315be3006137 100644
 --- a/components/policy/core/browser/BUILD.gn
 +++ b/components/policy/core/browser/BUILD.gn
 @@ -20,7 +20,10 @@ group("browser") {
@@ -101,10 +101,10 @@ index bf4ee73af841..73823671fb36 100644
      "browser_policy_connector.cc",
      "browser_policy_connector.h",
 diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
-index 3af00fd56062..c44fd1aa50bc 100644
+index f90b7fce7ba8..f4ecef9dad0d 100644
 --- a/components/policy/core/browser/configuration_policy_handler.cc
 +++ b/components/policy/core/browser/configuration_policy_handler.cc
-@@ -348,6 +348,51 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
+@@ -357,6 +357,51 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
      prefs->SetValue(pref_path_, value->Clone());
  }
  
@@ -200,10 +200,10 @@ index 01bd7f74a7b8..5fc6e3e95a82 100644
  // single type. |schema| is the schema used for this policy, and |strategy| is
  // the strategy used for schema validation errors.
 diff --git a/components/policy/resources/policy_templates.json b/components/policy/resources/policy_templates.json
-index 1aefb537e310..c00ac79e63bd 100644
+index fccabc1b6456..52a286b22536 100644
 --- a/components/policy/resources/policy_templates.json
 +++ b/components/policy/resources/policy_templates.json
-@@ -1141,6 +1141,26 @@
+@@ -1165,6 +1165,26 @@
        Note for administrators of <ph name="MS_WIN_NAME">Microsoft® Windows</ph>: Enabling this setting will only work for machines running Windows 7. For versions of Windows starting with Windows 8, you must deploy a "default application associations" file that makes <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> the handler for the <ph name="HHTPS_PROTOCOL">https</ph> and <ph name="HTTP_PROTOCOL">http</ph> protocols (and, optionally, the <ph name="FTP_PROTOCOL">ftp</ph> protocol and file formats such as <ph name="HTML_EXTENSION">.html</ph>, <ph name="HTM_EXTENSION">.htm</ph>, <ph name="PDF_EXTENSION">.pdf</ph>, <ph name="SVG_EXTENSION">.svg</ph>, <ph name="WEBP_EXTENSION">.webp</ph>, etc...). See <ph name="SUPPORT_URL">https://support.google.com/chrome?p=make_chrome_default_win</ph> for more information.''',
        'label': '''Set <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> as Default Browser''',
      },
@@ -231,7 +231,7 @@ index 1aefb537e310..c00ac79e63bd 100644
        'name': 'ApplicationLocaleValue',
        'owners': ['file://components/policy/resources/OWNERS'],
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index f10e1a8e5880..1a9039ac5bf9 100644
+index 0a1cdad24227..f45ab79f2da7 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
 @@ -238,10 +238,12 @@ jumbo_source_set("browser") {
@@ -248,10 +248,10 @@ index f10e1a8e5880..1a9039ac5bf9 100644
      "//base/util/type_safety",
      "//ipc",
 diff --git a/content/browser/frame_host/navigation_controller_impl.cc b/content/browser/frame_host/navigation_controller_impl.cc
-index dacaa680682a..202951721e2c 100644
+index b2dfa02a9893..9acc0b90de80 100644
 --- a/content/browser/frame_host/navigation_controller_impl.cc
 +++ b/content/browser/frame_host/navigation_controller_impl.cc
-@@ -87,6 +87,10 @@
+@@ -89,6 +89,10 @@
  #include "third_party/blink/public/common/mime_util/mime_util.h"
  #include "url/url_constants.h"
  
@@ -262,7 +262,7 @@ index dacaa680682a..202951721e2c 100644
  namespace content {
  namespace {
  
-@@ -730,6 +734,11 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
+@@ -745,6 +749,11 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
  }
  
  bool NavigationControllerImpl::CanViewSource() {
@@ -275,13 +275,13 @@ index dacaa680682a..202951721e2c 100644
    bool is_viewable_mime_type = blink::IsSupportedNonImageMimeType(mime_type) &&
                                 !media::IsSupportedMediaMimeType(mime_type);
 diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
-index 8abe09746fc0..d6d9a3f91b39 100644
+index e311e15ef5b9..9fd871ce20cb 100644
 --- a/tools/metrics/histograms/enums.xml
 +++ b/tools/metrics/histograms/enums.xml
-@@ -18060,6 +18060,7 @@ Called by update_net_error_codes.py.-->
-   <int value="600" label="DomainsToCheckForMalwareOfUploadedContent"/>
-   <int value="601" label="HSTSPolicyBlocklist"/>
-   <int value="604" label="AllowSyncXHRInPageDismissal"/>
+@@ -18496,6 +18496,7 @@ Called by update_net_error_codes.py.-->
+   <int value="635" label="InsecureContentBlockedForUrls"/>
+   <int value="640" label="WebRtcLocalIpsAllowedUrls"/>
+   <int value="645" label="ClickToCallEnabled"/>
 +  <int value="999" label="PageSourceViewEnabled"/>
  </enum>
  

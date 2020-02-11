@@ -29,6 +29,7 @@ export CXXFLAGS+=-Wno-pedantic \
 # ignore warnings for minor mistakes that are too common
 export CXXFLAGS+=-Wno-return-type \
                  -Wno-parentheses \
+                 -Wno-enum-compare \
                  -Wno-dangling-else \
                  -Wno-misleading-indentation \
 
@@ -44,6 +45,7 @@ export CXXFLAGS+=-Wno-address \
                  -Wno-class-memaccess \
                  -Wno-invalid-offsetof \
                  -Wno-subobject-linkage \
+                 -Wno-address-of-packed-member \
 
 # disable clang options
 defines=is_clang=false clang_use_chrome_plugins=false
@@ -121,10 +123,6 @@ ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 njobs=$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 endif
 
-# paths to files needed by flot
-flotpaths=/usr/share/javascript/jquery/*min.js \
-          /usr/share/javascript/jquery-flot/*min.js \
-
 %:
 	dh $@
 
@@ -134,17 +132,15 @@ out/Release/gn:
 override_dh_auto_configure:
 	# output compiler information
 	$(CXX) --version
-	# use system flot
-	for file in $(flotpaths); do ln -sf $$file third_party/flot; done
 	# put yasm script in the location expected by gn
 	ln -sf ../pdfium/third_party/yasm/run_yasm.py third_party/yasm
 	# strip out system third_party libraries
 	rm -f base/third_party/libevent/BUILD.gn build/config/freetype/freetype.gni
-	mkdir -p base/third_party/libevent
 	./debian/scripts/unbundle
 
 override_dh_auto_build-arch: out/Release/gn
 	git apply debian/patches/gooroom/0010-Put-gooroom-logo-into-the-browser.patch
+	git apply debian/patches/gooroom/product_logo_icon.patch
 	./out/Release/gn gen out/Release --args="$(defines)"
 	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox
 	cp out/Release/chrome_sandbox out/Release/chrome-sandbox
@@ -168,9 +164,6 @@ override_dh_auto_install-arch:
 
 override_dh_fixperms:
 	dh_fixperms --exclude chrome-sandbox
-
-override_dh_gencontrol:
-	dh_gencontrol -- -VBuilt-Using="$(shell dpkg-query -f '$${source:Package} (= $${source:Version}), ' -W libjs-jquery libjs-jquery-flot)"
 
 override_dh_auto_clean:
 	rm -rf out

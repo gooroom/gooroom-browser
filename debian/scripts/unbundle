@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 -B
 
 import os
 import sys
@@ -23,7 +23,7 @@ def strip(path):
                 else:
                     os.remove(removal)
 
-keepers = ('openh264','harfbuzz-ng','libjpeg')
+keepers = ('openh264','libjpeg')
 
 for lib,rule in replace_gn_files.REPLACEMENTS.items():
     if lib not in keepers:
@@ -34,13 +34,13 @@ for lib,rule in replace_gn_files.REPLACEMENTS.items():
             strip(os.path.dirname(rule))
             # remove the gn file that builds the embedded library
             if os.path.lexists(rule):
+                print('removing: %s'%rule)
                 os.remove(rule)
-        else:
-            # otherwise, create the missing directory
-            os.mkdir(libdir)
         # create a symlink to the unbundle gn file
         symlink = "ln -s "
         path = os.path.split(rule)
+        if not os.path.exists(path[0]):
+            os.mkdir(path[0])
         while path[0] != '':
             path = os.path.split(path[0])
             symlink += '../'

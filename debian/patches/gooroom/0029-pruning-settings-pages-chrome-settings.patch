@@ -1,7 +1,7 @@
-From bf0c90d6c0ad03a733789c920a096f39f3711db1 Mon Sep 17 00:00:00 2001
+From e2ab3472f2194c678c2cc273944cc58d4d0fad48 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 25 Nov 2019 18:40:43 +0900
-Subject: [PATCH 29/58] pruning settings pages(chrome://settings)
+Subject: [PATCH 29/66] pruning settings pages(chrome://settings)
 
 ---
  .../browser/resources/settings/about_page/about_page.html   | 2 ++
@@ -27,10 +27,10 @@ index 99c0a1c19a17..91e227215af8 100644
            <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueTap_"
                hidden="[[!prefs.feedback_allowed.value]]"
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index 46deb873d7d0..8a2305b93440 100644
+index 7c40d63c9d17..6495fd134c2a 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
-@@ -159,6 +159,7 @@
+@@ -158,6 +158,7 @@
              <settings-change-password-page></settings-change-password-page>
            </settings-section>
          </template>
@@ -38,7 +38,7 @@ index 46deb873d7d0..8a2305b93440 100644
          <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
            <settings-section page-title="$i18n{peoplePageTitle}"
                section="people">
-@@ -176,6 +177,7 @@
+@@ -175,6 +176,7 @@
              </settings-autofill-page>
            </settings-section>
          </template>
@@ -46,7 +46,7 @@ index 46deb873d7d0..8a2305b93440 100644
          <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
              restamp>
            <settings-section page-title="$i18n{appearancePageTitle}"
-@@ -310,6 +312,7 @@
+@@ -309,6 +311,7 @@
                  </settings-printing-page>
                </settings-section>
              </template>
@@ -54,7 +54,7 @@ index 46deb873d7d0..8a2305b93440 100644
              <template is="dom-if" if="[[showPage_(pageVisibility.a11y)]]"
                  restamp>
                <settings-section page-title="$i18n{a11yPageTitle}"
-@@ -318,7 +321,8 @@
+@@ -317,7 +320,8 @@
                      page-visibility="[[pageVisibility.a11y]]">
                  </settings-a11y-page>
                </settings-section>
@@ -81,10 +81,10 @@ index ca572d61d8dc..b048d3bcd78c 100644
  <if expr="chromeos">
        <template is="dom-if" route-path="/cupsPrinters">
 diff --git a/chrome/browser/resources/settings/privacy_page/personalization_options.html b/chrome/browser/resources/settings/privacy_page/personalization_options.html
-index 491eff1b6aab..75fc81144128 100644
+index 34d663a378fd..24f672bf2c37 100644
 --- a/chrome/browser/resources/settings/privacy_page/personalization_options.html
 +++ b/chrome/browser/resources/settings/privacy_page/personalization_options.html
-@@ -39,6 +39,7 @@
+@@ -41,6 +41,7 @@
          label="$i18n{linkDoctorPref}"
          sub-label="$i18n{linkDoctorPrefDesc}">
      </settings-toggle-button>
@@ -92,16 +92,16 @@ index 491eff1b6aab..75fc81144128 100644
      <settings-toggle-button pref="{{prefs.safebrowsing.enabled}}"
          label="$i18n{safeBrowsingEnableProtection}"
          sub-label="$i18n{safeBrowsingEnableProtectionDesc}">
-@@ -48,6 +49,7 @@
-         label="$i18n{safeBrowsingEnableExtendedReporting}"
-         sub-label="$i18n{safeBrowsingEnableExtendedReportingDesc}">
+@@ -63,6 +64,7 @@
+         sub-label="$i18n{safeBrowsingEnableExtendedReportingDesc}"
+         disabled="[[getDisabledExtendedSafeBrowsing_(prefs.*)]]">
      </settings-toggle-button>
 +</if>
  <if expr="_google_chrome">
  <if expr="chromeos">
      <settings-toggle-button pref="{{prefs.cros.metrics.reportingEnabled}}"
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 4dabc3f833ba..8f964c6414e4 100644
+index 0bcf8487656c..63a478f082c7 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -126,10 +126,12 @@
@@ -117,7 +117,7 @@ index 4dabc3f833ba..8f964c6414e4 100644
        <a id="autofill" href="/autofill"
            hidden="[[!pageVisibility.autofill]]">
          <iron-icon icon="settings:assignment"></iron-icon>
-@@ -208,10 +210,12 @@
+@@ -209,10 +211,12 @@
              <iron-icon icon="cr:print"></iron-icon>
              $i18n{printingPageTitle}
            </a>

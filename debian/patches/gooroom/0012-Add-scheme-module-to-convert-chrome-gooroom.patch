@@ -1,7 +1,7 @@
-From f338e73f2c24f319c4df1c6dec6f09f691e74012 Mon Sep 17 00:00:00 2001
+From 0bd68de9d45151d5afb9218617ab10583b2ea383 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 21 Nov 2019 10:09:23 +0900
-Subject: [PATCH 12/58] Add scheme module to convert (chrome://->gooroom://)
+Subject: [PATCH 12/66] Add scheme module to convert (chrome://->gooroom://)
 
 ---
  chrome/browser/extensions/extension_web_ui.cc |  9 ++++

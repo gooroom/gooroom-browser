@@ -1,7 +1,7 @@
-From be82013212f59bdbc3dc274ec271e50d17bcc825 Mon Sep 17 00:00:00 2001
+From 5fd444aa7d26e4c0c5c354c7d2a64a7ab1f9c662 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 14:59:07 +0900
-Subject: [PATCH 36/58] * Remove page-translation function. * Remove 
+Subject: [PATCH 36/66] * Remove page-translation function. * Remove 
  unnecessary settings-page items. * Remove google-login ways. (bookmark, 
  saving password, apps page) * Change google to gooroom strings. * Remove OS 
  information in gooroom://settings/help page.
@@ -24,10 +24,10 @@ Subject: [PATCH 36/58] * Remove page-translation function. * Remove
  14 files changed, 30 insertions(+), 18 deletions(-)
 
 diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
-index cf2dbcf86393..af32380c1d10 100644
+index 3a5ac42607c1..edf70f746496 100644
 --- a/chrome/app/chromium_strings.grd
 +++ b/chrome/app/chromium_strings.grd
-@@ -599,7 +599,7 @@ Chromium is unable to recover your settings.
+@@ -537,7 +537,7 @@ Chromium is unable to recover your settings.
  
        <if expr="use_titlecase and not chromeos">
          <message name="IDS_ABOUT" desc="In Title Case: The text label of the About Chrome menu item">
@@ -36,7 +36,7 @@ index cf2dbcf86393..af32380c1d10 100644
          </message>
          <message name="IDS_UPDATE_NOW" desc="In Title Case: The text label of the Update Chrome Now menu item">
            Update &amp;Chromium
-@@ -607,7 +607,7 @@ Chromium is unable to recover your settings.
+@@ -545,7 +545,7 @@ Chromium is unable to recover your settings.
        </if>
        <if expr="not use_titlecase and not chromeos">
          <message name="IDS_ABOUT" desc="The text label of the About Chrome menu item">
@@ -121,7 +121,7 @@ index 262da5dc1749..c7f7cda18f39 100644
    <message name="IDS_SETTINGS_SPELLING_DESCRIPTION_UNIFIED_CONSENT" desc="Description of using a web serviced to help resolve spelling errors. It is important to convey that what the user types will be sent to Google.">
      To fix spelling errors, Chromium sends the text you type in text fields to Google
 diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
-index 1d0215cf629a..c0654eef9927 100644
+index 7b8f6bef7410..86a3afbddc52 100644
 --- a/chrome/app/settings_strings.grdp
 +++ b/chrome/app/settings_strings.grdp
 @@ -23,7 +23,7 @@
@@ -133,7 +133,7 @@ index 1d0215cf629a..c0654eef9927 100644
    </message>
    <if expr="chromeos">
      <message name="IDS_SETTINGS_ABOUT_PAGE_DETAILED_BUILD_INFO" desc="Label describing the section that shows detailed information about the current Chrome build.">
-@@ -3077,7 +3077,7 @@
+@@ -3087,7 +3087,7 @@
      </message>
    </if>
    <message name="IDS_SETTINGS_SEARCH_EXPLANATION" desc="Explanation for the search engine dropdown setting.">
@@ -143,19 +143,19 @@ index 1d0215cf629a..c0654eef9927 100644
    <message name="IDS_SETTINGS_SEARCH_MANAGE_SEARCH_ENGINES" desc="Label for the Manage Search Engines button.">
      Manage search engines
 diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-index 2262e66304fd..b276cebd4ed6 100644
+index 9bd35d8e035d..894721c7374d 100644
 --- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
 +++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-@@ -1537,6 +1537,8 @@ void RenderViewContextMenu::AppendPageItems() {
- 
+@@ -1552,6 +1552,8 @@ void RenderViewContextMenu::AppendPageItems() {
      menu_model_.AddSeparator(ui::NORMAL_SEPARATOR);
    }
+ 
 +//Gooroom-browser unsupport Page-translation
 +#if !defined(GOOROOM_BUILD)
    if (TranslateService::IsTranslatableURL(params_.page_url)) {
      std::unique_ptr<translate::TranslatePrefs> prefs(
          ChromeTranslateClient::CreateTranslatePrefs(
-@@ -1555,6 +1557,7 @@ void RenderViewContextMenu::AppendPageItems() {
+@@ -1570,6 +1572,7 @@ void RenderViewContextMenu::AppendPageItems() {
        AddGoogleIconToLastMenuItem(&menu_model_);
      }
    }
@@ -164,7 +164,7 @@ index 2262e66304fd..b276cebd4ed6 100644
  
  void RenderViewContextMenu::AppendExitFullscreenItem() {
 diff --git a/chrome/browser/resources/ntp4/new_tab.html b/chrome/browser/resources/ntp4/new_tab.html
-index de19cad24438..adf19a1ca962 100644
+index 2b60f4a75a67..425b24558864 100644
 --- a/chrome/browser/resources/ntp4/new_tab.html
 +++ b/chrome/browser/resources/ntp4/new_tab.html
 @@ -102,9 +102,9 @@ document.write('<link id="themecss" rel="stylesheet" ' +
@@ -180,10 +180,10 @@ index de19cad24438..adf19a1ca962 100644
  </body>
  
 diff --git a/chrome/browser/resources/settings/privacy_page/personalization_options.html b/chrome/browser/resources/settings/privacy_page/personalization_options.html
-index 75fc81144128..8eae6af95b8f 100644
+index 24f672bf2c37..d76a1f599a64 100644
 --- a/chrome/browser/resources/settings/privacy_page/personalization_options.html
 +++ b/chrome/browser/resources/settings/privacy_page/personalization_options.html
-@@ -35,10 +35,12 @@
+@@ -37,10 +37,12 @@
          label="$i18n{searchSuggestPref}"
          sub-label="$i18n{searchSuggestPrefDesc}">
      </settings-toggle-button>
@@ -197,7 +197,7 @@ index 75fc81144128..8eae6af95b8f 100644
      <settings-toggle-button pref="{{prefs.safebrowsing.enabled}}"
          label="$i18n{safeBrowsingEnableProtection}"
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index e06353b42e63..5781b1f79a0e 100644
+index e125ed065e63..0e06cbfcaeec 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 @@ -112,12 +112,12 @@
@@ -229,10 +229,10 @@ index a6117d772a50..2c1247c22d17 100644
            prefs.hardware_acceleration_mode.enabled.value)]]">
          <cr-button on-click="onRestartTap_" slot="more-actions">
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_bubble_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_bubble_view.cc
-index afef006cd256..83816cd18562 100644
+index c2e3a3f85a8c..7e99e770f1d4 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_bubble_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_bubble_view.cc
-@@ -158,6 +158,10 @@ bool BookmarkBubbleView::GetExtraViewPadding(int* padding) {
+@@ -152,6 +152,10 @@ std::unique_ptr<views::View> BookmarkBubbleView::CreateExtraView() {
  }
  
  std::unique_ptr<views::View> BookmarkBubbleView::CreateFootnoteView() {
@@ -244,10 +244,10 @@ index afef006cd256..83816cd18562 100644
    // ChromeOS does not show the signin promo.
    return nullptr;
 diff --git a/chrome/browser/ui/views/passwords/password_pending_view.cc b/chrome/browser/ui/views/passwords/password_pending_view.cc
-index ebc6491b4696..afae5a594761 100644
+index f95bfc6cbf10..c03380fc8a01 100644
 --- a/chrome/browser/ui/views/passwords/password_pending_view.cc
 +++ b/chrome/browser/ui/views/passwords/password_pending_view.cc
-@@ -266,10 +266,13 @@ bool PasswordPendingView::Accept() {
+@@ -285,10 +285,13 @@ bool PasswordPendingView::Accept() {
      return sign_in_promo_->Accept();
    UpdateUsernameAndPasswordInModel();
    model()->OnSaveClicked();

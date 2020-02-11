@@ -1,7 +1,7 @@
-From 8f169b90c9b444da5ff07b60dc199e1e97545fcc Mon Sep 17 00:00:00 2001
+From c555a8b4acebda99b52a1e94de3d34e5af127b4a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 22 Nov 2019 18:04:29 +0900
-Subject: [PATCH 18/58] add extension for disable google.com's browser version 
+Subject: [PATCH 18/66] add extension for disable google.com's browser version 
  warning
 
 ---
@@ -23,10 +23,10 @@ Subject: [PATCH 18/58] add extension for disable google.com's browser version
  create mode 100644 gooroom/browser/dgw/disable_google_warning.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index 87c529bf393d..c667516b000c 100644
+index 0c1c6cad580c..0cc9448d0a25 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -308,6 +308,9 @@
+@@ -298,6 +298,9 @@
        <include name="IDR_MEMORY_INTERNALS_JS" file="resources\memory_internals\memory_internals.js" type="BINDATA" compress="gzip" />
        <if expr="enable_plugins">
          <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
@@ -51,10 +51,10 @@ index 8e07d2b192ae..db94c2c3ea9e 100644
      extension_misc::kAssessmentAssistantExtensionId,
      extension_misc::kAutoclickExtensionId,
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index 927eececde9b..53eeea12e3ca 100644
+index 76129e19fe3f..691e848bbad2 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
-@@ -69,6 +69,10 @@
+@@ -68,6 +68,10 @@
  #include "chrome/browser/defaults.h"
  #endif
  
@@ -65,7 +65,7 @@ index 927eececde9b..53eeea12e3ca 100644
  using content::BrowserThread;
  
  namespace extensions {
-@@ -489,6 +493,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+@@ -488,6 +492,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
  #if BUILDFLAG(ENABLE_PDF)
    Add(pdf_extension_util::GetManifest(),
        base::FilePath(FILE_PATH_LITERAL("pdf")));
@@ -77,13 +77,13 @@ index 927eececde9b..53eeea12e3ca 100644
  }
  
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index f159f9a242b4..53f85e4deb59 100644
+index a534601664a0..37c4b86ac9c1 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
-@@ -142,6 +142,9 @@
-         <include name="IDR_PDF_VIEWER_ZOOM_BUTTON_JS" file="pdf/elements/viewer-zoom-toolbar/viewer-zoom-button.js" type="BINDATA" />
-         <include name="IDR_PDF_VIEWER_ZOOM_SELECTOR_HTML" file="pdf/elements/viewer-zoom-toolbar/viewer-zoom-toolbar.html" type="BINDATA" />
-         <include name="IDR_PDF_VIEWER_ZOOM_SELECTOR_JS" file="pdf/elements/viewer-zoom-toolbar/viewer-zoom-toolbar.js" type="BINDATA" />
+@@ -146,6 +146,9 @@
+         <include name="IDR_PDF_VIEWER_ZOOM_BUTTON_JS" file="pdf/elements/viewer-zoom-button.js" type="BINDATA" />
+         <include name="IDR_PDF_VIEWER_ZOOM_SELECTOR_HTML" file="pdf/elements/viewer-zoom-toolbar.html" type="BINDATA" />
+         <include name="IDR_PDF_VIEWER_ZOOM_SELECTOR_JS" file="pdf/elements/viewer-zoom-toolbar.js" type="BINDATA" />
 +        <if expr="_gooroom">
 +          <include name="IDR_DGW_INJECT_CSS" file="dgw/inject.css" allowexternalscript="true" type="BINDATA" />
 +        </if>
@@ -138,10 +138,10 @@ index bfda97874dfd..04d73aaf7fc9 100644
      "bpmcpldpdmajfigpchkicefoigmkfalc";
  const char kQuickOfficeInternalExtensionId[] =
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index 0c3fe3fdb4bf..df7be14c1536 100644
+index dc52f3d727ab..e898a5783d87 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
-@@ -176,6 +176,11 @@ extern const char kFeedbackExtensionId[];
+@@ -177,6 +177,11 @@ extern const char kFeedbackExtensionId[];
  // The extension id of the PDF extension.
  extern const char kPdfExtensionId[];
  

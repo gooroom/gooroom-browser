@@ -1,7 +1,7 @@
-From 4c6b8e9d3f0f9e2b02a10b932a41204d322a22a4 Mon Sep 17 00:00:00 2001
+From ebdd512beb93c651730a81b017ab8a8a67bdb9f4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 22 Nov 2019 18:56:11 +0900
-Subject: [PATCH 21/58] Change gooroom-browser extensions path & config path
+Subject: [PATCH 21/66] Change gooroom-browser extensions path & config path
 
 ---
  chrome/common/chrome_paths.cc       | 3 +++
@@ -9,10 +9,10 @@ Subject: [PATCH 21/58] Change gooroom-browser extensions path & config path
  2 files changed, 6 insertions(+)
 
 diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
-index a7542ef69e94..b7c446111f32 100644
+index 1ca92ba2c97c..f72c03f88244 100644
 --- a/chrome/common/chrome_paths.cc
 +++ b/chrome/common/chrome_paths.cc
-@@ -58,6 +58,9 @@ const base::FilePath::CharType kPepperFlashSystemBaseDirectory[] =
+@@ -57,6 +57,9 @@ const base::FilePath::CharType kPepperFlashSystemBaseDirectory[] =
  const base::FilePath::CharType kFilepathSinglePrefExtensions[] =
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
      FILE_PATH_LITERAL("/usr/share/google-chrome/extensions");

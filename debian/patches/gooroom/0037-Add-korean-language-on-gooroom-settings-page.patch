@@ -1,7 +1,7 @@
-From 64899ba54338f6cc691a9e59d4acc7060694556f Mon Sep 17 00:00:00 2001
+From 97afe4119428be1b3e25daa32aff7a6c5c31623a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:07:22 +0900
-Subject: [PATCH 37/58] Add korean language on gooroom://settings page.
+Subject: [PATCH 37/66] Add korean language on gooroom://settings page.
 
 ---
  chrome/app/gooroom/resources/generated_resources_ko.xtb      | 3 ++-
@@ -44,10 +44,10 @@ index 53d03c3c4b47..6b2cdcbc0f22 100644
    <message name="IDS_SETTINGS_SEARCH_MANAGE_SEARCH_ENGINES" desc="Label for the Manage Search Engines button.">
      Manage search engines
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index 4f1d9835ed96..ef81dd45c0b2 100644
+index ee7b213ba7b4..b20a732738e6 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-@@ -2586,9 +2586,8 @@ void AddSearchStrings(content::WebUIDataSource* html_source, Profile* profile) {
+@@ -2625,9 +2625,8 @@ void AddSearchStrings(content::WebUIDataSource* html_source, Profile* profile) {
    };
    AddLocalizedStringsBulk(html_source, localized_strings,
                            base::size(localized_strings));

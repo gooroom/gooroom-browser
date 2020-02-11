@@ -1,7 +1,7 @@
-From dc4640d2f22b70e0b8b67e15bf93f71dff8555ca Mon Sep 17 00:00:00 2001
+From c88f12934cc1962274b25624b790319a0ca61025 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:21:47 +0900
-Subject: [PATCH 42/58] Remove reset-profile-dialog 'learn more' on settings 
+Subject: [PATCH 42/66] Remove reset-profile-dialog 'learn more' on settings 
  page
 
 ---

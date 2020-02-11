@@ -1,7 +1,7 @@
-From d790e3217891ff9f5282eedaade949993de1b2f8 Mon Sep 17 00:00:00 2001
+From 80314a4e68beba963dd4b2c3102802796bf573b4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 22 Nov 2019 17:56:17 +0900
-Subject: [PATCH 16/58] Change korean .xtb files to translate english
+Subject: [PATCH 16/66] Change korean .xtb files to translate english
 
 ---
  .../gooroom/resources/chromium_strings_ko.xtb | 468 +++++++++---------

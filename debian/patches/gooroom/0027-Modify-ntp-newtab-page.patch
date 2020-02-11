@@ -1,7 +1,7 @@
-From 8a7fc79cdfca80bc789adb23e8e298125f1d49ca Mon Sep 17 00:00:00 2001
+From cfb20104361a425b8d3754fbf0f4842de9eaf7ba Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 25 Nov 2019 18:28:23 +0900
-Subject: [PATCH 27/58] Modify ntp(newtab) page
+Subject: [PATCH 27/66] Modify ntp(newtab) page
 
 ---
  chrome/browser/resources/local_ntp/doodles.css    | 14 ++++++++------
@@ -12,7 +12,7 @@ Subject: [PATCH 27/58] Modify ntp(newtab) page
  5 files changed, 24 insertions(+), 11 deletions(-)
 
 diff --git a/chrome/browser/resources/local_ntp/doodles.css b/chrome/browser/resources/local_ntp/doodles.css
-index 885619db2c1c..66c3c703ed65 100644
+index ca9a379de2dc..3d68c5c7b3e3 100644
 --- a/chrome/browser/resources/local_ntp/doodles.css
 +++ b/chrome/browser/resources/local_ntp/doodles.css
 @@ -10,7 +10,9 @@
@@ -72,10 +72,10 @@ index 2e0543b41612..576669e5a338 100644
      const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
      darkMode.addListener(doodles.fadeToLogoOrDoodle);
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.css b/chrome/browser/resources/local_ntp/local_ntp.css
-index 206b5f9e96fe..dfe4de803dd2 100644
+index 0a02e7356be2..ad0912be70c8 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.css
 +++ b/chrome/browser/resources/local_ntp/local_ntp.css
-@@ -103,10 +103,14 @@ button {
+@@ -105,10 +105,14 @@ button {
     * unnecessary scrollbar. This height corresponds to MV tile height for a
     * single row, but also works for a row of icons, and works well on small
     * screens (like Pixelbook), as well as high-res screens. */
@@ -93,7 +93,7 @@ index 206b5f9e96fe..dfe4de803dd2 100644
  
  body.hide-fakebox #fakebox {
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.html b/chrome/browser/resources/local_ntp/local_ntp.html
-index 0893eb63f945..e2fb8877a651 100644
+index 8c7f4b11a7c5..f8e00a630f7e 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.html
 +++ b/chrome/browser/resources/local_ntp/local_ntp.html
 @@ -36,7 +36,7 @@
@@ -106,10 +106,10 @@ index 0893eb63f945..e2fb8877a651 100644
    <div id="ntp-contents">
      <div id="logo">
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
-index 21ebc4ef20f1..466d17270d3a 100644
+index 50972ac06fbd..19224512b027 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.js
 +++ b/chrome/browser/resources/local_ntp/local_ntp.js
-@@ -662,6 +662,12 @@ function init() {
+@@ -747,6 +747,12 @@ function init() {
  
    const searchboxApiHandle = embeddedSearchApiHandle.searchBox;
  

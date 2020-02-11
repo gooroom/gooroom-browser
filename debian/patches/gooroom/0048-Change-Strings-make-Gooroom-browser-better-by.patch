@@ -1,7 +1,7 @@
-From 2f58ca8af6a30cc39c49eb474e3495d152a124af Mon Sep 17 00:00:00 2001
+From 7216144a208ad27368c12f3d17619dafc24430e4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 29 Nov 2019 15:36:49 +0900
-Subject: [PATCH 48/58] Change Strings 'make Gooroom-browser better by 
+Subject: [PATCH 48/66] Change Strings 'make Gooroom-browser better by 
  reporting' to 'make Chromium better...' on settings page
 
 ---

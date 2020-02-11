@@ -1,7 +1,7 @@
-From d32c7b450dea42ef281945d27a7d4dead5fed574 Mon Sep 17 00:00:00 2001
+From 4b4e8f924aee9eed5c5017fa9cd43d5eb74b0e8f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 20 Nov 2019 20:27:52 +0900
-Subject: [PATCH 04/58] add GooroomPrefs that parse mainpref.json and 
+Subject: [PATCH 04/66] add GooroomPrefs that parse mainpref.json and 
  initializes GooroomBase and GooroomUrlFilter based on the result
 
 ---

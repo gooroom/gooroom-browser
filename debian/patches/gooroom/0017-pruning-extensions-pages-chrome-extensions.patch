@@ -1,7 +1,7 @@
-From 4e18b825a9d8e5dd3fbda8a4131a36890d4df4d7 Mon Sep 17 00:00:00 2001
+From 6ef93c89e40456fe05c03177d12201340408f715 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 22 Nov 2019 17:57:28 +0900
-Subject: [PATCH 17/58] pruning extensions pages(chrome://extensions)
+Subject: [PATCH 17/66] pruning extensions pages(chrome://extensions)
 
 ---
  chrome/app/gooroom/extensions_strings.grdp       | 2 +-

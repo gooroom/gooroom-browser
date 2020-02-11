@@ -1,7 +1,7 @@
-From 73802f5cc1501490e12e5c30741da02c1ef8e39a Mon Sep 17 00:00:00 2001
+From 39e41751c89c446580180d1ec1ba2a6474b14635 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 20 Nov 2019 21:10:35 +0900
-Subject: [PATCH 10/58] Put gooroom logo into the browser
+Subject: [PATCH 10/66] Put gooroom logo into the browser
 
 ---
  .../app/theme/chrome_unscaled_resources.grd   |   8 +++++++-
@@ -12018,10 +12018,10 @@ literal 0
 HcmV?d00001
 
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index f294003e44c6..5b31eb0fa860 100644
+index 9a34f5f591dc..c20ea5275363 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
-@@ -165,12 +165,19 @@
+@@ -164,11 +164,18 @@
        <if expr="not is_android">
          <structure type="chrome_scaled_image" name="IDR_PRERENDER" file="common/prerender_succeed_icon.png" />
        </if>
@@ -12029,7 +12029,6 @@ index f294003e44c6..5b31eb0fa860 100644
 +      <if expr="not _google_chrome and not _gooroom">
          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="chromium/product_logo_16.png" />
          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32" file="chromium/product_logo_32.png" />
-         <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_WHITE" file="chromium/product_logo_white.png" />
          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="chromium/product_logo_name_22.png" />
        </if>
 +      <if expr="_gooroom">
@@ -12043,7 +12042,7 @@ index f294003e44c6..5b31eb0fa860 100644
          <if expr="not is_android">
            <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="google_chrome/product_logo_16.png" />
 diff --git a/components/infobars/core/infobar_delegate.cc b/components/infobars/core/infobar_delegate.cc
-index 52e5e428cd9a..7e02205ac1fb 100644
+index 8a9deef2d799..da3c48bf6c0b 100644
 --- a/components/infobars/core/infobar_delegate.cc
 +++ b/components/infobars/core/infobar_delegate.cc
 @@ -39,7 +39,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
@@ -12279,10 +12278,10 @@ z=)V#O`Y$;>net%uY(`=A%(L4%X7$Xoxn%zrU;wnwBh^2=+Oq%v002ovPDHLkV1lwM
 Bu4(`P
 
 diff --git a/components/version_ui/resources/about_version.css b/components/version_ui/resources/about_version.css
-index 7c247b69c0ba..64e832be817b 100644
+index bd7da3a627c6..06298f8ca02b 100644
 --- a/components/version_ui/resources/about_version.css
 +++ b/components/version_ui/resources/about_version.css
-@@ -39,7 +39,7 @@ body {
+@@ -53,7 +53,7 @@ body {
    float: right;
    margin-left: 40px;
    text-align: right;

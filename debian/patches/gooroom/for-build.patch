@@ -1,0 +1,34 @@
+diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
+index c3568e415..6213f2e37 100644
+--- a/chrome/browser/chrome_content_browser_client.cc
++++ b/chrome/browser/chrome_content_browser_client.cc
+@@ -1126,9 +1126,6 @@ ChromeContentBrowserClient::ChromeContentBrowserClient(
+   extra_parts_.push_back(new GooroomURLRewrite);
+   extra_parts_.push_back(new content::GooroomSafetyPolicyPart);
+ #endif
+-
+-  gpu_binder_registry_.AddInterface(
+-      base::Bind(&metrics::CallStackProfileCollector::Create));
+ }
+ 
+ ChromeContentBrowserClient::~ChromeContentBrowserClient() {
+diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
+index 6f132f84b..e3a0f2547 100644
+--- a/gooroom/browser/gooroom_url_filter_impl.cc
++++ b/gooroom/browser/gooroom_url_filter_impl.cc
+@@ -42,13 +42,13 @@ void GooroomUrlFilterImpl::setWhiteList(const base::Value* vv) {
+     std::string pattern = it->GetString();
+     DLOG(INFO) << "pattern = " << pattern;
+ 
+-    if (!policy::URLBlacklist::FilterToComponents(
++    if (!policy::url_util::FilterToComponents(
+             pattern, &scheme, &host, &match_subdomains, &port, &path, &query)) {
+       LOG(ERROR) << "Invalid pattern " << pattern;
+     }
+ 
+     scoped_refptr<url_matcher::URLMatcherConditionSet> condition_set =
+-        policy::URLBlacklist::CreateConditionSet(&url_matcher_, ++matcher_id_,
++        policy::url_util::CreateConditionSet(&url_matcher_, ++matcher_id_,
+                                                  scheme, host, match_subdomains,
+                                                  port, path, query, true);
+     all_conditions_.push_back(std::move(condition_set));

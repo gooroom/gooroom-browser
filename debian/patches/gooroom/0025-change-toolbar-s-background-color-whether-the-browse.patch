@@ -1,7 +1,7 @@
-From fbc53a7db5d7828bc54fdb6249e8f047a3f80a2d Mon Sep 17 00:00:00 2001
+From 6a4d371dce4b5e5233fc13fe4c27e3288abc38f4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 25 Nov 2019 14:29:01 +0900
-Subject: [PATCH 25/58] change toolbar's background color whether the browser's
+Subject: [PATCH 25/66] change toolbar's background color whether the browser's
     type is trust or untrust
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH 25/58] change toolbar's background color whether the browser's
  1 file changed, 26 insertions(+)
 
 diff --git a/chrome/browser/themes/theme_properties.cc b/chrome/browser/themes/theme_properties.cc
-index 176776e76000..6eb3820e84dd 100644
+index 66499e5919d3..4af8bf2cfc89 100644
 --- a/chrome/browser/themes/theme_properties.cc
 +++ b/chrome/browser/themes/theme_properties.cc
 @@ -19,6 +19,10 @@

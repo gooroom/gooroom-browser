@@ -1,0 +1,35 @@
+From 969b9e8d553753eb53d62ba6d223a42fee4e39cc Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 3 Dec 2019 10:36:42 +0900
+Subject: [PATCH 60/66] BugTrackingSystem 1643 : Remove route to enter
+ incognito  mode from bookmarks
+
+---
+ .../ui/bookmarks/bookmark_context_menu_controller.cc  | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+index e95b414ed3b6..81fc973ef10d 100644
+--- a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
++++ b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+@@ -136,11 +136,12 @@ void BookmarkContextMenuController::BuildMenu() {
+             l10n_util::GetPluralStringFUTF16(
+                 IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_NEW_WINDOW, count));
+ 
+-    int incognito_count =
+-        chrome::OpenCount(parent_window_, selection_, profile_);
+-    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
+-            l10n_util::GetPluralStringFUTF16(
+-                IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_INCOGNITO, incognito_count));
++// Remove incognito mode on gooroom-browser
++//   int incognito_count =
++//        chrome::OpenCount(parent_window_, selection_, profile_);
++//    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
++//            l10n_util::GetPluralStringFUTF16(
++//                IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_INCOGNITO, incognito_count));
+   }
+ 
+   AddSeparator();
+-- 
+2.20.1
+

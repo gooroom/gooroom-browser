@@ -22,6 +22,6 @@
   "alternate_error_pages": {
     "enabled": false
   },
-  "homepage": "http://www.debian.org",
+  "homepage": "https://www.gooroom.kr",
   "AudioCaptureAllowed" : false
 }
