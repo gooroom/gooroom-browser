@@ -1,0 +1,32 @@
+From e28d15177ff4bfa446de3e42efe587fbfdf45ffb Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 13 Feb 2020 18:53:58 +0900
+Subject: [PATCH 2/2] BTS-1976 : Remove [manage security key] on settings page
+
+---
+ .../browser/resources/settings/privacy_page/privacy_page.html   | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index 4c67a43d9ae2..4cd90f830b0f 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -162,6 +162,7 @@
+             sub-label="$i18n{manageCertificatesDescription}"
+             on-click="onManageCertificatesTap_"></cr-link-row>
+ </if>
++<if expr="not _gooroom">
+         <template is="dom-if" if="[[enableSecurityKeysSubpage_]]">
+           <cr-link-row id="security-keys-subpage-trigger"
+             class="hr"
+@@ -169,6 +170,7 @@
+             sub-label="$i18n{securityKeysDesc}"
+             on-click="onSecurityKeysTap_"></cr-link-row>
+         </template>
++</if>
+         <cr-link-row id="site-settings-subpage-trigger"
+             class="hr"
+             label="$i18n{siteSettings}"
+-- 
+2.20.1
+
