@@ -152,9 +152,11 @@ gooroom/strings3.patch
 gooroom/for-build.patch
 gooroom/Change-Strings-in-.xtb.patch
 gooroom/Change-Strings-in-_ko.xtb.patch
-gooroom/Verfiy-sign.patch
+gooroom/Verify-sign.patch
 gooroom/BTS-1877-option-with-url-bug.patch
 gooroom/BTS-1909-Remove-upgrade-alarm.patch
 gooroom/verify-sign-2-to-build.patch
 gooroom/BTS-1970-Apply-adobe-flash.patch
 gooroom/BTS-1976-Remove-manage-security-key-on-settings-page.patch
+gooroom/BTS-1965-Rollback-USB-not-found-strings-on-content-s.patch
+gooroom/BTS-1979-Change-scheme-chrome-to-gooroom-on-print-pr.patch

@@ -426,8 +426,8 @@ index e962b01f0c52..68559f3f2332 100644
 +
 +  // Gooroom-Browser policy Sign module
 +  bool validSign = verifySign();
-+  if ( validSign ) return;
-+  else {
++  if ( !validSign )
++  {
 +    noVerifySignAlarm();
 +    exit(0);
 +  }

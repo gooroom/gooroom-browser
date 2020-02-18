@@ -1,0 +1,41 @@
+From 53ff39b36f17645dccdf01af75cfccb3df852f1c Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 17 Feb 2020 16:31:56 +0900
+Subject: [PATCH 1/2] BTS-1979 : Change scheme chrome:// to gooroom:// on print
+ preview page
+
+---
+ .../ui/webui/print_preview/print_preview_handler.cc      | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
+index 2ecb8cdde5a8..5223b061b6ac 100644
+--- a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
++++ b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
+@@ -12,6 +12,10 @@
+ #include <utility>
+ #include <vector>
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++#endif
++
+ #include "base/base64.h"
+ #include "base/bind.h"
+ #include "base/bind_helpers.h"
+@@ -728,7 +732,12 @@ void PrintPreviewHandler::HandleGetPreview(const base::ListValue* args) {
+     url::Replacements<char> url_sanitizer;
+     url_sanitizer.ClearUsername();
+     url_sanitizer.ClearPassword();
++#if defined(GOOROOM_BUILD)
++    // Change "chrome://" to "gooroom://"
++    const GURL& initiator_url = GooroomURLRewrite::ChangeGooroomScheme(initiator->GetLastCommittedURL());
++#else
+     const GURL& initiator_url = initiator->GetLastCommittedURL();
++#endif
+     settings.SetKey(kSettingHeaderFooterURL,
+                     base::Value(url_formatter::FormatUrl(
+                         initiator_url.ReplaceComponents(url_sanitizer))));
+-- 
+2.20.1
+

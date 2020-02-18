@@ -1,0 +1,26 @@
+From 2186a04f168c243c4bcc79b736f4ba9c719ef390 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 17 Feb 2020 17:16:35 +0900
+Subject: [PATCH 2/2] BTS-1965 : Rollback 'USB not found' strings on content
+ settings usb page (BTS-740)
+
+---
+ .../resources/settings/site_settings/chooser_exception_list.js  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
+index 02e2e9dcc782..79c7539ca337 100644
+--- a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
++++ b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
+@@ -108,7 +108,7 @@ Polymer({
+     // Set the message to display when the exception list is empty.
+     switch (this.chooserType) {
+       case settings.ChooserType.USB_DEVICES:
+-        //this.emptyListMessage_ = this.i18n('noUsbDevicesFound');
++        this.emptyListMessage_ = this.i18n('noUsbDevicesFound');
+         break;
+       case settings.ChooserType.SERIAL_PORTS:
+         this.emptyListMessage_ = this.i18n('noSerialPortsFound');
+-- 
+2.20.1
+
