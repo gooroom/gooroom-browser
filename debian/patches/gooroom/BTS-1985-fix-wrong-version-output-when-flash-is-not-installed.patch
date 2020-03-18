@@ -1,0 +1,13 @@
+diff --git a/chrome/common/chrome_content_client.cc b/chrome/common/chrome_content_client.cc
+index c0b96efac115..9eb6d323f421 100644
+--- a/chrome/common/chrome_content_client.cc
++++ b/chrome/common/chrome_content_client.cc
+@@ -240,6 +240,8 @@ bool GetCommandLinePepperFlash(content::PepperPluginInfo* plugin) {
+   std::string flash_version =
+       base::CommandLine::ForCurrentProcess()->GetSwitchValueASCII(
+           switches::kPpapiFlashVersion);
++  if (flash_version.empty())
++    return false;
+ 
+   *plugin = CreatePepperFlashInfo(base::FilePath(flash_path), flash_version,
+                                   true);

@@ -1,3 +1,15 @@
+gooroom-browser (2.5.0-1+grm2u4) stretch; urgency=medium
+
+  * BugTrackingSystem
+    1984 : Disable voice searh on newtab page
+    1985 : Fix wrong version output when flash is not installed
+    1996 : Change strings
+    2006 : Change ntp realbox default value
+    2049 : Set maximum length of the extension display name
+    2062 : Hide part of setting incognito mode
+
+ -- Choi J.S. <junsungc91@gmail.com>  Wed, 18 Mar 2020 16:25:00 +0900
+
 gooroom-browser (2.5.0-1+grm2u3) stretch; urgency=medium
 
   * BugTrackingSystem

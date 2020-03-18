@@ -1,0 +1,13 @@
+diff --git a/chrome/browser/resources/extensions/detail_view.html b/chrome/browser/resources/extensions/detail_view.html
+index 23cdc7bc32ec..30c9d3e2fb41 100644
+--- a/chrome/browser/resources/extensions/detail_view.html
++++ b/chrome/browser/resources/extensions/detail_view.html
+@@ -385,7 +385,7 @@
+               <extensions-toggle-row id="allow-incognito"
+                   checked="[[data.incognitoAccess.isActive]]"
+                   on-change="onAllowIncognitoChange_">
+-                <div>
++                <div hidden>
+                   <div>$i18n{itemAllowIncognito}</div>
+                   <div class="section-content">$i18n{incognitoInfoWarning}</div>
+                 </div>

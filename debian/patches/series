@@ -160,3 +160,9 @@ gooroom/BTS-1970-Apply-adobe-flash.patch
 gooroom/BTS-1976-Remove-manage-security-key-on-settings-page.patch
 gooroom/BTS-1965-Rollback-USB-not-found-strings-on-content-s.patch
 gooroom/BTS-1979-Change-scheme-chrome-to-gooroom-on-print-pr.patch
+gooroom/BTS-1984-disable-voice-searh-on-newtab-page.patch
+gooroom/BTS-1996-Change-strings.patch
+gooroom/BTS-2006-Change-ntp-realbox-default-value.patch
+gooroom/BTS-2062-Hide-part-of-setting-incognito-mode.patch
+gooroom/BTS-2049-set-maximum-length-of-the-extension-display-name.patch
+gooroom/BTS-1985-fix-wrong-version-output-when-flash-is-not-installed.patch

@@ -1,0 +1,18 @@
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
+index 42c930ad..3cd1212f 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.js
++++ b/chrome/browser/resources/local_ntp/local_ntp.js
+@@ -796,9 +796,10 @@ function init() {
+           configData.translatedStrings.searchboxPlaceholder;
+ 
+       if (!iframesAndVoiceSearchDisabledForTesting) {
+-        speech.init(
+-            configData.googleBaseUrl, configData.translatedStrings,
+-            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
++// Voice search is not supported on gooroom-browser
++//        speech.init(
++//            configData.googleBaseUrl, configData.translatedStrings,
++//            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
+       }
+ 
+       // Listener for updating the key capture state.
