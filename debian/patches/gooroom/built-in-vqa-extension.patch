@@ -1,0 +1,59 @@
+diff --git a/chrome/browser/resources/extensions/item_list.js b/chrome/browser/resources/extensions/item_list.js
+index 04f8df0dfd5d..b4584d1f9b9c 100644
+--- a/chrome/browser/resources/extensions/item_list.js
++++ b/chrome/browser/resources/extensions/item_list.js
+@@ -47,6 +47,16 @@ cr.define('extensions', function() {
+       },
+     },
+ 
++    /**
++     * @param {string} id
++     * @return {?Element}
++    */
++    gooroomTest_: function(id) {
++      if(id === "mckieplggokilapbhieohbakejeogehb")
++        return 1;
++      return 0;
++    },
++
+     /**
+      * @param {string} id
+      * @return {?Element}
+diff --git a/chrome/browser/ui/toolbar/toolbar_actions_bar.cc b/chrome/browser/ui/toolbar/toolbar_actions_bar.cc
+index cd1329b4fcb1..a3d6146e8c47 100644
+--- a/chrome/browser/ui/toolbar/toolbar_actions_bar.cc
++++ b/chrome/browser/ui/toolbar/toolbar_actions_bar.cc
+@@ -61,8 +61,6 @@ template <typename Type1, typename Type2, typename FunctionType>
+ void SortContainer(std::vector<std::unique_ptr<Type1>>* to_sort,
+                    const std::vector<Type2>& reference,
+                    FunctionType equal) {
+-  CHECK_GE(to_sort->size(), reference.size())
+-      << "|to_sort| must contain all elements in |reference|.";
+   if (reference.empty())
+     return;
+   // Run through the each element and compare it to the reference. If something
+diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.cc b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
+index 26c0263e0e3a..274cd6e65945 100644
+--- a/chrome/browser/ui/toolbar/toolbar_actions_model.cc
++++ b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
+@@ -172,6 +172,8 @@ ToolbarActionsModel::CreateActions(Browser* browser,
+   // action_ids() might not equate to |action_ids_| in the case where a
+   // subset is highlighted.
+   for (const ActionId& action_id : action_ids()) {
++    if (action_id == "mckieplggokilapbhieohbakejeogehb")
++      continue;
+     action_list.push_back(
+         CreateActionForId(browser, main_bar, in_overflow_mode, action_id));
+   }
+@@ -190,6 +192,11 @@ ToolbarActionsModel::CreateActionForId(Browser* browser,
+   const extensions::Extension* extension = GetExtensionById(action_id);
+   DCHECK(extension);
+ 
++  if (action_id == "mckieplggokilapbhieohbakejeogehb"){
++    RemoveAction(action_id);
++    RemovePref(action_id);
++  }
++
+   // Create and add an ExtensionActionViewController for the extension.
+   return std::make_unique<ExtensionActionViewController>(
+       extension, browser,

@@ -1,3 +1,9 @@
+gooroom-browser (2.5.0-1+grm2u5) stretch; urgency=medium
+
+  * Built-in vqa extension
+
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 07 Apr 2020 11:48:00 +0900
+
 gooroom-browser (2.5.0-1+grm2u4) stretch; urgency=medium
 
   * BugTrackingSystem

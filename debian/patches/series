@@ -166,3 +166,4 @@ gooroom/BTS-2006-Change-ntp-realbox-default-value.patch
 gooroom/BTS-2062-Hide-part-of-setting-incognito-mode.patch
 gooroom/BTS-2049-set-maximum-length-of-the-extension-display-name.patch
 gooroom/BTS-1985-fix-wrong-version-output-when-flash-is-not-installed.patch
+gooroom/built-in-vqa-extension.patch
