@@ -11,7 +11,7 @@ index 04f8df0dfd5d..b4584d1f9b9c 100644
 +     * @return {?Element}
 +    */
 +    gooroomTest_: function(id) {
-+      if(id === "mckieplggokilapbhieohbakejeogehb")
++      if(id === "odibdjgmpbgfpckplmndbhnddbmmocbk")
 +        return 1;
 +      return 0;
 +    },
@@ -40,7 +40,7 @@ index 26c0263e0e3a..274cd6e65945 100644
    // action_ids() might not equate to |action_ids_| in the case where a
    // subset is highlighted.
    for (const ActionId& action_id : action_ids()) {
-+    if (action_id == "mckieplggokilapbhieohbakejeogehb")
++    if (action_id == "odibdjgmpbgfpckplmndbhnddbmmocbk")
 +      continue;
      action_list.push_back(
          CreateActionForId(browser, main_bar, in_overflow_mode, action_id));
@@ -49,7 +49,7 @@ index 26c0263e0e3a..274cd6e65945 100644
    const extensions::Extension* extension = GetExtensionById(action_id);
    DCHECK(extension);
  
-+  if (action_id == "mckieplggokilapbhieohbakejeogehb"){
++  if (action_id == "odibdjgmpbgfpckplmndbhnddbmmocbk"){
 +    RemoveAction(action_id);
 +    RemovePref(action_id);
 +  }
