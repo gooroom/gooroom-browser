@@ -1,5 +1,18 @@
+diff --git a/chrome/browser/resources/extensions/item_list.html b/chrome/browser/resources/extensions/item_list.html
+index 339e774de80e..b174f537958d 100644
+--- a/chrome/browser/resources/extensions/item_list.html
++++ b/chrome/browser/resources/extensions/item_list.html
+@@ -108,7 +108,7 @@
+               filter="[[computedFilter_]]"
+               rendered-item-count="{{shownExtensionsCount_::dom-change}}">
+             <extensions-item id="[[item.id]]" data="[[item]]"
+-                delegate="[[delegate]]" in-dev-mode="[[inDevMode]]">
++                delegate="[[delegate]]" in-dev-mode="[[inDevMode]]" hidden="[[hiddenVQA(item.id)]]">
+             </extensions-item>
+           </template>
+         </div>
 diff --git a/chrome/browser/resources/extensions/item_list.js b/chrome/browser/resources/extensions/item_list.js
-index 04f8df0dfd5d..b4584d1f9b9c 100644
+index 04f8df0dfd5d..3b883ad412a6 100644
 --- a/chrome/browser/resources/extensions/item_list.js
 +++ b/chrome/browser/resources/extensions/item_list.js
 @@ -47,6 +47,16 @@ cr.define('extensions', function() {
@@ -10,7 +23,7 @@ index 04f8df0dfd5d..b4584d1f9b9c 100644
 +     * @param {string} id
 +     * @return {?Element}
 +    */
-+    gooroomTest_: function(id) {
++    hiddenVQA: function(id) {
 +      if(id === "odibdjgmpbgfpckplmndbhnddbmmocbk")
 +        return 1;
 +      return 0;
@@ -19,41 +32,31 @@ index 04f8df0dfd5d..b4584d1f9b9c 100644
      /**
       * @param {string} id
       * @return {?Element}
-diff --git a/chrome/browser/ui/toolbar/toolbar_actions_bar.cc b/chrome/browser/ui/toolbar/toolbar_actions_bar.cc
-index cd1329b4fcb1..a3d6146e8c47 100644
---- a/chrome/browser/ui/toolbar/toolbar_actions_bar.cc
-+++ b/chrome/browser/ui/toolbar/toolbar_actions_bar.cc
-@@ -61,8 +61,6 @@ template <typename Type1, typename Type2, typename FunctionType>
- void SortContainer(std::vector<std::unique_ptr<Type1>>* to_sort,
-                    const std::vector<Type2>& reference,
-                    FunctionType equal) {
--  CHECK_GE(to_sort->size(), reference.size())
--      << "|to_sort| must contain all elements in |reference|.";
-   if (reference.empty())
-     return;
-   // Run through the each element and compare it to the reference. If something
 diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.cc b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-index 26c0263e0e3a..274cd6e65945 100644
+index 26c0263e0e3a..058b71fc52df 100644
 --- a/chrome/browser/ui/toolbar/toolbar_actions_model.cc
 +++ b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-@@ -172,6 +172,8 @@ ToolbarActionsModel::CreateActions(Browser* browser,
-   // action_ids() might not equate to |action_ids_| in the case where a
-   // subset is highlighted.
-   for (const ActionId& action_id : action_ids()) {
-+    if (action_id == "odibdjgmpbgfpckplmndbhnddbmmocbk")
-+      continue;
-     action_list.push_back(
-         CreateActionForId(browser, main_bar, in_overflow_mode, action_id));
+@@ -382,6 +382,8 @@ void ToolbarActionsModel::AddAction(const ActionId& action_id) {
+     if (visible_count_delta)
+       SetVisibleIconCount(visible_icon_count() + visible_count_delta);
    }
-@@ -190,6 +192,11 @@ ToolbarActionsModel::CreateActionForId(Browser* browser,
-   const extensions::Extension* extension = GetExtensionById(action_id);
-   DCHECK(extension);
++  if (action_id == "odibdjgmpbgfpckplmndbhnddbmmocbk")
++    SetVisibleIconCount(visible_icon_count() - 1);
+ }
  
-+  if (action_id == "odibdjgmpbgfpckplmndbhnddbmmocbk"){
-+    RemoveAction(action_id);
-+    RemovePref(action_id);
-+  }
-+
-   // Create and add an ExtensionActionViewController for the extension.
-   return std::make_unique<ExtensionActionViewController>(
-       extension, browser,
+ void ToolbarActionsModel::RemoveAction(const ActionId& action_id) {
+diff --git a/chrome/browser/ui/views/toolbar/browser_actions_container.cc b/chrome/browser/ui/views/toolbar/browser_actions_container.cc
+index 48ca19a5d262..07ce2910d66b 100644
+--- a/chrome/browser/ui/views/toolbar/browser_actions_container.cc
++++ b/chrome/browser/ui/views/toolbar/browser_actions_container.cc
+@@ -464,6 +464,10 @@ void BrowserActionsContainer::Layout() {
+   // overflow container.
+   for (size_t i = 0u; i < toolbar_action_views_.size(); ++i) {
+     ToolbarActionView* view = toolbar_action_views_[i].get();
++    if (view->view_controller()->GetId() == "odibdjgmpbgfpckplmndbhnddbmmocbk"){
++      view->SetVisible(false);
++      continue;
++    }
+     if (i < start_index || i >= end_index) {
+       view->SetVisible(false);
+     } else {
