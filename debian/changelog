@@ -1,3 +1,9 @@
+gooroom-browser (2.5.0-1+grm2u8) stretch; urgency=medium
+
+  * Remove gooroom extensions(calculator, note)
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 27 Apr 2020 17:07:00 +0900
+
 gooroom-browser (2.5.0-1+grm2u7) stretch; urgency=medium
 
   * Stabilized vqa extension in gooroom-browser
