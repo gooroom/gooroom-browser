@@ -73,22 +73,15 @@ index 0b8f9a21d6d0..e49e570f1336 100644
  #include "components/policy/core/common/policy_bundle.h"
  #include "components/policy/core/common/policy_load_status.h"
  #include "components/policy/core/common/policy_types.h"
-@@ -134,7 +135,15 @@ void ConfigDirPolicyLoader::LoadFromPath(const base::FilePath& path,
+@@ -135,6 +135,8 @@ void ConfigDirPolicyLoader::LoadFromPath(const base::FilePath& path,
    PolicyLoadStatusUmaReporter status;
    if (files.empty()) {
      status.Add(POLICY_LOAD_STATUS_NO_POLICY);
-+    if(path.AsUTF8Unsafe().find("managed")!=std::string::npos)
++    if (path.AsUTF8Unsafe().find("managed")!=std::string::npos)
 +      SYSLOG(INFO) << "Not-Exist-Policy GRMCODE=050004";
      return;
-+  } else {
-+    if (path.AsUTF8Unsafe().find("managed")!=std::string::npos) {
-+      char buff[100] = {0,};
-+      snprintf(buff, sizeof(buff), "POLICY DIR=$(%s)", path.AsUTF8Unsafe().c_str());
-+      SYSLOG(INFO) << buff << " GRMCODE=050005";
-+    }
    }
- 
-   // Start with an empty dictionary and merge the files' contents.
+
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
 index d13cb1d535a7..759d2ae79e10 100644
 --- a/gooroom/BUILD.gn
@@ -435,19 +428,20 @@ index e962b01f0c52..68559f3f2332 100644
    //Add Flash version
    if(base::CommandLine::ForCurrentProcess()->HasSwitch(switches::kPpapiFlashPath))
 diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
-index 6f132f84b37a..348a9ff1e2ee 100644
+index e3a0f2547e18..cbfae040999e 100644
 --- a/gooroom/browser/gooroom_url_filter_impl.cc
 +++ b/gooroom/browser/gooroom_url_filter_impl.cc
-@@ -16,8 +16,10 @@ bool GooroomUrlFilterImpl::isTrustUrl(std::string url) {
+@@ -16,8 +16,11 @@ bool GooroomUrlFilterImpl::isTrustUrl(std::string url) {
        url_matcher_.MatchURL(GURL(url));
    bool trusted = !matching_ids.empty();
    GURL url_(url);
 -  SYSLOG(INFO) << "GOOROOM Trust mode = " << trusted << " by " << url_.scheme()
 -               << "://" << url_.host();
-+
-+  char buff[100] = {0,};
-+  snprintf(buff, sizeof(buff), "GOOROOM Trust mode = $(%d) by $(%s://%s)", trusted, url_.scheme().c_str(), url_.host().c_str());
-+  SYSLOG(INFO) << buff << " GRMCODE=050006";
++  if (!trusted) {
++    char buff[100] = {0,};
++    snprintf(buff, sizeof(buff), "[%s] operates in untrusted mode.", url_.host().c_str());
++    SYSLOG(INFO) << buff << " GRMCODE=050006";
++  }
    return trusted;
  }
  
