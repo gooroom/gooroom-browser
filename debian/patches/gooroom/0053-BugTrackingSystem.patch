@@ -1,7 +1,7 @@
-From 66199710085efefee7474d3586b626d72580139a Mon Sep 17 00:00:00 2001
+From 0447c053000130e2e44a4510e8e2c586558358be Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:55:34 +0900
-Subject: [PATCH 53/66] BugTrackingSystem
+Date: Fri, 5 Jun 2020 12:22:38 +0900
+Subject: [PATCH 53/79] BugTrackingSystem
 
 507 : Disable 'Open as window' on making shortcut app popup
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 53/66] BugTrackingSystem
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/ui/views/extensions/bookmark_app_confirmation_view.cc b/chrome/browser/ui/views/extensions/bookmark_app_confirmation_view.cc
-index 760838193038..40e25063c929 100644
+index f94c63fdb554..7b3b6326c39d 100644
 --- a/chrome/browser/ui/views/extensions/bookmark_app_confirmation_view.cc
 +++ b/chrome/browser/ui/views/extensions/bookmark_app_confirmation_view.cc
-@@ -85,6 +85,7 @@ BookmarkAppConfirmationView::BookmarkAppConfirmationView(
+@@ -88,6 +88,7 @@ BookmarkAppConfirmationView::BookmarkAppConfirmationView(
    layout->AddPaddingRow(
        views::GridLayout::kFixedSize,
        layout_provider->GetDistanceMetric(DISTANCE_CONTROL_LIST_VERTICAL));
@@ -20,10 +20,10 @@ index 760838193038..40e25063c929 100644
    auto open_as_window_checkbox = std::make_unique<views::Checkbox>(
        l10n_util::GetStringUTF16(IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_WINDOW));
    open_as_window_checkbox->SetChecked(web_app_info_->open_as_window);
-@@ -92,6 +93,7 @@ BookmarkAppConfirmationView::BookmarkAppConfirmationView(
-   layout->SkipColumns(1);
-   open_as_window_checkbox_ =
-       layout->AddView(std::move(open_as_window_checkbox));
+@@ -99,6 +100,7 @@ BookmarkAppConfirmationView::BookmarkAppConfirmationView(
+   if (g_auto_check_open_in_window_for_testing) {
+     open_as_window_checkbox_->SetChecked(true);
+   }
 +#endif
  
    title_tf_->SelectAll(true);

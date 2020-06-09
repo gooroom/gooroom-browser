@@ -1,0 +1,26 @@
+From a09f388c89c40637a3a5a097d6132156efed20af Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Jun 2020 15:16:58 +0900
+Subject: [PATCH 71/79] [BTS:1965] Rollback USB not found strings on
+ content-settings page
+
+---
+ .../resources/settings/site_settings/chooser_exception_list.js  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
+index 02e2e9dcc782..79c7539ca337 100644
+--- a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
++++ b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
+@@ -108,7 +108,7 @@ Polymer({
+     // Set the message to display when the exception list is empty.
+     switch (this.chooserType) {
+       case settings.ChooserType.USB_DEVICES:
+-        //this.emptyListMessage_ = this.i18n('noUsbDevicesFound');
++        this.emptyListMessage_ = this.i18n('noUsbDevicesFound');
+         break;
+       case settings.ChooserType.SERIAL_PORTS:
+         this.emptyListMessage_ = this.i18n('noSerialPortsFound');
+-- 
+2.20.1
+

@@ -1,7 +1,7 @@
-From a8709b63314daabbdf7536de10967af13e5d72e0 Mon Sep 17 00:00:00 2001
+From de42326f0f5aa7a817b2c0e10a9263a28cffb905 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 20 Nov 2019 20:45:34 +0900
-Subject: [PATCH 09/66] disable prerender
+Date: Tue, 2 Jun 2020 18:35:59 +0900
+Subject: [PATCH 09/79] disable prerender
 
 ---
  chrome/browser/ui/omnibox/chrome_omnibox_client.cc | 2 ++

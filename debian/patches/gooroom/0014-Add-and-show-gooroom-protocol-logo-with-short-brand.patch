@@ -1,11 +1,11 @@
-From ba2543cae33e8a1db3045e426ae2082384993112 Mon Sep 17 00:00:00 2001
+From 40d47ce10c43a5df0d51fec02ad09746f9e14e30 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 22 Nov 2019 17:25:58 +0900
-Subject: [PATCH 14/66] Add and show gooroom protocol logo with short brand 
+Date: Wed, 3 Jun 2020 18:47:56 +0900
+Subject: [PATCH 14/79] Add and show gooroom protocol logo with short brand 
  text and fake scheme gooroom:// instead of chrome:// in omnibox.
 
 ---
- chrome/app/chromium_strings.grd               | 14 ++++++
+ chrome/app/chromium_strings.grd               | 12 ++++-
  .../chrome_location_bar_model_delegate.cc     |  6 +++
  .../views/location_bar/location_icon_view.cc  | 11 +++++
  .../views/page_info/page_info_bubble_view.cc  |  9 +++-
@@ -14,21 +14,19 @@ Subject: [PATCH 14/66] Add and show gooroom protocol logo with short brand
  .../browser/vector_icons/gooroom_product.icon | 47 +++++++++++++++++++
  .../vector_icons/gooroom_product_1x.icon      | 47 +++++++++++++++++++
  .../components_chromium_strings_ko.xtb        |  4 +-
- 9 files changed, 139 insertions(+), 4 deletions(-)
+ 9 files changed, 136 insertions(+), 5 deletions(-)
  create mode 100644 components/omnibox/browser/vector_icons/gooroom_product.icon
  create mode 100644 components/omnibox/browser/vector_icons/gooroom_product_1x.icon
 
 diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
-index 7b8a2fd6b1e6..3a5ac42607c1 100644
+index 90228f41336b..a8421903aa20 100644
 --- a/chrome/app/chromium_strings.grd
 +++ b/chrome/app/chromium_strings.grd
-@@ -126,12 +126,26 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
+@@ -152,13 +152,23 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
+       <if expr="not is_android">
          <part file="settings_chromium_strings.grdp" />
        </if>
- 
-+      <message name="IDS_PROFILES_DISCONNECT_MANAGED_PROFILE_TEXT" desc="Message explaining to the user what will happen if they disconnect the managed profile.">
-+        Disconnecting <ph name="USERNAME">$1<ex>someone@example.com</ex></ph> will clear your history, bookmarks, settings, and other Chromium data stored on this device. Data stored in your Google Account will not be cleared and can be managed on <ph name="GOOGLE_DASHBOARD_LINK">&lt;a target="_blank" href="$2"&gt;</ph>Google Dashboard<ph name="END_GOOGLE_DASHBOARD_LINK">&lt;/a&gt;</ph>.
-+      </message>
+-
 +      <if expr="_gooroom">
 +        <!-- String "Gooroom" immediately after Gooroom protocol logo -->
 +        <message name="IDS_PRODUCT_NAME" desc="The Gooroom Browser application name">
@@ -99,10 +97,10 @@ index 222fab010d58..e7abac2b3dd9 100644
    if (delegate_->GetLocationBarModel()->GetURL().SchemeIs(url::kFileScheme))
      return l10n_util::GetStringUTF16(IDS_OMNIBOX_FILE);
 diff --git a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-index d6ef4c161e89..db50226c969e 100644
+index c149c10cbbed..5684b9043390 100644
 --- a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
 +++ b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-@@ -375,7 +375,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
+@@ -374,7 +374,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
      text = IDS_PAGE_INFO_FILE_PAGE;
    } else if (url.SchemeIs(content::kChromeDevToolsScheme)) {
      text = IDS_PAGE_INFO_DEVTOOLS_PAGE;
@@ -115,7 +113,7 @@ index d6ef4c161e89..db50226c969e 100644
      NOTREACHED();
    }
  
-@@ -421,6 +425,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
+@@ -420,6 +424,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
    gfx::NativeView parent_view = platform_util::GetViewForWindow(parent_window);
  
    if (url.SchemeIs(content::kChromeUIScheme) ||
@@ -126,20 +124,20 @@ index d6ef4c161e89..db50226c969e 100644
        url.SchemeIs(extensions::kExtensionScheme) ||
        url.SchemeIs(content::kViewSourceScheme) ||
 diff --git a/components/components_chromium_strings.grd b/components/components_chromium_strings.grd
-index 176583712d04..26a364c8c95e 100644
+index 2f8b6e8ead11..ef1987ac3196 100644
 --- a/components/components_chromium_strings.grd
 +++ b/components/components_chromium_strings.grd
-@@ -222,7 +222,7 @@
+@@ -249,7 +249,7 @@
  
        <!-- Page Info -->
        <message name="IDS_PAGE_INFO_INTERNAL_PAGE" desc="Message to display in the page info bubble when the page you are on is a chrome:// page or about:something.">
 -        You're viewing a secure Chromium page
 +        You're viewing a secure Gooroom page
        </message>
-       <message name="IDS_PAGE_INFO_SECURITY_TAB_SECURE_IDENTITY_VERIFIED" desc="The text of the identity section when the page is secure and uses a valid certificate">
-         Chromium verified that <ph name="ISSUER">$1<ex>VeriSign</ex></ph> issued this website's certificate.
+ 
+       <if expr="is_android">
 diff --git a/components/omnibox/browser/BUILD.gn b/components/omnibox/browser/BUILD.gn
-index 8992ebf6a626..b771102f2bf7 100644
+index f9a6fd95e475..03f84a88d5e5 100644
 --- a/components/omnibox/browser/BUILD.gn
 +++ b/components/omnibox/browser/BUILD.gn
 @@ -60,6 +60,9 @@ aggregate_vector_icons("omnibox_vector_icons") {

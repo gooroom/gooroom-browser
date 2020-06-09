@@ -1,7 +1,7 @@
-From 63441e8745a47996de8b7bba8ea0ec331e4e9189 Mon Sep 17 00:00:00 2001
+From a558143518749b0d024195d655a0f5efbfc6d35a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 28 Nov 2019 10:54:41 +0900
-Subject: [PATCH 34/66] fix gooroom-policy-dir bugs
+Date: Fri, 5 Jun 2020 11:13:22 +0900
+Subject: [PATCH 34/79] fix gooroom-policy-dir bugs
 
 ---
  chrome/common/chrome_paths.cc | 17 ++++++++++-------

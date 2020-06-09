@@ -1,7 +1,7 @@
-From ebdd512beb93c651730a81b017ab8a8a67bdb9f4 Mon Sep 17 00:00:00 2001
+From 681f731117c946e57338ae9c76a34ccfd2aaefc1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 22 Nov 2019 18:56:11 +0900
-Subject: [PATCH 21/66] Change gooroom-browser extensions path & config path
+Date: Thu, 4 Jun 2020 16:28:51 +0900
+Subject: [PATCH 21/79] Change gooroom-browser extensions path & config path
 
 ---
  chrome/common/chrome_paths.cc       | 3 +++
@@ -23,18 +23,18 @@ index 1ca92ba2c97c..f72c03f88244 100644
      FILE_PATH_LITERAL("/usr/share/chromium/extensions");
  #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
 diff --git a/chrome/common/chrome_paths_linux.cc b/chrome/common/chrome_paths_linux.cc
-index b81cd35ffe4d..349f2fa5838f 100644
+index 42d355bed93d..032f873ae7c9 100644
 --- a/chrome/common/chrome_paths_linux.cc
 +++ b/chrome/common/chrome_paths_linux.cc
 @@ -90,6 +90,9 @@ bool GetDefaultUserDataDirectory(base::FilePath* result) {
  
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
-   *result = config_dir.Append("google-chrome" + GetChannelSuffixForDataDir());
+   std::string data_dir_basename = "google-chrome";
 +#elif defined(GOOROOM_BUILD)
 +  //change gooroom config dir 
-+  *result = config_dir.Append("gooroom");
++  std::string data_dir_basename = "gooroom";
  #else
-   *result = config_dir.Append("chromium");
+   std::string data_dir_basename = "chromium";
  #endif
 -- 
 2.20.1

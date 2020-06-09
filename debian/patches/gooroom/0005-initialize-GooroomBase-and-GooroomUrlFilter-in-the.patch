@@ -1,7 +1,7 @@
-From 93a461b948ff2c1326538017859dbd7d7a7bf33a Mon Sep 17 00:00:00 2001
+From 2e3be7b9dfa8f2c9503fdb1f6e1420ec7e7aec10 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 20 Nov 2019 20:28:58 +0900
-Subject: [PATCH 05/66] initialize GooroomBase and GooroomUrlFilter in the 
+Date: Tue, 2 Jun 2020 18:16:00 +0900
+Subject: [PATCH 05/79] initialize GooroomBase and GooroomUrlFilter in the 
  messageloop of GooroomBrowserExtraPartsSecurity
 
 ---

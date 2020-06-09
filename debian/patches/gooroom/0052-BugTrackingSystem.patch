@@ -1,20 +1,22 @@
-From 9e81852b17ca4d53c7fe6ed30c71860b59ef882d Mon Sep 17 00:00:00 2001
+From 13df6216791a2552ad989fd30f6110dc3ef3f0c2 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:54:03 +0900
-Subject: [PATCH 52/66] BugTrackingSystem
+Date: Fri, 5 Jun 2020 12:20:38 +0900
+Subject: [PATCH 52/79] BugTrackingSystem
 
 650 - Client redirection URL does not apply Trust/Untrust judgement module.
 ---
- content/browser/web_contents/web_contents_impl.cc | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ content/browser/web_contents/web_contents_impl.cc | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 415d2582902e..dc3d33175aab 100644
+index 31f884b556cc..1d268150399b 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -4671,7 +4671,9 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -4660,9 +4660,10 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+     }
    }
  */
+-
  //If browser is switched, the current page is closed.
 -  if (navigation_handle->IsInMainFrame() && RequestCurrentUserDataDir(navigation_handle->GetURL())) {
 +  if (navigation_handle->IsInMainFrame()

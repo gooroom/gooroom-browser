@@ -1,0 +1,259 @@
+From 3d40706379272394befbf7e48bd4dab80f304724 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Jun 2020 11:28:11 +0900
+Subject: [PATCH 36/79] * Remove page-translation function. * Remove
+ unnecessary settings-page items. * Remove google-login ways. (bookmark,
+ saving password, apps page) * Change google to gooroom strings. * Remove OS
+ information in gooroom://settings/help page.
+
+---
+ chrome/app/chromium_strings.grd                               | 4 ++--
+ chrome/app/gooroom/resources/chromium_strings_ko.xtb          | 4 ++--
+ chrome/app/gooroom/resources/generated_resources_ko.xtb       | 4 ++--
+ chrome/app/settings_chromium_strings.grdp                     | 2 +-
+ chrome/app/settings_strings.grdp                              | 4 ++--
+ .../browser/renderer_context_menu/render_view_context_menu.cc | 3 +++
+ chrome/browser/resources/ntp4/new_tab.html                    | 4 ++--
+ .../settings/privacy_page/personalization_options.html        | 2 +-
+ .../browser/resources/settings/privacy_page/privacy_page.html | 4 ++--
+ .../browser/resources/settings/system_page/system_page.html   | 2 +-
+ chrome/browser/ui/views/passwords/password_pending_view.cc    | 3 +++
+ components/components_chromium_strings.grd                    | 2 +-
+ components/strings/components_chromium_strings_ko.xtb         | 2 +-
+ 13 files changed, 23 insertions(+), 17 deletions(-)
+
+diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
+index a8421903aa20..4c09c33fe921 100644
+--- a/chrome/app/chromium_strings.grd
++++ b/chrome/app/chromium_strings.grd
+@@ -554,7 +554,7 @@ Chromium is unable to recover your settings.
+ 
+       <if expr="use_titlecase and not chromeos">
+         <message name="IDS_ABOUT" desc="In Title Case: The text label of the About Chrome menu item">
+-          About &amp;Chromium
++          About &amp;Gooroom Browser
+         </message>
+         <message name="IDS_UPDATE_NOW" desc="In Title Case: The text label of the Update Chrome Now menu item">
+           Update &amp;Chromium
+@@ -562,7 +562,7 @@ Chromium is unable to recover your settings.
+       </if>
+       <if expr="not use_titlecase and not chromeos">
+         <message name="IDS_ABOUT" desc="The text label of the About Chrome menu item">
+-          About &amp;Chromium
++          About &amp;Gooroom Browser
+         </message>
+         <message name="IDS_UPDATE_NOW" desc="The text label of the Update Chrome Now menu item">
+           Update &amp;Chromium
+diff --git a/chrome/app/gooroom/resources/chromium_strings_ko.xtb b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
+index d22a4098a37f..d17bf042824f 100644
+--- a/chrome/app/gooroom/resources/chromium_strings_ko.xtb
++++ b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
+@@ -7,7 +7,7 @@
+ <translation id="1104942323762546749">Gooroom browser에서 비밀번호를 내보내려고 합니다. 허용하려면 Windows 비밀번호를 입력하세요.</translation>
+ <translation id="1115445892567829615">Gooroom browser에서 데이터를 동기화하지 못했습니다. 동기화 암호를 업데이트하시기 바랍니다.</translation>
+ <translation id="113122355610423240">Gooroom browser이 기본 브라우저로 설정되어 있습니다.</translation>
+-<translation id="1185134272377778587">Gooroom browser 정보</translation>
++<translation id="6770511459782010166">Gooroom browser 정보</translation>
+ <translation id="1396446129537741364">Gooroom browser이 비밀번호를 표시하려고 합니다.</translation>
+ <translation id="1414495520565016063">Gooroom browser에 로그인했습니다.</translation>
+ <translation id="151962892725702025">내 도메인에서 동기화를 사용할 수 없으므로 Gooroom browser OS에서 데이터를 동기화하지 못했습니다.</translation>
+@@ -41,7 +41,7 @@
+ <translation id="2838154144102149890">업데이트하려면 이 컴퓨터에서 Gooroom browser 실행을 중단해야 합니다. 중단하면 이 컴퓨터에 로그인한 다른 사용자가 저장하지 않은 변경 사항을 잃을 수 있습니다.</translation>
+ <translation id="2847479871509788944">Gooroom browser에서 제거...</translation>
+ <translation id="2886012850691518054">선택사항: 사용 통계 및 비정상 종료 보고서가 Google로 자동 전송되도록 선택하시면 Gooroom browser을 개선하는 데 도움이 됩니다.</translation>
+-<translation id="2910007522516064972">Gooroom browser 정보</translation>
++<translation id="3402899444278600794">Gooroom browser 정보</translation>
+ <translation id="2977470724722393594">Gooroom browser이 최신 버전임</translation>
+ <translation id="3032787606318309379">Gooroom browser에 추가하는 중...</translation>
+ <translation id="3068515742935458733">비정상 종료 보고서와 <ph name="UMA_LINK" />을(를) Google로 전송하여 Gooroom browser 개선에 참여합니다.</translation>
+diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+index 060628ee3fa0..23aaefdb47f7 100644
+--- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
++++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
+@@ -347,7 +347,7 @@
+ <translation id="1483493594462132177">보내기</translation>
+ <translation id="1484979925941077974">사이트에서 블루투스를 사용하고 있습니다.</translation>
+ <translation id="1485015260175968628">앱의 현재 권한:</translation>
+-<translation id="1485141095922496924">버전 <ph name="PRODUCT_VERSION" />(<ph name="PRODUCT_CHANNEL" />) <ph name="PRODUCT_MODIFIER" /> <ph name="PRODUCT_VERSION_BITS" /></translation>
++<translation id="2453329275152097344">버전 <ph name="PRODUCT_VERSION" />(<ph name="PRODUCT_CHANNEL" />) <ph name="PRODUCT_MODIFIER" /> <ph name="PRODUCT_VERSION_BITS" /></translation>
+ <translation id="1486096554574027028">비밀번호 검색</translation>
+ <translation id="1487335504823219454">사용 - 맞춤 설정</translation>
+ <translation id="1489664337021920575">다른 옵션 선택</translation>
+@@ -860,7 +860,7 @@
+ <translation id="2200356397587687044">계속하려면 Gooroom browser에 권한이 필요함</translation>
+ <translation id="220138918934036434">버튼 숨기기</translation>
+ <translation id="2202898655984161076">프린터를 나열하는 데 문제가 발생했습니다. <ph name="CLOUD_PRINT_NAME" />에 성공적으로 등록되지 못한 프린터가 있을 수 있습니다.</translation>
+-<translation id="2203682048752833055"><ph name="BEGIN_LINK" />주소 표시줄<ph name="END_LINK" />에서 사용되는 검색엔진</translation>
++<translation id="7213903639823314449"><ph name="BEGIN_LINK" />주소 표시줄<ph name="END_LINK" />에서 사용되는 검색엔진</translation>
+ <translation id="2204034823255629767">입력한 항목 조회 및 변경</translation>
+ <translation id="220792432208469595">사용 및 진단 데이터를 보냅니다. 이 기기는 현재 진단, 기기 및 앱 사용 데이터를 Google에 자동으로 보내고 있습니다. 이 데이터는 시스템 및 앱 안정성 등을 개선하는 데 활용됩니다. 일부 수집 데이터는 Google 앱과 파트너(Android 개발자 등)에게도 도움을 줍니다. 이 설정은 소유자가 지정합니다. 추가 웹 및 앱 활동이 사용 설정되어 있다면 이 데이터가 Google 계정에 저장될 수 있습니다. <ph name="BEGIN_LINK1" />자세히 알아보기<ph name="END_LINK1" /></translation>
+ <translation id="220858061631308971">'<ph name="DEVICE_NAME" />'의 PIN 코드를 입력하세요:</translation>
+diff --git a/chrome/app/settings_chromium_strings.grdp b/chrome/app/settings_chromium_strings.grdp
+index 596ee6a2e464..d065a78a473e 100644
+--- a/chrome/app/settings_chromium_strings.grdp
++++ b/chrome/app/settings_chromium_strings.grdp
+@@ -3,7 +3,7 @@
+ <grit-part>
+   <!-- About Page -->
+   <message name="IDS_SETTINGS_ABOUT_PROGRAM" desc="Menu title for the About Chromium page.">
+-    About Chromium
++    About Gooroom-browser
+   </message>
+   <message name="IDS_SETTINGS_GET_HELP_USING_CHROME" desc="Text of the button which takes the user to the Chrome help page.">
+     Get help with Chromium
+diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
+index 34c87d3f16f2..da7eaf07fc34 100644
+--- a/chrome/app/settings_strings.grdp
++++ b/chrome/app/settings_strings.grdp
+@@ -23,7 +23,7 @@
+ 
+   <!-- About Page -->
+   <message name="IDS_SETTINGS_ABOUT_PAGE_BROWSER_VERSION" desc="The text label describing the version of the browser, example: Version 57.0.2937.0 (Developer Build) unknown (64-bit)">
+-    Version <ph name="PRODUCT_VERSION">$1<ex>15.0.865.0</ex></ph> (<ph name="PRODUCT_CHANNEL">$2<ex>Developer Build</ex></ph>) <ph name="PRODUCT_MODIFIER">$3</ph> <ph name="PRODUCT_VERSION_BITS">$4</ph>
++    Version <ph name="PRODUCT_VERSION">$1<ex>15.0.865.0</ex></ph> (<ph name="PRODUCT_CHANNEL">$2<ex>Developer Build</ex></ph>)
+   </message>
+   <if expr="chromeos">
+     <message name="IDS_SETTINGS_ABOUT_PAGE_DETAILED_BUILD_INFO" desc="Label describing the section that shows detailed information about the current Chrome build.">
+@@ -3140,7 +3140,7 @@
+     </message>
+   </if>
+   <message name="IDS_SETTINGS_SEARCH_EXPLANATION" desc="Explanation for the search engine dropdown setting.">
+-    Search engine used in the <ph name="BEGIN_LINK">&lt;a target="_blank" href="$1"&gt;</ph>address bar<ph name="END_LINK">&lt;/a&gt;</ph>
++    Search engine used in the address bar
+   </message>
+   <message name="IDS_SETTINGS_SEARCH_MANAGE_SEARCH_ENGINES" desc="Label for the Manage Search Engines button.">
+     Manage search engines
+diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+index 491e36bcdfba..c5d9416aabdb 100644
+--- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
++++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+@@ -1556,6 +1556,8 @@ void RenderViewContextMenu::AppendPageItems() {
+     menu_model_.AddSeparator(ui::NORMAL_SEPARATOR);
+   }
+ 
++//Gooroom-browser unsupport Page-translation
++#if !defined(GOOROOM_BUILD)
+   if (TranslateService::IsTranslatableURL(params_.page_url)) {
+     std::unique_ptr<translate::TranslatePrefs> prefs(
+         ChromeTranslateClient::CreateTranslatePrefs(
+@@ -1574,6 +1576,7 @@ void RenderViewContextMenu::AppendPageItems() {
+       AddGoogleIconToLastMenuItem(&menu_model_);
+     }
+   }
++#endif
+ }
+ 
+ void RenderViewContextMenu::AppendExitFullscreenItem() {
+diff --git a/chrome/browser/resources/ntp4/new_tab.html b/chrome/browser/resources/ntp4/new_tab.html
+index 2b60f4a75a67..425b24558864 100644
+--- a/chrome/browser/resources/ntp4/new_tab.html
++++ b/chrome/browser/resources/ntp4/new_tab.html
+@@ -102,9 +102,9 @@ document.write('<link id="themecss" rel="stylesheet" ' +
+ 
+   <div id="login-container" hidden>
+     <div id="login-status-header-container" class="login-status-row">
+-      <div id="login-status-header"></div>
++      <div id="login-status-header" hidden></div>
+     </div>
+-    <div id="login-status-sub-header"></div>
++    <div id="login-status-sub-header" hidden></div>
+   </div>
+ </body>
+ 
+diff --git a/chrome/browser/resources/settings/privacy_page/personalization_options.html b/chrome/browser/resources/settings/privacy_page/personalization_options.html
+index d367c424da1e..da4b72f8cc92 100644
+--- a/chrome/browser/resources/settings/privacy_page/personalization_options.html
++++ b/chrome/browser/resources/settings/privacy_page/personalization_options.html
+@@ -54,11 +54,11 @@
+         label="$i18n{searchSuggestPref}"
+         sub-label="$i18n{searchSuggestPrefDesc}">
+     </settings-toggle-button>
++<if expr="not _gooroom">
+     <settings-toggle-button pref="{{prefs.alternate_error_pages.enabled}}"
+         label="$i18n{linkDoctorPref}"
+         sub-label="$i18n{linkDoctorPrefDesc}">
+     </settings-toggle-button>
+-<if expr="not _gooroom">
+     <template is="dom-if" if="[[!privacySettingsRedesignEnabled_]]">
+       <settings-toggle-button id="safeBrowsingToggle"
+           pref="{{prefs.safebrowsing.enabled}}"
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index 6e031971c1e6..d1285bab6e44 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -140,13 +140,13 @@
+           <settings-toggle-button id="doNotTrack"
+               pref="{{prefs.enable_do_not_track}}" label="$i18n{doNotTrack}"
+               on-settings-boolean-control-change="onDoNotTrackChange_"
+-              no-set-pref>
++              no-set-pref hidden>
+           </settings-toggle-button>
+           <settings-toggle-button id="canMakePaymentToggle"
+               aria-label="$i18n{canMakePaymentToggleLabel}"
+               label="$i18n{canMakePaymentToggleLabel}"
+               pref="{{prefs.payments.can_make_payment_enabled}}"
+-              on-settings-boolean-control-change="onCanMakePaymentChange_">
++              on-settings-boolean-control-change="onCanMakePaymentChange_" hidden>
+           </settings-toggle-button>
+          <!-- gooroom-browser -->
+         <div hidden="[[!pageVisibility.websocketSettings]]">
+diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
+index a6117d772a50..2c1247c22d17 100644
+--- a/chrome/browser/resources/settings/system_page/system_page.html
++++ b/chrome/browser/resources/settings/system_page/system_page.html
+@@ -21,7 +21,7 @@
+ </if>
+     <settings-toggle-button id="hardwareAcceleration"
+         pref="{{prefs.hardware_acceleration_mode.enabled}}"
+-        label="$i18n{hardwareAccelerationLabel}">
++        label="$i18n{hardwareAccelerationLabel}" hidden>
+       <template is="dom-if" if="[[shouldShowRestart_(
+           prefs.hardware_acceleration_mode.enabled.value)]]">
+         <cr-button on-click="onRestartTap_" slot="more-actions">
+diff --git a/chrome/browser/ui/views/passwords/password_pending_view.cc b/chrome/browser/ui/views/passwords/password_pending_view.cc
+index 3389f29fe16e..61e06a75838c 100644
+--- a/chrome/browser/ui/views/passwords/password_pending_view.cc
++++ b/chrome/browser/ui/views/passwords/password_pending_view.cc
+@@ -317,10 +317,13 @@ PasswordPendingView::~PasswordPendingView() = default;
+ bool PasswordPendingView::Accept() {
+   UpdateUsernameAndPasswordInModel();
+   model()->OnSaveClicked();
++//Gooroom-browser remove saving password function by google-login
++#if !defined(GOOROOM_BUILD)
+   if (model()->ReplaceToShowPromotionIfNeeded()) {
+     ReplaceWithPromo();
+     return false;  // Keep open.
+   }
++#endif
+   return true;
+ }
+ 
+diff --git a/components/components_chromium_strings.grd b/components/components_chromium_strings.grd
+index ef1987ac3196..d0eb36f10126 100644
+--- a/components/components_chromium_strings.grd
++++ b/components/components_chromium_strings.grd
+@@ -244,7 +244,7 @@
+ 
+       <!-- Version UI -->
+       <message name="IDS_VERSION_UI_LICENSE" desc="The label below the copyright message, containing the URLs.">
+-        Chromium is made possible by the <ph name="BEGIN_LINK_CHROMIUM">&lt;a target="_blank" href="$1"&gt;</ph>Chromium<ph name="END_LINK_CHROMIUM">&lt;/a&gt;</ph> open source project and other <ph name="BEGIN_LINK_OSS">&lt;a target="_blank" href="$2"&gt;</ph>open source software<ph name="END_LINK_OSS">&lt;/a&gt;</ph>.
++        Gooroom-browser is made possible by the <ph name="BEGIN_LINK_CHROMIUM">&lt;a target="_blank" href="$1"&gt;</ph>Chromium<ph name="END_LINK_CHROMIUM">&lt;/a&gt;</ph> open source project and other <ph name="BEGIN_LINK_OSS">&lt;a target="_blank" href="$2"&gt;</ph>open source software<ph name="END_LINK_OSS">&lt;/a&gt;</ph>.
+       </message>
+ 
+       <!-- Page Info -->
+diff --git a/components/strings/components_chromium_strings_ko.xtb b/components/strings/components_chromium_strings_ko.xtb
+index c53de85fb784..887c10f75529 100644
+--- a/components/strings/components_chromium_strings_ko.xtb
++++ b/components/strings/components_chromium_strings_ko.xtb
+@@ -6,7 +6,7 @@
+ <translation id="275588974610408078">비정상 종료 보고서는 Gooroom browser에서 사용할 수 없습니다.</translation>
+ <translation id="32013959327000922">안전한 Gooroom 페이지를 보는 중</translation>
+ <translation id="3550966579244642892">Gooroom browser OS 초기 설정이 완료되지 않았습니다.</translation>
+-<translation id="4365115785552740256">Gooroom browser은 <ph name="BEGIN_LINK_CHROMIUM" />Gooroom browser<ph name="END_LINK_CHROMIUM" /> 오픈소스 프로젝트를 비롯한 여러 <ph name="BEGIN_LINK_OSS" />오픈소스 소프트웨어<ph name="END_LINK_OSS" />에 기초해 만들어진 브라우저입니다.</translation>
++<translation id="7813260108943103110">Gooroom browser은 <ph name="BEGIN_LINK_CHROMIUM" />Chromium<ph name="END_LINK_CHROMIUM" /> 오픈소스 프로젝트를 비롯한 여러 <ph name="BEGIN_LINK_OSS" />오픈소스 소프트웨어<ph name="END_LINK_OSS" />에 기초해 만들어진 브라우저입니다.</translation>
+ <translation id="4559775032954821361">Gooroom browser 메뉴 &gt;
+           <ph name="SETTINGS_TITLE" />
+           &gt;
+-- 
+2.20.1
+

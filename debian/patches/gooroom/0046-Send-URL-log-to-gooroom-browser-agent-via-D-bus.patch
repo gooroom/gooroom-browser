@@ -1,18 +1,18 @@
-From fca1e191ed7f92bc9425f9fac8b1f39ab511aa6e Mon Sep 17 00:00:00 2001
+From fa89ed859025c209f7dcd5883348816a18ee4eee Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:32:51 +0900
-Subject: [PATCH 46/66] Send URL-log to gooroom-browser-agent via D-bus
+Date: Fri, 5 Jun 2020 11:47:56 +0900
+Subject: [PATCH 46/79] Send URL-log to gooroom-browser-agent via D-bus
 
 ---
  content/browser/BUILD.gn                      |  1 +
- .../browser/web_contents/web_contents_impl.cc | 34 +++++++++++++++++++
- 2 files changed, 35 insertions(+)
+ .../browser/web_contents/web_contents_impl.cc | 35 +++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index f45ab79f2da7..06480441f4dd 100644
+index b8af9819033a..af517d0a1046 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
-@@ -250,6 +250,7 @@ jumbo_source_set("browser") {
+@@ -251,6 +251,7 @@ jumbo_source_set("browser") {
      "//media/mojo/mojom:remoting",
      "//third_party/blink/public/mojom:embedded_frame_sink_mojo_bindings",
      "//third_party/leveldatabase",
@@ -21,7 +21,7 @@ index f45ab79f2da7..06480441f4dd 100644
  
    sources = [
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index c9f2fddee25a..1b121472a309 100644
+index 2e0019d77476..f1170719ca7d 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -9,10 +9,17 @@
@@ -42,8 +42,8 @@ index c9f2fddee25a..1b121472a309 100644
  #endif
  
  #include "base/bind.h"
-@@ -4632,6 +4639,33 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
-     max_frame_count_ = 1;
+@@ -4622,6 +4629,34 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+         GetMainFrame()->frame_tree_node()->GetFrameTreeSize();
    }
  #if BUILDFLAG(ENABLE_GOOROOM)
 +/* Delete temporarily
@@ -73,6 +73,7 @@ index c9f2fddee25a..1b121472a309 100644
 +    }
 +  }
 +*/
++
  //If browser is switched, the current page is closed.
    if (navigation_handle->IsInMainFrame() && RequestCurrentUserDataDir(navigation_handle->GetURL())) {
      ClosePage();

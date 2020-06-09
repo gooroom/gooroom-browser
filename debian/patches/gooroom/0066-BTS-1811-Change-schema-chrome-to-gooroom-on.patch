@@ -1,0 +1,38 @@
+From 4f3aa114736a36937b449392f903d517a89a59e1 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Jun 2020 14:47:58 +0900
+Subject: [PATCH 66/79] [BTS] 1811 : Change schema(chrome:// to gooroom://) on 
+ tab_hover_card_bubble_view
+
+---
+ chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc b/chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc
+index 1444d7e71d58..faa4114cd239 100644
+--- a/chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc
++++ b/chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc
+@@ -7,6 +7,9 @@
+ #include <algorithm>
+ #include <memory>
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++#endif
+ #include "base/containers/mru_cache.h"
+ #include "base/metrics/field_trial_params.h"
+ #include "base/metrics/histogram_macros.h"
+@@ -700,6 +703,10 @@ void TabHoverCardBubbleView::UpdateCardContent(const Tab* tab) {
+     title_label_->SetElideBehavior(gfx::ELIDE_MIDDLE);
+     domain = l10n_util::GetStringUTF16(IDS_HOVER_CARD_FILE_URL_SOURCE);
+   } else {
++#if defined(GOOROOM_BUILD)
++    // Change "chrome://" to "gooroom://"
++    domain_url = GooroomURLRewrite::ChangeGooroomScheme(domain_url);
++#endif
+     title_label_->SetElideBehavior(gfx::ELIDE_TAIL);
+     title_label_->SetMultiLine(true);
+     domain = url_formatter::FormatUrl(
+-- 
+2.20.1
+

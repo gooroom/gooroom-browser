@@ -1,7 +1,7 @@
-From e2ab3472f2194c678c2cc273944cc58d4d0fad48 Mon Sep 17 00:00:00 2001
+From ed0532d5c21e96fa9e467fc9e4d39ae6dc3f1cef Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Mon, 25 Nov 2019 18:40:43 +0900
-Subject: [PATCH 29/66] pruning settings pages(chrome://settings)
+Date: Thu, 4 Jun 2020 17:57:37 +0900
+Subject: [PATCH 29/79] pruning settings pages(chrome://settings)
 
 ---
  .../browser/resources/settings/about_page/about_page.html   | 2 ++
@@ -12,10 +12,10 @@ Subject: [PATCH 29/66] pruning settings pages(chrome://settings)
  5 files changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
-index 99c0a1c19a17..91e227215af8 100644
+index f50cfca8d7e6..0fbf4baa5f81 100644
 --- a/chrome/browser/resources/settings/about_page/about_page.html
 +++ b/chrome/browser/resources/settings/about_page/about_page.html
-@@ -234,8 +234,10 @@
+@@ -235,8 +235,10 @@
                  title="$i18n{aboutReleaseNotesOffline}" external></cr-link-row>
            </template>
  </if>
@@ -27,10 +27,10 @@ index 99c0a1c19a17..91e227215af8 100644
            <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueTap_"
                hidden="[[!prefs.feedback_allowed.value]]"
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index 7c40d63c9d17..6495fd134c2a 100644
+index 8b4e1a851153..39ac7b9a0059 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
-@@ -158,6 +158,7 @@
+@@ -159,6 +159,7 @@
              <settings-change-password-page></settings-change-password-page>
            </settings-section>
          </template>
@@ -38,15 +38,15 @@ index 7c40d63c9d17..6495fd134c2a 100644
          <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
            <settings-section page-title="$i18n{peoplePageTitle}"
                section="people">
-@@ -175,6 +176,7 @@
-             </settings-autofill-page>
+@@ -185,6 +186,7 @@
+             </settings-privacy-page>
            </settings-section>
          </template>
 +</if>
          <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
              restamp>
            <settings-section page-title="$i18n{appearancePageTitle}"
-@@ -309,6 +311,7 @@
+@@ -319,6 +321,7 @@
                  </settings-printing-page>
                </settings-section>
              </template>
@@ -54,7 +54,7 @@ index 7c40d63c9d17..6495fd134c2a 100644
              <template is="dom-if" if="[[showPage_(pageVisibility.a11y)]]"
                  restamp>
                <settings-section page-title="$i18n{a11yPageTitle}"
-@@ -317,7 +320,8 @@
+@@ -327,7 +330,8 @@
                      page-visibility="[[pageVisibility.a11y]]">
                  </settings-a11y-page>
                </settings-section>
@@ -65,46 +65,47 @@ index 7c40d63c9d17..6495fd134c2a 100644
              <settings-section page-title="$i18n{systemPageTitle}"
                  section="system">
 diff --git a/chrome/browser/resources/settings/printing_page/printing_page.html b/chrome/browser/resources/settings/printing_page/printing_page.html
-index ca572d61d8dc..b048d3bcd78c 100644
+index c5e5854a730e..e9a7dc5d8e26 100644
 --- a/chrome/browser/resources/settings/printing_page/printing_page.html
 +++ b/chrome/browser/resources/settings/printing_page/printing_page.html
-@@ -27,9 +27,11 @@
+@@ -28,10 +28,12 @@
          <cr-link-row label="$i18n{localPrintersTitle}"
              on-click="onTapLocalPrinters_" external></cr-link-row>
  </if>
 +<if expr="not _gooroom">
          <cr-link-row class="hr" id="cloudPrinters"
-             label="$i18n{cloudPrintersTitle}" on-click="onTapCloudPrinters_">
+             label="$i18n{cloudPrintersTitle}" on-click="onTapCloudPrinters_"
+             role-description="$i18n{subpageArrowRoleDescription}">
          </cr-link-row>
 +</if>
        </div>
  <if expr="chromeos">
        <template is="dom-if" route-path="/cupsPrinters">
 diff --git a/chrome/browser/resources/settings/privacy_page/personalization_options.html b/chrome/browser/resources/settings/privacy_page/personalization_options.html
-index 34d663a378fd..24f672bf2c37 100644
+index 4a02d7329cb2..d367c424da1e 100644
 --- a/chrome/browser/resources/settings/privacy_page/personalization_options.html
 +++ b/chrome/browser/resources/settings/privacy_page/personalization_options.html
-@@ -41,6 +41,7 @@
+@@ -58,6 +58,7 @@
          label="$i18n{linkDoctorPref}"
          sub-label="$i18n{linkDoctorPrefDesc}">
      </settings-toggle-button>
 +<if expr="not _gooroom">
-     <settings-toggle-button pref="{{prefs.safebrowsing.enabled}}"
-         label="$i18n{safeBrowsingEnableProtection}"
-         sub-label="$i18n{safeBrowsingEnableProtectionDesc}">
-@@ -63,6 +64,7 @@
-         sub-label="$i18n{safeBrowsingEnableExtendedReportingDesc}"
-         disabled="[[getDisabledExtendedSafeBrowsing_(prefs.*)]]">
-     </settings-toggle-button>
+     <template is="dom-if" if="[[!privacySettingsRedesignEnabled_]]">
+       <settings-toggle-button id="safeBrowsingToggle"
+           pref="{{prefs.safebrowsing.enabled}}"
+@@ -80,6 +81,7 @@
+               "onSafeBrowsingReportingToggleChange_">
+       </settings-toggle-button>
+     </template>
 +</if>
  <if expr="_google_chrome">
  <if expr="chromeos">
      <settings-toggle-button pref="{{prefs.cros.metrics.reportingEnabled}}"
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 0bcf8487656c..63a478f082c7 100644
+index 95b16d538947..c4f88b709e07 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-@@ -126,10 +126,12 @@
+@@ -127,10 +127,12 @@
          $i18n{multidevicePageTitle}
        </a>
  </if>
@@ -117,7 +118,7 @@ index 0bcf8487656c..63a478f082c7 100644
        <a id="autofill" href="/autofill"
            hidden="[[!pageVisibility.autofill]]">
          <iron-icon icon="settings:assignment"></iron-icon>
-@@ -209,10 +211,12 @@
+@@ -215,10 +217,12 @@
              <iron-icon icon="cr:print"></iron-icon>
              $i18n{printingPageTitle}
            </a>

@@ -1,0 +1,26 @@
+From 075d3c4c2d8c2b4e4545f15bc38bd67df96926cd Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Jun 2020 14:32:08 +0900
+Subject: [PATCH 59/79] BugTrackingSystem 1656 : 'devtools://' scheme is 
+ excluded  from trust/untrust judgment
+
+---
+ content/browser/web_contents/web_contents_impl.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
+index 4bbff8b664d1..9428f5b0f24d 100644
+--- a/content/browser/web_contents/web_contents_impl.cc
++++ b/content/browser/web_contents/web_contents_impl.cc
+@@ -4445,7 +4445,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+   //Chrome pages are excluded from trust/untrust judgment.
+   if (url.scheme() == "chrome" || url.scheme() == "chrome-extension" ||
+       url.scheme() == "chrome-search" || url.scheme() == "chrome-devtools" ||
+-      url.scheme() == "about")
++      url.scheme() == "about" || url.scheme() == "devtools")
+     return false;
+ 
+   if (url.spec().find("chrome/newtab") != std::string::npos)
+-- 
+2.20.1
+

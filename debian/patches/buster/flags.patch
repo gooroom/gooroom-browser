@@ -1,0 +1,51 @@
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -2515,7 +2515,7 @@ if (is_win || is_android || is_chromeos)
+ # Initialize all variables on the stack if needed.
+ config("default_init_stack_vars") {
+   cflags = []
+-  if (init_stack_vars && is_clang && !is_nacl && !using_sanitizer) {
++  if (false) {
+     cflags += [ "-ftrivial-auto-var-init=pattern" ]
+   }
+ }
+--- a/third_party/angle/BUILD.gn
++++ b/third_party/angle/BUILD.gn
+@@ -139,7 +139,6 @@ config("extra_warnings") {
+   if (is_clang) {
+     cflags += [
+       "-Wconditional-uninitialized",
+-      "-Wextra-semi-stmt",
+       "-Wfloat-conversion",
+       "-Winconsistent-missing-destructor-override",
+       "-Wmissing-field-initializers",
+--- a/third_party/angle/src/compiler/preprocessor/preprocessor.l
++++ b/third_party/angle/src/compiler/preprocessor/preprocessor.l
+@@ -51,7 +51,6 @@ IF YOU MODIFY THIS FILE YOU ALSO NEED TO
+ #pragma clang diagnostic ignored "-Wunknown-warning-option"
+ #endif
+ // Flex isn't semi-colon clean.
+-#pragma clang diagnostic ignored "-Wextra-semi-stmt"
+ #pragma clang diagnostic ignored "-Wunreachable-code"
+ #endif
+ 
+--- a/third_party/angle/src/compiler/translator/glslang.l
++++ b/third_party/angle/src/compiler/translator/glslang.l
+@@ -48,7 +48,6 @@ WHICH GENERATES THE GLSL ES LEXER (glsla
+ #pragma clang diagnostic ignored "-Wunknown-warning-option"
+ #endif
+ // Flex isn't semi-colon clean.
+-#pragma clang diagnostic ignored "-Wextra-semi-stmt"
+ #pragma clang diagnostic ignored "-Wunreachable-code"
+ #endif
+ }
+--- a/third_party/pffft/BUILD.gn
++++ b/third_party/pffft/BUILD.gn
+@@ -22,7 +22,6 @@ config("common_config") {
+ 
+ static_library("pffft") {
+   configs += [ ":common_config" ]
+-  cflags = [ "-Wno-unused-but-set-variable" ]
+   sources = [
+     "src/pffft.c",
+     "src/pffft.h",

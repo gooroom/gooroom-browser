@@ -1,7 +1,7 @@
-From ed33fa4c4cb588b3dfb2d7fe3fb0a8609a68053b Mon Sep 17 00:00:00 2001
+From afe11a1fa1b40991fc92542f023dc634fdfe689d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:20:21 +0900
-Subject: [PATCH 41/66] Add Pdf switching strings on settings page
+Date: Fri, 5 Jun 2020 11:41:02 +0900
+Subject: [PATCH 41/79] Add Pdf switching strings on settings page
 
 ---
  .../resources/generated_resources_ko.xtb       |  2 ++
@@ -12,7 +12,7 @@ Subject: [PATCH 41/66] Add Pdf switching strings on settings page
  5 files changed, 30 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
-index a625482403ef..ec41efbe257f 100644
+index 5ae97dd8a3fb..56a83038ab2e 100644
 --- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
 +++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
 @@ -4,6 +4,8 @@
@@ -21,16 +21,16 @@ index a625482403ef..ec41efbe257f 100644
  <translation id="8451170594022250242">Gooroom-browser를 종료할 때까지 Flash 설정이 유지됩니다.</translation>
 +<translation id="2851514022662865814">Gooroom Browser에서 PDF 파일을 자동으로 여는 대신 다운로드</translation>
 +<translation id="5065357668282619421">Gooroom Browser에서 PDF 파일을 자동으로 열기</translation>
- <translation id="1002469766576243227">이 인증 서비스는 <ph name="EXTENSION_NAME" />에서 호스팅합니다</translation>
  <translation id="1003088604756913841">새 <ph name="APP" /> 창에서 링크 열기</translation>
  <translation id="1004218526896219317">사이트 액세스</translation>
+ <translation id="1005274289863221750">마이크와 카메라 사용</translation>
 diff --git a/chrome/app/gooroom/settings_strings.grdp b/chrome/app/gooroom/settings_strings.grdp
-index 6b2cdcbc0f22..893e6ec03ba4 100644
+index 6b19e3db7863..cf23bdfed5c6 100644
 --- a/chrome/app/gooroom/settings_strings.grdp
 +++ b/chrome/app/gooroom/settings_strings.grdp
-@@ -3293,6 +3293,9 @@
-   <message name="IDS_SETTINGS_SITE_SETTINGS_PDF_DOWNLOAD_PDFS" desc="Label for downloading PDF documents instead of automatically opening them in Chrome.">
-     Download PDF files instead of automatically opening them in Gooroom-browser
+@@ -3362,6 +3362,9 @@
+   <message name="IDS_SETTINGS_SITE_SETTINGS_PDF_DOWNLOAD_PDFS" desc="Label for downloading PDF documents instead of automatically opening them in Gooroom browser.">
+     Download PDF files instead of automatically opening them in Gooroom browser
    </message>
 +  <message name="IDS_SETTINGS_SITE_SETTINGS_PDFS_AUTO_OPEN" desc="Label for downloading PDF documents instead of automatically opening them in Chrome.">
 +    automatically opening them in Gooroom-browser
@@ -98,10 +98,10 @@ index 66f61a6db59b..cd0e79ac6bd5 100644
 +
  });
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index b20a732738e6..a7cce8986b6c 100644
+index f86fe4326ae6..0dcd45bb2f3b 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-@@ -2838,6 +2838,8 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
+@@ -2878,6 +2878,8 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
      {"siteSettingsPdfDocuments", IDS_SETTINGS_SITE_SETTINGS_PDF_DOCUMENTS},
      {"siteSettingsPdfDownloadPdfs",
       IDS_SETTINGS_SITE_SETTINGS_PDF_DOWNLOAD_PDFS},

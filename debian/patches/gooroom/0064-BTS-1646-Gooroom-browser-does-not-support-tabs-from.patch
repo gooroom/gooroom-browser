@@ -1,15 +1,15 @@
-From 467ec8ba86e94cb3ee0098d70b22930fa0e90b6f Mon Sep 17 00:00:00 2001
+From 945b8e6cbc7bba9678b1cbf69db7cd955bf0921f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Tue, 3 Dec 2019 10:44:44 +0900
-Subject: [PATCH 64/66] [BTS} 1646 : Gooroom browser does not support tabs from
-  other devices.
+Date: Fri, 5 Jun 2020 14:46:35 +0900
+Subject: [PATCH 64/79] [BTS} 1646 : Gooroom browser does not support tabs from
+   other devices.
 
 ---
  chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc | 7 ++++---
  1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc b/chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc
-index c7a513b6b71d..5a2167b19cf7 100644
+index 8abeb300706e..ec8dbd1693a9 100644
 --- a/chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc
 +++ b/chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc
 @@ -448,9 +448,10 @@ void RecentTabsSubMenuModel::BuildTabsFromOtherDevices() {

@@ -1,7 +1,7 @@
-From 97afe4119428be1b3e25daa32aff7a6c5c31623a Mon Sep 17 00:00:00 2001
+From 1f5e2c7bdd270dfa7afc87440c109d7b4640b464 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:07:22 +0900
-Subject: [PATCH 37/66] Add korean language on gooroom://settings page.
+Date: Fri, 5 Jun 2020 11:32:30 +0900
+Subject: [PATCH 37/79] Add korean language on gooroom://settings page.
 
 ---
  chrome/app/gooroom/resources/generated_resources_ko.xtb      | 3 ++-
@@ -10,7 +10,7 @@ Subject: [PATCH 37/66] Add korean language on gooroom://settings page.
  3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
-index a45a8199100f..a625482403ef 100644
+index 23aaefdb47f7..5ae97dd8a3fb 100644
 --- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
 +++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
 @@ -3,6 +3,7 @@
@@ -18,10 +18,10 @@ index a45a8199100f..a625482403ef 100644
  <translation id="2273707414284427980">웹 소켓 사용 설정</translation>
  <translation id="4851515493665413363">웹 워커 사용 설정</translation>
 +<translation id="8451170594022250242">Gooroom-browser를 종료할 때까지 Flash 설정이 유지됩니다.</translation>
- <translation id="1002469766576243227">이 인증 서비스는 <ph name="EXTENSION_NAME" />에서 호스팅합니다</translation>
  <translation id="1003088604756913841">새 <ph name="APP" /> 창에서 링크 열기</translation>
  <translation id="1004218526896219317">사이트 액세스</translation>
-@@ -824,7 +825,7 @@
+ <translation id="1005274289863221750">마이크와 카메라 사용</translation>
+@@ -860,7 +861,7 @@
  <translation id="2200356397587687044">계속하려면 Gooroom browser에 권한이 필요함</translation>
  <translation id="220138918934036434">버튼 숨기기</translation>
  <translation id="2202898655984161076">프린터를 나열하는 데 문제가 발생했습니다. <ph name="CLOUD_PRINT_NAME" />에 성공적으로 등록되지 못한 프린터가 있을 수 있습니다.</translation>
@@ -31,10 +31,10 @@ index a45a8199100f..a625482403ef 100644
  <translation id="220792432208469595">사용 및 진단 데이터를 보냅니다. 이 기기는 현재 진단, 기기 및 앱 사용 데이터를 Google에 자동으로 보내고 있습니다. 이 데이터는 시스템 및 앱 안정성 등을 개선하는 데 활용됩니다. 일부 수집 데이터는 Google 앱과 파트너(Android 개발자 등)에게도 도움을 줍니다. 이 설정은 소유자가 지정합니다. 추가 웹 및 앱 활동이 사용 설정되어 있다면 이 데이터가 Google 계정에 저장될 수 있습니다. <ph name="BEGIN_LINK1" />자세히 알아보기<ph name="END_LINK1" /></translation>
  <translation id="220858061631308971">'<ph name="DEVICE_NAME" />'의 PIN 코드를 입력하세요:</translation>
 diff --git a/chrome/app/gooroom/settings_strings.grdp b/chrome/app/gooroom/settings_strings.grdp
-index 53d03c3c4b47..6b2cdcbc0f22 100644
+index 112f0457b52e..6b19e3db7863 100644
 --- a/chrome/app/gooroom/settings_strings.grdp
 +++ b/chrome/app/gooroom/settings_strings.grdp
-@@ -3077,7 +3077,7 @@
+@@ -3140,7 +3140,7 @@
      </message>
    </if>
    <message name="IDS_SETTINGS_SEARCH_EXPLANATION" desc="Explanation for the search engine dropdown setting.">
@@ -44,13 +44,13 @@ index 53d03c3c4b47..6b2cdcbc0f22 100644
    <message name="IDS_SETTINGS_SEARCH_MANAGE_SEARCH_ENGINES" desc="Label for the Manage Search Engines button.">
      Manage search engines
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index ee7b213ba7b4..b20a732738e6 100644
+index 1c4cbc72ba24..f86fe4326ae6 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-@@ -2625,9 +2625,8 @@ void AddSearchStrings(content::WebUIDataSource* html_source, Profile* profile) {
-   };
-   AddLocalizedStringsBulk(html_source, localized_strings,
-                           base::size(localized_strings));
+@@ -2661,9 +2661,8 @@ void AddSearchStrings(content::WebUIDataSource* html_source, Profile* profile) {
+   html_source->AddLocalizedString("searchPageTitle", IDS_SETTINGS_SEARCH);
+ #endif
+ 
 -  base::string16 search_explanation_text = l10n_util::GetStringFUTF16(
 -      IDS_SETTINGS_SEARCH_EXPLANATION,
 -      base::ASCIIToUTF16(chrome::kOmniboxLearnMoreURL));

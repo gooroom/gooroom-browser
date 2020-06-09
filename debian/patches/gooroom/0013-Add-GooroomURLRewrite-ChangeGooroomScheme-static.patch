@@ -1,18 +1,18 @@
-From 480a323ecedf47c03d860588af80c57942ebc620 Mon Sep 17 00:00:00 2001
+From ec163b8feca74c9be49edad528bbc334bb39535e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 21 Nov 2019 10:15:26 +0900
-Subject: [PATCH 13/66] Add 'GooroomURLRewrite::ChangeGooroomScheme' static 
+Date: Wed, 3 Jun 2020 10:14:53 +0900
+Subject: [PATCH 13/79] Add 'GooroomURLRewrite::ChangeGooroomScheme' static 
  function
 
 ---
- chrome/browser/chrome_content_browser_client.cc       | 11 +++++++++++
- .../ui/toolbar/chrome_location_bar_model_delegate.cc  |  8 ++++++++
- gooroom/URLRewrite/gooroom_url_rewrite.cc             | 10 ++++++++++
- gooroom/URLRewrite/gooroom_url_rewrite.h              |  2 ++
- 4 files changed, 31 insertions(+)
+ chrome/browser/chrome_content_browser_client.cc        |  8 ++++++++
+ .../ui/toolbar/chrome_location_bar_model_delegate.cc   |  8 ++++++++
+ gooroom/URLRewrite/gooroom_url_rewrite.cc              | 10 ++++++++++
+ gooroom/URLRewrite/gooroom_url_rewrite.h               |  2 ++
+ 4 files changed, 28 insertions(+)
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index a369a71d848f..467cb1903767 100644
+index 5cdfec3a834b..5a2548fe02a7 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -9,6 +9,10 @@
@@ -26,7 +26,7 @@ index a369a71d848f..467cb1903767 100644
  #include "base/base_switches.h"
  #include "base/bind.h"
  #include "base/bind_helpers.h"
-@@ -1118,6 +1122,13 @@ ChromeContentBrowserClient::ChromeContentBrowserClient(
+@@ -1148,6 +1152,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient(
  #endif
  
    extra_parts_.push_back(new ChromeContentBrowserClientPerformanceManagerPart);
@@ -34,9 +34,6 @@ index a369a71d848f..467cb1903767 100644
 +#if BUILDFLAG(ENABLE_GOOROOM)
 +  extra_parts_.push_back(new GooroomURLRewrite);
 +#endif
-+
-+  gpu_binder_registry_.AddInterface(
-+      base::Bind(&metrics::CallStackProfileCollector::Create));
  }
  
  ChromeContentBrowserClient::~ChromeContentBrowserClient() {

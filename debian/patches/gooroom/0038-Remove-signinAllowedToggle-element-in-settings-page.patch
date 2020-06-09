@@ -1,32 +1,32 @@
-From 032ddd05b774fee8974ec48691f9118c146f7cbc Mon Sep 17 00:00:00 2001
+From 8f86dea168e6331e5d4c4da1ccd217f36d532b6a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:11:48 +0900
-Subject: [PATCH 38/66] Remove 'signinAllowedToggle' element in settings page
+Date: Fri, 5 Jun 2020 11:34:16 +0900
+Subject: [PATCH 38/79] Remove 'signinAllowedToggle' element in settings page
 
 ---
  .../browser/resources/settings/privacy_page/privacy_page.html   | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 0e06cbfcaeec..30fdc0fe5041 100644
+index d1285bab6e44..fb22b7ba6846 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -95,6 +95,7 @@
-             on-click="onSyncAndGoogleServicesClick_"
-             hidden="[[!unifiedConsentEnabled_]]"></cr-link-row>
+@@ -127,6 +127,7 @@
+             </settings-toggle-button>
+           </template>
  <if expr="not chromeos">
 +<if expr="not _gooroom">
-         <settings-toggle-button id="signinAllowedToggle"
-             pref="{{prefs.signin.allowed_on_next_startup}}"
-             label="$i18n{signinAllowedTitle}"
-@@ -102,6 +103,7 @@
-             on-settings-boolean-control-change="onSigninAllowedChange_"
-             no-set-pref>
-         </settings-toggle-button>
+         <template is="dom-if" if="[[!privacySettingsRedesignEnabled_]]">
+           <settings-toggle-button id="signinAllowedToggle"
+               pref="{{prefs.signin.allowed_on_next_startup}}"
+@@ -136,6 +137,7 @@
+               no-set-pref>
+           </settings-toggle-button>
+         </template>
 +</if><!-- not _gooroom-->
  </if><!-- not chromeos -->
-         <template is="dom-if" if="[[!unifiedConsentEnabled_]]">
-           <settings-personalization-options prefs="{{prefs}}"
+           <settings-toggle-button id="doNotTrack"
+               pref="{{prefs.enable_do_not_track}}" label="$i18n{doNotTrack}"
 -- 
 2.20.1
 

@@ -1,7 +1,7 @@
-From feff8036a391210e53f3017382c2811e356932f0 Mon Sep 17 00:00:00 2001
+From 5226961ea988fc2294e78e070cb969fc43e02bd7 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 27 Nov 2019 11:51:13 +0900
-Subject: [PATCH 30/66] enable/disable WebSocket  according to policy, but, 
+Date: Fri, 5 Jun 2020 10:23:37 +0900
+Subject: [PATCH 30/79] enable/disable WebSocket  according to policy, but, 
  need a patch to fix an error when scrolling
 
 ---
@@ -28,7 +28,7 @@ Subject: [PATCH 30/66] enable/disable WebSocket  according to policy, but,
  create mode 100644 gooroom/content/gooroom_safety_policy_part.h
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 467cb1903767..de215bfe4fa3 100644
+index 5a2548fe02a7..8ed15a5e22f4 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -11,6 +11,7 @@
@@ -39,19 +39,19 @@ index 467cb1903767..de215bfe4fa3 100644
  #endif
  
  #include "base/base_switches.h"
-@@ -1125,6 +1126,7 @@ ChromeContentBrowserClient::ChromeContentBrowserClient(
+@@ -1155,6 +1156,7 @@ ChromeContentBrowserClient::ChromeContentBrowserClient(
  
  #if BUILDFLAG(ENABLE_GOOROOM)
    extra_parts_.push_back(new GooroomURLRewrite);
 +  extra_parts_.push_back(new content::GooroomSafetyPolicyPart);
  #endif
+ }
  
-   gpu_binder_registry_.AddInterface(
 diff --git a/content/public/common/common_param_traits_macros.h b/content/public/common/common_param_traits_macros.h
-index 5411d32dbfd1..948afbb5536a 100644
+index fcbfa6b8a81e..3959123951a7 100644
 --- a/content/public/common/common_param_traits_macros.h
 +++ b/content/public/common/common_param_traits_macros.h
-@@ -104,7 +104,12 @@ IPC_STRUCT_TRAITS_BEGIN(content::Referrer)
+@@ -99,7 +99,12 @@ IPC_STRUCT_TRAITS_BEGIN(content::Referrer)
    IPC_STRUCT_TRAITS_MEMBER(policy)
  IPC_STRUCT_TRAITS_END()
  
@@ -65,10 +65,10 @@ index 5411d32dbfd1..948afbb5536a 100644
    IPC_STRUCT_TRAITS_MEMBER(fixed_font_family_map)
    IPC_STRUCT_TRAITS_MEMBER(serif_font_family_map)
 diff --git a/content/public/common/web_preferences.cc b/content/public/common/web_preferences.cc
-index 4b765944962d..261e89fa3723 100644
+index b982618bef48..6a7357efb94c 100644
 --- a/content/public/common/web_preferences.cc
 +++ b/content/public/common/web_preferences.cc
-@@ -224,6 +224,10 @@ WebPreferences::WebPreferences()
+@@ -223,6 +223,10 @@ WebPreferences::WebPreferences()
        presentation_receiver(false),
        media_controls_enabled(true),
        do_not_update_selection_on_mutating_selection_range(false),
@@ -77,10 +77,10 @@ index 4b765944962d..261e89fa3723 100644
 +      webworker_enabled(true),
 +#endif
        autoplay_policy(AutoplayPolicy::kDocumentUserActivationRequired),
-       preferred_color_scheme(blink::PreferredColorScheme::kNoPreference),
        low_priority_iframes_threshold(net::EFFECTIVE_CONNECTION_TYPE_UNKNOWN),
+       picture_in_picture_enabled(true),
 diff --git a/content/public/common/web_preferences.h b/content/public/common/web_preferences.h
-index 700cba9043f0..5d5a2a124c68 100644
+index 04c03cfcb774..a4cf18de7c57 100644
 --- a/content/public/common/web_preferences.h
 +++ b/content/public/common/web_preferences.h
 @@ -310,6 +310,11 @@ struct CONTENT_EXPORT WebPreferences {
@@ -96,10 +96,10 @@ index 700cba9043f0..5d5a2a124c68 100644
    AutoplayPolicy autoplay_policy;
  
 diff --git a/content/renderer/render_view_impl.cc b/content/renderer/render_view_impl.cc
-index 16b6279b2228..ecb8f985d315 100644
+index 7bf0464c14f8..140f58c4592f 100644
 --- a/content/renderer/render_view_impl.cc
 +++ b/content/renderer/render_view_impl.cc
-@@ -1011,6 +1011,20 @@ void RenderView::ApplyWebPreferences(const WebPreferences& prefs,
+@@ -1006,6 +1006,20 @@ void RenderView::ApplyWebPreferences(const WebPreferences& prefs,
      NOTREACHED();
    }
  
@@ -121,7 +121,7 @@ index 16b6279b2228..ecb8f985d315 100644
    web_view->SetMaximumLegibleScale(prefs.default_maximum_page_scale_factor);
  #endif
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 693de4f4bfbe..15d43b09e6e4 100644
+index 0d4481be38b4..345c67f370cc 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -262,6 +262,10 @@ if (!is_android && !is_mac) {
@@ -330,7 +330,7 @@ index 000000000000..00f320e8bb69
 +#endif  // GOOROOM_SAFETY_POLICY_PART_H_
 +
 diff --git a/third_party/blink/public/platform/web_runtime_features.h b/third_party/blink/public/platform/web_runtime_features.h
-index d0b1bcb62edc..e3bf004b5a3f 100644
+index e95288c7da4f..f0fe2f51bfe1 100644
 --- a/third_party/blink/public/platform/web_runtime_features.h
 +++ b/third_party/blink/public/platform/web_runtime_features.h
 @@ -41,6 +41,11 @@ namespace blink {
@@ -346,7 +346,7 @@ index d0b1bcb62edc..e3bf004b5a3f 100644
    // Source/platform/runtime_enabled_features.json5.
    BLINK_PLATFORM_EXPORT static void EnableExperimentalFeatures(bool);
 diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
-index c3a3cd6872da..a3caead3e64a 100644
+index eaca908f2210..859f25b3e114 100644
 --- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 +++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 @@ -30,6 +30,19 @@
@@ -406,10 +406,10 @@ index c3a3cd6872da..a3caead3e64a 100644
      case WebSocketCommon::ConnectResult::kSuccess:
        DCHECK(!exception_state.HadException());
 diff --git a/third_party/blink/renderer/platform/BUILD.gn b/third_party/blink/renderer/platform/BUILD.gn
-index a3f1ea12b1e1..633b67104e82 100644
+index 2cdb42f959bb..afb66179b73d 100644
 --- a/third_party/blink/renderer/platform/BUILD.gn
 +++ b/third_party/blink/renderer/platform/BUILD.gn
-@@ -1416,6 +1416,12 @@ jumbo_component("platform") {
+@@ -1437,6 +1437,12 @@ jumbo_component("platform") {
      "windows_keyboard_codes.h",
    ]
  
@@ -423,10 +423,10 @@ index a3f1ea12b1e1..633b67104e82 100644
  
    # Add in the generated files.
 diff --git a/third_party/blink/renderer/platform/exported/web_runtime_features.cc b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-index bbeca4e606c1..9a0588982304 100644
+index a9da7db26386..246374bb4502 100644
 --- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 +++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-@@ -33,6 +33,10 @@
+@@ -34,6 +34,10 @@
  #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
  #include "third_party/blink/renderer/platform/wtf/assertions.h"
  
@@ -437,7 +437,7 @@ index bbeca4e606c1..9a0588982304 100644
  namespace blink {
  
  void WebRuntimeFeatures::EnableBlockingFocusWithoutUserActivation(bool enable) {
-@@ -609,6 +613,16 @@ void WebRuntimeFeatures::EnableDisplayCutoutAPI(bool enable) {
+@@ -606,6 +610,16 @@ void WebRuntimeFeatures::EnableDisplayCutoutAPI(bool enable) {
    RuntimeEnabledFeatures::SetDisplayCutoutAPIEnabled(enable);
  }
  

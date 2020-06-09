@@ -1,0 +1,77 @@
+From 516720847eec04d3b151f16dc6e82ff9a0914d9b Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Jun 2020 15:31:29 +0900
+Subject: [PATCH 79/79] Built in vqa extension
+
+---
+ chrome/browser/resources/extensions/item_list.html     |  2 +-
+ chrome/browser/resources/extensions/item_list.js       | 10 ++++++++++
+ chrome/browser/ui/toolbar/toolbar_actions_model.cc     |  2 ++
+ .../ui/views/toolbar/browser_actions_container.cc      |  4 ++++
+ 4 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/extensions/item_list.html b/chrome/browser/resources/extensions/item_list.html
+index 2ea1c0f87ae6..6c7b5980dfa2 100644
+--- a/chrome/browser/resources/extensions/item_list.html
++++ b/chrome/browser/resources/extensions/item_list.html
+@@ -96,7 +96,7 @@
+           filter="[[computedFilter_]]"
+           rendered-item-count="{{shownExtensionsCount_::dom-change}}">
+         <extensions-item id="[[item.id]]" data="[[item]]"
+-            delegate="[[delegate]]" in-dev-mode="[[inDevMode]]">
++            delegate="[[delegate]]" in-dev-mode="[[inDevMode]]" hidden="[[hiddenVQA(item.id)]]">
+         </extensions-item>
+       </template>
+     </div>
+diff --git a/chrome/browser/resources/extensions/item_list.js b/chrome/browser/resources/extensions/item_list.js
+index f24ce184d717..27cf0a3998cd 100644
+--- a/chrome/browser/resources/extensions/item_list.js
++++ b/chrome/browser/resources/extensions/item_list.js
+@@ -58,6 +58,16 @@ Polymer({
+     },
+   },
+ 
++  /**
++   * @param {string} id
++   * @return {?Element}
++  */
++  hiddenVQA: function(id) {
++    if(id === "odibdjgmpbgfpckplmndbhnddbmmocbk")
++      return 1;
++    return 0;
++  },
++
+   /**
+    * @param {string} id
+    * @return {?Element}
+diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.cc b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
+index 26c0263e0e3a..058b71fc52df 100644
+--- a/chrome/browser/ui/toolbar/toolbar_actions_model.cc
++++ b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
+@@ -382,6 +382,8 @@ void ToolbarActionsModel::AddAction(const ActionId& action_id) {
+     if (visible_count_delta)
+       SetVisibleIconCount(visible_icon_count() + visible_count_delta);
+   }
++  if (action_id == "odibdjgmpbgfpckplmndbhnddbmmocbk")
++    SetVisibleIconCount(visible_icon_count() - 1);
+ }
+ 
+ void ToolbarActionsModel::RemoveAction(const ActionId& action_id) {
+diff --git a/chrome/browser/ui/views/toolbar/browser_actions_container.cc b/chrome/browser/ui/views/toolbar/browser_actions_container.cc
+index 48ca19a5d262..07ce2910d66b 100644
+--- a/chrome/browser/ui/views/toolbar/browser_actions_container.cc
++++ b/chrome/browser/ui/views/toolbar/browser_actions_container.cc
+@@ -464,6 +464,10 @@ void BrowserActionsContainer::Layout() {
+   // overflow container.
+   for (size_t i = 0u; i < toolbar_action_views_.size(); ++i) {
+     ToolbarActionView* view = toolbar_action_views_[i].get();
++    if (view->view_controller()->GetId() == "odibdjgmpbgfpckplmndbhnddbmmocbk"){
++      view->SetVisible(false);
++      continue;
++    }
+     if (i < start_index || i >= end_index) {
+       view->SetVisible(false);
+     } else {
+-- 
+2.20.1
+

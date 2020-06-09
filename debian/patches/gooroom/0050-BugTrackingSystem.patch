@@ -1,7 +1,7 @@
-From aa29d75468c8f62c1e9f8dcff310ebf29c8e2ec5 Mon Sep 17 00:00:00 2001
+From 8a18a3350468e9c3aa5d223cd703564742bc8eb8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:49:43 +0900
-Subject: [PATCH 50/66] BugTrackingSystem
+Date: Fri, 5 Jun 2020 12:13:05 +0900
+Subject: [PATCH 50/79] BugTrackingSystem
 
 697 : Change strings 'chrome&google' to gooroom on gooroom:// pages
 697-6 : Change default ntp (google webstore -> gooroom.kr)
@@ -20,10 +20,10 @@ Subject: [PATCH 50/66] BugTrackingSystem
  11 files changed, 29 insertions(+), 12 deletions(-)
 
 diff --git a/chrome/app/gooroom/generated_resources.grd b/chrome/app/gooroom/generated_resources.grd
-index 44ff074cffaa..8a8cff1c6eab 100644
+index 07a0dbb301c8..9484ea189230 100644
 --- a/chrome/app/gooroom/generated_resources.grd
 +++ b/chrome/app/gooroom/generated_resources.grd
-@@ -4292,6 +4292,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
+@@ -4421,6 +4421,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
        <message name="IDS_EXTENSION_WEB_STORE_TITLE_SHORT" desc="Shortened version of text for the Chrome Web Store">
          Web Store
        </message>
@@ -34,7 +34,7 @@ index 44ff074cffaa..8a8cff1c6eab 100644
          Show Details
        </message>
 diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
-index 78628eef7596..2e3e967ac51a 100644
+index b00e8ff1d2d8..be81aa2f333e 100644
 --- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
 +++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
 @@ -1,6 +1,7 @@
@@ -60,10 +60,10 @@ index 83aea70460f4..285e0a6eff02 100644
        <!-- The URLs for Adobe Flash settings. We cannot rely on -->
        <!-- the automatic expansion of GRITLANGCODE here because Adobe does -->
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index c20ea5275363..e066f9238f20 100644
+index 8adf2bd4ce86..582b76057a44 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
-@@ -145,6 +145,7 @@
+@@ -143,6 +143,7 @@
          <structure type="chrome_scaled_image" name="IDR_ICON_USER_MANAGER_TUTORIAL_COMPLETE" file="common/user_manager_tutorial/complete.png" />
          </if>
        </if>
@@ -72,7 +72,7 @@ index c20ea5275363..e066f9238f20 100644
        <structure type="chrome_scaled_image" name="IDR_INPUT_ALERT_MENU" file="common/input_alert_menu.png" />
        <if expr="enable_service_discovery">
 diff --git a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-index 2d4001283821..164c75e4e935 100644
+index 7af74b204cfe..bdb152d2eabe 100644
 --- a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
 +++ b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
 @@ -65,7 +65,7 @@ constexpr char kSyncDataKey[] = "about_sync_data";
@@ -129,7 +129,7 @@ index 2b00d73bfa25..b093e1ce21f1 100644
  </div>
  
 diff --git a/chrome/browser/ui/webui/about_ui.cc b/chrome/browser/ui/webui/about_ui.cc
-index 560b170d090f..d23cdecc8774 100644
+index 948e17345ab4..1f8ebc31ab6a 100644
 --- a/chrome/browser/ui/webui/about_ui.cc
 +++ b/chrome/browser/ui/webui/about_ui.cc
 @@ -13,6 +13,7 @@
@@ -140,7 +140,7 @@ index 560b170d090f..d23cdecc8774 100644
  #include "base/bind.h"
  #include "base/bind_helpers.h"
  #include "base/callback.h"
-@@ -541,22 +542,28 @@ namespace {
+@@ -540,22 +541,28 @@ namespace {
  
  std::string ChromeURLs() {
    std::string html;
@@ -174,7 +174,7 @@ index 560b170d090f..d23cdecc8774 100644
    AppendFooter(&html);
    return html;
 diff --git a/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc b/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
-index e2f74452ace5..dc0a7d833462 100644
+index b4184f993e15..b910038f73e5 100644
 --- a/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
 +++ b/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
 @@ -192,6 +192,8 @@ void SupervisedUserInternalsMessageHandler::SendBasicInfo() {
@@ -187,7 +187,7 @@ index e2f74452ace5..dc0a7d833462 100644
                    ChildAccountService::IsChildAccountDetectionEnabled());
  
 diff --git a/content/browser/resources/service_worker/serviceworker_internals.html b/content/browser/resources/service_worker/serviceworker_internals.html
-index 48422886cda8..707b7abdd376 100644
+index 064716b44a67..f953eaa4747d 100644
 --- a/content/browser/resources/service_worker/serviceworker_internals.html
 +++ b/content/browser/resources/service_worker/serviceworker_internals.html
 @@ -2,7 +2,7 @@

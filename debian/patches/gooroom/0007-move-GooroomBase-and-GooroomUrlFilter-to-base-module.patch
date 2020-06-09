@@ -1,7 +1,7 @@
-From 3fec271782fc8636d4927d2eb9b593e16a2756ca Mon Sep 17 00:00:00 2001
+From 2e61fa8a1c5702b69001fcf359e0a17918da684f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 20 Nov 2019 20:43:40 +0900
-Subject: [PATCH 07/66] move GooroomBase and GooroomUrlFilter to base module
+Date: Tue, 2 Jun 2020 18:33:41 +0900
+Subject: [PATCH 07/79] move GooroomBase and GooroomUrlFilter to base module
 
 ---
  base/BUILD.gn               | 9 +++++++++
@@ -10,12 +10,12 @@ Subject: [PATCH 07/66] move GooroomBase and GooroomUrlFilter to base module
  3 files changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/base/BUILD.gn b/base/BUILD.gn
-index 200b8daecfbe..19fe81fd9696 100644
+index 0e54cd8264cf..e7d6d9ead1cd 100644
 --- a/base/BUILD.gn
 +++ b/base/BUILD.gn
-@@ -1141,6 +1141,15 @@ jumbo_component("base") {
-     "win/wrapped_window_proc.h",
-   ]
+@@ -1065,6 +1065,15 @@ jumbo_component("base") {
+     ]
+   }
  
 +  if (is_gooroom) {
 +    sources += [
@@ -26,11 +26,11 @@ index 200b8daecfbe..19fe81fd9696 100644
 +     ]
 +  }
 +
-   # Various files that are unused in the Chromium build, but presumably here to
-   # make downstream's life easier. They are not included in the main sources
-   # list to avoid breaking GN formatting's auto-sorting.
+   if (is_mac) {
+     sources += [
+       "allocator/allocator_interception_mac.h",
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 053cde4c1127..23c79cf23143 100644
+index 08fb18f42f78..4bed084884eb 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -216,6 +216,7 @@ if (!is_android && !is_mac) {

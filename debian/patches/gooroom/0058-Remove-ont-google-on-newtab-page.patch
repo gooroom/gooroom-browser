@@ -1,17 +1,17 @@
-From f9d0a8f1aff7a3e6ec0a87c870cd36aef8380a7d Mon Sep 17 00:00:00 2001
+From 082217fa272a180209a45cd9603c8351b247bffa Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 16:06:00 +0900
-Subject: [PATCH 58/66] Remove ont google on newtab page
+Date: Fri, 5 Jun 2020 14:31:50 +0900
+Subject: [PATCH 58/79] Remove ont google on newtab page
 
 ---
  chrome/browser/resources/local_ntp/local_ntp.js | 3 ---
  1 file changed, 3 deletions(-)
 
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
-index 19224512b027..42c930ad8e28 100644
+index dcc573873848..290d7025b857 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.js
 +++ b/chrome/browser/resources/local_ntp/local_ntp.js
-@@ -663,7 +663,6 @@ function handlePostMessage(event) {
+@@ -752,7 +752,6 @@ function handlePostMessage(event) {
          $(customize.IDS.CUSTOM_LINKS_RESTORE_DEFAULT).tabIndex =
              (args.showRestoreDefault ? 0 : -1);
        }
@@ -19,7 +19,7 @@ index 19224512b027..42c930ad8e28 100644
      }
    } else if (cmd === 'tileBlacklisted') {
      if (customLinksEnabled()) {
-@@ -888,12 +887,10 @@ function injectOneGoogleBar(ogb) {
+@@ -977,12 +976,10 @@ function injectOneGoogleBar(ogb) {
    renderOneGoogleBarTheme();
  
    const ogElem = $('one-google');

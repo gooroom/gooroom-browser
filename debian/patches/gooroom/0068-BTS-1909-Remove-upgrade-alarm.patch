@@ -1,0 +1,26 @@
+From 69131d51284a00ff88eb93f5aef33db835ef505b Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Jun 2020 15:12:58 +0900
+Subject: [PATCH 68/79] [BTS:1909] Remove upgrade alarm
+
+---
+ chrome/browser/upgrade_detector/upgrade_detector_impl.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/chrome/browser/upgrade_detector/upgrade_detector_impl.cc b/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
+index 8b0a0b2278e5..b71f3c7f7f5f 100644
+--- a/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
++++ b/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
+@@ -178,6 +178,9 @@ UpgradeDetectorImpl::UpgradeDetectorImpl(const base::Clock* clock,
+   // - kSimulateCriticalUpdate has precedence over kSimulateOutdated.
+   // - kSimulateOutdatedNoAU has precedence over kSimulateOutdated.
+   // - kSimulateOutdated[NoAu] can work on its own, or with a specified date.
++#if defined(GOOROOM_BUILD)
++  return;
++#endif
+   if (cmd_line.HasSwitch(switches::kDisableBackgroundNetworking))
+     return;
+   if (cmd_line.HasSwitch(switches::kSimulateUpgrade)) {
+-- 
+2.20.1
+

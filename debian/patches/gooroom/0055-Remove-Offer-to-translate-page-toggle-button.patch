@@ -1,14 +1,14 @@
-From ff9ca22b7466e5b139d1655f1822775a82add083 Mon Sep 17 00:00:00 2001
+From fc19041f3b087036c51388849f95fcb32b2ff024 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:57:35 +0900
-Subject: [PATCH 55/66] Remove 'Offer to translate page' toggle button
+Date: Fri, 5 Jun 2020 14:30:31 +0900
+Subject: [PATCH 55/79] Remove 'Offer to translate page' toggle button
 
 ---
  .../resources/settings/languages_page/languages_page.html       | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/languages_page/languages_page.html b/chrome/browser/resources/settings/languages_page/languages_page.html
-index ada3c5bc0b47..12c0f5a70528 100644
+index 8cebc41ed3c4..71b493ed86cf 100644
 --- a/chrome/browser/resources/settings/languages_page/languages_page.html
 +++ b/chrome/browser/resources/settings/languages_page/languages_page.html
 @@ -252,7 +252,7 @@

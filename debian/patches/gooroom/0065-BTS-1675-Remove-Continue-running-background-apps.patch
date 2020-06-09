@@ -1,7 +1,7 @@
-From dd6336c161b7adfc6866ad42a31ccef9524f4087 Mon Sep 17 00:00:00 2001
+From 7b3f77020a0599e58ac1fabbc4fe4cba584c6701 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Tue, 3 Dec 2019 10:46:00 +0900
-Subject: [PATCH 65/66] [BTS} 1675 : Remove [Continue running background apps 
+Date: Fri, 5 Jun 2020 14:47:03 +0900
+Subject: [PATCH 65/79] [BTS} 1675 : Remove [Continue running background apps 
  after Gooroom-browser shutdown] tab.
 
 ---

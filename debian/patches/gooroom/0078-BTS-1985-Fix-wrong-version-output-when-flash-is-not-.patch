@@ -1,0 +1,26 @@
+From 03470ad0f1b88a40fd0716d8182d442292904290 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Jun 2020 15:28:10 +0900
+Subject: [PATCH 78/79] [BTS:1985] Fix wrong version output when flash is not
+ installed
+
+---
+ chrome/common/chrome_content_client.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/common/chrome_content_client.cc b/chrome/common/chrome_content_client.cc
+index dc2c1e1653cf..8cf26e2781c6 100644
+--- a/chrome/common/chrome_content_client.cc
++++ b/chrome/common/chrome_content_client.cc
+@@ -241,6 +241,8 @@ bool GetCommandLinePepperFlash(content::PepperPluginInfo* plugin) {
+   std::string flash_version =
+       base::CommandLine::ForCurrentProcess()->GetSwitchValueASCII(
+           switches::kPpapiFlashVersion);
++  if (flash_version.empty())
++    return false;
+ 
+   *plugin = CreatePepperFlashInfo(base::FilePath(flash_path), flash_version,
+                                   true);
+-- 
+2.20.1
+

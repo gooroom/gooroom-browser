@@ -1,7 +1,7 @@
-From 9d5eb3d7690324a37cc56d43af5663cf4234ffba Mon Sep 17 00:00:00 2001
+From 69867e3dc59993d5a2a13809b035239159baeda8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Mon, 25 Nov 2019 14:19:30 +0900
-Subject: [PATCH 24/66] add 'setTrustMode()' path in GooroomPref
+Date: Thu, 4 Jun 2020 16:30:33 +0900
+Subject: [PATCH 24/79] add 'setTrustMode()' path in GooroomPref
 
 ---
  gooroom/browser/gooroom_pref.cc | 7 +++++++

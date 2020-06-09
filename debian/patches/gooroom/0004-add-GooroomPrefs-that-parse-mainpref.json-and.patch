@@ -1,7 +1,7 @@
-From 4b4e8f924aee9eed5c5017fa9cd43d5eb74b0e8f Mon Sep 17 00:00:00 2001
+From 74cad27459cd76b2b0a775fcf979853686443e3f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 20 Nov 2019 20:27:52 +0900
-Subject: [PATCH 04/66] add GooroomPrefs that parse mainpref.json and 
+Date: Tue, 2 Jun 2020 18:15:32 +0900
+Subject: [PATCH 04/79] add GooroomPrefs that parse mainpref.json and 
  initializes GooroomBase and GooroomUrlFilter based on the result
 
 ---
@@ -28,7 +28,7 @@ Subject: [PATCH 04/66] add GooroomPrefs that parse mainpref.json and
  create mode 100644 gooroom/browser/gooroom_url_filter_impl.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 9c4ef021bd93..053cde4c1127 100644
+index 04eb1379398b..08fb18f42f78 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -251,6 +251,16 @@ if (!is_android && !is_mac) {
@@ -439,7 +439,7 @@ index 000000000000..3e94b7fb6b22
 +#endif /* GOOROOM_BROWSER_GOOROOM_PREF_H_ */
 diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
 new file mode 100644
-index 000000000000..6f132f84b37a
+index 000000000000..e3a0f2547e18
 --- /dev/null
 +++ b/gooroom/browser/gooroom_url_filter_impl.cc
 @@ -0,0 +1,58 @@
@@ -487,13 +487,13 @@ index 000000000000..6f132f84b37a
 +    std::string pattern = it->GetString();
 +    DLOG(INFO) << "pattern = " << pattern;
 +
-+    if (!policy::URLBlacklist::FilterToComponents(
++    if (!policy::url_util::FilterToComponents(
 +            pattern, &scheme, &host, &match_subdomains, &port, &path, &query)) {
 +      LOG(ERROR) << "Invalid pattern " << pattern;
 +    }
 +
 +    scoped_refptr<url_matcher::URLMatcherConditionSet> condition_set =
-+        policy::URLBlacklist::CreateConditionSet(&url_matcher_, ++matcher_id_,
++        policy::url_util::CreateConditionSet(&url_matcher_, ++matcher_id_,
 +                                                 scheme, host, match_subdomains,
 +                                                 port, path, query, true);
 +    all_conditions_.push_back(std::move(condition_set));

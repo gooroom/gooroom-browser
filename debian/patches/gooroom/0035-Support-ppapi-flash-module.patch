@@ -1,7 +1,7 @@
-From 68008c0fa2db3b0fbcbc4d2226e2c1537a7160bd Mon Sep 17 00:00:00 2001
+From 0ea9db11a93a4bf9ff25867133e19b413e83a5e1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 28 Nov 2019 10:55:23 +0900
-Subject: [PATCH 35/66] Support ppapi-flash module
+Date: Fri, 5 Jun 2020 11:13:42 +0900
+Subject: [PATCH 35/79] Support ppapi-flash module
 
 ---
  gooroom/browser/gooroom_pref.cc | 7 +++++--

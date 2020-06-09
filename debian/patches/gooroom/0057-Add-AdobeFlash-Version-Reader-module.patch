@@ -1,7 +1,7 @@
-From 47a1d7514ab0f7eab23866736e79d8f6600762a4 Mon Sep 17 00:00:00 2001
+From 339822ce2036e87c266d16273bfddf9499062a9c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 16:01:04 +0900
-Subject: [PATCH 57/66] Add AdobeFlash-Version Reader module
+Date: Fri, 5 Jun 2020 14:31:27 +0900
+Subject: [PATCH 57/79] Add AdobeFlash-Version Reader module
 
 ---
  .../browser/web_contents/web_contents_impl.cc |  6 ++--
@@ -14,10 +14,10 @@ Subject: [PATCH 57/66] Add AdobeFlash-Version Reader module
  create mode 100644 gooroom/flash/flash_version.h
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index dc3d33175aab..bef251848f6f 100644
+index 1d268150399b..4bbff8b664d1 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -4482,9 +4482,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4484,9 +4484,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
        "/.config/gooroom/untrust";
  
@@ -27,7 +27,7 @@ index dc3d33175aab..bef251848f6f 100644
  
    int pid;
    //TODO do not discard other options when exec
-@@ -4494,7 +4492,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4496,7 +4494,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        return true;  // true is blank.. false is continue.
      } else {
        execl(exe_path.c_str(), "gooroom-browser",
@@ -36,7 +36,7 @@ index dc3d33175aab..bef251848f6f 100644
        exit(0);
      }
    } else {
-@@ -4503,7 +4501,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4505,7 +4503,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        return true;
      } else {
        execl(exe_path.c_str(), "gooroom-browser",
@@ -46,7 +46,7 @@ index dc3d33175aab..bef251848f6f 100644
      }
    }
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 15d43b09e6e4..d13cb1d535a7 100644
+index 345c67f370cc..7f784bbf5004 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -266,6 +266,9 @@ if (!is_android && !is_mac) {

@@ -1,7 +1,7 @@
-From 6935e394f122ac90da371a022a7d010b0dc803bf Mon Sep 17 00:00:00 2001
+From da43170fe7864caf91420e2dcbbc3046e07f23de Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:22:28 +0900
-Subject: [PATCH 43/66] change chrome to gooroom scheme on error page [Gooroom 
+Date: Fri, 5 Jun 2020 11:42:08 +0900
+Subject: [PATCH 43/79] change chrome to gooroom scheme on error page [Gooroom 
  Bug Tracking System - 0000400] change chrome to gooroom scheme on 
  content-settings bubble model
 
@@ -11,7 +11,7 @@ Subject: [PATCH 43/66] change chrome to gooroom scheme on error page [Gooroom
  2 files changed, 19 insertions(+)
 
 diff --git a/chrome/browser/ui/content_settings/content_setting_bubble_model.cc b/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
-index ed9227ffd661..35001526ef21 100644
+index 5f600f81d7bb..57c125b558cb 100644
 --- a/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
 +++ b/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
 @@ -9,6 +9,7 @@
@@ -22,7 +22,7 @@ index ed9227ffd661..35001526ef21 100644
  #include "base/bind.h"
  #include "base/command_line.h"
  #include "base/feature_list.h"
-@@ -782,7 +783,15 @@ bool ContentSettingSingleRadioGroup::settings_changed() const {
+@@ -775,7 +776,15 @@ bool ContentSettingSingleRadioGroup::settings_changed() const {
  // content type and setting the default value based on the content setting.
  void ContentSettingSingleRadioGroup::SetRadioGroup() {
    const GURL& url = web_contents()->GetURL();

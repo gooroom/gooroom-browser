@@ -1,17 +1,17 @@
-From c9bb19386a2118507f0553742b7d90d5317d05df Mon Sep 17 00:00:00 2001
+From 272f6c2eb8425a0f9e0a2f1cfbc7d9f561d73bc4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:24:26 +0900
-Subject: [PATCH 45/66] Add extension webstore wording 'compatible'
+Date: Fri, 5 Jun 2020 11:44:12 +0900
+Subject: [PATCH 45/79] Add extension webstore wording 'compatible'
 
 ---
  chrome/app/gooroom/resources/generated_resources_ko.xtb | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
-index ec41efbe257f..78628eef7596 100644
+index 56a83038ab2e..b00e8ff1d2d8 100644
 --- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
 +++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
-@@ -2536,7 +2536,7 @@
+@@ -2625,7 +2625,7 @@
  <translation id="4743260470722568160"><ph name="BEGIN_LINK" />애플리케이션 업데이트 방법 알아보기<ph name="END_LINK" /></translation>
  <translation id="4744981231093950366">{NUM_TABS,plural, =1{사이트 숨기기 취소}other{사이트 숨기기 취소}}</translation>
  <translation id="4746351372139058112">메시지</translation>
@@ -20,15 +20,15 @@ index ec41efbe257f..78628eef7596 100644
  <translation id="4750394297954878236">추천</translation>
  <translation id="475088594373173692">첫 번째 사용자</translation>
  <translation id="4751476147751820511">모션 또는 조도 센서</translation>
-@@ -4313,7 +4313,7 @@ VR로 들어가기 전에 이 사이트를 신뢰할 수 있는지 확인하세
- <translation id="7377169924702866686">Caps Lock이 켜져 있습니다.</translation>
+@@ -4433,7 +4433,7 @@
+ <translation id="7375053625150546623">EAP</translation>
+ <translation id="7376553024552204454">이동 시 마우스 커서 강조표시</translation>
  <translation id="7377451353532943397">계속해서 센서 액세스 차단</translation>
- <translation id="7378627244592794276">안함</translation>
 -<translation id="73786666777299047">Gooroom browser 웹 스토어 열기</translation>
 +<translation id="73786666777299047">Gooroom browser 호환 웹 스토어 열기</translation>
  <translation id="7378812711085314936">데이터 연결 가져오기</translation>
+ <translation id="7378962964415201590">새 스마트폰 페어링</translation>
  <translation id="7380768571499464492"><ph name="PRINTER_NAME" /> 업데이트됨</translation>
- <translation id="7385854874724088939">인쇄를 시도하는 동안 문제가 발생했습니다. 프린터를 점검한 다음 다시 시도해 보세요.</translation>
 -- 
 2.20.1
 

@@ -1,7 +1,7 @@
-From 7216144a208ad27368c12f3d17619dafc24430e4 Mon Sep 17 00:00:00 2001
+From fe394e4c96c28eba6fb2e6ad176e93396b74e86a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:36:49 +0900
-Subject: [PATCH 48/66] Change Strings 'make Gooroom-browser better by 
+Date: Fri, 5 Jun 2020 12:09:21 +0900
+Subject: [PATCH 48/79] Change Strings 'make Gooroom-browser better by 
  reporting' to 'make Chromium better...' on settings page
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 48/66] Change Strings 'make Gooroom-browser better by
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/app/gooroom/resources/chromium_strings_ko.xtb b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
-index a74c9216d403..8fdb74e3d2cb 100644
+index d17bf042824f..4cbd89dd5fe4 100644
 --- a/chrome/app/gooroom/resources/chromium_strings_ko.xtb
 +++ b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
-@@ -83,7 +83,7 @@
+@@ -71,7 +71,7 @@
  <translation id="3848258323044014972"><ph name="PAGE_TITLE" /> - Gooroom browser</translation>
  <translation id="388648406173476553">Gooroom browser을 맞춤설정 및 제어합니다. 확인이 필요한 항목이 있습니다. 클릭하여 세부정보를 보세요.</translation>
  <translation id="3889543394854987837">Gooroom browser을 열고 탐색을 시작하려면 내 이름을 클릭하세요.</translation>

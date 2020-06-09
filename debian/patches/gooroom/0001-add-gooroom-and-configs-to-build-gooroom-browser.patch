@@ -1,13 +1,13 @@
-From 000ea57a473f7588f66b8f46c46911236aebf52d Mon Sep 17 00:00:00 2001
+From 2f5797887f4942eb8a9917ec5b624f448383aa7a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 20 Nov 2019 19:02:10 +0900
-Subject: [PATCH 01/66] add /gooroom and configs to build gooroom-browser 
+Date: Tue, 2 Jun 2020 18:10:05 +0900
+Subject: [PATCH 01/79] add /gooroom and configs to build gooroom-browser 
  binary
 
 ---
  BUILD.gn                                      |   2 +
  build/config/compiler/BUILD.gn                |   3 +
- .../browser/chrome_content_browser_client.h   |   4 +-
+ .../browser/chrome_content_browser_client.h   |   5 +-
  gooroom/BUILD.gn                              | 453 ++++++++++++++++++
  gooroom/app/gooroom_exe_main_aura.cc          |  22 +
  gooroom/app/gooroom_main.cc                   | 117 +++++
@@ -18,7 +18,7 @@ Subject: [PATCH 01/66] add /gooroom and configs to build gooroom-browser
  .../browser/gooroom_content_browser_client.h  |  29 ++
  gooroom/browser/gooroom_content_client.cc     |   1 +
  gooroom/browser/gooroom_content_client.h      |  13 +
- 13 files changed, 969 insertions(+), 1 deletion(-)
+ 13 files changed, 969 insertions(+), 2 deletions(-)
  create mode 100644 gooroom/BUILD.gn
  create mode 100644 gooroom/app/gooroom_exe_main_aura.cc
  create mode 100644 gooroom/app/gooroom_main.cc
@@ -31,23 +31,23 @@ Subject: [PATCH 01/66] add /gooroom and configs to build gooroom-browser
  create mode 100644 gooroom/browser/gooroom_content_client.h
 
 diff --git a/BUILD.gn b/BUILD.gn
-index 75ea1abd8317..1316f999f5cc 100644
+index efaf5b31ee37..1389959826f6 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
 @@ -149,6 +149,8 @@ group("gn_all") {
-       "//tools/polymer:polymer_tools_python_unittests",
        "//ui/accessibility:accessibility_unittests",
-       "//ui/accessibility/extensions",
+       "//ui/accessibility/extensions:extension_tests",
+       "//ui/accessibility/extensions:extensions",
 +      "//gooroom:gooroom-browser",
 +      "//gooroom/browser:gooroom_browser",
      ]
    }
  
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 93ad68a613b3..1959d25a61bb 100644
+index fbf8335f11ba..eb50e498748b 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -239,6 +239,9 @@ config("compiler") {
+@@ -244,6 +244,9 @@ config("compiler") {
    defines = []
    configs = []
  
@@ -58,30 +58,31 @@ index 93ad68a613b3..1959d25a61bb 100644
    # categories here, add it to the associated file to keep this shared config
    # smaller.
 diff --git a/chrome/browser/chrome_content_browser_client.h b/chrome/browser/chrome_content_browser_client.h
-index b80edc76b14f..bbd7b86b4608 100644
+index d6b48bfa4314..14eb3faadd31 100644
 --- a/chrome/browser/chrome_content_browser_client.h
 +++ b/chrome/browser/chrome_content_browser_client.h
-@@ -649,6 +649,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+@@ -660,6 +660,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
                                   content::BrowserContext* browser_context);
-   virtual const ui::NativeTheme* GetWebTheme() const;  // For testing.
+   virtual ui::NativeTheme* GetWebTheme() const;  // For testing.
  
 +  // [GOOROOM] Changed from private to protected for inheritance.
 +  StartupData* startup_data_;
 +
-  private:
-   friend class DisableWebRtcEncryptionFlagTest;
-   friend class InProcessBrowserTest;
-@@ -718,7 +721,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
-                                               const url::Origin&>>
-       worker_interfaces_parameterized_;
+   // Used by subclasses (e.g. implemented by downstream embedders) to add
+   // their own extra part objects.
+   void AddExtraPart(ChromeContentBrowserClientParts* part) {
+@@ -730,8 +733,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+       service_manager::BinderRegistryWithArgs<content::RenderFrameHost*>>
+       frame_interfaces_parameterized_;
  
 -  StartupData* startup_data_;
- 
+-
  #if !defined(OS_ANDROID)
    std::unique_ptr<ChromeSerialDelegate> serial_delegate_;
+   std::unique_ptr<ChromeHidDelegate> hid_delegate_;
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
 new file mode 100644
-index 000000000000..386ae3bca6f6
+index 000000000000..dbfbe847133c
 --- /dev/null
 +++ b/gooroom/BUILD.gn
 @@ -0,0 +1,453 @@
@@ -406,10 +407,10 @@ index 000000000000..386ae3bca6f6
 +group("extra_resources") {
 +  # Deps should be same as those in chrome_extra_paks() within chrome_paks.gni.
 +  public_deps = [
-+    "//chrome/browser/resources:invalidations_resources",
-+    "//chrome/browser/resources:net_internals_resources",
-+    "//chrome/browser/resources:quota_internals_resources",
-+    "//chrome/browser/resources:webapks_ui_resources",
++#    "//chrome/browser/resources:invalidations_resources",
++#    "//chrome/browser/resources:net_internals_resources",
++#    "//chrome/browser/resources:quota_internals_resources",
++#    "//chrome/browser/resources:webapks_ui_resources",
 +  ]
 +
 +  if (!is_android) {

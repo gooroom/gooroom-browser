@@ -1,17 +1,17 @@
-From e023859c527b982b0a98a3b178300a8e9ccc2320 Mon Sep 17 00:00:00 2001
+From b02da47a4f9155f13f8144a5a8a4084fa28746ce Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Mon, 25 Nov 2019 14:09:02 +0900
-Subject: [PATCH 22/66] Remove gooroom://settings appearance theme page
+Date: Thu, 4 Jun 2020 16:29:21 +0900
+Subject: [PATCH 22/79] Remove gooroom://settings appearance theme page
 
 ---
  .../resources/settings/appearance_page/appearance_page.html     | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-index 3a619511bedf..76b2da2d4bb2 100644
+index 61300bbc3fab..e2d54869d46a 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-@@ -63,7 +63,7 @@
+@@ -62,7 +62,7 @@
          <div class="hr"></div>
  </if>
          <div class="settings-row continuation" id="themeRow"

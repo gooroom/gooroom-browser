@@ -1,33 +1,20 @@
-From de982fc901780a5d5d901186a87601b306cbc8ea Mon Sep 17 00:00:00 2001
+From 72f802d6cb2fd612196cd2aaf31b6df39ac9925f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:35:29 +0900
-Subject: [PATCH 47/66] Remove 'Export to JSON' button on gooroom://policy page
-    [Gooroom Bug Tracking System - 0000560] Change 'Chrome policies' to 
+Date: Fri, 5 Jun 2020 12:08:53 +0900
+Subject: [PATCH 47/79] Remove 'Export to JSON' button on gooroom://policy page
+     [Gooroom Bug Tracking System - 0000560] Change 'Chrome policies' to 
  'Gooroom   policies' string on gooroom://policy page
 
 ---
- chrome/browser/resources/policy/policy.html  | 2 +-
- chrome/browser/ui/webui/policy_ui_handler.cc | 2 +-
+ chrome/browser/ui/webui/policy_ui_handler.cc  | 2 +-
+ components/policy/resources/webui/policy.html | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/chrome/browser/resources/policy/policy.html b/chrome/browser/resources/policy/policy.html
-index efcbbe51d735..8570cb4b7892 100644
---- a/chrome/browser/resources/policy/policy.html
-+++ b/chrome/browser/resources/policy/policy.html
-@@ -26,7 +26,7 @@
-     </div>
-     <div class="header-row">
-       <button id="reload-policies">$i18n{reloadPolicies}</button>
--      <button id="export-policies">$i18n{exportPoliciesJSON}</button>
-+      <button id="export-policies" hidden>$i18n{exportPoliciesJSON}</button>
-       <div id="show-unset-container" class="show-unset-checkbox">
-         <label>
-           <input id="show-unset" type="checkbox">
 diff --git a/chrome/browser/ui/webui/policy_ui_handler.cc b/chrome/browser/ui/webui/policy_ui_handler.cc
-index 44c529aa787d..579ed93e103b 100644
+index cee8afd1c4d4..a3f66ecd3f3d 100644
 --- a/chrome/browser/ui/webui/policy_ui_handler.cc
 +++ b/chrome/browser/ui/webui/policy_ui_handler.cc
-@@ -888,7 +888,7 @@ base::Value PolicyUIHandler::GetPolicyNames() const {
+@@ -890,7 +890,7 @@ base::Value PolicyUIHandler::GetPolicyNames() const {
      chrome_policy_names->Append(base::Value(it.key()));
    }
    auto chrome_values = std::make_unique<base::DictionaryValue>();
@@ -36,6 +23,19 @@ index 44c529aa787d..579ed93e103b 100644
    chrome_values->SetList("policyNames", std::move(chrome_policy_names));
    names.Set("chrome", std::move(chrome_values));
  
+diff --git a/components/policy/resources/webui/policy.html b/components/policy/resources/webui/policy.html
+index 4ef1ca6d8abc..5ce2d87db257 100644
+--- a/components/policy/resources/webui/policy.html
++++ b/components/policy/resources/webui/policy.html
+@@ -31,7 +31,7 @@
+     </div>
+     <div class="header-row">
+       <button id="reload-policies">$i18n{reloadPolicies}</button>
+-      <button id="export-policies">$i18n{exportPoliciesJSON}</button>
++      <button id="export-policies" hidden>$i18n{exportPoliciesJSON}</button>
+       <div id="show-unset-container" class="show-unset-checkbox">
+         <label>
+           <input id="show-unset" type="checkbox">
 -- 
 2.20.1
 

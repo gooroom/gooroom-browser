@@ -1,8 +1,8 @@
-From 972a7907e93903c8941439b6399f04117a4e58bb Mon Sep 17 00:00:00 2001
+From f783f72307102fdd960e94c71fdc2cd162cbcf60 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 20 Nov 2019 19:06:35 +0900
-Subject: [PATCH 03/66] enable GooroomBrowserExtraPartsSecurity by attaching it
-    to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
+Date: Tue, 2 Jun 2020 18:13:27 +0900
+Subject: [PATCH 03/79] enable GooroomBrowserExtraPartsSecurity by attaching it
+     to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
 
 ---
  gooroom/BUILD.gn                                  | 4 ++++
@@ -10,7 +10,7 @@ Subject: [PATCH 03/66] enable GooroomBrowserExtraPartsSecurity by attaching it
  2 files changed, 7 insertions(+)
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 386ae3bca6f6..9c4ef021bd93 100644
+index dbfbe847133c..04eb1379398b 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -247,6 +247,10 @@ if (!is_android && !is_mac) {

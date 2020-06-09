@@ -1,7 +1,7 @@
-From 961b1bd0cf648a0e7dc4ef88c3e0e87cff08f8bf Mon Sep 17 00:00:00 2001
+From 3ebac492ffc36e811b62036566cb70766508cf58 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Mon, 25 Nov 2019 14:17:39 +0900
-Subject: [PATCH 23/66] Change the string associated with bookmarks (chrome:// 
+Date: Thu, 4 Jun 2020 16:29:51 +0900
+Subject: [PATCH 23/79] Change the string associated with bookmarks (chrome:// 
  to gooroom://)
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 23/66] Change the string associated with bookmarks (chrome://
  2 files changed, 25 insertions(+)
 
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
-index 79914c538a62..4c02f2c132ab 100644
+index 882bafa3eb88..58a59eaf26cf 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
 @@ -252,6 +252,14 @@ class BookmarkButton : public BookmarkButtonBase {
@@ -29,10 +29,10 @@ index 79914c538a62..4c02f2c132ab 100644
    }
  
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
-index d6c8fe50196f..ff2f73545a41 100644
+index 64121910b194..bc248350a94f 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
-@@ -373,7 +373,17 @@ void BookmarkEditorView::Init() {
+@@ -375,7 +375,17 @@ void BookmarkEditorView::Init() {
  
    if (details_.GetNodeType() != BookmarkNode::FOLDER) {
      auto url_tf = std::make_unique<views::Textfield>();
@@ -50,7 +50,7 @@ index d6c8fe50196f..ff2f73545a41 100644
      url_tf->set_controller(this);
      url_tf->SetAccessibleName(
          l10n_util::GetStringUTF16(IDS_BOOKMARK_AX_EDITOR_URL_LABEL));
-@@ -551,6 +561,13 @@ void BookmarkEditorView::ApplyEdits(EditorNode* parent) {
+@@ -553,6 +563,13 @@ void BookmarkEditorView::ApplyEdits(EditorNode* parent) {
    GURL new_url(GetInputURL());
    base::string16 new_title(title_tf_->GetText());
  

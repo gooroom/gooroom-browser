@@ -1,7 +1,7 @@
-From 0a254d1776f842921f488b7de450ed90ddb85ffd Mon Sep 17 00:00:00 2001
+From 5885eba1741e311ab124ecb32739dc5454500e2d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 29 Nov 2019 15:42:13 +0900
-Subject: [PATCH 49/66] BugTrackingSystem
+Date: Fri, 5 Jun 2020 12:12:35 +0900
+Subject: [PATCH 49/79] BugTrackingSystem
 
 746 : Change string Chromium to Gooroom Browser on gooroom://flags page
 743 : Remove Translate option on settings language page
@@ -26,17 +26,17 @@ Subject: [PATCH 49/66] BugTrackingSystem
  .../print_preview/ui/destination_dialog.html  | 25 -------------------
  .../print_preview/ui/destination_dialog.js    | 10 --------
  .../languages_page/languages_page.html        | 10 --------
- .../settings/privacy_page/privacy_page.html   |  2 +-
+ .../settings/privacy_page/privacy_page.html   |  4 ++-
  .../site_settings/chooser_exception_list.js   |  2 +-
  .../bookmark_context_menu_controller.cc       |  4 +--
  .../browser/web_contents/web_contents_impl.cc |  1 +
- 13 files changed, 17 insertions(+), 63 deletions(-)
+ 13 files changed, 19 insertions(+), 63 deletions(-)
 
 diff --git a/chrome/app/gooroom/chromium_strings.grd b/chrome/app/gooroom/chromium_strings.grd
-index c3c3023aa102..82464d6c7b1e 100644
+index 78a67b802995..9f2fda7d2c9e 100644
 --- a/chrome/app/gooroom/chromium_strings.grd
 +++ b/chrome/app/gooroom/chromium_strings.grd
-@@ -607,7 +607,7 @@ Chromium is unable to recover your settings.
+@@ -562,7 +562,7 @@ Chromium is unable to recover your settings.
        </if>
        <if expr="not use_titlecase and not chromeos">
          <message name="IDS_ABOUT" desc="The text label of the About Chrome menu item">
@@ -46,7 +46,7 @@ index c3c3023aa102..82464d6c7b1e 100644
          <message name="IDS_UPDATE_NOW" desc="The text label of the Update Chrome Now menu item">
            Update &amp;Chromium
 diff --git a/chrome/app/gooroom/resources/chromium_strings_ko.xtb b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
-index 8fdb74e3d2cb..57760a3e2cf4 100644
+index 4cbd89dd5fe4..0d76d1629028 100644
 --- a/chrome/app/gooroom/resources/chromium_strings_ko.xtb
 +++ b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
 @@ -1,6 +1,7 @@
@@ -57,7 +57,7 @@ index 8fdb74e3d2cb..57760a3e2cf4 100644
  <translation id="1065672644894730302">환경설정을 읽을 수 없습니다.
  
  일부 기능을 사용할 수 없으며 환경설정의 변경사항이 저장되지 않습니다.</translation>
-@@ -83,7 +84,7 @@
+@@ -71,7 +72,7 @@
  <translation id="3848258323044014972"><ph name="PAGE_TITLE" /> - Gooroom browser</translation>
  <translation id="388648406173476553">Gooroom browser을 맞춤설정 및 제어합니다. 확인이 필요한 항목이 있습니다. 클릭하여 세부정보를 보세요.</translation>
  <translation id="3889543394854987837">Gooroom browser을 열고 탐색을 시작하려면 내 이름을 클릭하세요.</translation>
@@ -67,7 +67,7 @@ index 8fdb74e3d2cb..57760a3e2cf4 100644
  <translation id="421369550622382712">Gooroom browser에 유용한 앱, 게임, 확장 프로그램, 테마를 찾아보세요.</translation>
  <translation id="4216212958613226427">Gooroom browser UI가 이 언어로 표시됩니다.</translation>
 diff --git a/chrome/app/gooroom/settings_chromium_strings.grdp b/chrome/app/gooroom/settings_chromium_strings.grdp
-index 262da5dc1749..8b7c45cdf2cd 100644
+index 596ee6a2e464..99cbca837594 100644
 --- a/chrome/app/gooroom/settings_chromium_strings.grdp
 +++ b/chrome/app/gooroom/settings_chromium_strings.grdp
 @@ -3,7 +3,7 @@
@@ -156,46 +156,44 @@ index 9dc7d5254509..bbfdd0687956 100644
  </body>
  </html>
 diff --git a/chrome/browser/resources/print_preview/ui/destination_dialog.html b/chrome/browser/resources/print_preview/ui/destination_dialog.html
-index a9f917682680..b929dbb5f895 100644
+index a9873cd3c0eb..362110cd94df 100644
 --- a/chrome/browser/resources/print_preview/ui/destination_dialog.html
 +++ b/chrome/browser/resources/print_preview/ui/destination_dialog.html
-@@ -190,31 +190,6 @@
-           $i18n{cancel}
-         </cr-button>
-       </div>
--      <div id="promos" slot="footer" hidden="[[!shouldShowFooter_(
--          shouldShowCloudPrintPromo_, invitation_)]]">
--        <div class="promo" id="cloudprintPromo"
--            hidden$="[[!shouldShowCloudPrintPromo_]]">
--          <iron-icon icon="print-preview:cloud-queue" alt=""></iron-icon>
--          <div class="promo-text"></div>
--          <cr-icon-button id="cloudPrintClose" class="icon-clear"
--              on-click="onCloudPrintPromoDismissed_"></cr-icon-button>
--        </div>
--        <div class="promo" id="invitationPromo" hidden="[[!invitation_]]">
--          <div inner-h-t-m-l="[[getInvitationText_(invitation_)]]"></div>
--          <div class="invitation-buttons">
--            <cr-button on-click="onInvitationAcceptClick_">
--              [[getAcceptButtonText_(invitation_)]]
--            </cr-button>
--            <cr-button on-click="onInvitationRejectClick_">
--              $i18n{reject}
--            </cr-button>
--            <div id="invitation-process-throbber" class="throbber" hidden></div>
--          </div>
--          <div class="invitation-details">
--            $i18nRaw{registerPrinterInformationMessage}
--          </div>
--        </div>
+@@ -154,29 +154,4 @@
+       $i18n{cancel}
+     </cr-button>
+   </div>
+-  <div id="promos" slot="footer" hidden="[[!shouldShowFooter_(
+-      shouldShowCloudPrintPromo_, invitation_)]]">
+-    <div class="promo" id="cloudprintPromo"
+-        hidden$="[[!shouldShowCloudPrintPromo_]]">
+-      <iron-icon icon="print-preview:cloud-queue" alt=""></iron-icon>
+-      <div class="promo-text"></div>
+-      <cr-icon-button id="cloudPrintClose" class="icon-clear"
+-          on-click="onCloudPrintPromoDismissed_"></cr-icon-button>
+-    </div>
+-    <div class="promo" id="invitationPromo" hidden="[[!invitation_]]">
+-      <div inner-h-t-m-l="[[getInvitationText_(invitation_)]]"></div>
+-      <div class="invitation-buttons">
+-        <cr-button on-click="onInvitationAcceptClick_">
+-          [[getAcceptButtonText_(invitation_)]]
+-        </cr-button>
+-        <cr-button on-click="onInvitationRejectClick_">
+-          $i18n{reject}
+-        </cr-button>
+-        <div id="invitation-process-throbber" class="throbber" hidden></div>
 -      </div>
-     </cr-dialog>
-   </template>
-   <script src="destination_dialog.js"></script>
+-      <div class="invitation-details">
+-        $i18nRaw{registerPrinterInformationMessage}
+-      </div>
+-    </div>
+-  </div>
+ </cr-dialog>
 diff --git a/chrome/browser/resources/print_preview/ui/destination_dialog.js b/chrome/browser/resources/print_preview/ui/destination_dialog.js
-index 06dabe3874a2..ca2f9a935941 100644
+index 2f24d98b292d..467cb0a320eb 100644
 --- a/chrome/browser/resources/print_preview/ui/destination_dialog.js
 +++ b/chrome/browser/resources/print_preview/ui/destination_dialog.js
-@@ -91,16 +91,6 @@ Polymer({
+@@ -126,16 +126,6 @@ Polymer({
  
    /** @override */
    ready: function() {
@@ -213,10 +211,10 @@ index 06dabe3874a2..ca2f9a935941 100644
  
    /** @override */
 diff --git a/chrome/browser/resources/settings/languages_page/languages_page.html b/chrome/browser/resources/settings/languages_page/languages_page.html
-index 2cc7d7d74b39..ada3c5bc0b47 100644
+index aa80d889a4b2..8cebc41ed3c4 100644
 --- a/chrome/browser/resources/settings/languages_page/languages_page.html
 +++ b/chrome/browser/resources/settings/languages_page/languages_page.html
-@@ -422,16 +422,6 @@
+@@ -425,16 +425,6 @@
                  </iron-icon>
                </cr-checkbox>
  </if> <!-- chromeos or is_win -->
@@ -234,25 +232,34 @@ index 2cc7d7d74b39..ada3c5bc0b47 100644
                    on-click="onMoveToTopTap_"
                    hidden="[[isNthLanguage_(
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 30fdc0fe5041..4c67a43d9ae2 100644
+index fb22b7ba6846..295b7317cc79 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -83,6 +83,7 @@
+@@ -76,6 +76,7 @@
      <settings-animated-pages id="pages" section="privacy"
          focus-config="[[focusConfig_]]">
        <div route-path="default">
 +<if expr="not _gooroom">
-         <template is="dom-if" if="[[!unifiedConsentEnabled_]]">
-           <div class="settings-box first">
-             <p class="privacy-explanation">
-@@ -95,7 +96,6 @@
-             on-click="onSyncAndGoogleServicesClick_"
-             hidden="[[!unifiedConsentEnabled_]]"></cr-link-row>
+         <template is="dom-if" if="[[!privacySettingsRedesignEnabled_]]">
+           <cr-link-row id="syncLinkRow"
+               label="$i18n{syncAndNonPersonalizedServices}"
+@@ -83,6 +84,7 @@
+               on-click="onSyncAndGoogleServicesClick_">
+           </cr-link-row>
+         </template>
++</if>
+         <cr-link-row id="clearBrowsingData"
+             class="hr"
+             label="$i18n{clearBrowsingData}"
+@@ -127,7 +129,7 @@
+             </settings-toggle-button>
+           </template>
  <if expr="not chromeos">
 -<if expr="not _gooroom">
-         <settings-toggle-button id="signinAllowedToggle"
-             pref="{{prefs.signin.allowed_on_next_startup}}"
-             label="$i18n{signinAllowedTitle}"
++<if expr="not _gonSyncAndGoogleServicesClick_ooroom">
+         <template is="dom-if" if="[[!privacySettingsRedesignEnabled_]]">
+           <settings-toggle-button id="signinAllowedToggle"
+               pref="{{prefs.signin.allowed_on_next_startup}}"
 diff --git a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
 index 79c7539ca337..02e2e9dcc782 100644
 --- a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
@@ -267,10 +274,10 @@ index 79c7539ca337..02e2e9dcc782 100644
        case settings.ChooserType.SERIAL_PORTS:
          this.emptyListMessage_ = this.i18n('noSerialPortsFound');
 diff --git a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
-index ed9be35ea949..e95b414ed3b6 100644
+index 11bf8d9f3d0a..2b84390b4a5d 100644
 --- a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
 +++ b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
-@@ -125,8 +125,8 @@ void BookmarkContextMenuController::BuildMenu() {
+@@ -124,8 +124,8 @@ void BookmarkContextMenuController::BuildMenu() {
              IDS_BOOKMARK_BAR_OPEN_IN_NEW_TAB);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_NEW_WINDOW,
              IDS_BOOKMARK_BAR_OPEN_IN_NEW_WINDOW);
@@ -282,7 +289,7 @@ index ed9be35ea949..e95b414ed3b6 100644
      int count = chrome::OpenCount(parent_window_, selection_);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 1b121472a309..1f9c72a1e057 100644
+index f1170719ca7d..c9ae516b146b 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -22,6 +22,7 @@

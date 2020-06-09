@@ -1,0 +1,34 @@
+From 89c1c151aca5f7b8b7e609c7fc2a8fe08717f67f Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Jun 2020 15:27:22 +0900
+Subject: [PATCH 77/79] [BTS:2049] Set maximum length of the extension display
+ name
+
+---
+ extensions/common/extension.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/extensions/common/extension.cc b/extensions/common/extension.cc
+index 34998826841b..9cdd87f18b45 100644
+--- a/extensions/common/extension.cc
++++ b/extensions/common/extension.cc
+@@ -616,6 +616,7 @@ bool Extension::LoadRequiredFeatures(base::string16* error) {
+ 
+ bool Extension::LoadName(base::string16* error) {
+   base::string16 localized_name;
++  size_t display_max_len_ = 512;
+   if (!manifest_->GetString(keys::kName, &localized_name)) {
+     *error = base::ASCIIToUTF16(errors::kInvalidName);
+     return false;
+@@ -626,6 +627,8 @@ bool Extension::LoadName(base::string16* error) {
+       base::CollapseWhitespace(localized_name, true);
+   base::i18n::SanitizeUserSuppliedString(&sanitized_name);
+   display_name_ = base::UTF16ToUTF8(sanitized_name);
++  if (display_name_.length() > display_max_len_)
++    display_name_.resize(display_max_len_);
+   return true;
+ }
+ 
+-- 
+2.20.1
+
