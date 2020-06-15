@@ -164,3 +164,6 @@ gooroom/0076-BTS-2062-Hide-part-of-setting-incognito-mode.patch
 gooroom/0077-BTS-2049-Set-maximum-length-of-the-extension-display.patch
 gooroom/0078-BTS-1985-Fix-wrong-version-output-when-flash-is-not-.patch
 gooroom/0079-Built-in-vqa-extension.patch
+gooroom/BTS-2322-Hide-voice-search.patch
+gooroom/BTS-2323,2324,2353-korean-translation.patch
+gooroom/BTS-2354-fix-adobe-flash-bug.patch

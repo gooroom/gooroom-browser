@@ -1,0 +1,32 @@
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
+index 8ce20e216895..575ae421153b 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.js
++++ b/chrome/browser/resources/local_ntp/local_ntp.js
+@@ -866,9 +866,10 @@ function init() {
+       searchboxApiHandle.autocompleteresultchanged = autocompleteResultChanged;
+ 
+       if (!iframesAndVoiceSearchDisabledForTesting) {
+-        speech.init(
+-            configData.googleBaseUrl, configData.translatedStrings,
+-            $(IDS.REALBOX_MICROPHONE), searchboxApiHandle);
++// Voice search is not supported on gooroom-browser
++//        speech.init(
++//            configData.googleBaseUrl, configData.translatedStrings,
++//            $(IDS.REALBOX_MICROPHONE), searchboxApiHandle);
+       }
+ 
+       utils.disableOutlineOnMouseClick($(IDS.REALBOX_MICROPHONE));
+@@ -885,10 +886,9 @@ function init() {
+           configData.translatedStrings.searchboxPlaceholder;
+ 
+       if (!iframesAndVoiceSearchDisabledForTesting) {
+-// Voice search is not supported on gooroom-browser
+-//        speech.init(
+-//            configData.googleBaseUrl, configData.translatedStrings,
+-//            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
++        speech.init(
++            configData.googleBaseUrl, configData.translatedStrings,
++            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
+       }
+ 
+       // Listener for updating the key capture state.

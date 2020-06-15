@@ -1,0 +1,104 @@
+diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
+index 9428f5b0f24d..15afae89f595 100644
+--- a/content/browser/web_contents/web_contents_impl.cc
++++ b/content/browser/web_contents/web_contents_impl.cc
+@@ -17,6 +17,7 @@
+ #include "base/path_service.h"
+ #include "gooroom/base/gooroom_base.h"
+ #include "gooroom/browser/gooroom_pref.h"
++#include "gooroom/flash/flash_version.h"
+ #include "dbus/bus.h"
+ #include "dbus/message.h"
+ #include "dbus/object_path.h"
+@@ -4484,7 +4485,9 @@ bool RequestCurrentUserDataDir(GURL url) {
+       "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
+       "/.config/gooroom/untrust";
+ 
+-  std::string flash_dir = "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so";
++  std::string flash_dir_option = "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so";
++  std::string flash_version_option = "";
++  flash_version_option = "--ppapi-flash-version=" + FlashVersion::GetFlashVersion();
+ 
+   int pid;
+   //TODO do not discard other options when exec
+@@ -4494,7 +4497,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+       return true;  // true is blank.. false is continue.
+     } else {
+       execl(exe_path.c_str(), "gooroom-browser",
+-            trust_user_data_dir_option.c_str(), flash_dir.c_str(), url.spec().c_str(), NULL);
++            trust_user_data_dir_option.c_str(), flash_dir_option.c_str(), flash_version_option.c_str(), url.spec().c_str(), NULL);
+       exit(0);
+     }
+   } else {
+@@ -4503,7 +4506,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+       return true;
+     } else {
+       execl(exe_path.c_str(), "gooroom-browser",
+-            untrust_user_data_dir_option.c_str(), flash_dir.c_str(), url.spec().c_str(), NULL);
++            untrust_user_data_dir_option.c_str(), flash_dir_option.c_str(), flash_version_option.c_str(), url.spec().c_str(), NULL);
+       exit(0);
+     }
+   }
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 8be66bb54e38..05ff093e16da 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -87,7 +87,15 @@ void GooroomPref::setup() {
+   std::string untrust_user_data_dir_option =
+       "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
+       "/.config/gooroom/untrust";
+-  std::string flash_dir = "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so";
++  std::string flash_dir_option = "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so";
++  std::string flash_version_option = "";
++  std::string flashVersion = "";
++  flashVersion = FlashVersion::GetFlashVersion();
++  //Add Flash version
++  if (!flashVersion.empty())
++  {
++    flash_version_option = "--ppapi-flash-version=" + flashVersion;
++  }
+ 
+   bool use_user_data_dir = false;
+   for (base::CommandLine::StringVector::const_iterator it = argv.begin();
+@@ -107,26 +115,31 @@ void GooroomPref::setup() {
+     }
+   }
+   if (!use_user_data_dir) {
+-    const char** restartoption = new const char*[argv.size() + 3];
+-    restartoption[argv.size() + 2] = NULL;
++    if (!flashVersion.empty()) {
++      const char** restartoption = new const char*[argv.size() + 4];
++      restartoption[argv.size() + 3] = NULL;
++      restartoption[0] = "gooroom-browser";
++      for (int j = 1; j < (int)argv.size(); j++) {
++        restartoption[j] = argv[j].c_str();
++      }
++      restartoption[argv.size()] = trust_user_data_dir_option.c_str();
++      restartoption[argv.size() + 1] = flash_dir_option.c_str();
++      restartoption[argv.size() + 2] = flash_version_option.c_str();
++      execv(exe_path.c_str(), (char**)restartoption);
++      exit(0);
++    }
++    const char** restartoption = new const char*[argv.size() + 2];
++    restartoption[argv.size() + 1] = NULL;
+     restartoption[0] = "gooroom-browser";
+     for (int j = 1; j < (int)argv.size(); j++) {
+       restartoption[j] = argv[j].c_str();
+     }
+     restartoption[argv.size()] = trust_user_data_dir_option.c_str();
+-    restartoption[argv.size() + 1] = flash_dir.c_str();
+     execv(exe_path.c_str(), (char**)restartoption);
+     exit(0);
+   }
+   // test args
+ 
+-  //Add Flash version
+-  if(base::CommandLine::ForCurrentProcess()->HasSwitch(switches::kPpapiFlashPath))
+-  {
+-    std::string flashVersion = FlashVersion::GetFlashVersion();
+-    if(!flashVersion.empty())
+-      base::CommandLine::ForCurrentProcess()->AppendSwitchASCII(switches::kPpapiFlashVersion, flashVersion);
+-  }
+ }
+ 
+ bool GooroomPref::useWebSocket() {
