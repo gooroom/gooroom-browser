@@ -1,3 +1,12 @@
+gooroom-browser (2.6.0-1+grm2u3) stretch; urgency=medium
+
+  * BugTrackingSystem
+    - 2332 : Remove secret mode toggle on extension page 
+    - 2348 : Change strings
+    - 1807 : Add Gooroom browser log
+
+ -- Choi J.S. <junsungc91@gmail.com>  Wed, 24 Jun 2020 20:33:00 +0900
+
 gooroom-browser (2.6.0-1+grm2u2) stretch; urgency=medium
 
   * BugTrackingSystem
@@ -5,7 +14,7 @@ gooroom-browser (2.6.0-1+grm2u2) stretch; urgency=medium
     - 2323,2324,2353 : Korean translation
     - 2354 : Fix adobe flash bug
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 15 Jul 2020 16:56:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 15 Jun 2020 16:56:00 +0900
 
 gooroom-browser (2.6.0-1+grm2u1) stretch; urgency=medium
 

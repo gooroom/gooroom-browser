@@ -167,3 +167,6 @@ gooroom/0079-Built-in-vqa-extension.patch
 gooroom/BTS-2322-Hide-voice-search.patch
 gooroom/BTS-2323,2324,2353-korean-translation.patch
 gooroom/BTS-2354-fix-adobe-flash-bug.patch
+gooroom/BTS-2332-remove-secret-mode-toggle-on-extension-page.patch
+gooroom/BTS-2348-change-strings.patch
+gooroom/browser-log.patch

@@ -1,0 +1,18 @@
+diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
+index e3a0f2547e18..6a57e5b82b5a 100644
+--- a/gooroom/browser/gooroom_url_filter_impl.cc
++++ b/gooroom/browser/gooroom_url_filter_impl.cc
+@@ -16,8 +16,11 @@ bool GooroomUrlFilterImpl::isTrustUrl(std::string url) {
+       url_matcher_.MatchURL(GURL(url));
+   bool trusted = !matching_ids.empty();
+   GURL url_(url);
+-  SYSLOG(INFO) << "GOOROOM Trust mode = " << trusted << " by " << url_.scheme()
+-               << "://" << url_.host();
++  if (!trusted) {
++    char buff[100] = {0,};
++    snprintf(buff, sizeof(buff), "[%s] operates in untrusted mode.", url_.host().c_str());
++    SYSLOG(INFO) << buff << " GRMCODE=050006";
++  }
+   return trusted;
+ }
+ 
