@@ -170,3 +170,5 @@ gooroom/BTS-2354-fix-adobe-flash-bug.patch
 gooroom/BTS-2332-remove-secret-mode-toggle-on-extension-page.patch
 gooroom/BTS-2348-change-strings.patch
 gooroom/browser-log.patch
+gooroom/BTS-2392-Hangul-bug-fix.patch
+gooroom/BTS-2431-Hide-gooroom-browser-login-on-settings-page.patch

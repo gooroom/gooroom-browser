@@ -1,0 +1,1278 @@
+diff --git a/chrome/browser/ui/libgtkui/BUILD.gn b/chrome/browser/ui/libgtkui/BUILD.gn
+index b1b8e33e8b31..3c6a998d06de 100644
+--- a/chrome/browser/ui/libgtkui/BUILD.gn
++++ b/chrome/browser/ui/libgtkui/BUILD.gn
+@@ -18,8 +18,6 @@ jumbo_component("libgtkui") {
+     "gtk_ui.h",
+     "gtk_util.cc",
+     "gtk_util.h",
+-    "input_method_context_impl_gtk.cc",
+-    "input_method_context_impl_gtk.h",
+     "native_theme_gtk.cc",
+     "native_theme_gtk.h",
+     "nav_button_provider_gtk.cc",
+@@ -92,6 +90,8 @@ jumbo_component("libgtkui") {
+     sources += [
+       "gtk_event_loop_x11.cc",
+       "gtk_event_loop_x11.h",
++      "x11_input_method_context_impl_gtk.cc",
++      "x11_input_method_context_impl_gtk.h",
+     ]
+ 
+     configs += [ "//build/config/linux:x11" ]
+diff --git a/chrome/browser/ui/libgtkui/gtk_key_bindings_handler.cc b/chrome/browser/ui/libgtkui/gtk_key_bindings_handler.cc
+index d63bdcb6ada5..9dea5f96ada8 100644
+--- a/chrome/browser/ui/libgtkui/gtk_key_bindings_handler.cc
++++ b/chrome/browser/ui/libgtkui/gtk_key_bindings_handler.cc
+@@ -17,6 +17,11 @@
+ #include "ui/base/ime/text_edit_commands.h"
+ #include "ui/events/event.h"
+ 
++#if defined(USE_X11)
++#include "ui/base/x/x11_util.h"  // nogncheck
++#include "ui/gfx/x/x11.h"        // nogncheck
++#endif
++
+ using ui::TextEditCommand;
+ 
+ // TODO(erg): Rewrite the old gtk_key_bindings_handler_unittest.cc and get them
+@@ -36,13 +41,56 @@ GtkWidget* CreateInvisibleWindow() {
+ #endif
+ }
+ 
++#if !defined(USE_X11)
++GdkModifierType EventFlagsToGdkModifierType(ui::EventFlags event_flags) {
++  static const struct {
++    ui::EventFlags event_flag;
++    GdkModifierType gdk_modifier;
++  } mapping[] = {
++      {ui::EF_SHIFT_DOWN, GDK_SHIFT_MASK},
++      {ui::EF_CAPS_LOCK_ON, GDK_LOCK_MASK},
++      {ui::EF_CONTROL_DOWN, GDK_CONTROL_MASK},
++      {ui::EF_ALT_DOWN, GDK_MOD1_MASK},
++      {ui::EF_NUM_LOCK_ON, GDK_MOD2_MASK},
++      {ui::EF_MOD3_DOWN, GDK_MOD3_MASK},
++      {ui::EF_COMMAND_DOWN, GDK_MOD4_MASK},
++      {ui::EF_ALTGR_DOWN, GDK_MOD5_MASK},
++      {ui::EF_LEFT_MOUSE_BUTTON, GDK_BUTTON1_MASK},
++      {ui::EF_MIDDLE_MOUSE_BUTTON, GDK_BUTTON2_MASK},
++      {ui::EF_RIGHT_MOUSE_BUTTON, GDK_BUTTON3_MASK},
++      {ui::EF_BACK_MOUSE_BUTTON, GDK_BUTTON4_MASK},
++      {ui::EF_FORWARD_MOUSE_BUTTON, GDK_BUTTON5_MASK},
++  };
++  GdkModifierType gdk_modifier_type = static_cast<GdkModifierType>(0);
++  for (const auto& map : mapping) {
++    if (event_flags & map.event_flag) {
++      gdk_modifier_type =
++          static_cast<GdkModifierType>(gdk_modifier_type | map.gdk_modifier);
++    }
++  }
++  return gdk_modifier_type;
++}
++#endif
++
+ }  // namespace
+ 
+ namespace libgtkui {
+ 
+ GtkKeyBindingsHandler::GtkKeyBindingsHandler()
+-    : fake_window_(CreateInvisibleWindow()), handler_(CreateNewHandler()) {
++    : fake_window_(CreateInvisibleWindow()),
++      handler_(CreateNewHandler()),
++      has_xkb_(false) {
+   gtk_container_add(GTK_CONTAINER(fake_window_), handler_);
++
++#if defined(USE_X11)
++  int opcode, event, error;
++  int major = XkbMajorVersion;
++  int minor = XkbMinorVersion;
++  has_xkb_ = XkbQueryExtension(gfx::GetXDisplay(), &opcode, &event, &error,
++                               &major, &minor);
++#else
++  has_xkb_ = false;
++#endif
+ }
+ 
+ GtkKeyBindingsHandler::~GtkKeyBindingsHandler() {
+@@ -56,19 +104,19 @@ bool GtkKeyBindingsHandler::MatchEvent(
+   CHECK(event.IsKeyEvent());
+ 
+   const ui::KeyEvent& key_event = static_cast<const ui::KeyEvent&>(event);
+-  if (key_event.is_char())
++  if (key_event.is_char() || !key_event.native_event())
+     return false;
+ 
+-  GdkEvent* gdk_event = GdkEventFromKeyEvent(key_event);
+-  if (!gdk_event)
+-    return false;
++  GdkEventKey gdk_event;
++  BuildGdkEventKeyFromKeyEvent(key_event, &gdk_event);
+ 
+   edit_commands_.clear();
+   // If this key event matches a predefined key binding, corresponding signal
+   // will be emitted.
+ 
+-  gtk_bindings_activate_event(G_OBJECT(handler_), &gdk_event->key);
+-  gdk_event_free(gdk_event);
++  gtk_bindings_activate_event(
++      G_OBJECT(handler_),
++      &gdk_event);
+ 
+   bool matched = !edit_commands_.empty();
+   if (edit_commands)
+@@ -101,6 +149,56 @@ void GtkKeyBindingsHandler::EditCommandMatched(TextEditCommand command,
+   edit_commands_.push_back(ui::TextEditCommandAuraLinux(command, value));
+ }
+ 
++void GtkKeyBindingsHandler::BuildGdkEventKeyFromKeyEvent(
++    const ui::KeyEvent& key_event,
++    GdkEventKey* gdk_event) {
++  GdkKeymap* keymap = gdk_keymap_get_for_display(gdk_display_get_default());
++  GdkModifierType consumed, state;
++
++#if defined(USE_X11)
++  const ui::PlatformEvent& xevent = key_event.native_event();
++  gdk_event->type =
++      xevent->xany.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
++  gdk_event->time = xevent->xkey.time;
++  gdk_event->state = static_cast<GdkModifierType>(xevent->xkey.state);
++  gdk_event->hardware_keycode = xevent->xkey.keycode;
++  if (has_xkb_) {
++    gdk_event->group = XkbGroupForCoreState(xevent->xkey.state);
++  } else {
++    // The overwhelming majority of people will be using X servers that support
++    // XKB. GDK has a fallback here that does some complicated stuff to detect
++    // whether a modifier key affects the keybinding, but that should be
++    // extremely rare.
++    static bool logged = false;
++    if (!logged) {
++      NOTIMPLEMENTED();
++      logged = true;
++    }
++    gdk_event->group = 0;
++  }
++#else
++  gdk_event->type =
++      key_event.type() == ui::ET_KEY_PRESSED ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
++  gdk_event->time =
++      (key_event.time_stamp() - base::TimeTicks()).InMilliseconds();
++  gdk_event->state = EventFlagsToGdkModifierType(
++      static_cast<ui::EventFlags>(key_event.flags()));
++  gdk_event->hardware_keycode = key_event.key_code();
++  // TODO(crbug.com/987939): Fix keyboard layout switching in Ozone/X11
++  gdk_event->group = 0;
++#endif
++
++  gdk_event->keyval = GDK_KEY_VoidSymbol;
++  gdk_keymap_translate_keyboard_state(
++      keymap, gdk_event->hardware_keycode,
++      static_cast<GdkModifierType>(gdk_event->state), gdk_event->group,
++      &gdk_event->keyval, nullptr, nullptr, &consumed);
++
++  state = static_cast<GdkModifierType>(gdk_event->state & ~consumed);
++  gdk_keymap_add_virtual_modifiers(keymap, &state);
++  gdk_event->state |= state;
++}
++
+ void GtkKeyBindingsHandler::HandlerInit(Handler* self) {
+   self->owner = nullptr;
+ }
+diff --git a/chrome/browser/ui/libgtkui/gtk_key_bindings_handler.h b/chrome/browser/ui/libgtkui/gtk_key_bindings_handler.h
+index bb370736298e..aef4b2ea5ae5 100644
+--- a/chrome/browser/ui/libgtkui/gtk_key_bindings_handler.h
++++ b/chrome/browser/ui/libgtkui/gtk_key_bindings_handler.h
+@@ -15,6 +15,7 @@
+ 
+ namespace ui {
+ class Event;
++class KeyEvent;
+ }
+ 
+ namespace libgtkui {
+@@ -67,6 +68,10 @@ class GtkKeyBindingsHandler {
+   void EditCommandMatched(ui::TextEditCommand command,
+                           const std::string& value);
+ 
++  // Builds a fake GdkEventKey from an XEvent.
++  void BuildGdkEventKeyFromKeyEvent(const ui::KeyEvent& key_event,
++                                    GdkEventKey* gdk_event);
++
+   // Initializes Handler structure.
+   static void HandlerInit(Handler* self);
+ 
+@@ -135,6 +140,9 @@ class GtkKeyBindingsHandler {
+ 
+   // Buffer to store the match results.
+   std::vector<ui::TextEditCommandAuraLinux> edit_commands_;
++
++  // Whether the current X server has the XKeyboard extension.
++  bool has_xkb_;
+ };
+ 
+ }  // namespace libgtkui
+diff --git a/chrome/browser/ui/libgtkui/gtk_ui.cc b/chrome/browser/ui/libgtkui/gtk_ui.cc
+index cf38ee74d0c3..297260ad3e60 100644
+--- a/chrome/browser/ui/libgtkui/gtk_ui.cc
++++ b/chrome/browser/ui/libgtkui/gtk_ui.cc
+@@ -25,7 +25,6 @@
+ #include "chrome/browser/themes/theme_properties.h"
+ #include "chrome/browser/ui/libgtkui/gtk_key_bindings_handler.h"
+ #include "chrome/browser/ui/libgtkui/gtk_util.h"
+-#include "chrome/browser/ui/libgtkui/input_method_context_impl_gtk.h"
+ #include "chrome/browser/ui/libgtkui/native_theme_gtk.h"
+ #include "chrome/browser/ui/libgtkui/nav_button_provider_gtk.h"
+ #include "chrome/browser/ui/libgtkui/print_dialog_gtk.h"
+@@ -72,6 +71,7 @@
+ #endif
+ 
+ #if defined(USE_X11)
++#include "chrome/browser/ui/libgtkui/x11_input_method_context_impl_gtk.h"  // nogncheck
+ #include "ui/gfx/x/x11.h"        // nogncheck
+ #include "ui/gfx/x/x11_types.h"  // nogncheck
+ #elif defined(USE_OZONE)
+@@ -686,7 +686,8 @@ std::unique_ptr<ui::LinuxInputMethodContext> GtkUi::CreateInputMethodContext(
+     ui::LinuxInputMethodContextDelegate* delegate,
+     bool is_simple) const {
+   return std::unique_ptr<ui::LinuxInputMethodContext>(
+-      new InputMethodContextImplGtk(delegate, is_simple));
++      new X11InputMethodContextImplGtk(delegate, is_simple));
++
+ }
+ 
+ gfx::FontRenderParams GtkUi::GetDefaultFontRenderParams() const {
+diff --git a/chrome/browser/ui/libgtkui/gtk_util.cc b/chrome/browser/ui/libgtkui/gtk_util.cc
+index eee1d429b735..f24c300004cf 100644
+--- a/chrome/browser/ui/libgtkui/gtk_util.cc
++++ b/chrome/browser/ui/libgtkui/gtk_util.cc
+@@ -19,11 +19,13 @@
+ #include "base/strings/string_split.h"
+ #include "base/strings/string_tokenizer.h"
+ #include "base/strings/string_util.h"
++#include "ui/aura/window.h"
+ #include "ui/aura/window_tree_host.h"
+ #include "ui/base/accelerators/accelerator.h"
+ #include "ui/events/event.h"
+ #include "ui/events/event_utils.h"
+ #include "ui/events/keycodes/dom/keycode_converter.h"
++#include "ui/events/event_constants.h"
+ #include "ui/gfx/color_utils.h"
+ #include "ui/gfx/geometry/size.h"
+ #include "ui/views/linux_ui/linux_ui.h"
+@@ -32,7 +34,6 @@
+ #include <gdk/gdkx.h>
+ 
+ #include "ui/events/keycodes/keyboard_code_conversion_x.h"  // nogncheck
+-#include "ui/gfx/x/x11_types.h"                             // nogncheck
+ #endif
+ 
+ namespace {
+@@ -72,48 +73,6 @@ void CommonInitFromCommandLine(const base::CommandLine& command_line) {
+ #endif
+ }
+ 
+-GdkModifierType GetIbusFlags(const ui::KeyEvent& key_event) {
+-  auto* properties = key_event.properties();
+-  if (!properties)
+-    return static_cast<GdkModifierType>(0);
+-  auto it = properties->find(ui::kPropertyKeyboardIBusFlag);
+-  DCHECK(it == properties->end() || it->second.size() == 1);
+-  uint8_t flags = (it != properties->end()) ? it->second[0] : 0;
+-  return static_cast<GdkModifierType>(flags
+-                                      << ui::kPropertyKeyboardIBusFlagOffset);
+-}
+-
+-GdkModifierType ExtractGdkEventStateFromKeyEvent(
+-    const ui::KeyEvent& key_event) {
+-  auto event_flags = static_cast<ui::EventFlags>(key_event.flags());
+-  static const struct {
+-    ui::EventFlags event_flag;
+-    GdkModifierType gdk_modifier;
+-  } mapping[] = {
+-      {ui::EF_SHIFT_DOWN, GDK_SHIFT_MASK},
+-      {ui::EF_CAPS_LOCK_ON, GDK_LOCK_MASK},
+-      {ui::EF_CONTROL_DOWN, GDK_CONTROL_MASK},
+-      {ui::EF_ALT_DOWN, GDK_MOD1_MASK},
+-      {ui::EF_NUM_LOCK_ON, GDK_MOD2_MASK},
+-      {ui::EF_MOD3_DOWN, GDK_MOD3_MASK},
+-      {ui::EF_COMMAND_DOWN, GDK_MOD4_MASK},
+-      {ui::EF_ALTGR_DOWN, GDK_MOD5_MASK},
+-      {ui::EF_LEFT_MOUSE_BUTTON, GDK_BUTTON1_MASK},
+-      {ui::EF_MIDDLE_MOUSE_BUTTON, GDK_BUTTON2_MASK},
+-      {ui::EF_RIGHT_MOUSE_BUTTON, GDK_BUTTON3_MASK},
+-      {ui::EF_BACK_MOUSE_BUTTON, GDK_BUTTON4_MASK},
+-      {ui::EF_FORWARD_MOUSE_BUTTON, GDK_BUTTON5_MASK},
+-  };
+-  unsigned int gdk_modifier_type = 0;
+-  for (const auto& map : mapping) {
+-    if (event_flags & map.event_flag) {
+-      gdk_modifier_type = gdk_modifier_type | map.gdk_modifier;
+-    }
+-  }
+-  return static_cast<GdkModifierType>(gdk_modifier_type |
+-                                      GetIbusFlags(key_event));
+-}
+-
+ int GetKeyEventProperty(const ui::KeyEvent& key_event,
+                         const char* property_key) {
+   auto* properties = key_event.properties();
+@@ -596,56 +555,9 @@ std::string GetGtkSettingsStringProperty(GtkSettings* settings,
+   return prop_value;
+ }
+ 
+-GdkDisplay* GetGdkDisplay() {
+-  GdkDisplay* display = nullptr;
+-  // TODO(crbug.com/1002674): Remove once GtkIM-based LinuxInputMethodContext
+-  // implementation is moved out of libgtkui.
+-#if defined(USE_X11)
+-  display = gdk_x11_lookup_xdisplay(gfx::GetXDisplay());
+-#endif
+-  if (!display)  // Fall back to the default display.
+-    display = gdk_display_get_default();
+-  return display;
+-}
+-
+ int BuildXkbStateFromGdkEvent(unsigned int state, unsigned char group) {
+   DCHECK_EQ(0u, ((state >> 13) & 0x3));
+   return state | ((group & 0x3) << 13);
+ }
+ 
+-GdkEvent* GdkEventFromKeyEvent(const ui::KeyEvent& key_event) {
+-  GdkEventType event_type =
+-      key_event.type() == ui::ET_KEY_PRESSED ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
+-  auto event_time = key_event.time_stamp() - base::TimeTicks();
+-  int hw_code = GetKeyEventProperty(key_event, ui::kPropertyKeyboardHwKeyCode);
+-  int group = GetKeyEventProperty(key_event, ui::kPropertyKeyboardGroup);
+-
+-  // Get GdkKeymap
+-  GdkKeymap* keymap = gdk_keymap_get_for_display(GetGdkDisplay());
+-
+-  // Get keyval and state
+-  GdkModifierType state = ExtractGdkEventStateFromKeyEvent(key_event);
+-  guint keyval = GDK_KEY_VoidSymbol;
+-  GdkModifierType consumed;
+-  gdk_keymap_translate_keyboard_state(keymap, hw_code, state, group, &keyval,
+-                                      nullptr, nullptr, &consumed);
+-  gdk_keymap_add_virtual_modifiers(keymap, &state);
+-  DCHECK(keyval != GDK_KEY_VoidSymbol);
+-
+-  // Build GdkEvent
+-  GdkEvent* gdk_event = gdk_event_new(event_type);
+-  gdk_event->type = event_type;
+-  gdk_event->key.time = event_time.InMilliseconds();
+-  gdk_event->key.hardware_keycode = hw_code;
+-  gdk_event->key.keyval = keyval;
+-  gdk_event->key.state = BuildXkbStateFromGdkEvent(state, group);
+-  gdk_event->key.group = group;
+-  gdk_event->key.send_event = key_event.flags() & ui::EF_FINAL;
+-  gdk_event->key.is_modifier = state & GDK_MODIFIER_MASK;
+-  gdk_event->key.length = 0;
+-  gdk_event->key.string = nullptr;
+-
+-  return gdk_event;
+-}
+-
+ }  // namespace libgtkui
+diff --git a/chrome/browser/ui/libgtkui/gtk_util.h b/chrome/browser/ui/libgtkui/gtk_util.h
+index ab8707407f80..ab7f36d2cae9 100644
+--- a/chrome/browser/ui/libgtkui/gtk_util.h
++++ b/chrome/browser/ui/libgtkui/gtk_util.h
+@@ -12,8 +12,6 @@
+ #include "ui/native_theme/native_theme.h"
+ #include "ui/views/window/frame_buttons.h"
+ 
+-typedef union _GdkEvent GdkEvent;
+-
+ namespace aura {
+ class Window;
+ }
+@@ -27,7 +25,6 @@ struct HSL;
+ }
+ 
+ namespace ui {
+-class KeyEvent;
+ }
+ 
+ namespace libgtkui {
+@@ -174,9 +171,6 @@ SkColor GetSeparatorColor(const std::string& css_selector);
+ std::string GetGtkSettingsStringProperty(GtkSettings* settings,
+                                          const gchar* prop_name);
+ 
+-// Get current GdkDisplay instance
+-GdkDisplay* GetGdkDisplay();
+-
+ // Xkb Events store group attribute into XKeyEvent::state bit field, along with
+ // other state-related info, while GdkEventKey objects have separate fields for
+ // that purpose, they are ::state and ::group. This function is responsible for
+@@ -188,13 +182,6 @@ GdkDisplay* GetGdkDisplay();
+ // https://gitlab.freedesktop.org/xorg/proto/xorgproto/blob/master/include/X11/extensions/XKB.h#L372
+ int BuildXkbStateFromGdkEvent(unsigned int state, unsigned char group);
+ 
+-// Translates |key_event| into a GdkEvent. GdkEvent::key::window is the only
+-// field not set by this function, callers must set it, as the way for
+-// retrieving it may vary depending on the event being processed. E.g: for IME
+-// Context impl, X11 window XID is obtained through Event::target() which is
+-// root aura::Window targeted by that key event.
+-GdkEvent* GdkEventFromKeyEvent(const ui::KeyEvent& key_event);
+-
+ }  // namespace libgtkui
+ 
+ #endif  // CHROME_BROWSER_UI_LIBGTKUI_GTK_UTIL_H_
+diff --git a/chrome/browser/ui/libgtkui/input_method_context_impl_gtk.cc b/chrome/browser/ui/libgtkui/input_method_context_impl_gtk.cc
+deleted file mode 100644
+index ac4f15dc4985..000000000000
+--- a/chrome/browser/ui/libgtkui/input_method_context_impl_gtk.cc
++++ /dev/null
+@@ -1,231 +0,0 @@
+-// Copyright 2013 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#include "chrome/browser/ui/libgtkui/input_method_context_impl_gtk.h"
+-
+-#include <gdk/gdk.h>
+-#include <gdk/gdkkeysyms.h>
+-#include <gdk/gdkx.h>
+-#include <gtk/gtk.h>
+-#include <stddef.h>
+-
+-#include "base/strings/utf_string_conversions.h"
+-#include "chrome/browser/ui/libgtkui/gtk_util.h"
+-#include "ui/aura/window_tree_host.h"
+-#include "ui/base/ime/composition_text.h"
+-#include "ui/base/ime/linux/composition_text_util_pango.h"
+-#include "ui/base/ime/text_input_client.h"
+-#include "ui/events/event.h"
+-#include "ui/gfx/geometry/dip_util.h"
+-#include "ui/views/linux_ui/linux_ui.h"
+-
+-namespace libgtkui {
+-
+-namespace {
+-
+-// Get IME KeyEvent's target window. Assumes root aura::Window is set to
+-// Event::target(), otherwise returns null.
+-GdkWindow* GetTargetWindow(const ui::KeyEvent& key_event) {
+-  if (!key_event.target())
+-    return nullptr;
+-
+-  GdkDisplay* display = GetGdkDisplay();
+-  aura::Window* window = static_cast<aura::Window*>(key_event.target());
+-  XID xwindow = window->GetHost()->GetAcceleratedWidget();
+-
+-  GdkWindow* gdk_window = gdk_x11_window_lookup_for_display(display, xwindow);
+-  if (gdk_window)
+-    g_object_ref(gdk_window);
+-  else
+-    gdk_window = gdk_x11_window_foreign_new_for_display(display, xwindow);
+-  return gdk_window;
+-}
+-
+-// Translate IME ui::KeyEvent to a GdkEventKey.
+-GdkEvent* GdkEventFromImeKeyEvent(const ui::KeyEvent& key_event) {
+-  GdkEvent* event = GdkEventFromKeyEvent(key_event);
+-  if (!event)
+-    return nullptr;
+-
+-  GdkWindow* target_window = GetTargetWindow(key_event);
+-  if (!target_window) {
+-    gdk_event_free(event);
+-    return nullptr;
+-  }
+-  event->key.window = target_window;
+-  return event;
+-}
+-
+-}  // namespace
+-
+-InputMethodContextImplGtk::InputMethodContextImplGtk(
+-    ui::LinuxInputMethodContextDelegate* delegate,
+-    bool is_simple)
+-    : delegate_(delegate),
+-      is_simple_(is_simple),
+-      has_focus_(false),
+-      gtk_context_(nullptr),
+-      gdk_last_set_client_window_(nullptr) {
+-  CHECK(delegate_);
+-
+-  gtk_context_ =
+-      is_simple ? gtk_im_context_simple_new() : gtk_im_multicontext_new();
+-
+-  g_signal_connect(gtk_context_, "commit", G_CALLBACK(OnCommitThunk), this);
+-  g_signal_connect(gtk_context_, "preedit-changed",
+-                   G_CALLBACK(OnPreeditChangedThunk), this);
+-  g_signal_connect(gtk_context_, "preedit-end", G_CALLBACK(OnPreeditEndThunk),
+-                   this);
+-  g_signal_connect(gtk_context_, "preedit-start",
+-                   G_CALLBACK(OnPreeditStartThunk), this);
+-  // TODO(shuchen): Handle operations on surrounding text.
+-  // "delete-surrounding" and "retrieve-surrounding" signals should be
+-  // handled.
+-}
+-
+-InputMethodContextImplGtk::~InputMethodContextImplGtk() {
+-  if (gtk_context_) {
+-    g_object_unref(gtk_context_);
+-    gtk_context_ = nullptr;
+-  }
+-}
+-
+-// Overridden from ui::LinuxInputMethodContext
+-bool InputMethodContextImplGtk::DispatchKeyEvent(
+-    const ui::KeyEvent& key_event) {
+-  if (!gtk_context_)
+-    return false;
+-
+-  GdkEvent* event = GdkEventFromImeKeyEvent(key_event);
+-  if (!event) {
+-    LOG(ERROR) << "Cannot translate a Keyevent to a GdkEvent.";
+-    return false;
+-  }
+-
+-  GdkWindow* target_window = event->key.window;
+-  if (!target_window) {
+-    LOG(ERROR) << "Cannot get target GdkWindow for KeyEvent.";
+-    return false;
+-  }
+-
+-  SetContextClientWindow(target_window);
+-
+-  // Convert the last known caret bounds relative to the screen coordinates
+-  // to a GdkRectangle relative to the client window.
+-  gint win_x = 0;
+-  gint win_y = 0;
+-  gdk_window_get_origin(target_window, &win_x, &win_y);
+-
+-  gint factor = gdk_window_get_scale_factor(target_window);
+-  gint caret_x = last_caret_bounds_.x() / factor;
+-  gint caret_y = last_caret_bounds_.y() / factor;
+-  gint caret_w = last_caret_bounds_.width() / factor;
+-  gint caret_h = last_caret_bounds_.height() / factor;
+-
+-  GdkRectangle gdk_rect = {caret_x - win_x, caret_y - win_y, caret_w, caret_h};
+-  gtk_im_context_set_cursor_location(gtk_context_, &gdk_rect);
+-
+-  const bool handled =
+-      gtk_im_context_filter_keypress(gtk_context_, &event->key);
+-  gdk_event_free(event);
+-  return handled;
+-}
+-
+-void InputMethodContextImplGtk::Reset() {
+-  gtk_im_context_reset(gtk_context_);
+-
+-  // Some input methods may not honour the reset call.
+-  // Focusing out/in the to make sure it gets reset correctly.
+-  if (!is_simple_ && has_focus_) {
+-    Blur();
+-    Focus();
+-  }
+-}
+-
+-void InputMethodContextImplGtk::Focus() {
+-  gtk_im_context_focus_in(gtk_context_);
+-  has_focus_ = true;
+-}
+-
+-void InputMethodContextImplGtk::Blur() {
+-  gtk_im_context_focus_out(gtk_context_);
+-  has_focus_ = false;
+-}
+-
+-void InputMethodContextImplGtk::SetCursorLocation(const gfx::Rect& rect) {
+-  // Remember the caret bounds so that we can set the cursor location later.
+-  // gtk_im_context_set_cursor_location() takes the location relative to the
+-  // client window, which is unknown at this point.  So we'll call
+-  // gtk_im_context_set_cursor_location() later in ProcessKeyEvent() where
+-  // (and only where) we know the client window.
+-  if (views::LinuxUI::instance()) {
+-    last_caret_bounds_ = gfx::ConvertRectToPixel(
+-        views::LinuxUI::instance()->GetDeviceScaleFactor(), rect);
+-  } else {
+-    last_caret_bounds_ = rect;
+-  }
+-}
+-
+-void InputMethodContextImplGtk::SetSurroundingText(
+-    const base::string16& text,
+-    const gfx::Range& selection_range) {}
+-
+-// private:
+-
+-// GtkIMContext event handlers.
+-
+-void InputMethodContextImplGtk::OnCommit(GtkIMContext* context, gchar* text) {
+-  if (context != gtk_context_)
+-    return;
+-
+-  delegate_->OnCommit(base::UTF8ToUTF16(text));
+-}
+-
+-void InputMethodContextImplGtk::OnPreeditChanged(GtkIMContext* context) {
+-  if (context != gtk_context_)
+-    return;
+-
+-  gchar* str = nullptr;
+-  PangoAttrList* attrs = nullptr;
+-  gint cursor_pos = 0;
+-  gtk_im_context_get_preedit_string(context, &str, &attrs, &cursor_pos);
+-  ui::CompositionText composition_text;
+-  ui::ExtractCompositionTextFromGtkPreedit(str, attrs, cursor_pos,
+-                                           &composition_text);
+-  g_free(str);
+-  pango_attr_list_unref(attrs);
+-
+-  delegate_->OnPreeditChanged(composition_text);
+-}
+-
+-void InputMethodContextImplGtk::OnPreeditEnd(GtkIMContext* context) {
+-  if (context != gtk_context_)
+-    return;
+-
+-  delegate_->OnPreeditEnd();
+-}
+-
+-void InputMethodContextImplGtk::OnPreeditStart(GtkIMContext* context) {
+-  if (context != gtk_context_)
+-    return;
+-
+-  delegate_->OnPreeditStart();
+-}
+-
+-void InputMethodContextImplGtk::SetContextClientWindow(GdkWindow* window) {
+-  if (window == gdk_last_set_client_window_)
+-    return;
+-#if GTK_CHECK_VERSION(3, 90, 0)
+-  gtk_im_context_set_client_widget(gtk_context_, GTK_WIDGET(window));
+-#else
+-  gtk_im_context_set_client_window(gtk_context_, window);
+-#endif
+-
+-  // Prevent leaks when overriding last client window
+-  if (gdk_last_set_client_window_)
+-    g_object_unref(gdk_last_set_client_window_);
+-  gdk_last_set_client_window_ = window;
+-}
+-
+-}  // namespace libgtkui
+diff --git a/chrome/browser/ui/libgtkui/input_method_context_impl_gtk.h b/chrome/browser/ui/libgtkui/input_method_context_impl_gtk.h
+deleted file mode 100644
+index 366da929bbbe..000000000000
+--- a/chrome/browser/ui/libgtkui/input_method_context_impl_gtk.h
++++ /dev/null
+@@ -1,84 +0,0 @@
+-// Copyright 2013 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#ifndef CHROME_BROWSER_UI_LIBGTKUI_INPUT_METHOD_CONTEXT_IMPL_GTK_H_
+-#define CHROME_BROWSER_UI_LIBGTKUI_INPUT_METHOD_CONTEXT_IMPL_GTK_H_
+-
+-#include "base/macros.h"
+-#include "base/strings/string16.h"
+-#include "ui/base/glib/glib_integers.h"
+-#include "ui/base/glib/glib_signal.h"
+-#include "ui/base/ime/linux/linux_input_method_context.h"
+-#include "ui/gfx/geometry/rect.h"
+-
+-typedef struct _GdkWindow GdkWindow;
+-typedef struct _GtkIMContext GtkIMContext;
+-
+-namespace libgtkui {
+-
+-// An implementation of LinuxInputMethodContext which uses GtkIMContext
+-// (gtk-immodule) as a bridge from/to underlying IMEs.
+-class InputMethodContextImplGtk : public ui::LinuxInputMethodContext {
+- public:
+-  InputMethodContextImplGtk(ui::LinuxInputMethodContextDelegate* delegate,
+-                            bool is_simple);
+-  ~InputMethodContextImplGtk() override;
+-
+-  // Overridden from ui::LinuxInputMethodContext
+-  bool DispatchKeyEvent(const ui::KeyEvent& key_event) override;
+-  void SetCursorLocation(const gfx::Rect& rect) override;
+-  void Reset() override;
+-  void Focus() override;
+-  void Blur() override;
+-  void SetSurroundingText(const base::string16& text,
+-                          const gfx::Range& selection_range) override;
+-
+- private:
+-  // GtkIMContext event handlers.  They are shared among |gtk_context_simple_|
+-  // and |gtk_multicontext_|.
+-  CHROMEG_CALLBACK_1(InputMethodContextImplGtk,
+-                     void,
+-                     OnCommit,
+-                     GtkIMContext*,
+-                     gchar*);
+-  CHROMEG_CALLBACK_0(InputMethodContextImplGtk,
+-                     void,
+-                     OnPreeditChanged,
+-                     GtkIMContext*);
+-  CHROMEG_CALLBACK_0(InputMethodContextImplGtk,
+-                     void,
+-                     OnPreeditEnd,
+-                     GtkIMContext*);
+-  CHROMEG_CALLBACK_0(InputMethodContextImplGtk,
+-                     void,
+-                     OnPreeditStart,
+-                     GtkIMContext*);
+-
+-  void SetContextClientWindow(GdkWindow* window);
+-
+-  // A set of callback functions.  Must not be nullptr.
+-  ui::LinuxInputMethodContextDelegate* delegate_;
+-
+-  // Input method context type flag.
+-  //   - true if it supports table-based input methods
+-  //   - false if it supports multiple, loadable input methods
+-  bool is_simple_;
+-
+-  // Keeps track of current focus state.
+-  bool has_focus_;
+-
+-  // IME's input GTK context.
+-  GtkIMContext* gtk_context_;
+-
+-  gpointer gdk_last_set_client_window_;
+-
+-  // Last known caret bounds relative to the screen coordinates.
+-  gfx::Rect last_caret_bounds_;
+-
+-  DISALLOW_COPY_AND_ASSIGN(InputMethodContextImplGtk);
+-};
+-
+-}  // namespace libgtkui
+-
+-#endif  // CHROME_BROWSER_UI_LIBGTKUI_INPUT_METHOD_CONTEXT_IMPL_GTK_H_
+diff --git a/chrome/browser/ui/libgtkui/x11_input_method_context_impl_gtk.cc b/chrome/browser/ui/libgtkui/x11_input_method_context_impl_gtk.cc
+new file mode 100644
+index 000000000000..c8b96045215a
+--- /dev/null
++++ b/chrome/browser/ui/libgtkui/x11_input_method_context_impl_gtk.cc
+@@ -0,0 +1,335 @@
++// Copyright 2013 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include "chrome/browser/ui/libgtkui/x11_input_method_context_impl_gtk.h"
++
++#include <gdk/gdk.h>
++#include <gdk/gdkkeysyms.h>
++#include <gdk/gdkx.h>
++#include <stddef.h>
++
++#include <gtk/gtk.h>
++
++#include "base/strings/utf_string_conversions.h"
++#include "ui/base/ime/composition_text.h"
++#include "ui/base/ime/linux/composition_text_util_pango.h"
++#include "ui/base/ime/text_input_client.h"
++#include "ui/events/event.h"
++#include "ui/events/keycodes/keyboard_code_conversion_x.h"
++#include "ui/gfx/geometry/dip_util.h"
++#include "ui/gfx/x/x11.h"
++#include "ui/gfx/x/x11_types.h"
++#include "ui/views/linux_ui/linux_ui.h"
++
++namespace libgtkui {
++
++X11InputMethodContextImplGtk::X11InputMethodContextImplGtk(
++    ui::LinuxInputMethodContextDelegate* delegate,
++    bool is_simple)
++    : delegate_(delegate),
++      is_simple_(is_simple),
++      has_focus_(false),
++      gtk_context_(nullptr),
++      gdk_last_set_client_window_(nullptr) {
++  CHECK(delegate_);
++
++  ResetXModifierKeycodesCache();
++
++  gtk_context_ =
++      is_simple ? gtk_im_context_simple_new() : gtk_im_multicontext_new();
++
++  g_signal_connect(gtk_context_, "commit", G_CALLBACK(OnCommitThunk), this);
++  g_signal_connect(gtk_context_, "preedit-changed",
++                   G_CALLBACK(OnPreeditChangedThunk), this);
++  g_signal_connect(gtk_context_, "preedit-end", G_CALLBACK(OnPreeditEndThunk),
++                   this);
++  g_signal_connect(gtk_context_, "preedit-start",
++                   G_CALLBACK(OnPreeditStartThunk), this);
++  // TODO(shuchen): Handle operations on surrounding text.
++  // "delete-surrounding" and "retrieve-surrounding" signals should be
++  // handled.
++}
++
++X11InputMethodContextImplGtk::~X11InputMethodContextImplGtk() {
++  if (gtk_context_) {
++    g_object_unref(gtk_context_);
++    gtk_context_ = nullptr;
++  }
++}
++
++// Overriden from ui::LinuxInputMethodContext
++
++bool X11InputMethodContextImplGtk::DispatchKeyEvent(
++    const ui::KeyEvent& key_event) {
++  if (!key_event.HasNativeEvent() || !gtk_context_)
++    return false;
++
++  // Translate a XKeyEvent to a GdkEventKey.
++  GdkEvent* event = GdkEventFromNativeEvent(key_event.native_event());
++  if (!event) {
++    LOG(ERROR) << "Cannot translate a XKeyEvent to a GdkEvent.";
++    return false;
++  }
++
++  if (event->key.window != gdk_last_set_client_window_) {
++#if GTK_CHECK_VERSION(3, 90, 0)
++    gtk_im_context_set_client_widget(gtk_context_,
++                                     GTK_WIDGET(event->key.window));
++#else
++    gtk_im_context_set_client_window(gtk_context_, event->key.window);
++#endif
++    gdk_last_set_client_window_ = event->key.window;
++  }
++
++  // Convert the last known caret bounds relative to the screen coordinates
++  // to a GdkRectangle relative to the client window.
++  gint win_x = 0;
++  gint win_y = 0;
++  gdk_window_get_origin(event->key.window, &win_x, &win_y);
++
++  gint factor = gdk_window_get_scale_factor(event->key.window);
++  gint caret_x = last_caret_bounds_.x() / factor;
++  gint caret_y = last_caret_bounds_.y() / factor;
++  gint caret_w = last_caret_bounds_.width() / factor;
++  gint caret_h = last_caret_bounds_.height() / factor;
++
++  GdkRectangle gdk_rect = {caret_x - win_x, caret_y - win_y, caret_w, caret_h};
++  gtk_im_context_set_cursor_location(gtk_context_, &gdk_rect);
++
++  const bool handled =
++      gtk_im_context_filter_keypress(gtk_context_, &event->key);
++  gdk_event_free(event);
++  return handled;
++}
++
++void X11InputMethodContextImplGtk::Reset() {
++  gtk_im_context_reset(gtk_context_);
++
++  // Some input methods may not honour the reset call.
++  // Focusing out/in the to make sure it gets reset correctly.
++  if (!is_simple_ && has_focus_) {
++    Blur();
++    Focus();
++  }
++}
++
++void X11InputMethodContextImplGtk::Focus() {
++  gtk_im_context_focus_in(gtk_context_);
++  has_focus_ = true;
++}
++
++void X11InputMethodContextImplGtk::Blur() {
++  gtk_im_context_focus_out(gtk_context_);
++  has_focus_ = false;
++}
++
++void X11InputMethodContextImplGtk::SetCursorLocation(const gfx::Rect& rect) {
++  // Remember the caret bounds so that we can set the cursor location later.
++  // gtk_im_context_set_cursor_location() takes the location relative to the
++  // client window, which is unknown at this point.  So we'll call
++  // gtk_im_context_set_cursor_location() later in ProcessKeyEvent() where
++  // (and only where) we know the client window.
++  if (views::LinuxUI::instance()) {
++    last_caret_bounds_ = gfx::ConvertRectToPixel(
++        views::LinuxUI::instance()->GetDeviceScaleFactor(), rect);
++  } else {
++    last_caret_bounds_ = rect;
++  }
++}
++
++void X11InputMethodContextImplGtk::SetSurroundingText(
++    const base::string16& text,
++    const gfx::Range& selection_range) {}
++
++// private:
++
++void X11InputMethodContextImplGtk::ResetXModifierKeycodesCache() {
++  modifier_keycodes_.clear();
++  meta_keycodes_.clear();
++  super_keycodes_.clear();
++  hyper_keycodes_.clear();
++
++  Display* display = gfx::GetXDisplay();
++  gfx::XScopedPtr<XModifierKeymap,
++                  gfx::XObjectDeleter<XModifierKeymap, int, XFreeModifiermap>>
++      modmap(XGetModifierMapping(display));
++  int min_keycode = 0;
++  int max_keycode = 0;
++  int keysyms_per_keycode = 1;
++  XDisplayKeycodes(display, &min_keycode, &max_keycode);
++  gfx::XScopedPtr<KeySym[]> keysyms(
++      XGetKeyboardMapping(display, min_keycode, max_keycode - min_keycode + 1,
++                          &keysyms_per_keycode));
++  for (int i = 0; i < 8 * modmap->max_keypermod; ++i) {
++    const int keycode = modmap->modifiermap[i];
++    if (!keycode)
++      continue;
++    modifier_keycodes_.insert(keycode);
++
++    if (!keysyms)
++      continue;
++    for (int j = 0; j < keysyms_per_keycode; ++j) {
++      switch (keysyms[(keycode - min_keycode) * keysyms_per_keycode + j]) {
++        case XK_Meta_L:
++        case XK_Meta_R:
++          meta_keycodes_.push_back(keycode);
++          break;
++        case XK_Super_L:
++        case XK_Super_R:
++          super_keycodes_.push_back(keycode);
++          break;
++        case XK_Hyper_L:
++        case XK_Hyper_R:
++          hyper_keycodes_.push_back(keycode);
++          break;
++      }
++    }
++  }
++}
++
++GdkEvent* X11InputMethodContextImplGtk::GdkEventFromNativeEvent(
++    const ui::PlatformEvent& native_event) {
++  XEvent xkeyevent;
++  if (native_event->type == GenericEvent) {
++    // If this is an XI2 key event, build a matching core X event, to avoid
++    // having two cases for every use.
++    ui::InitXKeyEventFromXIDeviceEvent(*native_event, &xkeyevent);
++  } else {
++    DCHECK(native_event->type == KeyPress || native_event->type == KeyRelease);
++    xkeyevent.xkey = native_event->xkey;
++  }
++  XKeyEvent& xkey = xkeyevent.xkey;
++
++  // Get a GdkDisplay.
++  GdkDisplay* display = gdk_x11_lookup_xdisplay(xkey.display);
++  if (!display) {
++    // Fall back to the default display.
++    display = gdk_display_get_default();
++  }
++  if (!display) {
++    LOG(ERROR) << "Cannot get a GdkDisplay for a key event.";
++    return nullptr;
++  }
++  // Get a keysym and group.
++  KeySym keysym = NoSymbol;
++  guint8 keyboard_group = 0;
++  XLookupString(&xkey, nullptr, 0, &keysym, nullptr);
++  GdkKeymap* keymap = gdk_keymap_get_for_display(display);
++  GdkKeymapKey* keys = nullptr;
++  guint* keyvals = nullptr;
++  gint n_entries = 0;
++  if (keymap && gdk_keymap_get_entries_for_keycode(keymap, xkey.keycode, &keys,
++                                                   &keyvals, &n_entries)) {
++    for (gint i = 0; i < n_entries; ++i) {
++      if (keyvals[i] == keysym) {
++        keyboard_group = keys[i].group;
++        break;
++      }
++    }
++  }
++  g_free(keys);
++  keys = nullptr;
++  g_free(keyvals);
++  keyvals = nullptr;
++// Get a GdkWindow.
++  GdkWindow* window = gdk_x11_window_lookup_for_display(display, xkey.window);
++  if (window)
++    g_object_ref(window);
++  else
++    window = gdk_x11_window_foreign_new_for_display(display, xkey.window);
++  if (!window) {
++    LOG(ERROR) << "Cannot get a GdkWindow for a key event.";
++    return nullptr;
++  }
++
++  // Create a GdkEvent.
++  GdkEventType event_type =
++      xkey.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
++  GdkEvent* event = gdk_event_new(event_type);
++  event->key.type = event_type;
++  event->key.window = window;
++  // GdkEventKey and XKeyEvent share the same definition for time and state.
++  event->key.send_event = xkey.send_event;
++  event->key.time = xkey.time;
++  event->key.state = xkey.state;
++  event->key.keyval = keysym;
++  event->key.length = 0;
++  event->key.string = nullptr;
++  event->key.hardware_keycode = xkey.keycode;
++  event->key.group = keyboard_group;
++  event->key.is_modifier = IsKeycodeModifierKey(xkey.keycode);
++
++  char keybits[32] = {0};
++  XQueryKeymap(xkey.display, keybits);
++  if (IsAnyOfKeycodesPressed(meta_keycodes_, keybits, sizeof keybits * 8))
++    event->key.state |= GDK_META_MASK;
++  if (IsAnyOfKeycodesPressed(super_keycodes_, keybits, sizeof keybits * 8))
++    event->key.state |= GDK_SUPER_MASK;
++  if (IsAnyOfKeycodesPressed(hyper_keycodes_, keybits, sizeof keybits * 8))
++    event->key.state |= GDK_HYPER_MASK;
++
++  return event;
++}
++
++bool X11InputMethodContextImplGtk::IsKeycodeModifierKey(
++    unsigned int keycode) const {
++  return modifier_keycodes_.find(keycode) != modifier_keycodes_.end();
++}
++
++bool X11InputMethodContextImplGtk::IsAnyOfKeycodesPressed(
++    const std::vector<int>& keycodes,
++    const char* keybits,
++    int num_keys) const {
++  for (size_t i = 0; i < keycodes.size(); ++i) {
++    const int keycode = keycodes[i];
++    if (keycode < 0 || num_keys <= keycode)
++      continue;
++    if (keybits[keycode / 8] & 1 << (keycode % 8))
++      return true;
++  }
++  return false;
++}
++
++// GtkIMContext event handlers.
++
++void X11InputMethodContextImplGtk::OnCommit(GtkIMContext* context,
++                                            gchar* text) {
++  if (context != gtk_context_)
++    return;
++
++  delegate_->OnCommit(base::UTF8ToUTF16(text));
++}
++
++void X11InputMethodContextImplGtk::OnPreeditChanged(GtkIMContext* context) {
++  if (context != gtk_context_)
++    return;
++
++  gchar* str = nullptr;
++  PangoAttrList* attrs = nullptr;
++  gint cursor_pos = 0;
++  gtk_im_context_get_preedit_string(context, &str, &attrs, &cursor_pos);
++  ui::CompositionText composition_text;
++  ui::ExtractCompositionTextFromGtkPreedit(str, attrs, cursor_pos,
++                                           &composition_text);
++  g_free(str);
++  pango_attr_list_unref(attrs);
++
++  delegate_->OnPreeditChanged(composition_text);
++}
++
++void X11InputMethodContextImplGtk::OnPreeditEnd(GtkIMContext* context) {
++  if (context != gtk_context_)
++    return;
++
++  delegate_->OnPreeditEnd();
++}
++
++void X11InputMethodContextImplGtk::OnPreeditStart(GtkIMContext* context) {
++  if (context != gtk_context_)
++    return;
++
++  delegate_->OnPreeditStart();
++}
++
++}  // namespace libgtkui
+diff --git a/chrome/browser/ui/libgtkui/x11_input_method_context_impl_gtk.h b/chrome/browser/ui/libgtkui/x11_input_method_context_impl_gtk.h
+new file mode 100644
+index 000000000000..ae888e55b153
+--- /dev/null
++++ b/chrome/browser/ui/libgtkui/x11_input_method_context_impl_gtk.h
+@@ -0,0 +1,113 @@
++// Copyright 2013 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef CHROME_BROWSER_UI_LIBGTKUI_X11_INPUT_METHOD_CONTEXT_IMPL_GTK_H_
++#define CHROME_BROWSER_UI_LIBGTKUI_X11_INPUT_METHOD_CONTEXT_IMPL_GTK_H_
++
++#include <unordered_set>
++#include <vector>
++
++#include "base/macros.h"
++#include "base/strings/string16.h"
++#include "ui/base/glib/glib_integers.h"
++#include "ui/base/glib/glib_signal.h"
++#include "ui/base/ime/linux/linux_input_method_context.h"
++#include "ui/events/platform_event.h"
++#include "ui/gfx/geometry/rect.h"
++
++typedef union _GdkEvent GdkEvent;
++typedef struct _GtkIMContext GtkIMContext;
++
++namespace libgtkui {
++
++// An implementation of LinuxInputMethodContext which is based on X11 event loop
++// and uses GtkIMContext(gtk-immodule) as a bridge from/to underlying IMEs.
++class X11InputMethodContextImplGtk : public ui::LinuxInputMethodContext {
++ public:
++  X11InputMethodContextImplGtk(ui::LinuxInputMethodContextDelegate* delegate,
++                               bool is_simple);
++  ~X11InputMethodContextImplGtk() override;
++
++  // Overriden from ui::LinuxInputMethodContext
++  bool DispatchKeyEvent(const ui::KeyEvent& key_event) override;
++  void SetCursorLocation(const gfx::Rect& rect) override;
++  void Reset() override;
++  void Focus() override;
++  void Blur() override;
++  void SetSurroundingText(const base::string16& text,
++                          const gfx::Range& selection_range) override;
++
++ private:
++  // Resets the cache of X modifier keycodes.
++  // TODO(yukishiino): We should call this method whenever X keyboard mapping
++  // changes, for example when a user switched to another keyboard layout.
++  void ResetXModifierKeycodesCache();
++
++  // Constructs a GdkEventKey from a XKeyEvent and returns it.  Otherwise,
++  // returns nullptr.  The returned GdkEvent must be freed by gdk_event_free.
++  GdkEvent* GdkEventFromNativeEvent(const ui::PlatformEvent& native_event);
++
++  // Returns true if the hardware |keycode| is assigned to a modifier key.
++  bool IsKeycodeModifierKey(unsigned int keycode) const;
++
++  // Returns true if one of |keycodes| is pressed.  |keybits| is a bit vector
++  // returned by XQueryKeymap, and |num_keys| is the number of keys in
++  // |keybits|.
++  bool IsAnyOfKeycodesPressed(const std::vector<int>& keycodes,
++                              const char* keybits,
++                              int num_keys) const;
++
++  // GtkIMContext event handlers.  They are shared among |gtk_context_simple_|
++  // and |gtk_multicontext_|.
++  CHROMEG_CALLBACK_1(X11InputMethodContextImplGtk,
++                     void,
++                     OnCommit,
++                     GtkIMContext*,
++                     gchar*);
++  CHROMEG_CALLBACK_0(X11InputMethodContextImplGtk,
++                     void,
++                     OnPreeditChanged,
++                     GtkIMContext*);
++  CHROMEG_CALLBACK_0(X11InputMethodContextImplGtk,
++                     void,
++                     OnPreeditEnd,
++                     GtkIMContext*);
++  CHROMEG_CALLBACK_0(X11InputMethodContextImplGtk,
++                     void,
++                     OnPreeditStart,
++                     GtkIMContext*);
++
++  // A set of callback functions.  Must not be nullptr.
++  ui::LinuxInputMethodContextDelegate* delegate_;
++
++  // Input method context type flag.
++  //   - true if it supports table-based input methods
++  //   - false if it supports multiple, loadable input methods
++  bool is_simple_;
++
++  // Keeps track of current focus state.
++  bool has_focus_;
++
++  // IME's input GTK context.
++  GtkIMContext* gtk_context_;
++
++  gpointer gdk_last_set_client_window_;
++
++  // Last known caret bounds relative to the screen coordinates.
++  gfx::Rect last_caret_bounds_;
++
++  // A set of hardware keycodes of modifier keys.
++  std::unordered_set<unsigned int> modifier_keycodes_;
++
++  // A list of keycodes of each modifier key.
++  std::vector<int> meta_keycodes_;
++  std::vector<int> super_keycodes_;
++  std::vector<int> hyper_keycodes_;
++
++  DISALLOW_COPY_AND_ASSIGN(X11InputMethodContextImplGtk);
++};
++
++}  // namespace libgtkui
++
++#endif  // CHROME_BROWSER_UI_LIBGTKUI_X11_INPUT_METHOD_CONTEXT_IMPL_GTK_H_
+diff --git a/ui/aura/window_event_dispatcher.cc b/ui/aura/window_event_dispatcher.cc
+index 5949a5613fb5..dd9c2852211b 100644
+--- a/ui/aura/window_event_dispatcher.cc
++++ b/ui/aura/window_event_dispatcher.cc
+@@ -1029,14 +1029,6 @@ DispatchDetails WindowEventDispatcher::PreDispatchKeyEvent(
+       !host_->ShouldSendKeyEventToIme()) {
+     return DispatchDetails();
+   }
+-
+-  // At this point (i.e: EP_PREDISPATCH), event target is still not set, so do
+-  // it explicitly here thus making it possible for InputMethodContext
+-  // implementation to retrieve target window through KeyEvent::target().
+-  // Event::target is reset at WindowTreeHost::DispatchKeyEventPostIME(), just
+-  // after key is processed by InputMethodContext.
+-  ui::Event::DispatcherApi(event).set_target(window());
+-
+   DispatchDetails details = host_->GetInputMethod()->DispatchKeyEvent(event);
+   event->StopPropagation();
+   return details;
+diff --git a/ui/aura/window_tree_host.cc b/ui/aura/window_tree_host.cc
+index e1efd8b47be0..4bdfe7544e7b 100644
+--- a/ui/aura/window_tree_host.cc
++++ b/ui/aura/window_tree_host.cc
+@@ -291,11 +291,6 @@ ui::EventDispatchDetails WindowTreeHost::DispatchKeyEventPostIME(
+   // If dispatch to IME is already disabled we shouldn't reach here.
+   DCHECK(!dispatcher_->should_skip_ime());
+   dispatcher_->set_skip_ime(true);
+-
+-  // InputMethod::DispatchKeyEvent() is called in PRE_DISPATCH phase, so event
+-  // target is reset here to avoid issues in subsequent processing phases.
+-  ui::Event::DispatcherApi(event).set_target(nullptr);
+-
+   // We should bypass event rewriters here as they've been tried before.
+   ui::EventDispatchDetails dispatch_details =
+       event_sink()->OnEventFromSource(event);
+diff --git a/ui/events/event.cc b/ui/events/event.cc
+index 7968ab19fb7e..bb6188785727 100644
+--- a/ui/events/event.cc
++++ b/ui/events/event.cc
+@@ -831,7 +831,6 @@ KeyEvent::KeyEvent(const PlatformEvent& native_event, int event_flags)
+ 
+   NormalizeFlags();
+   key_ = GetDomKeyFromXEvent(native_event);
+-  SetProperties(GetEventPropertiesFromXEvent(type(), *native_event));
+ #elif defined(OS_WIN)
+   // Only Windows has native character events.
+   if (is_char_) {
+diff --git a/ui/events/event_utils.h b/ui/events/event_utils.h
+index 5f798ae3e693..80785328842f 100644
+--- a/ui/events/event_utils.h
++++ b/ui/events/event_utils.h
+@@ -43,9 +43,6 @@ enum class DomCode;
+ // Key used to store keyboard 'group' values in Event::Properties
+ constexpr char kPropertyKeyboardGroup[] = "_keyevent_kbd_group_";
+ 
+-// Key used to store 'hardware key code' values in Event::Properties
+-constexpr char kPropertyKeyboardHwKeyCode[] = "_keyevent_kbd_hw_keycode_";
+-
+ // IBus specific Event::Properties constants. ibus-gtk in async mode uses
+ // gtk-specific XKeyEvent::state bits 24 and 25 for its key events.
+ // https://mail.gnome.org/archives/gtk-devel-list/2013-June/msg00003.html
+@@ -53,6 +50,10 @@ constexpr char kPropertyKeyboardIBusFlag[] = "_keyevent_kbd_ibus_ime_flags_";
+ constexpr unsigned int kPropertyKeyboardIBusFlagOffset = 24;
+ constexpr unsigned int kPropertyKeyboardIBusFlagMask = 0x03;
+ 
++
++// Key used to store 'hardware key code' values in Event::Properties
++constexpr char kPropertyKeyboardHwKeyCode[] = "_keyevent_kbd_hw_keycode_";
++
+ // Key used to store mouse event flag telling ET_MOUSE_EXITED must actually be
+ // interpreted as "crossing intermediate window" in blink context.
+ constexpr char kPropertyMouseCrossedIntermediateWindow[] =
