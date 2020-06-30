@@ -172,3 +172,5 @@ gooroom/BTS-2348-change-strings.patch
 gooroom/browser-log.patch
 gooroom/BTS-2392-Hangul-bug-fix.patch
 gooroom/BTS-2431-Hide-gooroom-browser-login-on-settings-page.patch
+gooroom/BTS-2397-Change-webrtc-thirdparty-to-show-in-folder.patch
+gooroom/BTS-2454-Remove-bookmark-sync-in-bubble.patch

@@ -1,3 +1,11 @@
+gooroom-browser (2.6.0-1+grm2u5) stretch; urgency=medium
+
+  * BugTrackingSystem
+    - 2397 : Change webrtc thirdparty to fix 'show in folder' bug
+    - 2454 : Remove bookmark sync in bubble message
+
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 30 Jun 2020 17:14:00 +0900
+
 gooroom-browser (2.6.0-1+grm2u4) stretch; urgency=medium
 
   * BugTrackingSystem
