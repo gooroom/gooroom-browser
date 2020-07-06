@@ -1,0 +1,14 @@
+diff --git a/chrome/app/gooroom/generated_resources.grd b/chrome/app/gooroom/generated_resources.grd
+index 9484ea189230..5260d37a9017 100644
+--- a/chrome/app/gooroom/generated_resources.grd
++++ b/chrome/app/gooroom/generated_resources.grd
+@@ -8087,6 +8087,9 @@ Please help our engineers fix this problem. Tell us what happened right before y
+       <message name="IDS_NOTIFICATION_PERMISSIONS_FRAGMENT" desc="Permission sentence fragment to show following the prompt 'This site wants to:' in a permissions request">
+         Show notifications
+       </message>
++      <message name="IDS_NOTIFICATION_BUTTON_ACTIVATE" desc="Activate button label">
++        Activate
++      </message>
+       <message name="IDS_NOTIFICATION_BUTTON_SETTINGS" desc="Short button label to go to the notification settings panel">
+         Settings
+       </message>
