@@ -1,7 +1,7 @@
-From a1808ec76d971fc318bc1df3c36470383252644a Mon Sep 17 00:00:00 2001
+From e6f30c26da2a44f068cce5b66a2a212f46a893de Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 3 Jun 2020 10:12:42 +0900
-Subject: [PATCH 12/79] Add scheme module to convert (chrome://->gooroom://)
+Date: Thu, 23 Jul 2020 15:01:01 +0900
+Subject: [PATCH 12/88] Add scheme module to convert (chrome://->gooroom://)
 
 ---
  chrome/browser/extensions/extension_web_ui.cc |  9 ++++
@@ -43,10 +43,10 @@ index 4c6f975f4b0c..16c42d4fb8c3 100644
                            url->spec().substr(override.length()));
          *url = original_url;
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 4bed084884eb..0d4481be38b4 100644
+index 408fe0ac516a..328b983e37f1 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -258,6 +258,10 @@ if (!is_android && !is_mac) {
+@@ -248,6 +248,10 @@ if (!is_android && !is_mac) {
          "browser/gooroom_pref.h",
          "browser/gooroom_url_filter_impl.cc",
          "browser/gooroom_url_filter_impl.h", 

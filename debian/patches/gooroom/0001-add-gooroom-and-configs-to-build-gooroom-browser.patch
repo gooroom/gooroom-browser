@@ -1,24 +1,24 @@
-From 2f5797887f4942eb8a9917ec5b624f448383aa7a Mon Sep 17 00:00:00 2001
+From 3d8c4a11661acfc4231765db02af8700e20afbd4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Tue, 2 Jun 2020 18:10:05 +0900
-Subject: [PATCH 01/79] add /gooroom and configs to build gooroom-browser 
+Date: Wed, 22 Jul 2020 11:05:51 +0900
+Subject: [PATCH 01/88] add /gooroom and configs to build gooroom-browser 
  binary
 
 ---
  BUILD.gn                                      |   2 +
  build/config/compiler/BUILD.gn                |   3 +
  .../browser/chrome_content_browser_client.h   |   5 +-
- gooroom/BUILD.gn                              | 453 ++++++++++++++++++
+ gooroom/BUILD.gn                              | 424 ++++++++++++++++++
  gooroom/app/gooroom_exe_main_aura.cc          |  22 +
  gooroom/app/gooroom_main.cc                   | 117 +++++
- gooroom/app/gooroom_main_delegate.cc          |  95 ++++
- gooroom/app/gooroom_main_delegate.h           |  48 ++
+ gooroom/app/gooroom_main_delegate.cc          | 100 +++++
+ gooroom/app/gooroom_main_delegate.h           |  51 +++
  gooroom/browser/BUILD.gn                      |  20 +
  .../browser/gooroom_content_browser_client.cc | 163 +++++++
  .../browser/gooroom_content_browser_client.h  |  29 ++
  gooroom/browser/gooroom_content_client.cc     |   1 +
  gooroom/browser/gooroom_content_client.h      |  13 +
- 13 files changed, 969 insertions(+), 2 deletions(-)
+ 13 files changed, 948 insertions(+), 2 deletions(-)
  create mode 100644 gooroom/BUILD.gn
  create mode 100644 gooroom/app/gooroom_exe_main_aura.cc
  create mode 100644 gooroom/app/gooroom_main.cc
@@ -31,10 +31,10 @@ Subject: [PATCH 01/79] add /gooroom and configs to build gooroom-browser
  create mode 100644 gooroom/browser/gooroom_content_client.h
 
 diff --git a/BUILD.gn b/BUILD.gn
-index efaf5b31ee37..1389959826f6 100644
+index ad58fc03312a..60037befc463 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
-@@ -149,6 +149,8 @@ group("gn_all") {
+@@ -154,6 +154,8 @@ group("gn_all") {
        "//ui/accessibility:accessibility_unittests",
        "//ui/accessibility/extensions:extension_tests",
        "//ui/accessibility/extensions:extensions",
@@ -44,7 +44,7 @@ index efaf5b31ee37..1389959826f6 100644
    }
  
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index fbf8335f11ba..eb50e498748b 100644
+index 4c5e6779efda..2118afcffc88 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
 @@ -244,6 +244,9 @@ config("compiler") {
@@ -58,12 +58,12 @@ index fbf8335f11ba..eb50e498748b 100644
    # categories here, add it to the associated file to keep this shared config
    # smaller.
 diff --git a/chrome/browser/chrome_content_browser_client.h b/chrome/browser/chrome_content_browser_client.h
-index d6b48bfa4314..14eb3faadd31 100644
+index ae86be8afe0f..96e5c491c2ae 100644
 --- a/chrome/browser/chrome_content_browser_client.h
 +++ b/chrome/browser/chrome_content_browser_client.h
-@@ -660,6 +660,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+@@ -676,6 +676,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
                                   content::BrowserContext* browser_context);
-   virtual ui::NativeTheme* GetWebTheme() const;  // For testing.
+   virtual const ui::NativeTheme* GetWebTheme() const;  // For testing.
  
 +  // [GOOROOM] Changed from private to protected for inheritance.
 +  StartupData* startup_data_;
@@ -71,7 +71,7 @@ index d6b48bfa4314..14eb3faadd31 100644
    // Used by subclasses (e.g. implemented by downstream embedders) to add
    // their own extra part objects.
    void AddExtraPart(ChromeContentBrowserClientParts* part) {
-@@ -730,8 +733,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+@@ -728,8 +731,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
        service_manager::BinderRegistryWithArgs<content::RenderFrameHost*>>
        frame_interfaces_parameterized_;
  
@@ -82,10 +82,10 @@ index d6b48bfa4314..14eb3faadd31 100644
    std::unique_ptr<ChromeHidDelegate> hid_delegate_;
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
 new file mode 100644
-index 000000000000..dbfbe847133c
+index 000000000000..fac0e5411187
 --- /dev/null
 +++ b/gooroom/BUILD.gn
-@@ -0,0 +1,453 @@
+@@ -0,0 +1,424 @@
 +# Copyright 2014 The Chromium Authors. All rights reserved.
 +# Use of this source code is governed by a BSD-style license that can be
 +# found in the LICENSE file.
@@ -188,16 +188,6 @@ index 000000000000..dbfbe847133c
 +        data = invoker.data
 +      } else {
 +        data = []
-+      }
-+
-+      if (!is_win || is_clang) {
-+        # Normally, we need to pass specific flags to the linker to
-+        # create an executable that gathers profile data. However, when
-+        # using MSVC, we need to make sure we *don't* pass /GENPROFILE
-+        # when linking without generating any code, or else the linker
-+        # will give us fatal error LNK1264. So we add the PGO flags
-+        # on all configurations, execpt MSVC on Windows.
-+        configs += [ "//build/config/compiler/pgo:default_pgo_flags" ]
 +      }
 +
 +      # Because the sources list varies so significantly per-platform, generally
@@ -377,25 +367,6 @@ index 000000000000..dbfbe847133c
 +  }
 +}
 +
-+group("child_dependencies") {
-+  public_deps = [
-+    "//chrome/browser/devtools",
-+    "//chrome/child",
-+    "//chrome/common",
-+    "//chrome/gpu",
-+    "//chrome/renderer",
-+    "//chrome/utility",
-+    "//components/sync",
-+    "//content/public/child",
-+    "//pdf",
-+    "//third_party/blink/public:blink_devtools_frontend_resources_files",
-+  ]
-+
-+  if (enable_nacl) {
-+    public_deps += [ "//components/nacl/renderer/plugin:nacl_trusted_plugin" ]
-+  }
-+}
-+
 +group("resources") {
 +  public_deps = [
 +    "//chrome/browser:resources",
@@ -569,7 +540,7 @@ index 000000000000..50053010c311
 +}
 diff --git a/gooroom/app/gooroom_main.cc b/gooroom/app/gooroom_main.cc
 new file mode 100644
-index 000000000000..3b42cd15673c
+index 000000000000..4f9863367bfe
 --- /dev/null
 +++ b/gooroom/app/gooroom_main.cc
 @@ -0,0 +1,117 @@
@@ -635,8 +606,8 @@ index 000000000000..3b42cd15673c
 +
 +  GooroomMainDelegate gooroom_main_delegate(
 +      base::TimeTicks::FromInternalValue(exe_entry_point_ticks));
-+  ChromeMainDelegate chrome_main_delegate(
-+      base::TimeTicks::FromInternalValue(exe_entry_point_ticks));
++//  ChromeMainDelegate chrome_main_delegate(
++//      base::TimeTicks::FromInternalValue(exe_entry_point_ticks));
 +
 +  content::ContentMainParams params(&gooroom_main_delegate);
 +
@@ -692,10 +663,10 @@ index 000000000000..3b42cd15673c
 +}
 diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
 new file mode 100644
-index 000000000000..5d131b1e1b9a
+index 000000000000..b2e985efa6f3
 --- /dev/null
 +++ b/gooroom/app/gooroom_main_delegate.cc
-@@ -0,0 +1,95 @@
+@@ -0,0 +1,100 @@
 +// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -726,8 +697,13 @@ index 000000000000..5d131b1e1b9a
 +    g_gooroom_content_browser_client = LAZY_INSTANCE_INITIALIZER;
 +#endif
 +
++GooroomMainDelegate::GooroomMainDelegate()
++    : GooroomMainDelegate(base::TimeTicks()) {}
++
 +GooroomMainDelegate::GooroomMainDelegate(base::TimeTicks exe_entry_point_ticks)
 +    : ChromeMainDelegate(exe_entry_point_ticks) {}
++
++GooroomMainDelegate::~GooroomMainDelegate() = default;
 +
 +void GooroomMainDelegate::PreSandboxStartup() {
 +  ChromeMainDelegate::PreSandboxStartup();
@@ -793,10 +769,10 @@ index 000000000000..5d131b1e1b9a
 +}
 diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
 new file mode 100644
-index 000000000000..9a0b3ba48e10
+index 000000000000..5d2797d678da
 --- /dev/null
 +++ b/gooroom/app/gooroom_main_delegate.h
-@@ -0,0 +1,48 @@
+@@ -0,0 +1,51 @@
 +// Copyright (c) 2011 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -822,7 +798,10 @@ index 000000000000..9a0b3ba48e10
 +// Chrome implementation of ContentMainDelegate.
 +class GooroomMainDelegate : public ChromeMainDelegate {
 + public:
++  GooroomMainDelegate();
 +  explicit GooroomMainDelegate(base::TimeTicks exe_entry_point_ticks);
++
++  ~GooroomMainDelegate() override;
 +
 + protected:
 +  void PostEarlyInitialization(bool is_running_tests) override;
@@ -873,7 +852,7 @@ index 000000000000..4a87b03520b4
 +}
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
 new file mode 100644
-index 000000000000..949513260eab
+index 000000000000..214a0b6b3d0d
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
 @@ -0,0 +1,163 @@
@@ -883,7 +862,7 @@ index 000000000000..949513260eab
 +
 +#include "gooroom/browser/gooroom_content_browser_client.h"
 +
-+#include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux_x11.h"
++#include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux.h"
 +#include "chrome/browser/performance_manager/chrome_browser_main_extra_parts_performance_manager.h"
 +#include "chrome/browser/profiling_host/chrome_browser_main_extra_parts_profiling.h"
 +
@@ -1008,7 +987,7 @@ index 000000000000..949513260eab
 +#if defined(TOOLKIT_VIEWS)
 +#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
 +#if defined(USE_X11)
-+  main_parts->AddParts(new ChromeBrowserMainExtraPartsViewsLinuxX11());
++  main_parts->AddParts(new ChromeBrowserMainExtraPartsViewsLinux());
 +#else
 +  main_parts->AddParts(new ChromeBrowserMainExtraPartsViewsLinux());
 +#endif  // USE_X11
@@ -1023,7 +1002,7 @@ index 000000000000..949513260eab
 +#endif
 +
 +#if defined(USE_X11)
-+  main_parts->AddParts(new ChromeBrowserMainExtraPartsX11());
++  main_parts->AddParts(new ChromeBrowserMainExtraParts());
 +#endif
 +
 +  main_parts->AddParts(new ChromeBrowserMainExtraPartsPerformanceManager);

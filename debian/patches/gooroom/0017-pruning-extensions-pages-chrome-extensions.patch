@@ -1,7 +1,7 @@
-From d1d798f5b9a00e86f596792c8a1381da2602e5cb Mon Sep 17 00:00:00 2001
+From fd4efa71b83d057da5e3497397616a4355dc238b Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 4 Jun 2020 15:34:37 +0900
-Subject: [PATCH 17/79] pruning extensions pages(chrome://extensions)
+Date: Thu, 23 Jul 2020 16:12:43 +0900
+Subject: [PATCH 17/88] pruning extensions pages(chrome://extensions)
 
 ---
  chrome/app/gooroom/extensions_strings.grdp       | 2 +-
@@ -9,7 +9,7 @@ Subject: [PATCH 17/79] pruning extensions pages(chrome://extensions)
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/app/gooroom/extensions_strings.grdp b/chrome/app/gooroom/extensions_strings.grdp
-index 5dca06ff6196..231669b95efc 100644
+index a9a94ad07410..4e4101278235 100644
 --- a/chrome/app/gooroom/extensions_strings.grdp
 +++ b/chrome/app/gooroom/extensions_strings.grdp
 @@ -308,7 +308,7 @@

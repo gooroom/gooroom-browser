@@ -1,32 +1,32 @@
-From aa408b95a792f9a9cb88fb9a79b6a66c198d7be8 Mon Sep 17 00:00:00 2001
+From 596ee0178943ef03041207f2a8dd8f7052368e42 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:16:15 +0900
-Subject: [PATCH 70/79] [BTS:1976] Remove manage security key on settings page
+Date: Mon, 27 Jul 2020 15:35:47 +0900
+Subject: [PATCH 70/88] [BTS:1976] Remove manage security key on settings page
 
 ---
  .../browser/resources/settings/privacy_page/privacy_page.html   | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 295b7317cc79..d053c1d79493 100644
+index 76fa91aed296..f4d10c36085b 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -195,6 +195,7 @@
-           sub-label="$i18n{manageCertificatesDescription}"
-           on-click="onManageCertificatesTap_"></cr-link-row>
+@@ -126,6 +126,7 @@
+                 sub-label="$i18n{manageCertificatesDescription}"
+                 on-click="onManageCertificatesTap_"></cr-link-row>
  </if>
 +<if expr="not _gooroom">
-           <template is="dom-if" if="[[enableSecurityKeysSubpage_]]">
-             <cr-link-row id="security-keys-subpage-trigger"
-               class="hr"
-@@ -202,6 +203,7 @@
-               sub-label="$i18n{securityKeysDesc}"
-               on-click="onSecurityKeysTap_"></cr-link-row>
-           </template>
+             <template is="dom-if" if="[[enableSecurityKeysSubpage_]]">
+               <cr-link-row id="security-keys-subpage-trigger"
+                 class="hr"
+@@ -133,6 +134,7 @@
+                 sub-label="$i18n{securityKeysDesc}"
+                 on-click="onSecurityKeysTap_"></cr-link-row>
+             </template>
 +</if>
-         </iron-collapse>
-       </div>
- 
+           </iron-collapse>
+         </template>
+         <template is="dom-if" if="[[privacySettingsRedesignEnabled_]]" restamp>
 -- 
 2.20.1
 

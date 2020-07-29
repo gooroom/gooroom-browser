@@ -1,7 +1,7 @@
-From 30a4174c4c60edfe6df740e1656d1942fd8ad6c2 Mon Sep 17 00:00:00 2001
+From 4f276f923913e002156d2f1fb9db17d6fe1483c6 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:11:38 +0900
-Subject: [PATCH 67/79] [BTS:1877] option with url bug
+Date: Mon, 27 Jul 2020 14:26:05 +0900
+Subject: [PATCH 67/88] [BTS:1877] option with url bug
 
 ---
  gooroom/browser/gooroom_pref.cc | 26 --------------------------

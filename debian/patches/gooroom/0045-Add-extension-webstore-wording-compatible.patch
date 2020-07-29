@@ -1,30 +1,21 @@
-From 272f6c2eb8425a0f9e0a2f1cfbc7d9f561d73bc4 Mon Sep 17 00:00:00 2001
+From 5183d83893d003982af25a07a8c12ca82e8e1d22 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 11:44:12 +0900
-Subject: [PATCH 45/79] Add extension webstore wording 'compatible'
+Date: Mon, 27 Jul 2020 12:02:49 +0900
+Subject: [PATCH 45/88] Add extension webstore wording 'compatible'
 
 ---
- chrome/app/gooroom/resources/generated_resources_ko.xtb | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ chrome/app/gooroom/resources/generated_resources_ko.xtb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
-index 56a83038ab2e..b00e8ff1d2d8 100644
+index d942af482775..67b27f31bd79 100644
 --- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
 +++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
-@@ -2625,7 +2625,7 @@
- <translation id="4743260470722568160"><ph name="BEGIN_LINK" />애플리케이션 업데이트 방법 알아보기<ph name="END_LINK" /></translation>
- <translation id="4744981231093950366">{NUM_TABS,plural, =1{사이트 숨기기 취소}other{사이트 숨기기 취소}}</translation>
- <translation id="4746351372139058112">메시지</translation>
--<translation id="4748762018725435655">Gooroom browser 웹 스토어의 확장 프로그램 필요</translation>
-+<translation id="4748762018725435655">Gooroom-browser 호환 웹 스토어로 연결</translation>
- <translation id="4750394297954878236">추천</translation>
- <translation id="475088594373173692">첫 번째 사용자</translation>
- <translation id="4751476147751820511">모션 또는 조도 센서</translation>
-@@ -4433,7 +4433,7 @@
- <translation id="7375053625150546623">EAP</translation>
+@@ -4764,7 +4764,7 @@
+ <translation id="7375235221357833624">{0,plural, =1{1시간 내 기기 업데이트}other{#시간 내 기기 업데이트}}</translation>
  <translation id="7376553024552204454">이동 시 마우스 커서 강조표시</translation>
  <translation id="7377451353532943397">계속해서 센서 액세스 차단</translation>
--<translation id="73786666777299047">Gooroom browser 웹 스토어 열기</translation>
+-<translation id="73786666777299047">Gooroom 웹 스토어 열기</translation>
 +<translation id="73786666777299047">Gooroom browser 호환 웹 스토어 열기</translation>
  <translation id="7378812711085314936">데이터 연결 가져오기</translation>
  <translation id="7378962964415201590">새 스마트폰 페어링</translation>

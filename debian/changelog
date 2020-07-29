@@ -1,63 +1,142 @@
-gooroom-browser (2.6.0-1+grm2u8) stretch; urgency=medium
+gooroom-browser (2.7.0-1+grm2u1) stretch; urgency=medium
 
-  * BugTrackingSystem
-    - 1973 : Translate [Activate] message on alarm bubble
+  * Init Gooroom Browser Version 2.7.0-1+grm2u1
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 06 Jul 2020 18:08:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 29 Jul 2020 11:04:00 +0900
 
-gooroom-browser (2.6.0-1+grm2u7) stretch; urgency=medium
+chromium (83.0.4103.116-1~deb10u3) buster-security; urgency=medium
 
-  * BugTrackingSystem
-    - 2397 : Change webrtc thirdparty to fix 'show in folder' bug #3
+  * Fix crashes when a connection error occurs (closes: #963548).
 
- -- Choi J.S. <junsungc91@gmail.com>  Thu, 02 Jul 2020 14:35:00 +0900
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 12 Jul 2020 07:08:46 -0400
 
-gooroom-browser (2.6.0-1+grm2u6) stretch; urgency=medium
+chromium (83.0.4103.116-1~deb10u2) buster-security; urgency=medium
 
-  * BugTrackingSystem
-    - 2397 : Change webrtc thirdparty to fix 'show in folder' bug #2
+  * Rebuild with optimization (closes: #964145).
 
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 01 Jul 2020 12:09:00 +0900
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 03 Jul 2020 22:31:38 -0400
 
-gooroom-browser (2.6.0-1+grm2u5) stretch; urgency=medium
+chromium (83.0.4103.116-1~deb10u1) buster-security; urgency=medium
 
-  * BugTrackingSystem
-    - 2397 : Change webrtc thirdparty to fix 'show in folder' bug
-    - 2454 : Remove bookmark sync in bubble message
+  * New upstream stable release.
+    - CVE-2020-6423: Use after free in audio. Reported by Anonymous
+    - CVE-2020-6430: Type Confusion in V8. Reported by Avihay Cohen
+    - CVE-2020-6431: Insufficient policy enforcement in full screen. Reported
+      by Luan Herrera
+    - CVE-2020-6432: Insufficient policy enforcement in navigations. Reported
+      by David Erceg
+    - CVE-2020-6433: Insufficient policy enforcement in extensions. Reported by
+      David Erceg
+    - CVE-2020-6434: Use after free in devtools. Reported by HyungSeok Han
+    - CVE-2020-6435: Insufficient policy enforcement in extensions. Reported by
+      Sergei Glazunov
+    - CVE-2020-6436: Use after free in window management. Reported by Igor
+      Bukanov
+    - CVE-2020-6437: Inappropriate implementation in WebView. Reported by Jann
+      Horn
+    - CVE-2020-6438: Insufficient policy enforcement in extensions. Reported by
+      Ng Yik Phang
+    - CVE-2020-6439: Insufficient policy enforcement in navigations. Reported
+      by remkoboonstra
+    - CVE-2020-6440: Inappropriate implementation in extensions. Reported by
+      David Erceg
+    - CVE-2020-6441: Insufficient policy enforcement in omnibox. Reported by
+      David Erceg
+    - CVE-2020-6442: Inappropriate implementation in cache. Reported by B@rMey
+    - CVE-2020-6443: Insufficient data validation in developer tools. Reported
+      by @lovasoa
+    - CVE-2020-6444: Uninitialized use in WebRTC. Reported by mlfbrown
+    - CVE-2020-6445: Insufficient policy enforcement in trusted types. Reported
+      by Jun Kokatsu
+    - CVE-2020-6446: Insufficient policy enforcement in trusted types. Reported
+      by Jun Kokatsu
+    - CVE-2020-6447: Inappropriate implementation in developer tools. Reported
+      by David Erceg
+    - CVE-2020-6448: Use after free in V8. Reported by Guang Gong
+    - CVE-2020-6454: Use after free in extensions. Reported by leecraso and
+      Guang Gong
+    - CVE-2020-6455: Out of bounds read in WebSQL. Reported by Nan Wang and
+      Guang Gong
+    - CVE-2020-6456: Insufficient validation of untrusted input in clipboard.
+      Reported by Michał Bentkowski
+    - CVE-2020-6457: Use after free in speech recognizer. Reported by Leecraso
+      and Guang Gong
+    - CVE-2020-6458: Out of bounds read and write in PDFium. Reported by
+      Aleksandar Nikolic
+    - CVE-2020-6459: Use after free in payments. Reported by Zhe Jin
+    - CVE-2020-6460: Insufficient data validation in URL formatting. Reported
+      by Anonymous
+    - CVE-2020-6461: Use after free in storage. Reported by Zhe Jin
+    - CVE-2020-6462: Use after free in task scheduling. Reported by Zhe Jin
+    - CVE-2020-6463: Use after free in ANGLE. Reported by Pawel Wylecial
+    - CVE-2020-6464: Type Confusion in Blink. Reported by Looben Yang
+    - CVE-2020-6465: Use after free in reader mode. Reported by Woojin Oh
+    - CVE-2020-6466: Use after free in media. Reported by Zhe Jin
+    - CVE-2020-6467: Use after free in WebRTC. Reported by ZhanJia Song
+    - CVE-2020-6468: Type Confusion in V8. Reported by Chris Salls and Jake
+      Corina
+    - CVE-2020-6469: Insufficient policy enforcement in developer tools.
+      Reported by David Erceg
+    - CVE-2020-6470: Insufficient validation of untrusted input in clipboard.
+      Reported by Michał Bentkowski
+    - CVE-2020-6471: Insufficient policy enforcement in developer tools.
+      Reported by David Erceg
+    - CVE-2020-6472: Insufficient policy enforcement in developer tools.
+      Reported by David Erceg
+    - CVE-2020-6473: Insufficient policy enforcement in Blink. Reported by
+      Soroush Karami and Panagiotis Ilia
+    - CVE-2020-6474: Use after free in Blink. Reported by Zhe Jin
+    - CVE-2020-6475: Incorrect security UI in full screen. Reported by Khalil
+      Zhani
+    - CVE-2020-6476: Insufficient policy enforcement in tab strip. Reported by
+      Alexandre Le Borgne
+    - CVE-2020-6478: Inappropriate implementation in full screen. Reported by
+      Khalil Zhani
+    - CVE-2020-6479: Inappropriate implementation in sharing. Reported by Zhong
+      Zhaochen
+    - CVE-2020-6480: Insufficient policy enforcement in enterprise. Reported by
+      Marvin Witt
+    - CVE-2020-6481: Insufficient policy enforcement in URL formatting.
+      Reported by Rayyan Bijoora
+    - CVE-2020-6482: Insufficient policy enforcement in developer tools.
+      Reported by Abdulrahman Alqabandi
+    - CVE-2020-6483: Insufficient policy enforcement in payments. Reported by
+      Jun Kokatsu
+    - CVE-2020-6484: Insufficient data validation in ChromeDriver. Reported by
+      Artem Zinenko
+    - CVE-2020-6485: Insufficient data validation in media router. Reported by
+      Sergei Glazunov
+    - CVE-2020-6486: Insufficient policy enforcement in navigations. Reported
+      by David Erceg
+    - CVE-2020-6487: Insufficient policy enforcement in downloads. Reported by
+      Jun Kokatsu
+    - CVE-2020-6488: Insufficient policy enforcement in downloads. Reported by
+      David Erceg
+    - CVE-2020-6489: Inappropriate implementation in developer tools. Reported
+      by @lovasoa
+    - CVE-2020-6490: Insufficient data validation in loader. Reported by
+      Twitter
+    - CVE-2020-6491: Incorrect security UI in site information. Reported by
+      Sultan Haikal
+    - CVE-2020-6493: Use after free in WebAuthentication. Reported by Anonymous
+    - CVE-2020-6494: Incorrect security UI in payments. Reported by Juho
+      Nurminen
+    - CVE-2020-6495: Insufficient policy enforcement in developer tools.
+      Reported by David Erceg
+    - CVE-2020-6496: Use after free in payments. Reported by Khalil Zhani
+    - CVE-2020-6497: Insufficient policy enforcement in Omnibox. Reported by
+      Rayyan Bijoora
+    - CVE-2020-6498: Incorrect security UI in progress display. Reported by
+      Rayyan Bijoora
+    - CVE-2020-6505: Use after free in speech. Reported by Khalil Zhani
+    - CVE-2020-6506: Insufficient policy enforcement in WebView. Reported by
+      Alesandro Ortiz
+    - CVE-2020-6507: Out of bounds write in V8. Reported by Sergei Glazunov
+    - CVE-2020-6509: Use after free in extensions. Reported by Anonymous
+    - CVE-2020-6831: Stack buffer overflow in SCTP. Reported by Natalie
+      Silvanovich
 
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 30 Jun 2020 17:14:00 +0900
-
-gooroom-browser (2.6.0-1+grm2u4) stretch; urgency=medium
-
-  * BugTrackingSystem
-    - 2392 : Hangul toggle bug fix
-    - 2431 : Hide gooroom browser login on setting page
-
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 29 Jun 2020 20:38:00 +0900
-
-gooroom-browser (2.6.0-1+grm2u3) stretch; urgency=medium
-
-  * BugTrackingSystem
-    - 2332 : Remove secret mode toggle on extension page 
-    - 2348 : Change strings
-    - 1807 : Add Gooroom browser log
-
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 24 Jun 2020 20:33:00 +0900
-
-gooroom-browser (2.6.0-1+grm2u2) stretch; urgency=medium
-
-  * BugTrackingSystem
-    - 2322 : Hide voice search on ntp page
-    - 2323,2324,2353 : Korean translation
-    - 2354 : Fix adobe flash bug
-
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 15 Jun 2020 16:56:00 +0900
-
-gooroom-browser (2.6.0-1+grm2u1) stretch; urgency=medium
-
-  * Init gooroom-browser 2.6.0-1+grm2u1 (rebase 80)
-
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 27 Apr 2020 17:07:00 +0900
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 26 Jun 2020 23:52:43 -0400
 
 chromium (80.0.3987.162-1~deb10u1) buster-security; urgency=medium
 

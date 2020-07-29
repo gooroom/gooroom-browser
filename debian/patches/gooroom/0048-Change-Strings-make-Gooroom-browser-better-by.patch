@@ -1,7 +1,7 @@
-From fe394e4c96c28eba6fb2e6ad176e93396b74e86a Mon Sep 17 00:00:00 2001
+From 171c63b7d9ab97db108a2eb4a3ed09e0cb5ee17a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 12:09:21 +0900
-Subject: [PATCH 48/79] Change Strings 'make Gooroom-browser better by 
+Date: Mon, 27 Jul 2020 13:42:04 +0900
+Subject: [PATCH 48/88] Change Strings 'make Gooroom-browser better by 
  reporting' to 'make Chromium better...' on settings page
 
 ---
@@ -9,18 +9,18 @@ Subject: [PATCH 48/79] Change Strings 'make Gooroom-browser better by
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/app/gooroom/resources/chromium_strings_ko.xtb b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
-index d17bf042824f..4cbd89dd5fe4 100644
+index 1c2e8a31aae5..d2ea66ac1ed2 100644
 --- a/chrome/app/gooroom/resources/chromium_strings_ko.xtb
 +++ b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
-@@ -71,7 +71,7 @@
- <translation id="3848258323044014972"><ph name="PAGE_TITLE" /> - Gooroom browser</translation>
+@@ -73,7 +73,7 @@
  <translation id="388648406173476553">Gooroom browser을 맞춤설정 및 제어합니다. 확인이 필요한 항목이 있습니다. 클릭하여 세부정보를 보세요.</translation>
  <translation id="3889543394854987837">Gooroom browser을 열고 탐색을 시작하려면 내 이름을 클릭하세요.</translation>
+ <translation id="3945058413678539331">Gooroom browser에서 비밀번호를 복사하려고 합니다. 허용하려면 Windows 비밀번호를 입력하세요.</translation>
 -<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 Gooroom browser 개선에 참여</translation>
 +<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 Chromium 개선에 참여</translation>
  <translation id="4050175100176540509">최신 버전에는 중요한 보안 개선사항 및 새로운 기능이 포함되어 있습니다.</translation>
+ <translation id="419998258129752635"><ph name="PAGE_TITLE" /> - 네트워크 로그인 - Gooroom browser</translation>
  <translation id="421369550622382712">Gooroom browser에 유용한 앱, 게임, 확장 프로그램, 테마를 찾아보세요.</translation>
- <translation id="4216212958613226427">Gooroom browser UI가 이 언어로 표시됩니다.</translation>
 -- 
 2.20.1
 

@@ -1,7 +1,7 @@
-From eaf82e9440dafc7a51f59df37331967d7c07de8f Mon Sep 17 00:00:00 2001
+From bd174448fafa06ffc6807036da0af08cc0365624 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 14:32:28 +0900
-Subject: [PATCH 60/79] BugTrackingSystem 1643 : Remove route to enter 
+Date: Mon, 27 Jul 2020 14:23:00 +0900
+Subject: [PATCH 60/88] BugTrackingSystem 1643 : Remove route to enter 
  incognito  mode from bookmarks
 
 ---

@@ -1,0 +1,26 @@
+From 20bf0167215fee2f4e84fea4b51292bbdf76dcb0 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 28 Jul 2020 10:18:34 +0900
+Subject: [PATCH 88/88] [BTS:1973] Translate 'Activate' message on alarm bubble
+
+---
+ chrome/app/gooroom/generated_resources.grd | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/chrome/app/gooroom/generated_resources.grd b/chrome/app/gooroom/generated_resources.grd
+index beb11e624a2f..e388f7e9ef90 100644
+--- a/chrome/app/gooroom/generated_resources.grd
++++ b/chrome/app/gooroom/generated_resources.grd
+@@ -8215,6 +8215,9 @@ Please help our engineers fix this problem. Tell us what happened right before y
+         </message>
+       </if>
+ 
++      <message name="IDS_NOTIFICATION_BUTTON_ACTIVATE" desc="Activate button label">
++        Activate
++      </message>
+       <!-- Web and message center notifications -->
+       <message name="IDS_NOTIFICATION_BUTTON_SETTINGS" desc="Short button label to go to the notification settings panel">
+         Settings
+-- 
+2.20.1
+

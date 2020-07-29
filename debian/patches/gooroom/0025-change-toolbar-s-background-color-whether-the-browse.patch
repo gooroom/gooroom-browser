@@ -1,15 +1,15 @@
-From 400d5e24d9e4062b6be940e79761c8e69b1206a5 Mon Sep 17 00:00:00 2001
+From 990748c7059d42bfcc7bdb514ace3c6f3f213339 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 4 Jun 2020 16:30:56 +0900
-Subject: [PATCH 25/79] change toolbar's background color whether the browser's
-     type is trust or untrust
+Date: Thu, 23 Jul 2020 17:16:15 +0900
+Subject: [PATCH 25/88] change toolbar's background color whether the browser's
+      type is trust or untrust
 
 ---
  chrome/browser/themes/theme_properties.cc | 26 +++++++++++++++++++++++
  1 file changed, 26 insertions(+)
 
 diff --git a/chrome/browser/themes/theme_properties.cc b/chrome/browser/themes/theme_properties.cc
-index 49b1ad883d79..9f3fd17d6dbd 100644
+index 55cf198d4850..d5162715a3cb 100644
 --- a/chrome/browser/themes/theme_properties.cc
 +++ b/chrome/browser/themes/theme_properties.cc
 @@ -19,6 +19,10 @@
@@ -38,10 +38,10 @@ index 49b1ad883d79..9f3fd17d6dbd 100644
  SkColor GetLightModeColor(int id) {
  #if defined(OS_WIN)
    const SkColor kDefaultColorNTPBackground =
-@@ -54,9 +66,23 @@ SkColor GetLightModeColor(int id) {
-     // increment the version number in browser_theme_pack.cc.
-     case ThemeProperties::COLOR_FRAME:
-     case ThemeProperties::COLOR_BACKGROUND_TAB:
+@@ -56,10 +68,24 @@ SkColor GetLightModeColor(int id) {
+     case ThemeProperties::COLOR_TAB_BACKGROUND_INACTIVE_FRAME_ACTIVE:
+     case ThemeProperties::COLOR_WINDOW_CONTROL_BUTTON_BACKGROUND_ACTIVE:
+     case ThemeProperties::COLOR_STATUS_BUBBLE:
 +#if defined(GOOROOM_BUILD)
 +      if (base::GetGooroomBase()->isTrustMode()) {
 +        return kDefaultColorFrameTrust;
@@ -52,7 +52,8 @@ index 49b1ad883d79..9f3fd17d6dbd 100644
 +#endif
        return SkColorSetRGB(0xDE, 0xE1, 0xE6);
      case ThemeProperties::COLOR_FRAME_INACTIVE:
-     case ThemeProperties::COLOR_BACKGROUND_TAB_INACTIVE:
+     case ThemeProperties::COLOR_TAB_BACKGROUND_INACTIVE_FRAME_INACTIVE:
+     case ThemeProperties::COLOR_WINDOW_CONTROL_BUTTON_BACKGROUND_INACTIVE:
 +#if defined(GOOROOM_BUILD)
 +      if (base::GetGooroomBase()->isTrustMode())
 +        return kDefaultColorFrameInactiveTrust;
@@ -60,7 +61,7 @@ index 49b1ad883d79..9f3fd17d6dbd 100644
 +        return kDefaultColorFrameInactiveUntrust;
 +#endif
        return color_utils::HSLShift(
-           GetLightModeColor(ThemeProperties::COLOR_FRAME),
+           GetLightModeColor(ThemeProperties::COLOR_FRAME_ACTIVE),
            ThemeProperties::GetDefaultTint(ThemeProperties::TINT_FRAME_INACTIVE,
 -- 
 2.20.1

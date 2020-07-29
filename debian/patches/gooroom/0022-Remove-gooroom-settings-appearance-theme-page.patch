@@ -1,19 +1,19 @@
-From b02da47a4f9155f13f8144a5a8a4084fa28746ce Mon Sep 17 00:00:00 2001
+From 99824c4a628a4655b17013665311eaae7484954e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 4 Jun 2020 16:29:21 +0900
-Subject: [PATCH 22/79] Remove gooroom://settings appearance theme page
+Date: Thu, 23 Jul 2020 17:09:28 +0900
+Subject: [PATCH 22/88] Remove gooroom://settings appearance theme page
 
 ---
  .../resources/settings/appearance_page/appearance_page.html     | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-index 61300bbc3fab..e2d54869d46a 100644
+index fc68a42c1a6e..ffb44aa31e11 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-@@ -62,7 +62,7 @@
-         <div class="hr"></div>
- </if>
+@@ -48,7 +48,7 @@
+         focus-config="[[focusConfig_]]">
+       <div route-path="default">
          <div class="settings-row continuation" id="themeRow"
 -            hidden="[[!pageVisibility.setTheme]]">
 +            hidden>

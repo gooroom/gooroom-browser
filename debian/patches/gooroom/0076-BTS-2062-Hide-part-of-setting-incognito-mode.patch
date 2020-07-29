@@ -1,19 +1,19 @@
-From e0f2c12e83d1543a20679233546bfebb6d5d547f Mon Sep 17 00:00:00 2001
+From 0db8484cabde80a8bf06bf761242efa8a66ce9e6 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:24:49 +0900
-Subject: [PATCH 76/79] [BTS:2062] Hide part of setting incognito mode
+Date: Mon, 27 Jul 2020 15:41:14 +0900
+Subject: [PATCH 76/88] [BTS:2062] Hide part of setting incognito mode
 
 ---
  chrome/browser/resources/extensions/detail_view.html | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/extensions/detail_view.html b/chrome/browser/resources/extensions/detail_view.html
-index 6f63a2a978fd..0a935dd38551 100644
+index de97fd2ba018..66951f332cc3 100644
 --- a/chrome/browser/resources/extensions/detail_view.html
 +++ b/chrome/browser/resources/extensions/detail_view.html
-@@ -353,7 +353,7 @@
-           <extensions-toggle-row id="allow-incognito"
+@@ -350,7 +350,7 @@
                checked="[[data.incognitoAccess.isActive]]"
+               class="hr"
                on-change="onAllowIncognitoChange_">
 -            <div>
 +            <div hidden>

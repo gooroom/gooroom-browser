@@ -1,7 +1,7 @@
-From 857cea6bed6e6a563e2361027a4577b196a76ecd Mon Sep 17 00:00:00 2001
+From ce03ea2ac108eec9a58252f41675b252c6e07ff9 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 11:13:00 +0900
-Subject: [PATCH 33/79] Add PageSourceViewEnabled policy to  control 
+Date: Fri, 24 Jul 2020 11:44:17 +0900
+Subject: [PATCH 33/88] Add PageSourceViewEnabled policy to  control 
  page-source-view
 
 ---
@@ -18,7 +18,7 @@ Subject: [PATCH 33/79] Add PageSourceViewEnabled policy to  control
  10 files changed, 125 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/policy/configuration_policy_handler_list_factory.cc b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
-index 9c2fdea178f5..ac7baba944be 100644
+index 3043937210cc..ea20c5792f2e 100644
 --- a/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 +++ b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 @@ -10,6 +10,10 @@
@@ -32,7 +32,7 @@ index 9c2fdea178f5..ac7baba944be 100644
  #include "base/bind.h"
  #include "base/memory/ptr_util.h"
  #include "base/stl_util.h"
-@@ -149,6 +153,11 @@ namespace {
+@@ -150,6 +154,11 @@ namespace {
  // that directly map to a single preference.
  // clang-format off
  const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
@@ -44,7 +44,7 @@ index 9c2fdea178f5..ac7baba944be 100644
    { key::kHomepageIsNewTabPage,
      prefs::kHomePageIsNewTabPage,
      base::Value::Type::BOOLEAN },
-@@ -1711,7 +1720,9 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
+@@ -1715,7 +1724,9 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
  #if BUILDFLAG(ENABLE_PLUGINS)
    handlers->AddHandler(std::make_unique<PluginPolicyHandler>());
  #endif  // BUILDFLAG(ENABLE_PLUGINS)
@@ -56,7 +56,7 @@ index 9c2fdea178f5..ac7baba944be 100644
  }
  
 diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index 8c481e2a63fd..8bb4a81649dc 100644
+index b81b107e0f42..d8fde6900b63 100644
 --- a/chrome/common/pref_names.cc
 +++ b/chrome/common/pref_names.cc
 @@ -23,6 +23,10 @@ namespace prefs {
@@ -71,7 +71,7 @@ index 8c481e2a63fd..8bb4a81649dc 100644
  // successfully checked via ChildAccountService.
  const char kChildAccountStatusKnown[] = "child_account_status_known";
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index d0c18de303f0..a5cc3a3982dd 100644
+index 7344d14470e5..63ea7b834467 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
 @@ -22,6 +22,9 @@ namespace prefs {
@@ -85,10 +85,10 @@ index d0c18de303f0..a5cc3a3982dd 100644
  extern const char kDefaultApps[];
  extern const char kSafeBrowsingForTrustedSourcesEnabled[];
 diff --git a/components/policy/core/browser/BUILD.gn b/components/policy/core/browser/BUILD.gn
-index 2e9c1a5ae863..c396bd970cfb 100644
+index bb408ff7dd33..d7165fbe4733 100644
 --- a/components/policy/core/browser/BUILD.gn
 +++ b/components/policy/core/browser/BUILD.gn
-@@ -18,7 +18,10 @@ group("browser") {
+@@ -14,7 +14,10 @@ group("browser") {
  }
  
  jumbo_source_set("internal") {
@@ -101,10 +101,10 @@ index 2e9c1a5ae863..c396bd970cfb 100644
      "browser_policy_connector.cc",
      "browser_policy_connector.h",
 diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
-index 41e8f34d246b..900507346a97 100644
+index d1702600fdbb..1dd1b6c01674 100644
 --- a/components/policy/core/browser/configuration_policy_handler.cc
 +++ b/components/policy/core/browser/configuration_policy_handler.cc
-@@ -357,6 +357,51 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
+@@ -345,6 +345,51 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
      prefs->SetValue(pref_path_, value->Clone());
  }
  
@@ -157,7 +157,7 @@ index 41e8f34d246b..900507346a97 100644
  
  SchemaValidatingPolicyHandler::SchemaValidatingPolicyHandler(
 diff --git a/components/policy/core/browser/configuration_policy_handler.h b/components/policy/core/browser/configuration_policy_handler.h
-index 01bd7f74a7b8..5fc6e3e95a82 100644
+index 058345389f76..f6c6888a5163 100644
 --- a/components/policy/core/browser/configuration_policy_handler.h
 +++ b/components/policy/core/browser/configuration_policy_handler.h
 @@ -15,6 +15,7 @@
@@ -168,7 +168,7 @@ index 01bd7f74a7b8..5fc6e3e95a82 100644
  
  class PrefValueMap;
  
-@@ -304,6 +305,30 @@ class POLICY_EXPORT IntPercentageToDoublePolicyHandler
+@@ -303,6 +304,30 @@ class POLICY_EXPORT IntPercentageToDoublePolicyHandler
    DISALLOW_COPY_AND_ASSIGN(IntPercentageToDoublePolicyHandler);
  };
  
@@ -200,10 +200,10 @@ index 01bd7f74a7b8..5fc6e3e95a82 100644
  // single type. |schema| is the schema used for this policy, and |strategy| is
  // the strategy used for schema validation errors.
 diff --git a/components/policy/resources/policy_templates.json b/components/policy/resources/policy_templates.json
-index 0348733dcf97..474691548562 100644
+index 0f70d06fcf03..db2e6c48cdb9 100644
 --- a/components/policy/resources/policy_templates.json
 +++ b/components/policy/resources/policy_templates.json
-@@ -1184,6 +1184,26 @@
+@@ -1217,6 +1217,26 @@
        Note for administrators of <ph name="MS_WIN_NAME">Microsoft® Windows</ph>: Enabling this setting will only work for machines running Windows 7. For versions of Windows starting with Windows 8, you must deploy a "default application associations" file that makes <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> the handler for the <ph name="HHTPS_PROTOCOL">https</ph> and <ph name="HTTP_PROTOCOL">http</ph> protocols (and, optionally, the <ph name="FTP_PROTOCOL">ftp</ph> protocol and file formats such as <ph name="HTML_EXTENSION">.html</ph>, <ph name="HTM_EXTENSION">.htm</ph>, <ph name="PDF_EXTENSION">.pdf</ph>, <ph name="SVG_EXTENSION">.svg</ph>, <ph name="WEBP_EXTENSION">.webp</ph>, etc...). See <ph name="SUPPORT_URL">https://support.google.com/chrome?p=make_chrome_default_win</ph> for more information.''',
        'label': '''Set <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> as Default Browser''',
      },
@@ -231,10 +231,10 @@ index 0348733dcf97..474691548562 100644
        'name': 'ApplicationLocaleValue',
        'owners': ['file://components/policy/resources/OWNERS'],
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index 2cb2b5bbdc88..b8af9819033a 100644
+index a5c2729a6c0e..dc1d3e3dc1df 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
-@@ -239,10 +239,12 @@ jumbo_source_set("browser") {
+@@ -241,10 +241,12 @@ jumbo_source_set("browser") {
      "//ui/snapshot",
      "//ui/touch_selection",
      "//v8:v8_version",
@@ -248,7 +248,7 @@ index 2cb2b5bbdc88..b8af9819033a 100644
      "//base/util/type_safety",
      "//ipc",
 diff --git a/content/browser/frame_host/navigation_controller_impl.cc b/content/browser/frame_host/navigation_controller_impl.cc
-index 9b489fed825c..3478acfbb70e 100644
+index f950552abbe9..987f4ea6988e 100644
 --- a/content/browser/frame_host/navigation_controller_impl.cc
 +++ b/content/browser/frame_host/navigation_controller_impl.cc
 @@ -89,6 +89,10 @@
@@ -275,17 +275,17 @@ index 9b489fed825c..3478acfbb70e 100644
    bool is_viewable_mime_type = blink::IsSupportedNonImageMimeType(mime_type) &&
                                 !media::IsSupportedMediaMimeType(mime_type);
 diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
-index d3b774e16ed7..969ff34a6674 100644
+index d69575e355a2..e28df894d9d6 100644
 --- a/tools/metrics/histograms/enums.xml
 +++ b/tools/metrics/histograms/enums.xml
-@@ -18926,6 +18926,7 @@ Called by update_net_error_codes.py.-->
-   <int value="652" label="StricterMixedContentTreatmentEnabled"/>
-   <int value="653" label="NTPCustomBackgroundEnabled"/>
-   <int value="654" label="DNSInterceptionChecksEnabled"/>
+@@ -19958,6 +19958,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
+   <int value="687" label="ScrollToTextFragmentEnabled"/>
+   <int value="688" label="ManagedGuestSessionAutoLaunchNotificationReduced"/>
+   <int value="689" label="SystemFeaturesDisableList"/>
 +  <int value="999" label="PageSourceViewEnabled"/>
  </enum>
  
- <enum name="EnterprisePolicyInvalidations">
+ <enum name="EnterprisePolicyDeviceIdValidity">
 -- 
 2.20.1
 

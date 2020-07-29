@@ -18,18 +18,17 @@ export CXX=clang++
 # more verbose linker output
 export LDFLAGS+=-Wl,--stats
 
+# initial flags from dpkg-buildflags
+export DEB_CXXFLAGS_MAINT_STRIP=-g
+export CXXFLAGS=$(shell dpkg-buildflags --get CXXFLAGS)
+
 # extra flags to reduce warnings that aren't very useful
-export CXXFLAGS+=-Wno-pedantic \
-                 -Wno-unused-result \
+export CXXFLAGS+=-Wno-conversion \
                  -Wno-unused-function \
                  -Wno-unused-variable \
+                 -Wno-unused-private-field \
                  -Wno-deprecated-declarations \
-
-# ignore warnings for minor mistakes that are too common
-export CXXFLAGS+=-Wno-return-type \
-                 -Wno-parentheses \
-                 -Wno-enum-compare \
-                 -Wno-dangling-else \
+                 -Wno-unknown-pragmas \
 
 # disable clang plugins
 defines=clang_use_chrome_plugins=false
@@ -41,7 +40,7 @@ defines+=custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
 # set the appropriate cpu architecture
 DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifeq (i386,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"x86\"
+defines+=host_cpu=\"x86\" symbol_level=0
 endif
 ifeq (amd64,$(DEB_HOST_ARCH))
 defines+=host_cpu=\"x64\"
@@ -76,7 +75,6 @@ defines+=is_debug=false \
          closure_compile=false \
          blink_symbol_level=0 \
          treat_warnings_as_errors=false \
-         linux_use_bundled_binutils=false \
 
 # enabled features
 defines+=use_gio=true \
@@ -95,10 +93,6 @@ defines+=use_gio=true \
          ffmpeg_branding=\"Chrome\" \
          fieldtrial_testing_like_official_build=true \
 
-# some notes about embedded libraries
-#  can't use system nss since net/third_party/nss is heavily patched
-#  can't use system ots (open text *summarizer*) since that's not google's ots (open text *sanitizer*)
-
 # handle parallel build options
 njobs=1
 ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
@@ -114,10 +108,7 @@ out/Release/gn:
 override_dh_auto_configure:
 	# output compiler information
 	$(CXX) --version
-	# put yasm script in the location expected by gn
-	ln -sf ../pdfium/third_party/yasm/run_yasm.py third_party/yasm
-	# strip out system third_party libraries
-	rm -f base/third_party/libevent/BUILD.gn build/config/freetype/freetype.gni
+	# prefer unbundled (system) libraries
 	./debian/scripts/unbundle
 
 override_dh_auto_build-arch: out/Release/gn

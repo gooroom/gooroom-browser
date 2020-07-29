@@ -1,7 +1,7 @@
-From 81cb8df5586a5ff9182f516bf65c7f728a3e65ab Mon Sep 17 00:00:00 2001
+From 5837f64742dcf6190304e174ce0ad835d696d4a5 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 3 Jun 2020 10:10:36 +0900
-Subject: [PATCH 11/79] register /gooroom/ as a external protocol and scheme
+Date: Thu, 23 Jul 2020 14:59:35 +0900
+Subject: [PATCH 11/88] register /gooroom/ as a external protocol and scheme
 
 ---
  chrome/browser/profiles/profile_io_data.cc | 4 ++++
@@ -11,10 +11,10 @@ Subject: [PATCH 11/79] register /gooroom/ as a external protocol and scheme
  4 files changed, 10 insertions(+)
 
 diff --git a/chrome/browser/profiles/profile_io_data.cc b/chrome/browser/profiles/profile_io_data.cc
-index 9a6f5cde5780..9bad3491d271 100644
+index cc6956e363eb..a2822a21929a 100644
 --- a/chrome/browser/profiles/profile_io_data.cc
 +++ b/chrome/browser/profiles/profile_io_data.cc
-@@ -307,6 +307,10 @@ bool ProfileIOData::IsHandledProtocol(const std::string& scheme) {
+@@ -306,6 +306,10 @@ bool ProfileIOData::IsHandledProtocol(const std::string& scheme) {
      extensions::kExtensionScheme,
  #endif
      content::kChromeUIScheme,
@@ -22,14 +22,14 @@ index 9a6f5cde5780..9bad3491d271 100644
 +    // Treat "gooroom://" as a external protocol
 +    content::kGooroomUIScheme,
 +#endif
+     content::kChromeUIUntrustedScheme,
      url::kDataScheme,
  #if defined(OS_CHROMEOS)
-     content::kExternalFileScheme,
 diff --git a/content/common/url_schemes.cc b/content/common/url_schemes.cc
-index 6c6bf27a6859..255bc5bce291 100644
+index d0a31f2406ee..1726fa245b7a 100644
 --- a/content/common/url_schemes.cc
 +++ b/content/common/url_schemes.cc
-@@ -53,6 +53,10 @@ void RegisterContentSchemes(bool lock_schemes) {
+@@ -59,6 +59,10 @@ void RegisterContentSchemes() {
  
    url::AddStandardScheme(kChromeDevToolsScheme, url::SCHEME_WITH_HOST);
    url::AddStandardScheme(kChromeUIScheme, url::SCHEME_WITH_HOST);
@@ -37,11 +37,11 @@ index 6c6bf27a6859..255bc5bce291 100644
 +#if defined(GOOROOM_BUILD)
 +  url::AddStandardScheme(kGooroomUIScheme, url::SCHEME_WITH_HOST);
 +#endif
+   url::AddStandardScheme(kChromeUIUntrustedScheme, url::SCHEME_WITH_HOST);
    url::AddStandardScheme(kGuestScheme, url::SCHEME_WITH_HOST);
    url::AddStandardScheme(kChromeErrorScheme, url::SCHEME_WITH_HOST);
- 
 diff --git a/content/public/common/url_constants.cc b/content/public/common/url_constants.cc
-index 688e84d52755..75be8da923b5 100644
+index 9ae5fd3c15a9..826f838899b3 100644
 --- a/content/public/common/url_constants.cc
 +++ b/content/public/common/url_constants.cc
 @@ -11,6 +11,7 @@ namespace content {
@@ -50,10 +50,10 @@ index 688e84d52755..75be8da923b5 100644
  const char kChromeErrorScheme[] = "chrome-error";
 +const char kGooroomUIScheme[] = "gooroom";
  const char kChromeUIScheme[] = "chrome";
+ const char kChromeUIUntrustedScheme[] = "chrome-untrusted";
  const char kGuestScheme[] = "chrome-guest";
- const char kViewSourceScheme[] = "view-source";
 diff --git a/content/public/common/url_constants.h b/content/public/common/url_constants.h
-index e7e283d80a58..fc566ea8f30a 100644
+index 6569c60ff300..bda07c5b5dc5 100644
 --- a/content/public/common/url_constants.h
 +++ b/content/public/common/url_constants.h
 @@ -19,6 +19,7 @@ namespace content {
@@ -62,8 +62,8 @@ index e7e283d80a58..fc566ea8f30a 100644
  CONTENT_EXPORT extern const char kChromeErrorScheme[];
 +CONTENT_EXPORT extern const char kGooroomUIScheme[]; // Used for WebUIs.
  CONTENT_EXPORT extern const char kChromeUIScheme[];  // Used for WebUIs.
+ CONTENT_EXPORT extern const char kChromeUIUntrustedScheme[];
  CONTENT_EXPORT extern const char kGuestScheme[];
- CONTENT_EXPORT extern const char kViewSourceScheme[];
 -- 
 2.20.1
 

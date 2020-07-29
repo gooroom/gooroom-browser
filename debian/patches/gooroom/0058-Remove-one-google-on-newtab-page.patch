@@ -1,0 +1,37 @@
+From 281844f6d828f970bc86926c3072ff14b5a78b88 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 14:18:54 +0900
+Subject: [PATCH 58/88] Remove one google on newtab page
+
+---
+ chrome/browser/resources/local_ntp/local_ntp.js | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
+index efdfc0a3fa09..b725a5b94e22 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.js
++++ b/chrome/browser/resources/local_ntp/local_ntp.js
+@@ -817,7 +817,6 @@ function handlePostMessage(event) {
+         $(customize.IDS.CUSTOM_LINKS_RESTORE_DEFAULT).tabIndex =
+             (args.showRestoreDefault ? 0 : -1);
+       }
+-      $(IDS.OGB).classList.add(CLASSES.SHOW_ELEMENT);
+     }
+   } else if (cmd === 'tileBlacklisted') {
+     if (customLinksEnabled()) {
+@@ -1051,12 +1050,10 @@ function injectOneGoogleBar(ogb) {
+   renderOneGoogleBarTheme();
+ 
+   const ogElem = $('one-google');
+-  ogElem.innerHTML = ogb.barHtml;
+ 
+   const afterBarScript = document.createElement('script');
+   afterBarScript.type = 'text/javascript';
+   afterBarScript.appendChild(document.createTextNode(ogb.afterBarScript));
+-  ogElem.parentNode.insertBefore(afterBarScript, ogElem.nextSibling);
+ 
+   $('one-google-end-of-body').innerHTML = ogb.endOfBodyHtml;
+ 
+-- 
+2.20.1
+

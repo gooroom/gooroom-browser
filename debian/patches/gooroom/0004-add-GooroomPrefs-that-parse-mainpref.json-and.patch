@@ -1,7 +1,7 @@
-From 74cad27459cd76b2b0a775fcf979853686443e3f Mon Sep 17 00:00:00 2001
+From fdd1b2841c0d9ec5b353f5b35bf4902a5ce444a4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Tue, 2 Jun 2020 18:15:32 +0900
-Subject: [PATCH 04/79] add GooroomPrefs that parse mainpref.json and 
+Date: Wed, 22 Jul 2020 14:13:47 +0900
+Subject: [PATCH 04/88] add GooroomPrefs that parse mainpref.json and 
  initializes GooroomBase and GooroomUrlFilter based on the result
 
 ---
@@ -28,10 +28,10 @@ Subject: [PATCH 04/79] add GooroomPrefs that parse mainpref.json and
  create mode 100644 gooroom/browser/gooroom_url_filter_impl.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 04eb1379398b..08fb18f42f78 100644
+index b5628c64cc0c..1ae69e2242cf 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -251,6 +251,16 @@ if (!is_android && !is_mac) {
+@@ -241,6 +241,16 @@ if (!is_android && !is_mac) {
           # for commit #3
          "browser/gooroom_browser_extra_parts_security.cc",
          "browser/gooroom_browser_extra_parts_security.h",
@@ -49,7 +49,7 @@ index 04eb1379398b..08fb18f42f78 100644
      }
    }
 diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
-index 5d131b1e1b9a..6584bb27d8c3 100644
+index b2e985efa6f3..48f5b16c028c 100644
 --- a/gooroom/app/gooroom_main_delegate.cc
 +++ b/gooroom/app/gooroom_main_delegate.cc
 @@ -3,6 +3,7 @@
@@ -60,7 +60,7 @@ index 5d131b1e1b9a..6584bb27d8c3 100644
  #include "base/lazy_instance.h"
  #include "base/logging.h"
  #include "gooroom/browser/gooroom_content_browser_client.h"
-@@ -43,6 +44,7 @@ bool GooroomMainDelegate::BasicStartupComplete(int* exit_code) {
+@@ -48,6 +49,7 @@ bool GooroomMainDelegate::BasicStartupComplete(int* exit_code) {
      DLOG(INFO) << "BasicStartupComplete() this = " << this;
    }
  
@@ -69,7 +69,7 @@ index 5d131b1e1b9a..6584bb27d8c3 100644
  }
  
 diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
-index 9a0b3ba48e10..78139d3e6505 100644
+index 5d2797d678da..b49912b0b3fd 100644
 --- a/gooroom/app/gooroom_main_delegate.h
 +++ b/gooroom/app/gooroom_main_delegate.h
 @@ -5,6 +5,9 @@
@@ -90,7 +90,7 @@ index 9a0b3ba48e10..78139d3e6505 100644
  
  namespace base {
  class CommandLine;
-@@ -37,6 +39,8 @@ class GooroomMainDelegate : public ChromeMainDelegate {
+@@ -40,6 +42,8 @@ class GooroomMainDelegate : public ChromeMainDelegate {
  
    GooroomContentClient gooroom_content_client_;
  

@@ -1,7 +1,7 @@
-From 075d3c4c2d8c2b4e4545f15bc38bd67df96926cd Mon Sep 17 00:00:00 2001
+From a3f1e396deeb14123c2784af864e9f7852ea59a7 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 14:32:08 +0900
-Subject: [PATCH 59/79] BugTrackingSystem 1656 : 'devtools://' scheme is 
+Date: Mon, 27 Jul 2020 14:20:10 +0900
+Subject: [PATCH 59/88] BugTrackingSystem 1656 : 'devtools://' scheme is 
  excluded  from trust/untrust judgment
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 59/79] BugTrackingSystem 1656 : 'devtools://' scheme is
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 4bbff8b664d1..9428f5b0f24d 100644
+index d977acc425b3..736afd963ecc 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -4445,7 +4445,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4484,7 +4484,7 @@ bool RequestCurrentUserDataDir(GURL url) {
    //Chrome pages are excluded from trust/untrust judgment.
    if (url.scheme() == "chrome" || url.scheme() == "chrome-extension" ||
        url.scheme() == "chrome-search" || url.scheme() == "chrome-devtools" ||

@@ -1,7 +1,7 @@
-From a98bac0b3c1f2631fb22548b799eb09c1993b07b Mon Sep 17 00:00:00 2001
+From ab264e7f3a5aa85ad748796447b7380f9b15790e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 11:43:15 +0900
-Subject: [PATCH 44/79] Remove Incognito mode in gooroom-browser
+Date: Mon, 27 Jul 2020 12:00:59 +0900
+Subject: [PATCH 44/88] Remove Incognito mode in gooroom-browser
 
 ---
  chrome/browser/resources/bookmarks/command_manager.js | 1 -
@@ -10,10 +10,10 @@ Subject: [PATCH 44/79] Remove Incognito mode in gooroom-browser
  3 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/bookmarks/command_manager.js b/chrome/browser/resources/bookmarks/command_manager.js
-index 6539f75e8e07..23037c7705f2 100644
+index 0326cdaa7729..0b8a93eea866 100644
 --- a/chrome/browser/resources/bookmarks/command_manager.js
 +++ b/chrome/browser/resources/bookmarks/command_manager.js
-@@ -741,7 +741,6 @@ export const CommandManager = Polymer({
+@@ -742,7 +742,6 @@ export const CommandManager = Polymer({
            // <hr>
            Command.OPEN_NEW_TAB,
            Command.OPEN_NEW_WINDOW,
@@ -22,10 +22,10 @@ index 6539f75e8e07..23037c7705f2 100644
        case MenuSource.TOOLBAR:
          return [
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index 5dc632420d36..d80a9b5df41a 100644
+index d7c33ba0cd6d..f10e06d23715 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
-@@ -390,7 +390,9 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+@@ -393,7 +393,9 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
        NewWindow(browser_);
        break;
      case IDC_NEW_INCOGNITO_WINDOW:
@@ -36,10 +36,10 @@ index 5dc632420d36..d80a9b5df41a 100644
      case IDC_CLOSE_WINDOW:
        base::RecordAction(base::UserMetricsAction("CloseWindowByKey"));
 diff --git a/chrome/browser/ui/toolbar/app_menu_model.cc b/chrome/browser/ui/toolbar/app_menu_model.cc
-index 7e662c3f5d1d..f3dc707dadb5 100644
+index dec6a8920e92..101a740b02d0 100644
 --- a/chrome/browser/ui/toolbar/app_menu_model.cc
 +++ b/chrome/browser/ui/toolbar/app_menu_model.cc
-@@ -904,6 +904,9 @@ void AppMenuModel::UpdateZoomControls() {
+@@ -928,6 +928,9 @@ void AppMenuModel::UpdateZoomControls() {
  }
  
  bool AppMenuModel::ShouldShowNewIncognitoWindowMenuItem() {

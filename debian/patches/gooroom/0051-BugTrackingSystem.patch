@@ -1,7 +1,7 @@
-From d3657efc5f0b15468369721259cdb4c6d5328069 Mon Sep 17 00:00:00 2001
+From 3863d573bc58a08203a522071143421b2cc8650a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 12:17:47 +0900
-Subject: [PATCH 51/79] BugTrackingSystem
+Date: Mon, 27 Jul 2020 14:09:39 +0900
+Subject: [PATCH 51/88] BugTrackingSystem
 
 355 : Re-register the whitelist upon trust/untrust judgement module.
 ---
@@ -11,7 +11,7 @@ Subject: [PATCH 51/79] BugTrackingSystem
  3 files changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index c9ae516b146b..31f884b556cc 100644
+index 8aca90af90e5..c3571cfb9573 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -16,6 +16,7 @@
@@ -22,7 +22,7 @@ index c9ae516b146b..31f884b556cc 100644
  #include "dbus/bus.h"
  #include "dbus/message.h"
  #include "dbus/object_path.h"
-@@ -4435,6 +4436,8 @@ const char kUserDataDir[] = "user-data-dir";
+@@ -4474,6 +4475,8 @@ const char kUserDataDir[] = "user-data-dir";
  // It is a function that determines whether it is trusted mode or untrusted mode.
  // and exec if necessary (browser switching).
  bool RequestCurrentUserDataDir(GURL url) {

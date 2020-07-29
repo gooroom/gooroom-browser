@@ -1,7 +1,7 @@
-From 5885eba1741e311ab124ecb32739dc5454500e2d Mon Sep 17 00:00:00 2001
+From fc105a78f4dd6c68435c7055fd43f1bf0692fcf3 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 12:12:35 +0900
-Subject: [PATCH 49/79] BugTrackingSystem
+Date: Mon, 27 Jul 2020 13:45:46 +0900
+Subject: [PATCH 49/88] BugTrackingSystem
 
 746 : Change string Chromium to Gooroom Browser on gooroom://flags page
 743 : Remove Translate option on settings language page
@@ -17,36 +17,20 @@ Subject: [PATCH 49/79] BugTrackingSystem
 714 : Remove browser-login on gooroom://welcome page
 205 : Remove google-cloud-login on print page
 ---
- chrome/app/gooroom/chromium_strings.grd       |  2 +-
- .../gooroom/resources/chromium_strings_ko.xtb |  3 ++-
- .../gooroom/settings_chromium_strings.grdp    |  2 +-
+ .../gooroom/resources/chromium_strings_ko.xtb |  4 ++-
  chrome/app/resources/manpage.1.in             | 10 ++++----
  .../browser/resources/history/side_bar.html   |  5 ----
  .../local_discovery/local_discovery.html      |  4 ++-
  .../print_preview/ui/destination_dialog.html  | 25 -------------------
  .../print_preview/ui/destination_dialog.js    | 10 --------
  .../languages_page/languages_page.html        | 10 --------
- .../settings/privacy_page/privacy_page.html   |  4 ++-
  .../site_settings/chooser_exception_list.js   |  2 +-
  .../bookmark_context_menu_controller.cc       |  4 +--
  .../browser/web_contents/web_contents_impl.cc |  1 +
- 13 files changed, 19 insertions(+), 63 deletions(-)
+ 10 files changed, 15 insertions(+), 60 deletions(-)
 
-diff --git a/chrome/app/gooroom/chromium_strings.grd b/chrome/app/gooroom/chromium_strings.grd
-index 78a67b802995..9f2fda7d2c9e 100644
---- a/chrome/app/gooroom/chromium_strings.grd
-+++ b/chrome/app/gooroom/chromium_strings.grd
-@@ -562,7 +562,7 @@ Chromium is unable to recover your settings.
-       </if>
-       <if expr="not use_titlecase and not chromeos">
-         <message name="IDS_ABOUT" desc="The text label of the About Chrome menu item">
--          About &amp;Chromium
-+          About &amp;Gooroom Browser
-         </message>
-         <message name="IDS_UPDATE_NOW" desc="The text label of the Update Chrome Now menu item">
-           Update &amp;Chromium
 diff --git a/chrome/app/gooroom/resources/chromium_strings_ko.xtb b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
-index 4cbd89dd5fe4..0d76d1629028 100644
+index d2ea66ac1ed2..cf4ffc1fddd7 100644
 --- a/chrome/app/gooroom/resources/chromium_strings_ko.xtb
 +++ b/chrome/app/gooroom/resources/chromium_strings_ko.xtb
 @@ -1,6 +1,7 @@
@@ -57,28 +41,16 @@ index 4cbd89dd5fe4..0d76d1629028 100644
  <translation id="1065672644894730302">환경설정을 읽을 수 없습니다.
  
  일부 기능을 사용할 수 없으며 환경설정의 변경사항이 저장되지 않습니다.</translation>
-@@ -71,7 +72,7 @@
- <translation id="3848258323044014972"><ph name="PAGE_TITLE" /> - Gooroom browser</translation>
+@@ -73,7 +74,8 @@
  <translation id="388648406173476553">Gooroom browser을 맞춤설정 및 제어합니다. 확인이 필요한 항목이 있습니다. 클릭하여 세부정보를 보세요.</translation>
  <translation id="3889543394854987837">Gooroom browser을 열고 탐색을 시작하려면 내 이름을 클릭하세요.</translation>
+ <translation id="3945058413678539331">Gooroom browser에서 비밀번호를 복사하려고 합니다. 허용하려면 Windows 비밀번호를 입력하세요.</translation>
 -<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 Chromium 개선에 참여</translation>
-+<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 오픈소스 프로젝트(Chromium) 개선에 참여</translation>
++<translation id="4036079820698952681"><ph name="BEGIN_LINK" />현재 설정<ph name="END_LINK" />을 보고하여 오픈소스 프로
++젝트(Chromium) 개선에 참여</translation>
  <translation id="4050175100176540509">최신 버전에는 중요한 보안 개선사항 및 새로운 기능이 포함되어 있습니다.</translation>
+ <translation id="419998258129752635"><ph name="PAGE_TITLE" /> - 네트워크 로그인 - Gooroom browser</translation>
  <translation id="421369550622382712">Gooroom browser에 유용한 앱, 게임, 확장 프로그램, 테마를 찾아보세요.</translation>
- <translation id="4216212958613226427">Gooroom browser UI가 이 언어로 표시됩니다.</translation>
-diff --git a/chrome/app/gooroom/settings_chromium_strings.grdp b/chrome/app/gooroom/settings_chromium_strings.grdp
-index 596ee6a2e464..99cbca837594 100644
---- a/chrome/app/gooroom/settings_chromium_strings.grdp
-+++ b/chrome/app/gooroom/settings_chromium_strings.grdp
-@@ -3,7 +3,7 @@
- <grit-part>
-   <!-- About Page -->
-   <message name="IDS_SETTINGS_ABOUT_PROGRAM" desc="Menu title for the About Chromium page.">
--    About Chromium
-+    About Gooroom-Browser
-   </message>
-   <message name="IDS_SETTINGS_GET_HELP_USING_CHROME" desc="Text of the button which takes the user to the Chrome help page.">
-     Get help with Chromium
 diff --git a/chrome/app/resources/manpage.1.in b/chrome/app/resources/manpage.1.in
 index 1e4fe85907e3..085cbe85ff3a 100644
 --- a/chrome/app/resources/manpage.1.in
@@ -118,10 +90,10 @@ index 1e4fe85907e3..085cbe85ff3a 100644
  <http://standards.freedesktop.org/basedir-spec/latest/> .)
  
 diff --git a/chrome/browser/resources/history/side_bar.html b/chrome/browser/resources/history/side_bar.html
-index 73fa9dec87d7..7d616aed9198 100644
+index 372d46cf8efc..b3caebd5dcb8 100644
 --- a/chrome/browser/resources/history/side_bar.html
 +++ b/chrome/browser/resources/history/side_bar.html
-@@ -119,11 +119,6 @@
+@@ -101,11 +101,6 @@
          $i18n{historyMenuItem}
          <paper-ripple></paper-ripple>
        </a>
@@ -156,10 +128,10 @@ index 9dc7d5254509..bbfdd0687956 100644
  </body>
  </html>
 diff --git a/chrome/browser/resources/print_preview/ui/destination_dialog.html b/chrome/browser/resources/print_preview/ui/destination_dialog.html
-index a9873cd3c0eb..362110cd94df 100644
+index 56a6a8d8ee67..2304f9201ac4 100644
 --- a/chrome/browser/resources/print_preview/ui/destination_dialog.html
 +++ b/chrome/browser/resources/print_preview/ui/destination_dialog.html
-@@ -154,29 +154,4 @@
+@@ -148,29 +148,4 @@
        $i18n{cancel}
      </cr-button>
    </div>
@@ -190,31 +162,31 @@ index a9873cd3c0eb..362110cd94df 100644
 -  </div>
  </cr-dialog>
 diff --git a/chrome/browser/resources/print_preview/ui/destination_dialog.js b/chrome/browser/resources/print_preview/ui/destination_dialog.js
-index 2f24d98b292d..467cb0a320eb 100644
+index e0532e60acf2..2a522299def3 100644
 --- a/chrome/browser/resources/print_preview/ui/destination_dialog.js
 +++ b/chrome/browser/resources/print_preview/ui/destination_dialog.js
 @@ -126,16 +126,6 @@ Polymer({
  
    /** @override */
-   ready: function() {
+   ready() {
 -    this.$$('.promo-text').innerHTML =
 -        this.i18nAdvanced('cloudPrintPromotion', {
 -          substitutions: ['<a is="action-link" class="sign-in">', '</a>'],
 -          attrs: {
--            'is': (node, v) => v == 'action-link',
--            'class': (node, v) => v == 'sign-in',
--            'tabindex': (node, v) => v == '0',
--            'role': (node, v) => v == 'link',
+-            'is': (node, v) => v === 'action-link',
+-            'class': (node, v) => v === 'sign-in',
+-            'tabindex': (node, v) => v === '0',
+-            'role': (node, v) => v === 'link',
 -          },
 -        });
    },
  
    /** @override */
 diff --git a/chrome/browser/resources/settings/languages_page/languages_page.html b/chrome/browser/resources/settings/languages_page/languages_page.html
-index aa80d889a4b2..8cebc41ed3c4 100644
+index 974cf4af7d7f..5b05bcc022f6 100644
 --- a/chrome/browser/resources/settings/languages_page/languages_page.html
 +++ b/chrome/browser/resources/settings/languages_page/languages_page.html
-@@ -425,16 +425,6 @@
+@@ -374,16 +374,6 @@
                  </iron-icon>
                </cr-checkbox>
  </if> <!-- chromeos or is_win -->
@@ -231,40 +203,11 @@ index aa80d889a4b2..8cebc41ed3c4 100644
                <button class="dropdown-item" role="menuitem"
                    on-click="onMoveToTopTap_"
                    hidden="[[isNthLanguage_(
-diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index fb22b7ba6846..295b7317cc79 100644
---- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
-+++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -76,6 +76,7 @@
-     <settings-animated-pages id="pages" section="privacy"
-         focus-config="[[focusConfig_]]">
-       <div route-path="default">
-+<if expr="not _gooroom">
-         <template is="dom-if" if="[[!privacySettingsRedesignEnabled_]]">
-           <cr-link-row id="syncLinkRow"
-               label="$i18n{syncAndNonPersonalizedServices}"
-@@ -83,6 +84,7 @@
-               on-click="onSyncAndGoogleServicesClick_">
-           </cr-link-row>
-         </template>
-+</if>
-         <cr-link-row id="clearBrowsingData"
-             class="hr"
-             label="$i18n{clearBrowsingData}"
-@@ -127,7 +129,7 @@
-             </settings-toggle-button>
-           </template>
- <if expr="not chromeos">
--<if expr="not _gooroom">
-+<if expr="not _gonSyncAndGoogleServicesClick_ooroom">
-         <template is="dom-if" if="[[!privacySettingsRedesignEnabled_]]">
-           <settings-toggle-button id="signinAllowedToggle"
-               pref="{{prefs.signin.allowed_on_next_startup}}"
 diff --git a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
-index 79c7539ca337..02e2e9dcc782 100644
+index 2cc5030cbf7e..90e460d79667 100644
 --- a/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
 +++ b/chrome/browser/resources/settings/site_settings/chooser_exception_list.js
-@@ -108,7 +108,7 @@ Polymer({
+@@ -102,7 +102,7 @@ Polymer({
      // Set the message to display when the exception list is empty.
      switch (this.chooserType) {
        case settings.ChooserType.USB_DEVICES:
@@ -289,7 +232,7 @@ index 11bf8d9f3d0a..2b84390b4a5d 100644
      int count = chrome::OpenCount(parent_window_, selection_);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index f1170719ca7d..c9ae516b146b 100644
+index a7f2df51c0e5..8aca90af90e5 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -22,6 +22,7 @@

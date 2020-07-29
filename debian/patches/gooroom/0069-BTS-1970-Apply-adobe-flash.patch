@@ -1,7 +1,7 @@
-From 21c6af5ba133df4e28bc36b52f0d4526331471d3 Mon Sep 17 00:00:00 2001
+From 74cd14d0d62ecc71de50143029aaefdfcd27423e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:14:11 +0900
-Subject: [PATCH 69/79] [BTS:1970] Apply adobe flash
+Date: Mon, 27 Jul 2020 15:33:23 +0900
+Subject: [PATCH 69/88] [BTS:1970] Apply adobe flash
 
 ---
  gooroom/browser/gooroom_pref.cc | 5 +++--

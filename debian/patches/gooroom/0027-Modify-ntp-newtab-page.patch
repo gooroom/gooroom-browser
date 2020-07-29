@@ -1,7 +1,7 @@
-From d6ab6a5438947127d2f96a9145a859108fe34394 Mon Sep 17 00:00:00 2001
+From 729de8babd192cae60f88585f7c94420dcb6b7a0 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 4 Jun 2020 17:40:19 +0900
-Subject: [PATCH 27/79] Modify ntp(newtab) page
+Date: Thu, 23 Jul 2020 17:22:30 +0900
+Subject: [PATCH 27/88] Modify ntp(newtab) page
 
 ---
  chrome/browser/resources/local_ntp/doodles.css    | 14 ++++++++------
@@ -72,7 +72,7 @@ index 2e0543b41612..576669e5a338 100644
      const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
      darkMode.addListener(doodles.fadeToLogoOrDoodle);
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.css b/chrome/browser/resources/local_ntp/local_ntp.css
-index ef088a6c3e2c..9aff7f9a06f1 100644
+index e563fe18ff8f..5293845c5c63 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.css
 +++ b/chrome/browser/resources/local_ntp/local_ntp.css
 @@ -105,10 +105,14 @@ button {
@@ -93,7 +93,7 @@ index ef088a6c3e2c..9aff7f9a06f1 100644
  
  body.hide-fakebox #fakebox {
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.html b/chrome/browser/resources/local_ntp/local_ntp.html
-index 7f2cf920294b..2d349e69ad31 100644
+index ccefbd553b0e..d756a30fa181 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.html
 +++ b/chrome/browser/resources/local_ntp/local_ntp.html
 @@ -36,7 +36,7 @@
@@ -106,10 +106,10 @@ index 7f2cf920294b..2d349e69ad31 100644
    <div id="ntp-contents">
      <div id="logo">
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
-index 213a2982d5f1..dcc573873848 100644
+index 9ab299da1531..efdfc0a3fa09 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.js
 +++ b/chrome/browser/resources/local_ntp/local_ntp.js
-@@ -836,6 +836,12 @@ function init() {
+@@ -901,6 +901,12 @@ function init() {
  
    const searchboxApiHandle = embeddedSearchApiHandle.searchBox;
  

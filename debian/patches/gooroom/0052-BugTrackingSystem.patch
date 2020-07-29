@@ -1,7 +1,7 @@
-From 13df6216791a2552ad989fd30f6110dc3ef3f0c2 Mon Sep 17 00:00:00 2001
+From b2e36e2796ba8f4134dfcd96226ad4684122890d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 12:20:38 +0900
-Subject: [PATCH 52/79] BugTrackingSystem
+Date: Mon, 27 Jul 2020 14:10:06 +0900
+Subject: [PATCH 52/88] BugTrackingSystem
 
 650 - Client redirection URL does not apply Trust/Untrust judgement module.
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 52/79] BugTrackingSystem
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 31f884b556cc..1d268150399b 100644
+index c3571cfb9573..c3a832b6e243 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -4660,9 +4660,10 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -4716,9 +4716,10 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
      }
    }
  */

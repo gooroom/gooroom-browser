@@ -1,7 +1,7 @@
-From 89c1c151aca5f7b8b7e609c7fc2a8fe08717f67f Mon Sep 17 00:00:00 2001
+From 9178ee39376063c3beaefce85a01e124c886ff53 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:27:22 +0900
-Subject: [PATCH 77/79] [BTS:2049] Set maximum length of the extension display
+Date: Mon, 27 Jul 2020 15:41:46 +0900
+Subject: [PATCH 77/88] [BTS:2049] Set maximum length of the extension display 
  name
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 77/79] [BTS:2049] Set maximum length of the extension display
  1 file changed, 3 insertions(+)
 
 diff --git a/extensions/common/extension.cc b/extensions/common/extension.cc
-index 34998826841b..9cdd87f18b45 100644
+index 980c18557bb3..93bbcb38692d 100644
 --- a/extensions/common/extension.cc
 +++ b/extensions/common/extension.cc
-@@ -616,6 +616,7 @@ bool Extension::LoadRequiredFeatures(base::string16* error) {
+@@ -585,6 +585,7 @@ bool Extension::LoadRequiredFeatures(base::string16* error) {
  
  bool Extension::LoadName(base::string16* error) {
    base::string16 localized_name;
@@ -20,7 +20,7 @@ index 34998826841b..9cdd87f18b45 100644
    if (!manifest_->GetString(keys::kName, &localized_name)) {
      *error = base::ASCIIToUTF16(errors::kInvalidName);
      return false;
-@@ -626,6 +627,8 @@ bool Extension::LoadName(base::string16* error) {
+@@ -595,6 +596,8 @@ bool Extension::LoadName(base::string16* error) {
        base::CollapseWhitespace(localized_name, true);
    base::i18n::SanitizeUserSuppliedString(&sanitized_name);
    display_name_ = base::UTF16ToUTF8(sanitized_name);

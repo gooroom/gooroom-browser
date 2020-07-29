@@ -6,6 +6,8 @@ Makefile
 base/third_party/libevent/BUILD.gn
 build/secondary/third_party/libjpeg_turbo/BUILD.gn
 
+third_party/libjpeg.gni
+
 third_party/re2/BUILD.gn
 third_party/icu/BUILD.gn
 third_party/flac/BUILD.gn
@@ -20,6 +22,7 @@ third_party/libvpx/BUILD.gn
 third_party/libwebp/BUILD.gn
 third_party/libjpeg/BUILD.gn
 third_party/libxslt/BUILD.gn
+third_party/openh264/BUILD.gn
 third_party/freetype/BUILD.gn
 third_party/fontconfig/BUILD.gn
 third_party/harfbuzz-ng/harfbuzz.gni

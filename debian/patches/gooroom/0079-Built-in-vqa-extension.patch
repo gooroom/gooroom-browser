@@ -1,7 +1,7 @@
-From 516720847eec04d3b151f16dc6e82ff9a0914d9b Mon Sep 17 00:00:00 2001
+From 1ab00dcb13abfbab72741a958e701e4183084690 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:31:29 +0900
-Subject: [PATCH 79/79] Built in vqa extension
+Date: Mon, 27 Jul 2020 15:44:10 +0900
+Subject: [PATCH 79/88] Built in vqa extension
 
 ---
  chrome/browser/resources/extensions/item_list.html     |  2 +-
@@ -11,10 +11,10 @@ Subject: [PATCH 79/79] Built in vqa extension
  4 files changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/extensions/item_list.html b/chrome/browser/resources/extensions/item_list.html
-index 2ea1c0f87ae6..6c7b5980dfa2 100644
+index 56b2f7b6b8a6..9577c0c53d6c 100644
 --- a/chrome/browser/resources/extensions/item_list.html
 +++ b/chrome/browser/resources/extensions/item_list.html
-@@ -96,7 +96,7 @@
+@@ -105,7 +105,7 @@
            filter="[[computedFilter_]]"
            rendered-item-count="{{shownExtensionsCount_::dom-change}}">
          <extensions-item id="[[item.id]]" data="[[item]]"
@@ -24,10 +24,10 @@ index 2ea1c0f87ae6..6c7b5980dfa2 100644
        </template>
      </div>
 diff --git a/chrome/browser/resources/extensions/item_list.js b/chrome/browser/resources/extensions/item_list.js
-index f24ce184d717..27cf0a3998cd 100644
+index 82136e86fa81..0deb06003c1d 100644
 --- a/chrome/browser/resources/extensions/item_list.js
 +++ b/chrome/browser/resources/extensions/item_list.js
-@@ -58,6 +58,16 @@ Polymer({
+@@ -72,6 +72,16 @@ Polymer({
      },
    },
  
@@ -45,23 +45,23 @@ index f24ce184d717..27cf0a3998cd 100644
     * @param {string} id
     * @return {?Element}
 diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.cc b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-index 26c0263e0e3a..058b71fc52df 100644
+index 639cbd7f9f0b..d96cda4de4bd 100644
 --- a/chrome/browser/ui/toolbar/toolbar_actions_model.cc
 +++ b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-@@ -382,6 +382,8 @@ void ToolbarActionsModel::AddAction(const ActionId& action_id) {
-     if (visible_count_delta)
-       SetVisibleIconCount(visible_icon_count() + visible_count_delta);
+@@ -386,6 +386,8 @@ void ToolbarActionsModel::AddAction(const ActionId& action_id) {
    }
+ 
+   UpdatePinnedActionIds();
 +  if (action_id == "odibdjgmpbgfpckplmndbhnddbmmocbk")
 +    SetVisibleIconCount(visible_icon_count() - 1);
  }
  
  void ToolbarActionsModel::RemoveAction(const ActionId& action_id) {
 diff --git a/chrome/browser/ui/views/toolbar/browser_actions_container.cc b/chrome/browser/ui/views/toolbar/browser_actions_container.cc
-index 48ca19a5d262..07ce2910d66b 100644
+index 33926e822139..af414d21dc1f 100644
 --- a/chrome/browser/ui/views/toolbar/browser_actions_container.cc
 +++ b/chrome/browser/ui/views/toolbar/browser_actions_container.cc
-@@ -464,6 +464,10 @@ void BrowserActionsContainer::Layout() {
+@@ -463,6 +463,10 @@ void BrowserActionsContainer::Layout() {
    // overflow container.
    for (size_t i = 0u; i < toolbar_action_views_.size(); ++i) {
      ToolbarActionView* view = toolbar_action_views_[i].get();

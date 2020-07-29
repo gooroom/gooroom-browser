@@ -1,7 +1,7 @@
-From 6102df1dfe971a6310b44c03a18bcfdba60bb362 Mon Sep 17 00:00:00 2001
+From d832d0480939ef9d94521101db70c7ac36a21d31 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 10:25:13 +0900
-Subject: [PATCH 31/79] change default path of policy including content 
+Date: Thu, 23 Jul 2020 18:12:09 +0900
+Subject: [PATCH 31/88] change default path of policy including content 
  settings
 
 ---

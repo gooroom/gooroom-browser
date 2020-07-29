@@ -1,7 +1,7 @@
-From ec163b8feca74c9be49edad528bbc334bb39535e Mon Sep 17 00:00:00 2001
+From 73e1ef5cf2ce3f5fe8e3e172d66f01bff53d01c9 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 3 Jun 2020 10:14:53 +0900
-Subject: [PATCH 13/79] Add 'GooroomURLRewrite::ChangeGooroomScheme' static 
+Date: Thu, 23 Jul 2020 15:03:53 +0900
+Subject: [PATCH 13/88] Add 'GooroomURLRewrite::ChangeGooroomScheme' static 
  function
 
 ---
@@ -12,7 +12,7 @@ Subject: [PATCH 13/79] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
  4 files changed, 28 insertions(+)
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 5cdfec3a834b..5a2548fe02a7 100644
+index b5deda2a1739..f9f00d5039a2 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -9,6 +9,10 @@
@@ -26,7 +26,7 @@ index 5cdfec3a834b..5a2548fe02a7 100644
  #include "base/base_switches.h"
  #include "base/bind.h"
  #include "base/bind_helpers.h"
-@@ -1148,6 +1152,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient(
+@@ -1156,6 +1160,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient(
  #endif
  
    extra_parts_.push_back(new ChromeContentBrowserClientPerformanceManagerPart);
@@ -38,7 +38,7 @@ index 5cdfec3a834b..5a2548fe02a7 100644
  
  ChromeContentBrowserClient::~ChromeContentBrowserClient() {
 diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-index 0c30acaa49ca..dff64d7f7cba 100644
+index a453cfa7de1b..cabf096fb6d0 100644
 --- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 +++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 @@ -4,6 +4,9 @@
@@ -51,7 +51,7 @@ index 0c30acaa49ca..dff64d7f7cba 100644
  #include "base/logging.h"
  #include "build/build_config.h"
  #include "chrome/browser/autocomplete/autocomplete_classifier_factory.h"
-@@ -69,6 +72,11 @@ bool ChromeLocationBarModelDelegate::GetURL(GURL* url) const {
+@@ -71,6 +74,11 @@ bool ChromeLocationBarModelDelegate::GetURL(GURL* url) const {
      return false;
  
    *url = entry->GetVirtualURL();

@@ -1,0 +1,33 @@
+From 2d367d5cbc3a1175dd36388a3a169d6f6f0ab762 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 14:12:50 +0900
+Subject: [PATCH 53/88] ugTrackingSystem
+
+507 : Disable 'Open as window' on making shortcut app popup
+---
+ chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
+index b9b280ae3734..94d6fc8abb98 100644
+--- a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
++++ b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
+@@ -87,6 +87,7 @@ WebAppConfirmationView::WebAppConfirmationView(
+   layout->AddPaddingRow(
+       views::GridLayout::kFixedSize,
+       layout_provider->GetDistanceMetric(DISTANCE_CONTROL_LIST_VERTICAL));
++#if !defined(GOOROOM_BUILD)
+   auto open_as_window_checkbox = std::make_unique<views::Checkbox>(
+       l10n_util::GetStringUTF16(IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_WINDOW));
+   open_as_window_checkbox->SetChecked(web_app_info_->open_as_window);
+@@ -98,6 +99,7 @@ WebAppConfirmationView::WebAppConfirmationView(
+   if (g_auto_check_open_in_window_for_testing) {
+     open_as_window_checkbox_->SetChecked(true);
+   }
++#endif
+ 
+   title_tf_->SelectAll(true);
+   chrome::RecordDialogCreation(chrome::DialogIdentifier::WEB_APP_CONFIRMATION);
+-- 
+2.20.1
+

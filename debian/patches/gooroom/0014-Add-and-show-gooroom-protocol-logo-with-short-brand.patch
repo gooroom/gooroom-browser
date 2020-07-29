@@ -1,7 +1,7 @@
-From 40d47ce10c43a5df0d51fec02ad09746f9e14e30 Mon Sep 17 00:00:00 2001
+From 992bc60193901b10952cdecd78fbff6beb20042d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 3 Jun 2020 18:47:56 +0900
-Subject: [PATCH 14/79] Add and show gooroom protocol logo with short brand 
+Date: Thu, 23 Jul 2020 15:08:02 +0900
+Subject: [PATCH 14/88] Add and show gooroom protocol logo with short brand 
  text and fake scheme gooroom:// instead of chrome:// in omnibox.
 
 ---
@@ -19,10 +19,10 @@ Subject: [PATCH 14/79] Add and show gooroom protocol logo with short brand
  create mode 100644 components/omnibox/browser/vector_icons/gooroom_product_1x.icon
 
 diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
-index 90228f41336b..a8421903aa20 100644
+index 9c44b2c3bacd..a1e00c14aa8f 100644
 --- a/chrome/app/chromium_strings.grd
 +++ b/chrome/app/chromium_strings.grd
-@@ -152,13 +152,23 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
+@@ -182,13 +182,23 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
        <if expr="not is_android">
          <part file="settings_chromium_strings.grdp" />
        </if>
@@ -48,10 +48,10 @@ index 90228f41336b..a8421903aa20 100644
          <message name="IDS_SXS_SHORTCUT_NAME" desc="Unused in Chromium builds" translateable="false">
          </message>
 diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-index dff64d7f7cba..2ddee6908981 100644
+index cabf096fb6d0..933767a5b951 100644
 --- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 +++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-@@ -179,6 +179,12 @@ const gfx::VectorIcon* ChromeLocationBarModelDelegate::GetVectorIconOverride()
+@@ -185,6 +185,12 @@ const gfx::VectorIcon* ChromeLocationBarModelDelegate::GetVectorIconOverride()
      return &omnibox::kExtensionAppIcon;
  #endif
  
@@ -65,21 +65,21 @@ index dff64d7f7cba..2ddee6908981 100644
  }
  
 diff --git a/chrome/browser/ui/views/location_bar/location_icon_view.cc b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-index 222fab010d58..e7abac2b3dd9 100644
+index c4ad41ce573a..642a913c4cd4 100644
 --- a/chrome/browser/ui/views/location_bar/location_icon_view.cc
 +++ b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-@@ -125,6 +125,10 @@ bool LocationIconView::ShouldShowText() const {
+@@ -134,6 +134,10 @@ bool LocationIconView::ShouldShowText() const {
    const GURL& url = location_bar_model->GetURL();
    if (url.SchemeIs(content::kChromeUIScheme) ||
        url.SchemeIs(extensions::kExtensionScheme) ||
 +#if defined(GOOROOM_BUILD)
 +      // Show a string "Gooroom" immediately after Gooroom protocol logo
-+        url.SchemeIs(content::kGooroomUIScheme) ||
++      url.SchemeIs(content::kGooroomUIScheme) ||
 +#endif
-       url.SchemeIs(url::kFileScheme)) {
+       url.SchemeIs(url::kFileScheme) ||
+       url.SchemeIs(dom_distiller::kDomDistillerScheme)) {
      return true;
-   }
-@@ -140,9 +144,16 @@ base::string16 LocationIconView::GetText() const {
+@@ -150,9 +154,16 @@ base::string16 LocationIconView::GetText() const {
    if (delegate_->IsEditingOrEmpty())
      return base::string16();
  
@@ -97,13 +97,13 @@ index 222fab010d58..e7abac2b3dd9 100644
    if (delegate_->GetLocationBarModel()->GetURL().SchemeIs(url::kFileScheme))
      return l10n_util::GetStringUTF16(IDS_OMNIBOX_FILE);
 diff --git a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-index c149c10cbbed..5684b9043390 100644
+index 8b5390cd9671..86b8bffe3cab 100644
 --- a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
 +++ b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-@@ -374,7 +374,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
-     text = IDS_PAGE_INFO_FILE_PAGE;
-   } else if (url.SchemeIs(content::kChromeDevToolsScheme)) {
-     text = IDS_PAGE_INFO_DEVTOOLS_PAGE;
+@@ -409,7 +409,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
+     } else {
+       text = IDS_PAGE_INFO_READER_MODE_PAGE;
+     }
 -  } else if (!url.SchemeIs(content::kChromeUIScheme)) {
 +  } else if (!url.SchemeIs(content::kChromeUIScheme) 
 +#if defined(GOOROOM_BUILD)
@@ -113,7 +113,7 @@ index c149c10cbbed..5684b9043390 100644
      NOTREACHED();
    }
  
-@@ -420,6 +424,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
+@@ -453,6 +457,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
    gfx::NativeView parent_view = platform_util::GetViewForWindow(parent_window);
  
    if (url.SchemeIs(content::kChromeUIScheme) ||
@@ -124,10 +124,10 @@ index c149c10cbbed..5684b9043390 100644
        url.SchemeIs(extensions::kExtensionScheme) ||
        url.SchemeIs(content::kViewSourceScheme) ||
 diff --git a/components/components_chromium_strings.grd b/components/components_chromium_strings.grd
-index 2f8b6e8ead11..ef1987ac3196 100644
+index d9e90bc9cbc4..de7b9fce54cd 100644
 --- a/components/components_chromium_strings.grd
 +++ b/components/components_chromium_strings.grd
-@@ -249,7 +249,7 @@
+@@ -279,7 +279,7 @@
  
        <!-- Page Info -->
        <message name="IDS_PAGE_INFO_INTERNAL_PAGE" desc="Message to display in the page info bubble when the page you are on is a chrome:// page or about:something.">
@@ -137,10 +137,10 @@ index 2f8b6e8ead11..ef1987ac3196 100644
  
        <if expr="is_android">
 diff --git a/components/omnibox/browser/BUILD.gn b/components/omnibox/browser/BUILD.gn
-index f9a6fd95e475..03f84a88d5e5 100644
+index 4757f16eaaae..f50136ff24ff 100644
 --- a/components/omnibox/browser/BUILD.gn
 +++ b/components/omnibox/browser/BUILD.gn
-@@ -60,6 +60,9 @@ aggregate_vector_icons("omnibox_vector_icons") {
+@@ -61,6 +61,9 @@ aggregate_vector_icons("omnibox_vector_icons") {
      "star.icon",
      "switch.icon",
      "tab.icon",

@@ -1,7 +1,7 @@
-From e6c9dcf46487ea8810bd6751b0c8cec0e4d45400 Mon Sep 17 00:00:00 2001
+From 1d07b5a2b4715d815cdde5906a2865f9726858e0 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 14:30:54 +0900
-Subject: [PATCH 56/79] Add korean translation about 'Extensions no-installed 
+Date: Mon, 27 Jul 2020 14:16:01 +0900
+Subject: [PATCH 56/88] Add korean translation about 'Extensions no-installed 
  items..' in extension page
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH 56/79] Add korean translation about 'Extensions no-installed
  1 file changed, 1 insertion(+)
 
 diff --git a/chrome/app/gooroom/resources/generated_resources_ko.xtb b/chrome/app/gooroom/resources/generated_resources_ko.xtb
-index be81aa2f333e..3e80581bac12 100644
+index 1f91183836f2..675cde5d1277 100644
 --- a/chrome/app/gooroom/resources/generated_resources_ko.xtb
 +++ b/chrome/app/gooroom/resources/generated_resources_ko.xtb
 @@ -1,6 +1,7 @@

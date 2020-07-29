@@ -1,0 +1,69 @@
+From a16e78c4340024289c1f0933caa8cef41448280d Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 11:52:13 +0900
+Subject: [PATCH 41/88] Update chrome://settings/ page
+
+---
+ chrome/browser/resources/settings/basic_page/basic_page.html  | 4 +---
+ .../settings/privacy_page/personalization_options.html        | 2 --
+ 2 files changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
+index c7a913b5c1ae..b900dafb767f 100644
+--- a/chrome/browser/resources/settings/basic_page/basic_page.html
++++ b/chrome/browser/resources/settings/basic_page/basic_page.html
+@@ -126,6 +126,7 @@
+             <settings-autofill-page prefs="{{prefs}}"></settings-autofill-page>
+           </settings-section>
+         </template>
++</if>
+         <template is="dom-if" if="[[showSafetyCheckPage_(
+             pageVisibility.safetyCheck)]]" restamp>
+           <settings-section page-title="$i18n{safetyCheckSectionTitle}"
+@@ -144,7 +145,6 @@
+             </settings-privacy-page>
+           </settings-section>
+         </template>
+-</if>
+         <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
+             restamp>
+           <settings-section page-title="$i18n{appearancePageTitle}"
+@@ -220,7 +220,6 @@
+                 </settings-printing-page>
+               </settings-section>
+             </template>
+-<if expr="not _gooroom">
+             <template is="dom-if" if="[[showPage_(pageVisibility.a11y)]]"
+                 restamp>
+               <settings-section page-title="$i18n{a11yPageTitle}"
+@@ -228,7 +227,6 @@
+                 <settings-a11y-page prefs="{{prefs}}"></settings-a11y-page>
+               </settings-section>
+             </template>
+-</if>
+ <if expr="not chromeos">
+             <settings-section page-title="$i18n{systemPageTitle}"
+                 section="system">
+diff --git a/chrome/browser/resources/settings/privacy_page/personalization_options.html b/chrome/browser/resources/settings/privacy_page/personalization_options.html
+index 90bc29f47a41..dace1a9871a1 100644
+--- a/chrome/browser/resources/settings/privacy_page/personalization_options.html
++++ b/chrome/browser/resources/settings/privacy_page/personalization_options.html
+@@ -51,7 +51,6 @@
+         label="$i18n{searchSuggestPref}"
+         sub-label="$i18n{searchSuggestPrefDesc}">
+     </settings-toggle-button>
+-<if expr="not _gooroom">
+   <template is="dom-if" if="[[!privacySettingsRedesignEnabled_]]">
+     <settings-toggle-button id="linkDoctor"
+         pref="{{prefs.alternate_error_pages.enabled}}"
+@@ -59,7 +58,6 @@
+         sub-label="$i18n{linkDoctorPrefDesc}">
+     </settings-toggle-button>
+   </template>
+-</if>
+ <if expr="_google_chrome">
+ <if expr="chromeos">
+     <settings-toggle-button pref="{{prefs.cros.metrics.reportingEnabled}}"
+-- 
+2.20.1
+

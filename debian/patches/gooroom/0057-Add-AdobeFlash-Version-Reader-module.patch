@@ -1,7 +1,7 @@
-From 339822ce2036e87c266d16273bfddf9499062a9c Mon Sep 17 00:00:00 2001
+From c8fcfbd7385c9b34e24ab003f3852d4d7f9278b6 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 14:31:27 +0900
-Subject: [PATCH 57/79] Add AdobeFlash-Version Reader module
+Date: Mon, 27 Jul 2020 14:17:56 +0900
+Subject: [PATCH 57/88] Add AdobeFlash-Version Reader module
 
 ---
  .../browser/web_contents/web_contents_impl.cc |  6 ++--
@@ -14,10 +14,10 @@ Subject: [PATCH 57/79] Add AdobeFlash-Version Reader module
  create mode 100644 gooroom/flash/flash_version.h
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 1d268150399b..4bbff8b664d1 100644
+index c3a832b6e243..d977acc425b3 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -4484,9 +4484,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4523,9 +4523,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
        "/.config/gooroom/untrust";
  
@@ -27,7 +27,7 @@ index 1d268150399b..4bbff8b664d1 100644
  
    int pid;
    //TODO do not discard other options when exec
-@@ -4496,7 +4494,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4535,7 +4533,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        return true;  // true is blank.. false is continue.
      } else {
        execl(exe_path.c_str(), "gooroom-browser",
@@ -36,7 +36,7 @@ index 1d268150399b..4bbff8b664d1 100644
        exit(0);
      }
    } else {
-@@ -4505,7 +4503,7 @@ bool RequestCurrentUserDataDir(GURL url) {
+@@ -4544,7 +4542,7 @@ bool RequestCurrentUserDataDir(GURL url) {
        return true;
      } else {
        execl(exe_path.c_str(), "gooroom-browser",
@@ -46,10 +46,10 @@ index 1d268150399b..4bbff8b664d1 100644
      }
    }
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 345c67f370cc..7f784bbf5004 100644
+index 107458ed6843..08e6e3413bbf 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -266,6 +266,9 @@ if (!is_android && !is_mac) {
+@@ -256,6 +256,9 @@ if (!is_android && !is_mac) {
          # for commit #18
          "content/gooroom_safety_policy_part.cc",
          "content/gooroom_safety_policy_part.h",

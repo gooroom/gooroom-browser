@@ -1,7 +1,7 @@
-From fa89ed859025c209f7dcd5883348816a18ee4eee Mon Sep 17 00:00:00 2001
+From 7dfd0e3a92a6eb93b84121ef6ef63f8321d279a9 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 11:47:56 +0900
-Subject: [PATCH 46/79] Send URL-log to gooroom-browser-agent via D-bus
+Date: Mon, 27 Jul 2020 12:03:17 +0900
+Subject: [PATCH 46/88] Send URL-log to gooroom-browser-agent via D-bus
 
 ---
  content/browser/BUILD.gn                      |  1 +
@@ -9,10 +9,10 @@ Subject: [PATCH 46/79] Send URL-log to gooroom-browser-agent via D-bus
  2 files changed, 36 insertions(+)
 
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index b8af9819033a..af517d0a1046 100644
+index dc1d3e3dc1df..93cddef67bb7 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
-@@ -251,6 +251,7 @@ jumbo_source_set("browser") {
+@@ -253,6 +253,7 @@ jumbo_source_set("browser") {
      "//media/mojo/mojom:remoting",
      "//third_party/blink/public/mojom:embedded_frame_sink_mojo_bindings",
      "//third_party/leveldatabase",
@@ -21,7 +21,7 @@ index b8af9819033a..af517d0a1046 100644
  
    sources = [
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 2e0019d77476..f1170719ca7d 100644
+index abc21a7f55f8..a7f2df51c0e5 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -9,10 +9,17 @@
@@ -42,7 +42,7 @@ index 2e0019d77476..f1170719ca7d 100644
  #endif
  
  #include "base/bind.h"
-@@ -4622,6 +4629,34 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -4678,6 +4685,34 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
          GetMainFrame()->frame_tree_node()->GetFrameTreeSize();
    }
  #if BUILDFLAG(ENABLE_GOOROOM)

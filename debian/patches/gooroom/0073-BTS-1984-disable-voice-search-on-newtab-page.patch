@@ -1,17 +1,17 @@
-From ba2950d6c31519fc6c7e962fb523803a2c67b486 Mon Sep 17 00:00:00 2001
+From aa80bdc21c0cd85fac81d17e42156dbef14c2387 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:19:51 +0900
-Subject: [PATCH 73/79] [BTS:1984] disable voice search on newtab page
+Date: Mon, 27 Jul 2020 15:37:06 +0900
+Subject: [PATCH 73/88] [BTS:1984] disable voice search on newtab page
 
 ---
  chrome/browser/resources/local_ntp/local_ntp.js | 7 ++++---
  1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
-index 290d7025b857..8ce20e216895 100644
+index b725a5b94e22..4c2e0fb67acc 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.js
 +++ b/chrome/browser/resources/local_ntp/local_ntp.js
-@@ -885,9 +885,10 @@ function init() {
+@@ -959,9 +959,10 @@ function init() {
            configData.translatedStrings.searchboxPlaceholder;
  
        if (!iframesAndVoiceSearchDisabledForTesting) {

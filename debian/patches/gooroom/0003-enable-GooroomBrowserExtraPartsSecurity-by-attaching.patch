@@ -1,8 +1,8 @@
-From f783f72307102fdd960e94c71fdc2cd162cbcf60 Mon Sep 17 00:00:00 2001
+From 9afe90290932e7c4ae5db5de85a4c71d5686e068 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Tue, 2 Jun 2020 18:13:27 +0900
-Subject: [PATCH 03/79] enable GooroomBrowserExtraPartsSecurity by attaching it
-     to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
+Date: Wed, 22 Jul 2020 14:12:05 +0900
+Subject: [PATCH 03/88] enable GooroomBrowserExtraPartsSecurity by attaching it
+      to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
 
 ---
  gooroom/BUILD.gn                                  | 4 ++++
@@ -10,10 +10,10 @@ Subject: [PATCH 03/79] enable GooroomBrowserExtraPartsSecurity by attaching it
  2 files changed, 7 insertions(+)
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index dbfbe847133c..04eb1379398b 100644
+index fac0e5411187..b5628c64cc0c 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -247,6 +247,10 @@ if (!is_android && !is_mac) {
+@@ -237,6 +237,10 @@ if (!is_android && !is_mac) {
          "browser/gooroom_content_browser_client.h",
          "browser/gooroom_content_client.cc",
          "browser/gooroom_content_client.h",
@@ -25,7 +25,7 @@ index dbfbe847133c..04eb1379398b 100644
      }
    }
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
-index 949513260eab..1d858624d61c 100644
+index 214a0b6b3d0d..d13112c61553 100644
 --- a/gooroom/browser/gooroom_content_browser_client.cc
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
 @@ -3,6 +3,7 @@
@@ -34,7 +34,7 @@ index 949513260eab..1d858624d61c 100644
  #include "gooroom/browser/gooroom_content_browser_client.h"
 +#include "gooroom/browser/gooroom_browser_extra_parts_security.h"
  
- #include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux_x11.h"
+ #include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux.h"
  #include "chrome/browser/performance_manager/chrome_browser_main_extra_parts_performance_manager.h"
 @@ -153,6 +154,8 @@ GooroomContentBrowserClient::CreateBrowserMainParts(
  

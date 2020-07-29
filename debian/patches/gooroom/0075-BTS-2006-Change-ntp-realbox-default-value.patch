@@ -1,25 +1,25 @@
-From d02073f508b97b72d00d82921cbb51d78db22e71 Mon Sep 17 00:00:00 2001
+From 33196be608e29527d44ea823b238c79164d6ed5e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:23:37 +0900
-Subject: [PATCH 75/79] [BTS:2006] Change ntp realbox default value
+Date: Mon, 27 Jul 2020 15:38:30 +0900
+Subject: [PATCH 75/88] [BTS:2006] Change ntp realbox default value
 
 ---
  chrome/browser/search/ntp_features.cc | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/browser/search/ntp_features.cc b/chrome/browser/search/ntp_features.cc
-index 09e066a1a810..14a54a2b4f44 100644
+index 711f01370fbc..d9ed2105e742 100644
 --- a/chrome/browser/search/ntp_features.cc
 +++ b/chrome/browser/search/ntp_features.cc
-@@ -47,7 +47,7 @@ const base::Feature kRealboxUseGoogleGIcon{"NtpRealboxUseGoogleGIcon",
+@@ -35,7 +35,7 @@ const base::Feature kRealboxUseGoogleGIcon{"NtpRealboxUseGoogleGIcon",
  // If enabled, the search box in the middle of the NTP will accept input
  // directly (i.e. not be a "fake" box) and search results will show directly
  // below the non-fake input ("realbox").
 -const base::Feature kRealbox{"NtpRealbox", base::FEATURE_DISABLED_BY_DEFAULT};
 +const base::Feature kRealbox{"NtpRealbox", base::FEATURE_ENABLED_BY_DEFAULT};
  
- bool IsRealboxEnabled() {
-   return base::FeatureList::IsEnabled(kRealbox) ||
+ // If enabled, shows Vasco suggestion chips in the NTP below fakebox/realbox
+ // despite other config.
 -- 
 2.20.1
 

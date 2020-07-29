@@ -1,7 +1,7 @@
-From 681f731117c946e57338ae9c76a34ccfd2aaefc1 Mon Sep 17 00:00:00 2001
+From cfc8dccea6ee420548bbfcb8fc89d1a213fdb8d9 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 4 Jun 2020 16:28:51 +0900
-Subject: [PATCH 21/79] Change gooroom-browser extensions path & config path
+Date: Thu, 23 Jul 2020 17:08:07 +0900
+Subject: [PATCH 21/88] Change gooroom-browser extensions path & config path
 
 ---
  chrome/common/chrome_paths.cc       | 3 +++

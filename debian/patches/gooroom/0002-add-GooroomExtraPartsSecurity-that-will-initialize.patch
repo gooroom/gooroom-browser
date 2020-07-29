@@ -1,7 +1,7 @@
-From 0bdf7c20b65226ddc4e50968c6cf7da703f68545 Mon Sep 17 00:00:00 2001
+From 53d51781f4ab8aa6dc16e5cccfd96205368e3e00 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Tue, 2 Jun 2020 18:12:09 +0900
-Subject: [PATCH 02/79] add GooroomExtraPartsSecurity that will initialize 
+Date: Wed, 22 Jul 2020 14:07:50 +0900
+Subject: [PATCH 02/88] add GooroomExtraPartsSecurity that will initialize 
  GooroomBase via GooroomPrefs
 
 ---

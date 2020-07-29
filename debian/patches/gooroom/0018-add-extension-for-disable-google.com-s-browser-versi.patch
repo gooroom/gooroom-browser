@@ -1,7 +1,7 @@
-From fd2c8659cb9d3f07b6b25fc28b49ec7d124cd69b Mon Sep 17 00:00:00 2001
+From ceafa5e466751549e1ca0e008f1bf7a9970a7041 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Thu, 4 Jun 2020 15:43:27 +0900
-Subject: [PATCH 18/79] add extension for disable google.com's browser version 
+Date: Thu, 23 Jul 2020 16:40:08 +0900
+Subject: [PATCH 18/88] add extension for disable google.com's browser version 
  warning
 
 ---
@@ -23,11 +23,11 @@ Subject: [PATCH 18/79] add extension for disable google.com's browser version
  create mode 100644 gooroom/browser/dgw/disable_google_warning.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index 1deaa699ca4d..8c0ccee44585 100644
+index 5544091d5eb2..0bc639a80e72 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -203,6 +203,9 @@
-       <include name="IDR_MEMORY_INTERNALS_JS" file="resources\memory_internals\memory_internals.js" type="BINDATA" compress="gzip" />
+@@ -158,6 +158,9 @@
+       <include name="IDR_ORIGIN_MOJO_JS" file="${root_gen_dir}\url\mojom\origin.mojom-lite.js" use_base_dir="false" type="BINDATA" compress="gzip"/>
        <if expr="enable_plugins">
          <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
 +        <if expr="_gooroom">
@@ -37,7 +37,7 @@ index 1deaa699ca4d..8c0ccee44585 100644
        <if expr="is_win">
          <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_win.json" type="BINDATA" />
 diff --git a/chrome/browser/extensions/component_extensions_whitelist/whitelist.cc b/chrome/browser/extensions/component_extensions_whitelist/whitelist.cc
-index 5b98694d717c..48b3dd2ec61d 100644
+index 7e4d8a58ec6a..efe4eae3e6a8 100644
 --- a/chrome/browser/extensions/component_extensions_whitelist/whitelist.cc
 +++ b/chrome/browser/extensions/component_extensions_whitelist/whitelist.cc
 @@ -29,6 +29,9 @@ bool IsComponentExtensionWhitelisted(const std::string& extension_id) {
@@ -51,7 +51,7 @@ index 5b98694d717c..48b3dd2ec61d 100644
      extension_misc::kAssessmentAssistantExtensionId,
      extension_misc::kAutoclickExtensionId,
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index a881e3bead9c..ca7683c6e6ac 100644
+index 86484b729eb0..00e5d916eeed 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
 @@ -68,6 +68,10 @@
@@ -65,7 +65,7 @@ index a881e3bead9c..ca7683c6e6ac 100644
  using content::BrowserThread;
  
  namespace extensions {
-@@ -491,6 +495,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+@@ -498,6 +502,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
  #if BUILDFLAG(ENABLE_PDF)
    Add(pdf_extension_util::GetManifest(),
        base::FilePath(FILE_PATH_LITERAL("pdf")));
@@ -77,10 +77,10 @@ index a881e3bead9c..ca7683c6e6ac 100644
  }
  
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index b25e2d366cfc..414d703bc02d 100644
+index c737ee855aca..8e1e6238e161 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
-@@ -132,6 +132,9 @@
+@@ -133,6 +133,9 @@
          <include name="IDR_PDF_VIEWER_TOOLBAR_DROPDOWN_JS" file="${root_gen_dir}/chrome/browser/resources/pdf/elements/viewer-toolbar-dropdown.js" use_base_dir="false" type="BINDATA" />
          <include name="IDR_PDF_VIEWER_ZOOM_BUTTON_JS" file="${root_gen_dir}/chrome/browser/resources/pdf/elements/viewer-zoom-button.js" use_base_dir="false" type="BINDATA" />
          <include name="IDR_PDF_VIEWER_ZOOM_SELECTOR_JS" file="${root_gen_dir}/chrome/browser/resources/pdf/elements/viewer-zoom-toolbar.js" use_base_dir="false" type="BINDATA" />
@@ -124,10 +124,10 @@ index 000000000000..0f4b1e504496
 +}
 +
 diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
-index 9bb3c5704bc9..3e479bb3ce7b 100644
+index 12d947fdfc4f..3151711ed94a 100644
 --- a/extensions/common/constants.cc
 +++ b/extensions/common/constants.cc
-@@ -106,6 +106,9 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
+@@ -109,6 +109,9 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
  #endif
  const char kFeedbackExtensionId[] = "gfdkimpbcpahaombhbimeihdjnejgicl";
  const char kPdfExtensionId[] = "mhjfbmdgcfjbbpaeojofohoefgiehjai";
@@ -138,10 +138,10 @@ index 9bb3c5704bc9..3e479bb3ce7b 100644
      "bpmcpldpdmajfigpchkicefoigmkfalc";
  const char kQuickOfficeInternalExtensionId[] =
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index ba486054903c..b4390b00f0cd 100644
+index d48c06e5f99a..158c50308083 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
-@@ -180,6 +180,11 @@ extern const char kFeedbackExtensionId[];
+@@ -183,6 +183,11 @@ extern const char kFeedbackExtensionId[];
  // The extension id of the PDF extension.
  extern const char kPdfExtensionId[];
  

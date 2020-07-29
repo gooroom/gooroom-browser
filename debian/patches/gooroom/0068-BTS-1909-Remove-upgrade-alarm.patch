@@ -1,18 +1,18 @@
-From 69131d51284a00ff88eb93f5aef33db835ef505b Mon Sep 17 00:00:00 2001
+From d2878b3952e7fab0e0ff6e515a798fe9f26ca221 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Fri, 5 Jun 2020 15:12:58 +0900
-Subject: [PATCH 68/79] [BTS:1909] Remove upgrade alarm
+Date: Mon, 27 Jul 2020 15:32:48 +0900
+Subject: [PATCH 68/88] [BTS:1909] Remove upgrade alarm
 
 ---
  chrome/browser/upgrade_detector/upgrade_detector_impl.cc | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/chrome/browser/upgrade_detector/upgrade_detector_impl.cc b/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
-index 8b0a0b2278e5..b71f3c7f7f5f 100644
+index 4e396c995c43..14ca18211305 100644
 --- a/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
 +++ b/chrome/browser/upgrade_detector/upgrade_detector_impl.cc
-@@ -178,6 +178,9 @@ UpgradeDetectorImpl::UpgradeDetectorImpl(const base::Clock* clock,
-   // - kSimulateCriticalUpdate has precedence over kSimulateOutdated.
+@@ -417,6 +417,9 @@ void UpgradeDetectorImpl::Init() {
+   //   switch from being taken into account.
    // - kSimulateOutdatedNoAU has precedence over kSimulateOutdated.
    // - kSimulateOutdated[NoAu] can work on its own, or with a specified date.
 +#if defined(GOOROOM_BUILD)
@@ -20,7 +20,7 @@ index 8b0a0b2278e5..b71f3c7f7f5f 100644
 +#endif
    if (cmd_line.HasSwitch(switches::kDisableBackgroundNetworking))
      return;
-   if (cmd_line.HasSwitch(switches::kSimulateUpgrade)) {
+ 
 -- 
 2.20.1
 
