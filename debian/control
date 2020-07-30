@@ -14,6 +14,10 @@ Build-Depends:
  lld,
  clang,
  clang-format,
+ git,
+ libssl-dev,
+ python3-dev,
+ libgtk2.0-dev,
  python3,
  pkg-config,
  ninja-build,
@@ -89,7 +93,7 @@ Build-Depends:
  fonts-ipafont-gothic,
  fonts-ipafont-mincho,
 
-Package: chromium
+Package: gooroom-browser
 Architecture: i386 amd64 arm64 armhf
 Depends:
  ${misc:Depends},
