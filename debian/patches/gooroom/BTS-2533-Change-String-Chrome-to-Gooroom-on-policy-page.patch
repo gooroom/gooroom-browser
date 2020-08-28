@@ -1,0 +1,13 @@
+diff --git a/components/policy/core/browser/policy_conversions.cc b/components/policy/core/browser/policy_conversions.cc
+index cfef134a57b1..aa5828978152 100644
+--- a/components/policy/core/browser/policy_conversions.cc
++++ b/components/policy/core/browser/policy_conversions.cc
+@@ -210,7 +210,7 @@ Value ArrayPolicyConversions::GetUpdaterPolicies() {
+ Value ArrayPolicyConversions::GetChromePolicies() {
+   Value chrome_policies_data(Value::Type::DICTIONARY);
+   chrome_policies_data.SetKey("id", Value("chrome"));
+-  chrome_policies_data.SetKey("name", Value("Chrome Policies"));
++  chrome_policies_data.SetKey("name", Value("Gooroom Policies"));
+   chrome_policies_data.SetKey("policies", client()->GetChromePolicies());
+   return chrome_policies_data;
+ }

@@ -169,4 +169,7 @@ gooroom/0085-Change-gooroom-browser-syslog.patch
 gooroom/0086-BTS-2397-Change-webrtc-thirdparty-to-show-in-folder.patch
 gooroom/0087-BTS-2454-Remove-bookmark-sync-in-bookmark-bubble.patch
 gooroom/0088-BTS-1973-Translate-Activate-message-on-alarm-bubble.patch
-
+gooroom/BTS-2506-Change-String-Font-to-Page.patch
+gooroom/BTS-2533-Change-String-Chrome-to-Gooroom-on-policy-page.patch
+gooroom/BTS-2573-Change-Korean-Translation.patch
+gooroom/BTS-2585-Add-Kroean-translation.patch
