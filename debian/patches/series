@@ -174,3 +174,14 @@ gooroom/BTS-2533-Change-String-Chrome-to-Gooroom-on-policy-page.patch
 gooroom/BTS-2573-Change-Korean-Translation.patch
 gooroom/BTS-2585-Add-Kroean-translation.patch
 gooroom/appoint-newtab-shortcut.patch
+gooroom/BTS-2915-Refresh-newtab-shortcut.patch
+gooroom/CVE-2020-6510-Handle-race-condition-between-click-completion-event.patch
+gooroom/CVE-2020-6511-Stop-leaking-cross-origin-post-redirect-data-using-S.patch
+gooroom/CVE-2020-6512-Merged-Squashed-multiple-commits.patch
+gooroom/CVE-2020-6513-Merge-to-M84-Make-PDFium-JS-host-object-have-immutab.patch
+gooroom/CVE-2020-6515--Fix-UAF-when-closing-tabs-very-quickly.patch
+gooroom/CVE-2020-6516-OOR-CORS-each-content-should-be-assumed-as-an-opaque.patch
+gooroom/CVE-2020-6517-Add-end-check-to-fix-security-bug.patch
+gooroom/CVE-2020-6539-Don-t-crash-when-using-revert-in-var-fallback.patch
+gooroom/CVE-2020-6541-usb-Prevent-iterator-invalidation-during-Promise-res.patch
+

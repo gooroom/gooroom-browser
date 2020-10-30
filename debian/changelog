@@ -1,3 +1,28 @@
+gooroom-browser (2.7.0-1+grm2u4) stretch; urgency=medium
+
+  * BugTrackingSystem
+    - 2915 : Refresh newtab shortcut
+  * Security patch
+    - CVE-2020-6510: Heap buffer overflow in background fetch. Reported 
+      by Leecraso and Guang Gong of 360 Alpha Lab working with 360 BugCloud
+    - CVE-2020-6511: Side-channel information leakage in content security
+      policy. Reported by Mikhail Oblozhikhin
+    - CVE-2020-6512: Type Confusion in V8. Reported by nocma, leogan,
+      cheneyxu of WeChat Open Platform Security Team
+    - CVE-2020-6513: Heap buffer overflow in PDFium. Reported by 
+      Aleksandar Nikolic of Cisco Talos
+    - CVE-2020-6515: Use after free in tab strip. Reported by DDV_UA
+    - CVE-2020-6516: Policy bypass in CORS. Reported by Yongke Wang
+      (@Rudykewang) and Aryb1n(@aryb1n) of Tencent Security Xuanwu Lab
+      (腾讯安全玄武实验室
+    - CVE-2020-6517: Heap buffer overflow in history.
+      Reported by ZeKai Wu (@hellowuzekai) of Tencent Security Xuanwu Lab
+    - CVE-2020-6539: Use after free in CSS. Reported by Oriol Brufau
+    - CVE-2020-6541: Use after free in WebUSB. Reported by Sergei
+      Glazunov of Google Project Zero
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 30 Oct 2020 17:56:00 +0900
+
 gooroom-browser (2.7.0-1+grm2u3) stretch; urgency=medium
 
   * Add appointed shortcut function on newtab
