@@ -17,7 +17,6 @@ gooroom-browser (2.7.0-1+grm2u4) stretch; urgency=medium
       (腾讯安全玄武实验室
     - CVE-2020-6517: Heap buffer overflow in history.
       Reported by ZeKai Wu (@hellowuzekai) of Tencent Security Xuanwu Lab
-    - CVE-2020-6539: Use after free in CSS. Reported by Oriol Brufau
     - CVE-2020-6541: Use after free in WebUSB. Reported by Sergei
       Glazunov of Google Project Zero
 

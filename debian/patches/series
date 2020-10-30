@@ -182,6 +182,5 @@ gooroom/CVE-2020-6513-Merge-to-M84-Make-PDFium-JS-host-object-have-immutab.patch
 gooroom/CVE-2020-6515--Fix-UAF-when-closing-tabs-very-quickly.patch
 gooroom/CVE-2020-6516-OOR-CORS-each-content-should-be-assumed-as-an-opaque.patch
 gooroom/CVE-2020-6517-Add-end-check-to-fix-security-bug.patch
-gooroom/CVE-2020-6539-Don-t-crash-when-using-revert-in-var-fallback.patch
 gooroom/CVE-2020-6541-usb-Prevent-iterator-invalidation-during-Promise-res.patch
 
