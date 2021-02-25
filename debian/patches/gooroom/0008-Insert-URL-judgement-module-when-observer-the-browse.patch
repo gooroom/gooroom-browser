@@ -1,17 +1,17 @@
-From de7a7cecf2048855d15d2ee978576608f27087a4 Mon Sep 17 00:00:00 2001
+From 79ed53dab6f738274cc4d6c9abe58da757a9dd11 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:31:12 +0900
-Subject: [PATCH 08/88] Insert URL judgement module when observer the browser.
+Subject: [PATCH 08/71] Insert URL judgement module when observer the browser.
 
 ---
- .../browser/web_contents/web_contents_impl.cc | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
+ .../browser/web_contents/web_contents_impl.cc | 101 ++++++++++++++++++
+ 1 file changed, 101 insertions(+)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 0fe5a498d698..abc21a7f55f8 100644
+index a5fb571b38e1..6f39bd09427b 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -10,6 +10,11 @@
+@@ -12,6 +12,11 @@
  #include <utility>
  #include <vector>
  
@@ -22,8 +22,8 @@ index 0fe5a498d698..abc21a7f55f8 100644
 +
  #include "base/bind.h"
  #include "base/command_line.h"
- #include "base/debug/dump_without_crashing.h"
-@@ -4449,6 +4454,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
+ #include "base/containers/flat_set.h"
+@@ -5100,6 +5105,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
    }
  }
  
@@ -119,19 +119,20 @@ index 0fe5a498d698..abc21a7f55f8 100644
  void WebContentsImpl::DidRedirectNavigation(
      NavigationHandle* navigation_handle) {
    TRACE_EVENT1("navigation", "WebContentsImpl::DidRedirectNavigation",
-@@ -4583,6 +4677,12 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
-     max_loaded_frame_count_ =
+@@ -5235,6 +5329,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
          GetMainFrame()->frame_tree_node()->GetFrameTreeSize();
    }
+ 
 +#if BUILDFLAG(ENABLE_GOOROOM)
 +//If browser is switched, the current page is closed.
 +  if (navigation_handle->IsInMainFrame() && RequestCurrentUserDataDir(navigation_handle->GetURL())) {
 +    ClosePage();
 +  }
 +#endif
- }
- 
- void WebContentsImpl::DidFailLoadWithError(
++
+   if (web_preferences_) {
+     // Update the WebPreferences for this WebContents that depends on changes
+     // that might occur during navigation. This will only update the preferences
 -- 
 2.20.1
 

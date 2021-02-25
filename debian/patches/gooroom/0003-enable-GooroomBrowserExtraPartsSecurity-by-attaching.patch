@@ -1,19 +1,19 @@
-From 9afe90290932e7c4ae5db5de85a4c71d5686e068 Mon Sep 17 00:00:00 2001
+From 17e033a8f461926899c0e0a273966854ebf8e22c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:12:05 +0900
-Subject: [PATCH 03/88] enable GooroomBrowserExtraPartsSecurity by attaching it
-      to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
+Subject: [PATCH 03/71] enable GooroomBrowserExtraPartsSecurity by attaching it
+ to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
 
 ---
  gooroom/BUILD.gn                                  | 4 ++++
- gooroom/browser/gooroom_content_browser_client.cc | 3 +++
- 2 files changed, 7 insertions(+)
+ gooroom/browser/gooroom_content_browser_client.cc | 4 ++++
+ 2 files changed, 8 insertions(+)
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index fac0e5411187..b5628c64cc0c 100644
+index 5516caa4f5ab..f852ad07706f 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -237,6 +237,10 @@ if (!is_android && !is_mac) {
+@@ -229,6 +229,10 @@ if (!is_android && !is_mac) {
          "browser/gooroom_content_browser_client.h",
          "browser/gooroom_content_client.cc",
          "browser/gooroom_content_client.h",
@@ -25,7 +25,7 @@ index fac0e5411187..b5628c64cc0c 100644
      }
    }
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
-index 214a0b6b3d0d..d13112c61553 100644
+index 6827a512fab7..70931140d956 100644
 --- a/gooroom/browser/gooroom_content_browser_client.cc
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
 @@ -3,6 +3,7 @@
@@ -34,13 +34,14 @@ index 214a0b6b3d0d..d13112c61553 100644
  #include "gooroom/browser/gooroom_content_browser_client.h"
 +#include "gooroom/browser/gooroom_browser_extra_parts_security.h"
  
- #include "chrome/browser/ui/views/chrome_browser_main_extra_parts_views_linux.h"
- #include "chrome/browser/performance_manager/chrome_browser_main_extra_parts_performance_manager.h"
-@@ -153,6 +154,8 @@ GooroomContentBrowserClient::CreateBrowserMainParts(
+ #include <iterator>
+ #include <map>
+@@ -723,6 +724,9 @@ GooroomContentBrowserClient::CreateBrowserMainParts(
  
    chrome::AddMetricsExtraParts(main_parts.get());
  
-+  main_parts->AddParts(new GooroomBrowserExtraPartsSecurity());
++  main_parts->AddParts(
++      std::make_unique<GooroomBrowserExtraPartsSecurity>());
 +
    return main_parts;
  }

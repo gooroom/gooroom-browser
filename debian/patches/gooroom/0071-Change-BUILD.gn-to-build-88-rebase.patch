@@ -1,0 +1,111 @@
+From b6b2e75e8026d2c79d964351ab63ef0373613f39 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 18 Feb 2021 11:56:55 +0900
+Subject: [PATCH 71/71] Change BUILD.gn to build 88 rebase
+
+---
+ gooroom/BUILD.gn | 53 ++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 35 insertions(+), 18 deletions(-)
+
+diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
+index b5d56aa91dba..9eeec7520b93 100644
+--- a/gooroom/BUILD.gn
++++ b/gooroom/BUILD.gn
+@@ -174,7 +174,7 @@ if (!is_android && !is_mac) {
+           ldflags += [ "-Wl,--long-plt" ]
+         }
+ 
+-        if (is_desktop_linux && !is_component_build && !using_sanitizer) {
++        if (!is_component_build && !using_sanitizer) {
+           version_script = "//build/linux/chrome.map"
+           inputs = [
+             version_script,
+@@ -182,12 +182,6 @@ if (!is_android && !is_mac) {
+           ldflags += [ "-Wl,--version-script=" +
+                        rebase_path(version_script, root_build_dir) ]
+         }
+-
+-        if (use_x11) {
+-          configs += [
+-            "//build/config/linux:x11",
+-          ]
+-        }
+       }
+ 
+       # These files are used by the installer so we need a public dep.
+@@ -304,38 +298,61 @@ group("resources") {
+ group("extra_resources") {
+   # Deps should be same as those in chrome_extra_paks() within chrome_paks.gni.
+   public_deps = [
+-#    "//chrome/browser/resources:invalidations_resources",
+-#    "//chrome/browser/resources:net_internals_resources",
+-#    "//chrome/browser/resources:quota_internals_resources",
+-#    "//chrome/browser/resources:webapks_ui_resources",
++    "//components/autofill/core/browser:autofill_address_rewriter_resources",
+   ]
+ 
+   if (!is_android) {
+     public_deps += [
+       "//chrome/browser/resources:component_extension_resources",
+-      "//chrome/browser/resources:downloads_resources",
++      "//chrome/browser/resources:dev_ui_paks",
++      "//chrome/browser/resources:gaia_auth_host_resources",
+       "//chrome/browser/resources:local_ntp_resources",
+-      "//chrome/browser/resources:settings_resources",
++      "//chrome/browser/resources:new_tab_page_resources",
++      "//chrome/browser/resources/bookmarks:bookmarks_resources",
++      "//chrome/browser/resources/commander:commander_resources",
++      "//chrome/browser/resources/downloads:downloads_resources",
++      "//chrome/browser/resources/history:history_resources",
++      "//chrome/browser/resources/read_later:read_later_resources",
++      "//chrome/browser/resources/settings:settings_resources",
++      "//chrome/browser/resources/tab_search:tab_search_resources",
+     ]
+   }
+ 
+   if (is_chromeos) {
+     public_deps += [
+-      "//chrome/browser/resources/chromeos/chromevox",
+-      "//chrome/browser/resources/chromeos/select_to_speak",
+-      "//chrome/browser/resources/chromeos/switch_access",
++      "//chrome/browser/resources:bluetooth_pairing_dialog_resources",
++      "//chrome/browser/resources:multidevice_internals_resources",
++      "//chrome/browser/resources/chromeos:cellular_setup_resources",
++      "//chrome/browser/resources/chromeos:multidevice_setup_resources",
++      "//chrome/browser/resources/chromeos/accessibility:build",
++      "//chrome/browser/resources/nearby_internals:nearby_internals_resources",
++      "//chrome/browser/resources/nearby_share:nearby_share_dialog_resources",
++      "//chrome/browser/resources/settings/chromeos:os_settings_resources",
++      "//third_party/ink:ink_resources",
++    ]
++  }
++
++  if (is_linux || is_chromeos) {
++    public_deps += [ "//chrome/browser/resources/webui_js_exception:webui_js_exception_resources" ]
++  }
++
++  if (!is_android && !is_chromeos) {
++    public_deps += [
++      "//chrome/browser/resources/signin/profile_picker:profile_picker_resources",
++      "//chrome/browser/resources/welcome:welcome_resources",
+     ]
+   }
+ 
+   if (enable_extensions) {
+     public_deps += [
+-      "//chrome/browser/resources:extensions_resources",
+       "//chrome/browser/resources:sync_file_system_internals_resources",
++      "//chrome/browser/resources/extensions:extensions_resources",
+     ]
+   }
+ 
+   if (enable_print_preview) {
+-    public_deps += [ "//chrome/browser/resources:print_preview_resources" ]
++    public_deps +=
++        [ "//chrome/browser/resources/print_preview:print_preview_resources" ]
+   }
+ }
+ 
+-- 
+2.20.1
+

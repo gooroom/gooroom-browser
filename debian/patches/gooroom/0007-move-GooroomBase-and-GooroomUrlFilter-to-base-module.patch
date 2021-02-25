@@ -1,7 +1,7 @@
-From 8005c4e6cfad7531962eb41152043905f4f5b1b8 Mon Sep 17 00:00:00 2001
+From 2fedb64f30c1ba505f9b654eff4a10751ecb9359 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:28:21 +0900
-Subject: [PATCH 07/88] move GooroomBase and GooroomUrlFilter to base module
+Subject: [PATCH 07/71] move GooroomBase and GooroomUrlFilter to base module
 
 ---
  base/BUILD.gn               | 9 +++++++++
@@ -10,10 +10,10 @@ Subject: [PATCH 07/88] move GooroomBase and GooroomUrlFilter to base module
  3 files changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/base/BUILD.gn b/base/BUILD.gn
-index 8df68ae89306..1a25aba59967 100644
+index 632d70d0a04e..ec71af7c960e 100644
 --- a/base/BUILD.gn
 +++ b/base/BUILD.gn
-@@ -1086,6 +1086,15 @@ jumbo_component("base") {
+@@ -1045,6 +1045,15 @@ component("base") {
      ]
    }
  
@@ -30,18 +30,18 @@ index 8df68ae89306..1a25aba59967 100644
      sources += [
        "allocator/allocator_interception_mac.h",
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 1ae69e2242cf..408fe0ac516a 100644
+index 3d50fca0c64b..6a14fbc635c1 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -206,6 +206,7 @@ if (!is_android && !is_mac) {
+@@ -203,6 +203,7 @@ if (!is_android && !is_mac) {
  
        data_deps += [
          "//chrome/browser/resources/media/mei_preload:component",
 +        "//third_party/widevine/cdm:widevine_cdm_binary",
        ]
- 
-       if (is_multi_dll_chrome) {
-@@ -243,10 +244,6 @@ if (!is_android && !is_mac) {
+     }
+   }
+@@ -235,10 +236,6 @@ if (!is_android && !is_mac) {
          "browser/gooroom_browser_extra_parts_security.h",
  
          # for commit #4

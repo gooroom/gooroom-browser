@@ -1,7 +1,7 @@
-From 5837f64742dcf6190304e174ce0ad835d696d4a5 Mon Sep 17 00:00:00 2001
+From 8ac6c707bb7fdc11473aaf0ecd63b2b988be76c4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 14:59:35 +0900
-Subject: [PATCH 11/88] register /gooroom/ as a external protocol and scheme
+Subject: [PATCH 11/71] register /gooroom/ as a external protocol and scheme
 
 ---
  chrome/browser/profiles/profile_io_data.cc | 4 ++++
@@ -11,10 +11,10 @@ Subject: [PATCH 11/88] register /gooroom/ as a external protocol and scheme
  4 files changed, 10 insertions(+)
 
 diff --git a/chrome/browser/profiles/profile_io_data.cc b/chrome/browser/profiles/profile_io_data.cc
-index cc6956e363eb..a2822a21929a 100644
+index 16c5e6132537..52bc2d6b7577 100644
 --- a/chrome/browser/profiles/profile_io_data.cc
 +++ b/chrome/browser/profiles/profile_io_data.cc
-@@ -306,6 +306,10 @@ bool ProfileIOData::IsHandledProtocol(const std::string& scheme) {
+@@ -254,6 +254,10 @@ bool ProfileIOData::IsHandledProtocol(const std::string& scheme) {
      extensions::kExtensionScheme,
  #endif
      content::kChromeUIScheme,
@@ -26,7 +26,7 @@ index cc6956e363eb..a2822a21929a 100644
      url::kDataScheme,
  #if defined(OS_CHROMEOS)
 diff --git a/content/common/url_schemes.cc b/content/common/url_schemes.cc
-index d0a31f2406ee..1726fa245b7a 100644
+index dc37f121130d..091337d2918c 100644
 --- a/content/common/url_schemes.cc
 +++ b/content/common/url_schemes.cc
 @@ -59,6 +59,10 @@ void RegisterContentSchemes() {
@@ -41,10 +41,10 @@ index d0a31f2406ee..1726fa245b7a 100644
    url::AddStandardScheme(kGuestScheme, url::SCHEME_WITH_HOST);
    url::AddStandardScheme(kChromeErrorScheme, url::SCHEME_WITH_HOST);
 diff --git a/content/public/common/url_constants.cc b/content/public/common/url_constants.cc
-index 9ae5fd3c15a9..826f838899b3 100644
+index db7ce218c436..877fac8fbeeb 100644
 --- a/content/public/common/url_constants.cc
 +++ b/content/public/common/url_constants.cc
-@@ -11,6 +11,7 @@ namespace content {
+@@ -12,6 +12,7 @@ namespace content {
  // There are security implications associated with introducing new schemes.
  const char kChromeDevToolsScheme[] = "devtools";
  const char kChromeErrorScheme[] = "chrome-error";
@@ -53,7 +53,7 @@ index 9ae5fd3c15a9..826f838899b3 100644
  const char kChromeUIUntrustedScheme[] = "chrome-untrusted";
  const char kGuestScheme[] = "chrome-guest";
 diff --git a/content/public/common/url_constants.h b/content/public/common/url_constants.h
-index 6569c60ff300..bda07c5b5dc5 100644
+index e554270649df..32ecae459bc7 100644
 --- a/content/public/common/url_constants.h
 +++ b/content/public/common/url_constants.h
 @@ -19,6 +19,7 @@ namespace content {

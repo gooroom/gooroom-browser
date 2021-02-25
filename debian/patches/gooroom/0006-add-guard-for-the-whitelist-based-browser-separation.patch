@@ -1,7 +1,7 @@
-From 27a3d7ad7d75139e5047032857e18e0e0daf2d79 Mon Sep 17 00:00:00 2001
+From 2fa05f6abf64571cb0469a96f709b162d35ab22d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:14:47 +0900
-Subject: [PATCH 06/88] add guard for the whitelist based browser separation
+Subject: [PATCH 06/71] add guard for the whitelist based browser separation
 
 ---
  build/config/chrome_build.gni   | 1 +
@@ -10,7 +10,7 @@ Subject: [PATCH 06/88] add guard for the whitelist based browser separation
  3 files changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/build/config/chrome_build.gni b/build/config/chrome_build.gni
-index 883c6614d14b..3cf2f15d6800 100644
+index e8f9660f2c3d..6ec402c58b29 100644
 --- a/build/config/chrome_build.gni
 +++ b/build/config/chrome_build.gni
 @@ -7,6 +7,7 @@ declare_args() {
@@ -19,8 +19,8 @@ index 883c6614d14b..3cf2f15d6800 100644
    is_chrome_branded = false
 +  is_gooroom = true
  
-   # Break chrome.dll into multple pieces based on process type. Only available
-   # on Windows.
+   # Turn this on to generate order files. See
+   # https://chromium.googlesource.com/chromium/src/+/master/docs/win_order_files.md
 diff --git a/ppapi/buildflags/BUILD.gn b/ppapi/buildflags/BUILD.gn
 index 4dfdc7a5b335..2b50baf98d4d 100644
 --- a/ppapi/buildflags/BUILD.gn

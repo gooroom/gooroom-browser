@@ -1,0 +1,542 @@
+From 084cfc912eff465191cb9c8c09560c7f17e82ba9 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 22 Jul 2020 14:13:47 +0900
+Subject: [PATCH 04/71] add GooroomPrefs that parse mainpref.json and
+ initializes GooroomBase and GooroomUrlFilter based on the result
+
+---
+ gooroom/BUILD.gn                           |  10 ++
+ gooroom/app/gooroom_main_delegate.cc       |   2 +
+ gooroom/app/gooroom_main_delegate.h        |   6 +-
+ gooroom/base/gooroom_base.cc               |  33 +++++
+ gooroom/base/gooroom_base.h                |  37 ++++++
+ gooroom/base/gooroom_url_filter.cc         |  10 ++
+ gooroom/base/gooroom_url_filter.h          |  30 +++++
+ gooroom/browser/BUILD.gn                   |   4 +
+ gooroom/browser/gooroom_pref.cc            | 134 +++++++++++++++++++++
+ gooroom/browser/gooroom_pref.h             |  42 +++++++
+ gooroom/browser/gooroom_url_filter_impl.cc |  58 +++++++++
+ gooroom/browser/gooroom_url_filter_impl.h  |  30 +++++
+ 12 files changed, 395 insertions(+), 1 deletion(-)
+ create mode 100644 gooroom/base/gooroom_base.cc
+ create mode 100644 gooroom/base/gooroom_base.h
+ create mode 100644 gooroom/base/gooroom_url_filter.cc
+ create mode 100644 gooroom/base/gooroom_url_filter.h
+ create mode 100644 gooroom/browser/gooroom_pref.cc
+ create mode 100644 gooroom/browser/gooroom_pref.h
+ create mode 100644 gooroom/browser/gooroom_url_filter_impl.cc
+ create mode 100644 gooroom/browser/gooroom_url_filter_impl.h
+
+diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
+index f852ad07706f..3d50fca0c64b 100644
+--- a/gooroom/BUILD.gn
++++ b/gooroom/BUILD.gn
+@@ -233,6 +233,16 @@ if (!is_android && !is_mac) {
+          # for commit #3
+         "browser/gooroom_browser_extra_parts_security.cc",
+         "browser/gooroom_browser_extra_parts_security.h",
++
++        # for commit #4
++        "base/gooroom_base.cc",
++        "base/gooroom_base.h",
++        "base/gooroom_url_filter.cc",
++        "base/gooroom_url_filter.h",
++        "browser/gooroom_pref.cc",
++        "browser/gooroom_pref.h",
++        "browser/gooroom_url_filter_impl.cc",
++        "browser/gooroom_url_filter_impl.h", 
+       ]
+     }
+   }
+diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
+index 683b83c46d7e..d0a7807d179c 100644
+--- a/gooroom/app/gooroom_main_delegate.cc
++++ b/gooroom/app/gooroom_main_delegate.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "gooroom/app/gooroom_main_delegate.h"
++#include "gooroom/browser/gooroom_content_browser_client.h"
+ #include "base/lazy_instance.h"
+ #include "base/logging.h"
+ #include "gooroom/browser/gooroom_content_browser_client.h"
+@@ -48,6 +49,7 @@ bool GooroomMainDelegate::BasicStartupComplete(int* exit_code) {
+     DLOG(INFO) << "BasicStartupComplete() this = " << this;
+   }
+ 
++  gooroom::g_gooroom = &gooroom_pref_;
+   return result;
+ }
+ 
+diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
+index 5d2797d678da..b49912b0b3fd 100644
+--- a/gooroom/app/gooroom_main_delegate.h
++++ b/gooroom/app/gooroom_main_delegate.h
+@@ -5,6 +5,9 @@
+ #ifndef GOOROOM_APP_GOOROOM_MAIN_DELEGATE_H_
+ #define GOOROOM_APP_GOOROOM_MAIN_DELEGATE_H_
+ 
++#include "gooroom/browser/gooroom_content_client.h"
++#include "gooroom/browser/gooroom_pref.h"
++
+ #include <iostream>
+ #include <istream>
+ #include <ostream>
+@@ -14,7 +17,6 @@
+ #include "base/time/time.h"
+ #include "chrome/app/chrome_main_delegate.h"
+ #include "content/public/app/content_main_delegate.h"
+-#include "gooroom/browser/gooroom_content_client.h"
+ 
+ namespace base {
+ class CommandLine;
+@@ -40,6 +42,8 @@ class GooroomMainDelegate : public ChromeMainDelegate {
+ 
+   GooroomContentClient gooroom_content_client_;
+ 
++  gooroom::GooroomPref gooroom_pref_;
++
+ #if !defined(CHROME_MULTIPLE_DLL_CHILD)
+   std::unique_ptr<StartupData> startup_data_;
+ #endif
+diff --git a/gooroom/base/gooroom_base.cc b/gooroom/base/gooroom_base.cc
+new file mode 100644
+index 000000000000..c6af40d3405e
+--- /dev/null
++++ b/gooroom/base/gooroom_base.cc
+@@ -0,0 +1,33 @@
++#include "gooroom_base.h"
++#include "gooroom_url_filter.h"
++
++#include "base/stl_util.h"
++
++namespace base {
++
++static GooroomBase* g_gooroom_base;
++
++GooroomBase* GetGooroomBase() {
++  if (g_gooroom_base == nullptr)
++    g_gooroom_base = new GooroomBase();
++  return g_gooroom_base;
++}
++
++GooroomBase::GooroomBase() {}
++GooroomBase::~GooroomBase() {}
++
++bool GooroomBase::isTrustMode() {
++  return trustMode_;
++}
++void GooroomBase::setTrustMode(bool mode) {
++  trustMode_ = mode;
++}
++
++GooroomUrlFilter* GooroomBase::getUrlFilter() {
++  return urlFilter_.get();
++}
++void GooroomBase::setUrlFilter(GooroomUrlFilter* pfilter) {
++  urlFilter_.reset(pfilter);
++}
++
++}  // namespace base
+diff --git a/gooroom/base/gooroom_base.h b/gooroom/base/gooroom_base.h
+new file mode 100644
+index 000000000000..c64ed691b678
+--- /dev/null
++++ b/gooroom/base/gooroom_base.h
+@@ -0,0 +1,37 @@
++/*
++ * gooroom_prefs.h
++ *
++ *  Created on: 2017. 8. 17.
++ *      Author: gooroom
++ */
++
++#ifndef GOOROOM_BASE_H_
++#define GOOROOM_BASE_H_
++
++#include <memory>
++#include <string>
++
++#include "base/base_export.h"
++#include "gooroom_url_filter.h"
++
++namespace base {
++
++class BASE_EXPORT GooroomBase {
++ public:
++  GooroomBase();
++  virtual ~GooroomBase();
++
++  virtual bool isTrustMode();
++  virtual void setTrustMode(bool mode);
++
++  virtual GooroomUrlFilter* getUrlFilter();
++  virtual void setUrlFilter(GooroomUrlFilter* pfilter);
++
++ private:
++  bool trustMode_;
++  std::unique_ptr<GooroomUrlFilter> urlFilter_;
++};
++
++}  // namespace base
++
++#endif /* GOOROOM_BASE_H_ */
+diff --git a/gooroom/base/gooroom_url_filter.cc b/gooroom/base/gooroom_url_filter.cc
+new file mode 100644
+index 000000000000..a9f34a0963e6
+--- /dev/null
++++ b/gooroom/base/gooroom_url_filter.cc
+@@ -0,0 +1,10 @@
++#include "gooroom_url_filter.h"
++
++#include "base/stl_util.h"
++
++namespace base {
++
++GooroomUrlFilter::GooroomUrlFilter() {}
++GooroomUrlFilter::~GooroomUrlFilter() {}
++
++}  // namespace base
+\ No newline at end of file
+diff --git a/gooroom/base/gooroom_url_filter.h b/gooroom/base/gooroom_url_filter.h
+new file mode 100644
+index 000000000000..a12f394eb75a
+--- /dev/null
++++ b/gooroom/base/gooroom_url_filter.h
+@@ -0,0 +1,30 @@
++/*
++ * gooroom_url_filter.h
++ *
++ *  Created on: 2017. 8. 17.
++ *      Author: gooroom
++ */
++
++#ifndef GOOROOM_URL_FILTER_H_
++#define GOOROOM_URL_FILTER_H_
++
++#include <memory>
++#include <string>
++
++#include "base/base_export.h"
++
++namespace base {
++
++class GooroomBase;
++BASE_EXPORT GooroomBase* GetGooroomBase();
++
++class BASE_EXPORT GooroomUrlFilter {
++ public:
++  GooroomUrlFilter();
++  virtual ~GooroomUrlFilter();
++  virtual bool isTrustUrl(std::string url) = 0;
++};
++
++}  // namespace base
++
++#endif /* GOOROOM_URL_FILTER_H_ */
+diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
+index 309bd48c7d9b..57f5f21afd23 100644
+--- a/gooroom/browser/BUILD.gn
++++ b/gooroom/browser/BUILD.gn
+@@ -13,6 +13,10 @@ static_library("gooroom_browser") {
+     "gooroom_content_browser_client.cc",
+     "gooroom_content_client.cc",
+     "gooroom_content_client.h",
++    "gooroom_pref.cc",
++    "gooroom_pref.h",
++    "gooroom_url_filter_impl.cc",
++    "gooroom_url_filter_impl.h",
+   ]
+ 
+   deps = [
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+new file mode 100644
+index 000000000000..115ac6f499e9
+--- /dev/null
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -0,0 +1,134 @@
++#include "gooroom_pref.h"
++
++#include "gooroom/base/gooroom_base.h"
++#include "gooroom/browser/gooroom_url_filter_impl.h"
++
++#include "base/command_line.h"
++#include "base/path_service.h"
++#include "base/syslog_logging.h"
++
++#include "chrome/browser/browser_process.h"
++#include "chrome/browser/profiles/profile.h"
++#include "chrome/browser/profiles/profile_manager.h"
++#include "chrome/common/chrome_constants.h"
++#include "chrome/common/chrome_switches.h"
++
++#include "components/prefs/json_pref_store.h"
++#include "components/prefs/pref_registry_simple.h"
++#include "components/prefs/pref_service.h"
++#include "components/prefs/pref_service_factory.h"
++
++namespace gooroom {
++
++GooroomPref* g_gooroom = NULL;
++
++GooroomPref::GooroomPref() {}
++
++GooroomPref::~GooroomPref() {}
++
++PrefService* GooroomPref::pref() {
++  if (pref_ == nullptr)
++    setup();
++  return pref_.get();
++}
++
++void GooroomPref::setup() {
++  DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
++
++  // read CORE policy file from ... ==================================
++  // TODO use constant value
++  base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
++
++  PrefRegistrySimple* registry = new PrefRegistrySimple;
++  registry->RegisterBooleanPref(kPolicyGooroomWebsocket, false);
++  registry->RegisterBooleanPref(kPolicyGooroomWebworker, false);
++  registry->RegisterListPref(kPolicyGooroomWhiteList);
++
++  PrefServiceFactory prefServiceFactory;
++//  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
++//      base::CreateSequencedTaskRunnerWithTraits({base::MayBlock()});
++  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
++      base::CreateSequencedTaskRunner({base::ThreadPool()});
++
++  prefServiceFactory.SetUserPrefsFile(path, refTaskRunner.get());
++  pref_ = prefServiceFactory.Create(registry);
++
++  // check a whilte list and make url filter from the list ===========
++  const PrefService::Preference* p =
++      pref_->FindPreference(gooroom::kPolicyGooroomWhiteList);
++  GooroomUrlFilterImpl* pfilterImpl = new GooroomUrlFilterImpl();
++  if (p != nullptr)
++    pfilterImpl->setWhiteList(p->GetValue());
++  base::GetGooroomBase()->setUrlFilter(pfilterImpl);
++
++  // if there is a url in command line, check the url is trust to determine the
++  // mode whether trust or not.
++  // ===========================================================================
++  // Test whether there is a url in command line.
++  base::CommandLine* cmd = base::CommandLine::ForCurrentProcess();
++  const base::CommandLine::StringVector argv = cmd->argv();
++
++  base::FilePath exe_path_dir;
++  base::FilePath home_path_dir;
++  base::PathService::Get(base::DIR_EXE, &exe_path_dir);
++  base::PathService::Get(base::DIR_HOME, &home_path_dir);
++  DLOG(INFO) << "exe_path_dir = " << exe_path_dir.AsUTF8Unsafe();
++  std::string exe_path = exe_path_dir.AsUTF8Unsafe() + "/gooroom-browser";
++  std::string trust_user_data_dir_option =
++      "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
++      "/.config/gooroom/trust";
++  std::string untrust_user_data_dir_option =
++      "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
++      "/.config/gooroom/untrust";
++
++  bool use_user_data_dir = false;
++  for (base::CommandLine::StringVector::const_iterator it = argv.begin();
++       it != argv.end(); ++it) {
++    std::string command = *it;
++    if (command.find("--user-data-dir") !=
++        std::string::npos) {  // exist --user-data-dir
++      use_user_data_dir = true;
++      break;
++    }
++    if (GURL(*it).is_valid() == true) {
++      bool trusted = pfilterImpl->isTrustUrl(*it);
++      base::GetGooroomBase()->setTrustMode(trusted);
++      int pid;
++      if (trusted) {
++        pid = fork();
++        if (pid != 0) {
++          exit(0);
++        } else {
++          execl(exe_path.c_str(), "gooroom-browser",
++                trust_user_data_dir_option.c_str(), GURL(*it).spec().c_str(),
++                NULL);
++          exit(0);
++        }
++      } else {
++        pid = fork();
++        if (pid != 0) {
++          exit(0);
++        } else {
++          execl(exe_path.c_str(), "gooroom-browser",
++                untrust_user_data_dir_option.c_str(), GURL(*it).spec().c_str(),
++                NULL);
++          exit(0);
++        }
++      }
++    }
++  }
++  if (!use_user_data_dir) {
++    const char** restartoption = new const char*[argv.size() + 2];
++    restartoption[argv.size() + 1] = NULL;
++    restartoption[0] = "gooroom-browser";
++    for (int j = 1; j < (int)argv.size(); j++) {
++      restartoption[j] = argv[j].c_str();
++    }
++    restartoption[argv.size()] = trust_user_data_dir_option.c_str();
++    execv(exe_path.c_str(), (char**)restartoption);
++    exit(0);
++  }
++  // test args
++}
++
++}  // namespace gooroom
+diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
+new file mode 100644
+index 000000000000..3e94b7fb6b22
+--- /dev/null
++++ b/gooroom/browser/gooroom_pref.h
+@@ -0,0 +1,42 @@
++/*
++ * gooroom_prefs.h
++ *
++ *  Created on: 2017. 8. 17.
++ *      Author: gooroom
++ */
++
++#ifndef GOOROOM_BROWSER_GOOROOM_PREF_H_
++#define GOOROOM_BROWSER_GOOROOM_PREF_H_
++
++#include "components/prefs/pref_service.h"
++
++namespace gooroom {
++
++/** whitelist policy */
++const char kPolicyGooroomWhiteList[] = "gooroom.policy.whitelist";
++/** websocket confirm policy */
++const char kPolicyGooroomWebsocket[] = "gooroom.policy.websocket";
++/** webworker confirm policy */
++const char kPolicyGooroomWebworker[] = "gooroom.policy.webworker";
++/** websocket confirm enable/disable */
++const char kGooroomWebsocketConfirm[] = "gooroom.websocket.confirm";
++/** webwork confirm enable/disable */
++const char kGooroomWebworkerConfirm[] = "gooroom.webworker.confirm";
++
++class GooroomPref {
++ public:
++  GooroomPref();
++  ~GooroomPref();
++
++  PrefService* pref();
++  void setup();
++
++ private:
++  std::unique_ptr<PrefService> pref_;
++};
++
++extern gooroom::GooroomPref* g_gooroom;
++
++}  // namespace gooroom
++
++#endif /* GOOROOM_BROWSER_GOOROOM_PREF_H_ */
+diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
+new file mode 100644
+index 000000000000..a625b0664cf4
+--- /dev/null
++++ b/gooroom/browser/gooroom_url_filter_impl.cc
+@@ -0,0 +1,58 @@
++#include "gooroom_url_filter_impl.h"
++#include "gooroom/base/gooroom_base.h"
++
++#include <vector>
++
++#include "base/syslog_logging.h"
++#include "components/policy/core/browser/url_util.h"
++#include "url/gurl.h"
++
++GooroomUrlFilterImpl::GooroomUrlFilterImpl() {}
++
++GooroomUrlFilterImpl::~GooroomUrlFilterImpl() {}
++
++bool GooroomUrlFilterImpl::isTrustUrl(std::string url) {
++  std::set<url_matcher::URLMatcherConditionSet::ID> matching_ids =
++      url_matcher_.MatchURL(GURL(url));
++  bool trusted = !matching_ids.empty();
++  GURL url_(url);
++  SYSLOG(INFO) << "GOOROOM Trust mode = " << trusted << " by " << url_.scheme()
++               << "://" << url_.host();
++  return trusted;
++}
++
++void GooroomUrlFilterImpl::setWhiteList(const base::Value* vv) {
++  const base::ListValue* wlist = nullptr;
++  vv->GetAsList(&wlist);
++
++  url_matcher::URLMatcherConditionSet::Vector all_conditions_;
++  url_matcher::URLMatcherConditionSet::ID matcher_id_ = 0;
++  std::string scheme;
++  std::string host;
++  uint16_t port = 0;
++  std::string path;
++  std::string query;
++  bool match_subdomains = true;
++
++  std::map<std::string, bool> hosts;
++  std::map<GURL, bool> urls;
++
++  for (base::ListValue::const_iterator it = wlist->begin(); it != wlist->end();
++       ++it) {
++    std::string pattern = it->GetString();
++    DLOG(INFO) << "pattern = " << pattern;
++
++    if (!policy::url_util::FilterToComponents(
++            pattern, &scheme, &host, &match_subdomains, &port, &path, &query)) {
++      LOG(ERROR) << "Invalid pattern " << pattern;
++    }
++
++    scoped_refptr<url_matcher::URLMatcherConditionSet> condition_set =
++        policy::url_util::CreateConditionSet(&url_matcher_, ++matcher_id_,
++                                                 scheme, host, match_subdomains,
++                                                 port, path, query, true);
++    all_conditions_.push_back(std::move(condition_set));
++  }
++
++  url_matcher_.AddConditionSets(all_conditions_);
++}
+diff --git a/gooroom/browser/gooroom_url_filter_impl.h b/gooroom/browser/gooroom_url_filter_impl.h
+new file mode 100644
+index 000000000000..58b942869a2c
+--- /dev/null
++++ b/gooroom/browser/gooroom_url_filter_impl.h
+@@ -0,0 +1,30 @@
++// Copyright (c) 2012 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef GOOROOM_URL_FILTER_IMPL_H_
++#define GOOROOM_URL_FILTER_IMPL_H_
++
++#include <memory>
++
++#include "base/run_loop.h"
++#include "base/values.h"
++#include "components/url_matcher/url_matcher.h"
++
++#include "gooroom/base/gooroom_base.h"
++
++class GooroomUrlFilterImpl : public base::GooroomUrlFilter {
++ public:
++  GooroomUrlFilterImpl();
++  ~GooroomUrlFilterImpl() override;
++
++  // implement base::GooroomUrlFilter
++  bool isTrustUrl(std::string url) override;
++
++  void setWhiteList(const base::Value* vv);
++
++ private:
++  url_matcher::URLMatcher url_matcher_;
++};
++
++#endif  // GOOROOM_URL_FILTER_IMPL_H_
+-- 
+2.20.1
+

@@ -1,0 +1,126 @@
+From c20c74efe2e6aa8ad154e42e946ef294d8231fd8 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:22:30 +0900
+Subject: [PATCH 24/71] Modify ntp(newtab) page
+
+---
+ chrome/browser/resources/local_ntp/doodles.css    | 14 ++++++++------
+ chrome/browser/resources/local_ntp/doodles.js     |  5 +++--
+ chrome/browser/resources/local_ntp/local_ntp.css  |  8 ++++++--
+ chrome/browser/resources/local_ntp/local_ntp.html |  2 +-
+ chrome/browser/resources/local_ntp/local_ntp.js   |  6 ++++++
+ 5 files changed, 24 insertions(+), 11 deletions(-)
+
+diff --git a/chrome/browser/resources/local_ntp/doodles.css b/chrome/browser/resources/local_ntp/doodles.css
+index 25191935104b..abc9f707d56a 100644
+--- a/chrome/browser/resources/local_ntp/doodles.css
++++ b/chrome/browser/resources/local_ntp/doodles.css
+@@ -9,7 +9,9 @@
+ }
+ 
+ .non-google-page #logo {
+-  display: none;
++  /* GOOROOM
++     2-2. show logo even if the search provider is not google (e.g., naver) */
++  /*display: none;*/
+ }
+ 
+ #logo-doodle {
+@@ -69,18 +71,18 @@
+ 
+ #logo-default,
+ #logo-non-white {
+-  background-image: url(../new_tab_page/icons/google_logo.svg);
++  background-image: url(../../../../chrome/app/theme/gooroom/gooroom_newtab_logo.png);
+   background-repeat: no-repeat;
+   bottom: var(--logo-margin-bottom);
+-  height: 92px;
+-  left: calc(50% - 272px/2);
++  height: 70px;
++  left: calc(50% - 200px/2);
+   position: absolute;
+-  width: 272px;
++  width: 250px;
+ }
+ 
+ body.alternate-logo #logo-default,
+ body.alternate-logo #logo-non-white {
+-  -webkit-mask-image: url(../new_tab_page/icons/google_logo.svg);
++  -webkit-mask-image: url(../../../../chrome/app/theme/gooroom/gooroom_newtab_logo.png);
+   -webkit-mask-repeat: no-repeat;
+   -webkit-mask-size: 100%;
+   background: var(--logo-color);
+diff --git a/chrome/browser/resources/local_ntp/doodles.js b/chrome/browser/resources/local_ntp/doodles.js
+index b1b7d6e04732..96b23e119011 100644
+--- a/chrome/browser/resources/local_ntp/doodles.js
++++ b/chrome/browser/resources/local_ntp/doodles.js
+@@ -132,12 +132,13 @@ doodles.init = function() {
+   // Load the Doodle. After the first request completes (getting cached
+   // data), issue a second request for fresh Doodle data.
+   doodles.loadDoodle(/*v=*/ null, function(ddl) {
+-    if (ddl === null) {
++      // GOOROOM
++      // Just show gooroom logo not doodle.
++
+       // Got no ddl object at all, the feature is probably disabled. Just show
+       // the logo.
+       doodles.showLogoOrDoodle(/*fromCache=*/ true);
+       return;
+-    }
+ 
+     const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
+     darkMode.addListener(doodles.fadeToLogoOrDoodle);
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.css b/chrome/browser/resources/local_ntp/local_ntp.css
+index d972497fb8d1..1996a8a22c5b 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.css
++++ b/chrome/browser/resources/local_ntp/local_ntp.css
+@@ -105,10 +105,14 @@ button {
+    * unnecessary scrollbar. This height corresponds to MV tile height for a
+    * single row, but also works for a row of icons, and works well on small
+    * screens (like Pixelbook), as well as high-res screens. */
+-  height: 155px;
++/*  height: 155px;
+   left: calc(50% - var(--content-width)/2);
+   position: absolute;
+-  top: calc(50% - 155px);
++  top: calc(50% - 155px);*/
++  /* GOOROOM
++     2-3. Do not align logo in center of the ntp-contents */
++  /*justify-content: center;*/
++
+ }
+ 
+ body.hide-fakebox #fakebox {
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.html b/chrome/browser/resources/local_ntp/local_ntp.html
+index 1608f7574403..52bd3edeb741 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.html
++++ b/chrome/browser/resources/local_ntp/local_ntp.html
+@@ -36,7 +36,7 @@
+   <div id="custom-bg"></div>
+   <div id="custom-bg-preview"></div>
+   <!-- Container for the OneGoogleBar HTML. -->
+-  <div id="one-google"></div>
++  <div id="one-google" hidden></div>
+ 
+   <div id="ntp-contents">
+     <div id="logo">
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
+index d9d58e1ddef9..aea45abf1f2b 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.js
++++ b/chrome/browser/resources/local_ntp/local_ntp.js
+@@ -896,6 +896,12 @@ function init() {
+ 
+   const searchboxApiHandle = embeddedSearchApiHandle.searchBox;
+ 
++  // GOOROOM
++  // 2-1. Do not show fakebox if the search provider is not google (e.g., naver) */
++  if (!configData.isGooglePage) {
++    showLogoOrDoodle(null, null, /*fromCache=*/true);
++  }
++
+   if (configData.isGooglePage) {
+     requestAndInsertGoogleResources();
+     animations.addRippleAnimations();
+-- 
+2.20.1
+

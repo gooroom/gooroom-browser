@@ -1,7 +1,7 @@
-From e445df571fc92061a28620188b30266971764ed3 Mon Sep 17 00:00:00 2001
+From 55974958953ba8c57366ee9dee3b80d53788ae42 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:34:42 +0900
-Subject: [PATCH 10/88] Put gooroom logo into the browser
+Subject: [PATCH 10/71] Put gooroom logo into the browser
 
 ---
  .../app/theme/chrome_unscaled_resources.grd   |   8 +++++++-
@@ -9,6 +9,7 @@ Subject: [PATCH 10/88] Put gooroom logo into the browser
  .../gooroom/product_logo_22.png               | Bin 0 -> 11852 bytes
  .../gooroom/product_logo_32.png               | Bin 0 -> 13265 bytes
  .../gooroom/product_logo_name_22.png          | Bin 0 -> 6632 bytes
+ .../gooroom/product_logo_name_22_white.png    | Bin 0 -> 4324 bytes
  .../gooroom/product_logo_name_48.png          | Bin 0 -> 6632 bytes
  .../gooroom/product_logo_white.png            | Bin 0 -> 4324 bytes
  .../gooroom/webstore_icon.png                 | Bin 0 -> 19929 bytes
@@ -38,7 +39,7 @@ Subject: [PATCH 10/88] Put gooroom logo into the browser
  chrome/app/theme/gooroom/product_logo_256.png | Bin 0 -> 50166 bytes
  chrome/app/theme/gooroom/product_logo_48.png  | Bin 0 -> 50167 bytes
  chrome/app/theme/gooroom/product_logo_64.png  | Bin 0 -> 50169 bytes
- chrome/app/theme/theme_resources.grd          |   8 +++++++-
+ chrome/app/theme/theme_resources.grd          |   9 ++++++++-
  components/infobars/core/infobar_delegate.cc  |   2 +-
  .../chromium/product_logo.png                 | Bin 2435 -> 8711 bytes
  .../gooroom/product_logo.png                  | Bin 0 -> 8711 bytes
@@ -47,12 +48,13 @@ Subject: [PATCH 10/88] Put gooroom logo into the browser
  .../gooroom/product_logo_white.png            | Bin 0 -> 4640 bytes
  .../version_ui_scaled_resources.grdp          |   4 ++--
  .../version_ui/resources/about_version.css    |   2 +-
- tools/grit/grit_rule.gni                      |   9 +++++++++
- 44 files changed, 34 insertions(+), 6 deletions(-)
+ tools/grit/grit_defines.gni                   |   7 +++++++
+ 45 files changed, 33 insertions(+), 6 deletions(-)
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_16.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_22.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_32.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_name_22.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_name_22_white.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_name_48.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_white.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/webstore_icon.png
@@ -88,10 +90,10 @@ Subject: [PATCH 10/88] Put gooroom logo into the browser
  create mode 100644 components/resources/default_200_percent/gooroom/product_logo_white.png
 
 diff --git a/chrome/app/theme/chrome_unscaled_resources.grd b/chrome/app/theme/chrome_unscaled_resources.grd
-index 01c0b80b58f2..2370d43690ac 100644
+index 08da3f70d5a6..ca529505e3db 100644
 --- a/chrome/app/theme/chrome_unscaled_resources.grd
 +++ b/chrome/app/theme/chrome_unscaled_resources.grd
-@@ -59,7 +59,7 @@
+@@ -61,7 +61,7 @@
            <include name="IDR_WELCOME_SET_DEFAULT_LIGHT" file="google_chrome/welcome/set_default_light.svg" type="BINDATA" />
          </if>
        </if>
@@ -100,7 +102,7 @@ index 01c0b80b58f2..2370d43690ac 100644
          <include name="IDR_PRODUCT_LOGO_64" file="chromium/product_logo_64.png" type="BINDATA" />
          <include name="IDR_PRODUCT_LOGO_128" file="chromium/product_logo_128.png" type="BINDATA" />
          <include name="IDR_PRODUCT_LOGO_256" file="chromium/product_logo_256.png" type="BINDATA" />
-@@ -76,6 +76,12 @@
+@@ -78,6 +78,12 @@
            <include name="IDR_WEBSTORE_APP_ICON_128" file="chromium/chromeos/webstore_app_icon_128.png" type="BINDATA" />
          </if>
        </if>
@@ -1723,6 +1725,99 @@ zZXAt+1O_UCAP|O8ZEaY>sjR{cm*G0=7AlzW+PpL8yqTS02^+77F|mG<#9U4AmL?{^
 zzEf^hV$4THI31DW%3)WFVKm}&5YmCDNC`z|ZGaP&kT3_P8%MfvopmLQx)bC&aPM6{
 z?~Fv_BuKEW#EfIFkKfdea0DVBG{#H@*-M0pVobZ;79@|DwSp`b;RWC!438|IcV@Di
 md4dE95+q2FAVGqy#Qy{A=3@k5Z%m&60000<MNUMnLSTaHkKxz=
+
+literal 0
+HcmV?d00001
+
+diff --git a/chrome/app/theme/default_100_percent/gooroom/product_logo_name_22_white.png b/chrome/app/theme/default_100_percent/gooroom/product_logo_name_22_white.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..e77982a30d60c19885029ec8c96cd4c935ec90bb
+GIT binary patch
+literal 4324
+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
+Sz0|k>0000<MNUMnLSTYQM>U23
 
 literal 0
 HcmV?d00001
@@ -12027,10 +12122,10 @@ literal 0
 HcmV?d00001
 
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index a0da72b1cabf..800c0212c71b 100644
+index 7c83cb3c875e..c740f5ea556c 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
-@@ -166,11 +166,17 @@
+@@ -164,12 +164,19 @@
        <if expr="not is_android">
          <structure type="chrome_scaled_image" name="IDR_PRERENDER" file="common/prerender_succeed_icon.png" />
        </if>
@@ -12039,21 +12134,23 @@ index a0da72b1cabf..800c0212c71b 100644
          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="chromium/product_logo_16.png" />
          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32" file="chromium/product_logo_32.png" />
          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="chromium/product_logo_name_22.png" />
+         <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="chromium/product_logo_name_22_white.png" />
        </if>
 +      <if expr="_gooroom">
 +        <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="gooroom/product_logo_16.png" />
 +        <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_22" file="gooroom/product_logo_22.png" />
 +        <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32" file="gooroom/product_logo_32.png" />
 +        <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="gooroom/product_logo_name_22.png" />
++        <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="gooroom/product_logo_name_22_white.png" />
 +      </if>
        <if expr="_google_chrome">
          <if expr="not is_android">
            <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="google_chrome/product_logo_16.png" />
 diff --git a/components/infobars/core/infobar_delegate.cc b/components/infobars/core/infobar_delegate.cc
-index f0410a65afe3..b463f3fd851e 100644
+index 7c39dc2c7131..e87e6e19efee 100644
 --- a/components/infobars/core/infobar_delegate.cc
 +++ b/components/infobars/core/infobar_delegate.cc
-@@ -39,7 +39,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
+@@ -38,7 +38,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
  }
  
  gfx::Image InfoBarDelegate::GetIcon() const {
@@ -12750,17 +12847,15 @@ index bd7da3a627c6..06298f8ca02b 100644
  }
  
  #company {
-diff --git a/tools/grit/grit_rule.gni b/tools/grit/grit_rule.gni
-index 87c8504dbc8e..5e6bd995c1d3 100644
---- a/tools/grit/grit_rule.gni
-+++ b/tools/grit/grit_rule.gni
-@@ -127,6 +127,15 @@ if (is_chrome_branded) {
+diff --git a/tools/grit/grit_defines.gni b/tools/grit/grit_defines.gni
+index 74c967443d63..bc27f6e83af9 100644
+--- a/tools/grit/grit_defines.gni
++++ b/tools/grit/grit_defines.gni
+@@ -39,6 +39,13 @@ if (is_chrome_branded) {
      "-E",
      "CHROMIUM_BUILD=google_chrome",
    ]
-+}
-+
-+if(is_gooroom) {
++} else if (is_gooroom) {
 +  grit_defines += [
 +    "-D",
 +    "_gooroom",

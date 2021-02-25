@@ -1,17 +1,17 @@
-From d2551cd29e85a1aedd612f246f3a5671adcc53fc Mon Sep 17 00:00:00 2001
+From eb3049f0bbe7740273a7724a400bebee5c20af3c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:33:29 +0900
-Subject: [PATCH 09/88] disable prerender
+Subject: [PATCH 09/71] disable prerender
 
 ---
  chrome/browser/ui/omnibox/chrome_omnibox_client.cc | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
-index 777ce1a80863..0bc271fc1bcb 100644
+index b1566e60239f..833305b5f7a1 100644
 --- a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
 +++ b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
-@@ -362,10 +362,12 @@ void ChromeOmniboxClient::OnTextChanged(const AutocompleteMatch& current_match,
+@@ -342,10 +342,12 @@ void ChromeOmniboxClient::OnTextChanged(const AutocompleteMatch& current_match,
        // (http://crbug.com/105689)
        if (!CurrentPageExists())
          break;

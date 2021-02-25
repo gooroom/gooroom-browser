@@ -1,0 +1,49 @@
+From bbdc7b2055b35dbc4d4dfde4fe2a50aeb6e82d36 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 24 Jul 2020 11:59:52 +0900
+Subject: [PATCH 31/71] fix gooroom-policy-dir bugs
+
+---
+ chrome/common/chrome_paths.cc | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
+index 93db8c65f489..00c0d8c59f8e 100644
+--- a/chrome/common/chrome_paths.cc
++++ b/chrome/common/chrome_paths.cc
+@@ -6,6 +6,8 @@
+ 
+ #if defined(GOOROOM_BUILD)
+ #include "gooroom/base/gooroom_base.h"
++#include "base/command_line.h"
++#include "chrome/common/chrome_switches.h"
+ #endif
+ #include "base/files/file_util.h"
+ #include "base/logging.h"
+@@ -463,15 +465,16 @@ bool PathProvider(int key, base::FilePath* result) {
+ //change gooroom policies path
+       base::FilePath home_path_dir;
+       base::PathService::Get(base::DIR_HOME, &home_path_dir);
+-      std::string assignedDir =
+-          home_path_dir.AsUTF8Unsafe() + "/.config/gooroom/trust";
++      std::string assignedDir = home_path_dir.AsUTF8Unsafe() + "/.config/gooroom/trust";
+ 
+-      if (base::GetGooroomBase()->isTrustMode())
+-        cur = base::FilePath(
+-            FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/trust"));
++      base::CommandLine* cmdline = base::CommandLine::ForCurrentProcess();
++      base::FilePath user_data_dir =
++        cmdline->GetSwitchValuePath(switches::kUserDataDir);
++
++      if ( user_data_dir.AsUTF8Unsafe() == assignedDir )
++        cur = base::FilePath(FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/trust"));
+       else
+-        cur = base::FilePath(
+-            FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/untrust"));
++        cur = base::FilePath(FILE_PATH_LITERAL("/usr/share/gooroom/browser/policies/untrust"));
+ #else
+       cur = base::FilePath(FILE_PATH_LITERAL("/etc/chromium/policies"));
+ #endif
+-- 
+2.20.1
+

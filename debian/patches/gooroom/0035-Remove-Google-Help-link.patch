@@ -1,0 +1,26 @@
+From 0bee9df80aaf3f5a5e70782c05f35324ad9844e7 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 10:28:35 +0900
+Subject: [PATCH 35/71] Remove Google-Help link
+
+---
+ .../browser/resources/settings/settings_main/settings_main.html | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
+index 665ba985b267..d1be276e88b7 100644
+--- a/chrome/browser/resources/settings/settings_main/settings_main.html
++++ b/chrome/browser/resources/settings/settings_main/settings_main.html
+@@ -34,7 +34,9 @@
+     </style>
+     <div id="noSearchResults" hidden$="[[!showNoResultsFound_]]">
+       <div>$i18n{searchNoResults}</div>
++<if expr="not _gooroom">
+       <div>$i18nRaw{searchNoResultsHelp}</div>
++</if>
+     </div>
+     <template is="dom-if"
+         if="[[showManagedHeader_(inSearchMode_, showingSubpage_,
+-- 
+2.20.1
+

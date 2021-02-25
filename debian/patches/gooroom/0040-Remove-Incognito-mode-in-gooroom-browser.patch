@@ -1,0 +1,55 @@
+From 53144ce18d1c318bf514080d9afed34be962d23a Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 12:00:59 +0900
+Subject: [PATCH 40/71] Remove Incognito mode in gooroom-browser
+
+---
+ chrome/browser/resources/bookmarks/command_manager.js | 1 -
+ chrome/browser/ui/browser_command_controller.cc       | 2 ++
+ chrome/browser/ui/toolbar/app_menu_model.cc           | 4 ++++
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/bookmarks/command_manager.js b/chrome/browser/resources/bookmarks/command_manager.js
+index de2338fb1e0d..a873cd25b130 100644
+--- a/chrome/browser/resources/bookmarks/command_manager.js
++++ b/chrome/browser/resources/bookmarks/command_manager.js
+@@ -761,7 +761,6 @@ export const CommandManager = Polymer({
+           // <hr>
+           Command.OPEN_NEW_TAB,
+           Command.OPEN_NEW_WINDOW,
+-          Command.OPEN_INCOGNITO,
+         ];
+       case MenuSource.TOOLBAR:
+         return [
+diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
+index ac683d695152..06ec7919ab70 100644
+--- a/chrome/browser/ui/browser_command_controller.cc
++++ b/chrome/browser/ui/browser_command_controller.cc
+@@ -397,7 +397,9 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+       NewWindow(browser_);
+       break;
+     case IDC_NEW_INCOGNITO_WINDOW:
++#if !defined(GOOROOM_BUILD)
+       NewIncognitoWindow(profile());
++#endif
+       break;
+     case IDC_CLOSE_WINDOW:
+       base::RecordAction(base::UserMetricsAction("CloseWindowByKey"));
+diff --git a/chrome/browser/ui/toolbar/app_menu_model.cc b/chrome/browser/ui/toolbar/app_menu_model.cc
+index 3b462a90eb6c..9fdf7afa6434 100644
+--- a/chrome/browser/ui/toolbar/app_menu_model.cc
++++ b/chrome/browser/ui/toolbar/app_menu_model.cc
+@@ -943,6 +943,10 @@ void AppMenuModel::UpdateZoomControls() {
+ }
+ 
+ bool AppMenuModel::ShouldShowNewIncognitoWindowMenuItem() {
++#if defined(GOOROOM_BUILD)
++  return false;
++#endif
++
+   if (browser_->profile()->IsGuestSession() ||
+       browser_->profile()->IsEphemeralGuestProfile())
+     return false;
+-- 
+2.20.1
+

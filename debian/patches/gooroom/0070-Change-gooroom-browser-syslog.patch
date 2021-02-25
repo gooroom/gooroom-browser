@@ -1,0 +1,30 @@
+From 2a77cf4b80eb8d6114f7fbb20150f24e3de46b7c Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 16:25:54 +0900
+Subject: [PATCH 70/71] Change gooroom browser syslog
+
+---
+ gooroom/browser/gooroom_url_filter_impl.cc | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
+index a625b0664cf4..2a19d1ca3fd6 100644
+--- a/gooroom/browser/gooroom_url_filter_impl.cc
++++ b/gooroom/browser/gooroom_url_filter_impl.cc
+@@ -16,8 +16,11 @@ bool GooroomUrlFilterImpl::isTrustUrl(std::string url) {
+       url_matcher_.MatchURL(GURL(url));
+   bool trusted = !matching_ids.empty();
+   GURL url_(url);
+-  SYSLOG(INFO) << "GOOROOM Trust mode = " << trusted << " by " << url_.scheme()
+-               << "://" << url_.host();
++  if (!trusted) {
++    char buff[100] = {0,};
++    snprintf(buff, sizeof(buff), "[%s] operates in untrusted mode.", url_.host().c_str());
++    SYSLOG(INFO) << buff << " GRMCODE=050006";
++  }
+   return trusted;
+ }
+ 
+-- 
+2.20.1
+

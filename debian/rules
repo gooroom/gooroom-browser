@@ -72,7 +72,7 @@ defines+=is_debug=false \
          enable_iterator_debugging=false \
          enable_hangout_services_extension=false \
          optimize_webui=false \
-         closure_compile=false \
+         enable_js_type_check=false \
          blink_symbol_level=0 \
          treat_warnings_as_errors=false \
 
@@ -112,7 +112,6 @@ override_dh_auto_configure:
 	./debian/scripts/unbundle
 
 override_dh_auto_build-arch: out/Release/gn
-	git apply debian/patches/gooroom/0010-Put-gooroom-logo-into-the-browser.patch
 	./out/Release/gn gen out/Release --args="$(defines)"
 	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox
 	cp out/Release/chrome_sandbox out/Release/chrome-sandbox
@@ -120,6 +119,7 @@ override_dh_auto_build-arch: out/Release/gn
 	chmod 4755 out/Release/chrome-sandbox # suid sandbox
 	sed -e s/@@PACKAGE@@/gooroom-browser/g -e s/@@MENUNAME@@/gooroom-browser/g \
 	    < chrome/app/resources/manpage.1.in > out/Release/gooroom-browser.1
+
 
 override_dh_auto_build-indep: out/Release/gn
 	./out/Release/gn gen out/Release --args="$(defines)"

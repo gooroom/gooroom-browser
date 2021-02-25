@@ -1,101 +1,117 @@
 description: add include statements that are missing
 author: Michael Gilbert <mgilbert@debian.org>
 
---- a/content/public/test/back_forward_cache_util.h
-+++ b/content/public/test/back_forward_cache_util.h
-@@ -7,6 +7,8 @@
- 
- #include "base/strings/string_piece.h"
- 
-+#include <memory>
-+
- namespace content {
- class BackForwardCacheImpl;
- class RenderFrameHost;
---- a/base/test/icu_test_util.h
-+++ b/base/test/icu_test_util.h
+--- a/cc/base/list_container_helper.cc
++++ b/cc/base/list_container_helper.cc
 @@ -5,6 +5,7 @@
- #ifndef BASE_TEST_ICU_TEST_UTIL_H_
- #define BASE_TEST_ICU_TEST_UTIL_H_
+ #include "cc/base/list_container_helper.h"
  
-+#include <memory>
- #include <string>
+ #include <stddef.h>
++#include <string.h>
  
- #include "base/macros.h"
---- a/third_party/webrtc/call/rtx_receive_stream.h
-+++ b/third_party/webrtc/call/rtx_receive_stream.h
-@@ -11,6 +11,8 @@
- #ifndef CALL_RTX_RECEIVE_STREAM_H_
- #define CALL_RTX_RECEIVE_STREAM_H_
+ #include <algorithm>
+ #include <cstring>
+--- a/third_party/crashpad/crashpad/util/net/http_multipart_builder.cc
++++ b/third_party/crashpad/crashpad/util/net/http_multipart_builder.cc
+@@ -17,6 +17,7 @@
+ #include <string.h>
+ #include <sys/types.h>
  
-+#include <stdint.h>
++#include <cstring>
+ #include <utility>
+ #include <vector>
+ 
+--- a/third_party/crashpad/crashpad/snapshot/minidump/minidump_context_converter.cc
++++ b/third_party/crashpad/crashpad/snapshot/minidump/minidump_context_converter.cc
+@@ -20,6 +20,8 @@
+ #include "base/stl_util.h"
+ #include "minidump/minidump_context.h"
+ 
++#include <cstring>
 +
- #include <map>
+ namespace crashpad {
+ namespace internal {
  
- #include "call/rtp_packet_sink_interface.h"
+--- a/third_party/crashpad/crashpad/util/process/process_memory.cc
++++ b/third_party/crashpad/crashpad/util/process/process_memory.cc
+@@ -16,6 +16,7 @@
+ 
+ #include <string.h>
+ 
++#include <cstring>
+ #include <algorithm>
+ 
+ #include "base/check_op.h"
+--- a/third_party/crashpad/crashpad/util/stream/log_output_stream.cc
++++ b/third_party/crashpad/crashpad/util/stream/log_output_stream.cc
+@@ -16,6 +16,7 @@
+ 
+ #include <string.h>
+ 
++#include <cstring>
+ #include <algorithm>
+ 
+ #include "base/check.h"
 --- a/third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h
 +++ b/third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h
-@@ -11,6 +11,8 @@
- #ifndef MODULES_AUDIO_PROCESSING_AEC3_CLOCKDRIFT_DETECTOR_H_
- #define MODULES_AUDIO_PROCESSING_AEC3_CLOCKDRIFT_DETECTOR_H_
+@@ -14,6 +14,7 @@
+ #include <stddef.h>
  
-+#include <stddef.h>
-+
  #include <array>
++#include <cstddef>
  
  namespace webrtc {
---- a/ui/gfx/linux/drm_util_linux.h
-+++ b/ui/gfx/linux/drm_util_linux.h
-@@ -5,6 +5,8 @@
- #ifndef UI_GFX_LINUX_DRM_UTIL_LINUX_H_
- #define UI_GFX_LINUX_DRM_UTIL_LINUX_H_
  
-+#include <stdint.h>
-+
- #include "ui/gfx/buffer_types.h"
- 
- namespace ui {
 --- a/chrome/browser/search/background/ntp_backgrounds.h
 +++ b/chrome/browser/search/background/ntp_backgrounds.h
-@@ -5,6 +5,8 @@
- #ifndef CHROME_BROWSER_SEARCH_BACKGROUND_NTP_BACKGROUNDS_H_
- #define CHROME_BROWSER_SEARCH_BACKGROUND_NTP_BACKGROUNDS_H_
+@@ -8,6 +8,7 @@
+ #include <stddef.h>
  
-+#include <stddef.h>
-+
  #include <array>
++#include <cstddef>
  
  class GURL;
---- a/extensions/browser/install/crx_install_error.cc
-+++ b/extensions/browser/install/crx_install_error.cc
-@@ -7,6 +7,8 @@
- #include "base/logging.h"
- #include "extensions/browser/install/sandboxed_unpacker_failure_reason.h"
  
-+#include <algorithm>
-+
- namespace extensions {
+--- a/components/autofill/core/browser/pattern_provider/pattern_provider.h
++++ b/components/autofill/core/browser/pattern_provider/pattern_provider.h
+@@ -6,6 +6,7 @@
+ #define COMPONENTS_AUTOFILL_CORE_BROWSER_PATTERN_PROVIDER_PATTERN_PROVIDER_H_
  
- CrxInstallError::CrxInstallError(CrxInstallErrorType type,
---- a/chrome/browser/performance_manager/graph/policies/background_tab_loading_policy_helpers.cc
-+++ b/chrome/browser/performance_manager/graph/policies/background_tab_loading_policy_helpers.cc
+ #include <string>
++#include <vector>
+ 
+ #include "base/gtest_prod_util.h"
+ #include "base/macros.h"
+--- a/components/autofill/core/browser/data_model/borrowed_transliterator.h
++++ b/components/autofill/core/browser/data_model/borrowed_transliterator.h
 @@ -5,6 +5,8 @@
- #include "chrome/browser/performance_manager/graph/policies/background_tab_loading_policy_helpers.h"
- #include "base/logging.h"
- 
-+#include <limits>
-+
- namespace performance_manager {
- 
- namespace policies {
---- a/third_party/blink/renderer/core/html/trust_token_attribute_parsing.h
-+++ b/third_party/blink/renderer/core/html/trust_token_attribute_parsing.h
-@@ -9,6 +9,8 @@
- #include "services/network/public/mojom/trust_tokens.mojom-blink-forward.h"
- #include "third_party/blink/renderer/core/core_export.h"
+ #ifndef COMPONENTS_AUTOFILL_CORE_BROWSER_DATA_MODEL_BORROWED_TRANSLITERATOR_H_
+ #define COMPONENTS_AUTOFILL_CORE_BROWSER_DATA_MODEL_BORROWED_TRANSLITERATOR_H_
  
 +#include <memory>
 +
- namespace blink {
+ #include "base/i18n/unicodestring.h"
+ #include "base/no_destructor.h"
+ #include "base/synchronization/lock.h"
+--- a/ui/accessibility/platform/inspect/tree_formatter.h
++++ b/ui/accessibility/platform/inspect/tree_formatter.h
+@@ -5,6 +5,9 @@
+ #ifndef UI_ACCESSIBILITY_PLATFORM_INSPECT_TREE_FORMATTER_H_
+ #define UI_ACCESSIBILITY_PLATFORM_INSPECT_TREE_FORMATTER_H_
  
- class JSONValue;
++#include <memory>
++#include <vector>
++
+ #include "ui/accessibility/platform/inspect/inspect.h"
+ 
+ #include "ui/gfx/native_widget_types.h"
+--- a/third_party/openscreen/src/util/crypto/random_bytes.h
++++ b/third_party/openscreen/src/util/crypto/random_bytes.h
+@@ -6,6 +6,7 @@
+ #define UTIL_CRYPTO_RANDOM_BYTES_H_
+ 
+ #include <array>
++#include <cstdint>
+ 
+ namespace openscreen {
+ 

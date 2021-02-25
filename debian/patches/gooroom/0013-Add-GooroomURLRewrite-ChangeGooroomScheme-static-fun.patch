@@ -1,0 +1,103 @@
+From c16b869a5923690c9af383f26978333eda031628 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 15:03:53 +0900
+Subject: [PATCH 13/71] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
+ function
+
+---
+ chrome/browser/chrome_content_browser_client.cc        |  8 ++++++++
+ .../ui/toolbar/chrome_location_bar_model_delegate.cc   |  9 +++++++++
+ gooroom/URLRewrite/gooroom_url_rewrite.cc              | 10 ++++++++++
+ gooroom/URLRewrite/gooroom_url_rewrite.h               |  2 ++
+ 4 files changed, 29 insertions(+)
+
+diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
+index e277c7f6674e..50f9fc7dd3b7 100644
+--- a/chrome/browser/chrome_content_browser_client.cc
++++ b/chrome/browser/chrome_content_browser_client.cc
+@@ -10,6 +10,10 @@
+ #include <utility>
+ #include <vector>
+ 
++#if BUILDFLAG(ENABLE_GOOROOM)
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++#endif
++
+ #include "base/base_switches.h"
+ #include "base/bind.h"
+ #include "base/callback_helpers.h"
+@@ -1306,6 +1310,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
+ #endif
+ 
+   extra_parts_.push_back(new ChromeContentBrowserClientPerformanceManagerPart);
++
++#if BUILDFLAG(ENABLE_GOOROOM)
++  extra_parts_.push_back(new GooroomURLRewrite);
++#endif
+ }
+ 
+ ChromeContentBrowserClient::~ChromeContentBrowserClient() {
+diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
+index 2e0a004c8e7d..a1db33d3b9b7 100644
+--- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
++++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
+@@ -4,6 +4,10 @@
+ 
+ #include "chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++#endif
++
+ #include "base/check.h"
+ #include "base/feature_list.h"
+ #include "base/metrics/histogram_macros.h"
+@@ -74,6 +78,11 @@ bool ChromeLocationBarModelDelegate::GetURL(GURL* url) const {
+     return false;
+ 
+   *url = entry->GetVirtualURL();
++#if BUILDFLAG(ENABLE_GOOROOM)
++  // Change "chrome://" to "gooroom://"
++  *url = GooroomURLRewrite::ChangeGooroomScheme(*url);
++#endif
++
+   return true;
+ }
+ 
+diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.cc b/gooroom/URLRewrite/gooroom_url_rewrite.cc
+index e73b8893d292..dbdb8b11955a 100644
+--- a/gooroom/URLRewrite/gooroom_url_rewrite.cc
++++ b/gooroom/URLRewrite/gooroom_url_rewrite.cc
+@@ -8,6 +8,16 @@
+ #include "content/public/common/url_constants.h"
+ #include "ui/base/l10n/l10n_util.h"
+ 
++GURL GooroomURLRewrite::ChangeGooroomScheme(GURL url){
++  // Change "chrome://" to "gooroom://"
++  if(url.scheme() == "chrome"){
++    std::string new_url = "gooroom://" + url.GetContent();
++    GURL changed_url = GURL(new_url);
++    return changed_url;
++  }
++  return url;
++}
++
+ bool HandleGooroomURLRewrite(GURL* url,
+                              content::BrowserContext* browser_context) {
+   // change "gooroom://*" to "chrome://*"
+diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.h b/gooroom/URLRewrite/gooroom_url_rewrite.h
+index 98d2febbe74f..bf2c00313b3a 100644
+--- a/gooroom/URLRewrite/gooroom_url_rewrite.h
++++ b/gooroom/URLRewrite/gooroom_url_rewrite.h
+@@ -34,6 +34,8 @@ class GooroomURLRewrite : public ChromeContentBrowserClientParts {
+  public:
+   ~GooroomURLRewrite() override {}
+ 
++  static GURL ChangeGooroomScheme(GURL url);
++
+   void BrowserURLHandlerCreated(content::BrowserURLHandler* handler) override;
+   // ChromeContentBrowserClientParts:
+   void OverrideWebkitPrefs(content::RenderViewHost* rvh,
+-- 
+2.20.1
+
