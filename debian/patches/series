@@ -148,3 +148,4 @@ gooroom/0071-Change-BUILD.gn-to-build-88-rebase.patch
 gooroom/l10n.patch
 gooroom/new_tab_page_logo.patch
 gooroom/appoint_newtab_shortcut.patch
+gooroom/odf-bugs-3323-fix.patch
