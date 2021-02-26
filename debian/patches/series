@@ -85,7 +85,6 @@ gooroom/0006-add-guard-for-the-whitelist-based-browser-separation.patch
 gooroom/0007-move-GooroomBase-and-GooroomUrlFilter-to-base-module.patch
 gooroom/0008-Insert-URL-judgement-module-when-observer-the-browse.patch
 gooroom/0009-disable-prerender.patch
-gooroom/0010-Put-gooroom-logo-into-the-browser.patch
 gooroom/0011-register-gooroom-as-a-external-protocol-and-scheme.patch
 gooroom/0012-Add-scheme-module-to-convert-chrome-gooroom.patch
 gooroom/0013-Add-GooroomURLRewrite-ChangeGooroomScheme-static-fun.patch
