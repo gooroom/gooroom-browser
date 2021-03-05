@@ -259,6 +259,33 @@ index e7d209b39fde..17fbc0a8fc69 100644
  </enum>
  
  <enum name="EnterprisePolicyDeviceIdValidity">
+diff --git a/content/browser/renderer_host/navigation_controller_impl.cc b/content/browser/renderer_host/navigation_controller_impl.cc
+index 6dcdf8985017..1b3037e73a1a 100644
+--- a/content/browser/renderer_host/navigation_controller_impl.cc
++++ b/content/browser/renderer_host/navigation_controller_impl.cc
+@@ -91,6 +91,10 @@
+ #include "third_party/blink/public/common/mime_util/mime_util.h"
+ #include "url/url_constants.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "components/policy/core/browser/configuration_policy_handler.h"
++#endif
++
+ namespace content {
+ namespace {
+ 
+@@ -765,6 +769,11 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
+ }
+ 
+ bool NavigationControllerImpl::CanViewSource() {
++#if defined(GOOROOM_BUILD)
++  if(!policy::PageSourceViewPolicyHandler::getEnabled()){
++    return false;
++  }
++#endif
+   const std::string& mime_type = delegate_->GetContentsMimeType();
+   bool is_viewable_mime_type = blink::IsSupportedNonImageMimeType(mime_type) &&
+                                !media::IsSupportedMediaMimeType(mime_type);
 -- 
 2.20.1
 
