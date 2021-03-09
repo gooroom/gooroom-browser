@@ -68,26 +68,6 @@ index d4d829255e95..3652ce420a3a 100644
    // Media Remoting settings.
    (*s_allowlist)[media_router::prefs::kMediaRouterMediaRemotingEnabled] =
        settings_api::PrefType::PREF_TYPE_BOOLEAN;
-diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index 5db3d9b229cc..d3dcc5a245cd 100644
---- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
-+++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -900,6 +900,15 @@
-             search-label="$i18n{siteSettingsAllSitesSearch}"
-             search-term="{{searchFilter_}}">
- </if>
-+                        <!-- gooroom-browser -->
-+                         <settings-toggle-button
-+                                 pref="{{prefs.gooroom_option.websocket_confirm}}"
-+                                 label="$i18n{websocketEnable}">
-+                         </settings-toggle-button>
-+                         <settings-toggle-button
-+                                 pref="{{prefs.gooroom_option.webworker_confirm}}"
-+                                 label="$i18n{webworkerEnable}">
-+                         </settings-toggle-button>
-           <settings-toggle-button
-               pref="{{prefs.webkit.webprefs.encrypted_media_enabled}}"
-               label="[[getProtectedContentLabel_(
 diff --git a/chrome/browser/resources/settings/settings_ui/settings_ui.js b/chrome/browser/resources/settings/settings_ui/settings_ui.js
 index 041bcd6d5841..45417f9ebd78 100644
 --- a/chrome/browser/resources/settings/settings_ui/settings_ui.js

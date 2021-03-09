@@ -152,3 +152,6 @@ gooroom/odf-bugs-3323-fix.patch
 gooroom/BugFix-Web-socket-worker-IPC-Bug-fix.patch
 gooroom/change-syslog-id.patch
 gooroom/reset-error-page-to-jenkins-build.patch
+gooroom/BTS-3318-3319-Edit-security-settings-page.patch
+gooroom/BTS-3322-3311-3310-Korean.pach
+gooroom/BTS-3324-limit-tls.patch
