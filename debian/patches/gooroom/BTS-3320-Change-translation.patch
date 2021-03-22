@@ -1,0 +1,22 @@
+diff --git a/chrome/app/resources/generated_resources_ko.xtb b/chrome/app/resources/generated_resources_ko.xtb
+index 43a2a8ec800c..b05b17e6c4ee 100644
+--- a/chrome/app/resources/generated_resources_ko.xtb
++++ b/chrome/app/resources/generated_resources_ko.xtb
+@@ -2186,7 +2186,7 @@
+ <translation id="3492788708641132712">동기화가 작동하지 않습니다. 다시 로그인하세요.</translation>
+ <translation id="3493486281776271508">인터넷에 연결되어 있어야 합니다.</translation>
+ <translation id="3493881266323043047">유효성</translation>
+-<translation id="3494769164076977169">사이트에서 첫 파일 다운로드 후 자동으로 파일을 다운로드하려고 할 때 확인(권장)</translation>
++<translation id="3494769164076977169">사이트에서 자동 파일 다운로드 허용</translation>
+ <translation id="3495496470825196617">충전 시 전력 유휴 상태로 설정</translation>
+ <translation id="3495660573538963482">Google 어시스턴트 설정</translation>
+ <translation id="3496213124478423963">축소</translation>
+@@ -3471,7 +3471,7 @@
+ <translation id="5029568752722684782">사본 지우기</translation>
+ <translation id="5033137252639132982">움직임 감지 센서 사용이 허용되지 않음</translation>
+ <translation id="5033266061063942743">기하학적 모양</translation>
+-<translation id="5036662165765606524">사이트에서 여러 파일을 자동으로 다운로드하도록 허용하지 않음</translation>
++<translation id="5036662165765606524">사이트에서 파일을 자동으로 다운로드하도록 허용하지 않음</translation>
+ <translation id="5037676449506322593">모두 선택</translation>
+ <translation id="5038022729081036555">내일 <ph name="TIME_LIMIT" /> 동안 다시 사용할 수 있습니다.</translation>
+ <translation id="5038863510258510803">사용 설정 중...</translation>

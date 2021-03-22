@@ -155,3 +155,9 @@ gooroom/reset-error-page-to-jenkins-build.patch
 gooroom/BTS-3318-3319-Edit-security-settings-page.patch
 gooroom/BTS-3322-3311-3310-Korean.pach
 gooroom/BTS-3324-limit-tls.patch
+gooroom/BTS-3101-Change-Chromium-String-on-media.patch
+gooroom/BTS-3309-disable-tab-group-feedback.patch
+gooroom/BTS-3313-Remove-oneGoogleBar.patch
+gooroom/BTS-3315-Change-Strings-on-policy-page.patch
+gooroom/BTS-3316-Remove-secret-mode.patch
+gooroom/BTS-3320-Change-translation.patch
