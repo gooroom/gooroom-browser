@@ -1,3 +1,11 @@
+gooroom-browser (2.8.0-1+grm2u4) stretch; urgency=medium
+  
+  * Bug Fix (3307 3343)
+    - Fix Highlight bug
+    - Fix bookmark broken ui bug
+
+ -- Choi J.S. <junsungc91@gmail.com>  Thu, 1 Apr 2021 13:29:00 +0900
+
 gooroom-browser (2.8.0-1+grm2u3) stretch; urgency=medium
   
   * Bug Fix (3101 3309 3313 3315 3316 3320)

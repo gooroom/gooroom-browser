@@ -1,0 +1,13 @@
+diff --git a/ui/webui/resources/js/search_highlight_utils.js b/ui/webui/resources/js/search_highlight_utils.js
+index f76e24f1d9e9..1575d8c328b4 100644
+--- a/ui/webui/resources/js/search_highlight_utils.js
++++ b/ui/webui/resources/js/search_highlight_utils.js
+@@ -165,7 +165,7 @@ cr.define('cr.search_highlight_utils', function() {
+    * @return {string}
+    */
+   /* #export */ function stripDiacritics(text) {
+-    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
++    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC');
+   }
+ 
+   // #cr_define_end

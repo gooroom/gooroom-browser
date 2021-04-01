@@ -68,7 +68,6 @@ system/harfbuzz.patch
 system/openjpeg.patch
 system/convertutf.patch
 system/clang-format.patch
-system/use-desktop-gl-as-default.patch
 
 buster/re2.patch
 buster/drm97.patch
@@ -161,3 +160,4 @@ gooroom/BTS-3313-Remove-oneGoogleBar.patch
 gooroom/BTS-3315-Change-Strings-on-policy-page.patch
 gooroom/BTS-3316-Remove-secret-mode.patch
 gooroom/BTS-3320-Change-translation.patch
+gooroom/BTS-3307-fix-wrong-highlight.patch
