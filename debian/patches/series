@@ -161,3 +161,4 @@ gooroom/BTS-3315-Change-Strings-on-policy-page.patch
 gooroom/BTS-3316-Remove-secret-mode.patch
 gooroom/BTS-3320-Change-translation.patch
 gooroom/BTS-3307-fix-wrong-highlight.patch
+gooroom/Change-Cookie-default-value.patch

@@ -1,3 +1,9 @@
+gooroom-browser (2.8.0-1+grm2u5) stretch; urgency=medium
+  
+  * Changed Cookie default value by gooroom policy
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 16 Apr 2021 16:31:00 +0900
+
 gooroom-browser (2.8.0-1+grm2u4) stretch; urgency=medium
   
   * Bug Fix (3307 3343)
