@@ -1,194 +1,86 @@
-From 5e71d834c82d8d46fab8ca4b2f0d0d4e4e778b50 Mon Sep 17 00:00:00 2001
+From 3698be1bbc33856b8164edc96e13feb6a908729f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Mon, 27 Jul 2020 13:47:13 +0900
-Subject: [PATCH 43/71] BugTrackingSystem
+Date: Mon, 27 Jul 2020 14:09:39 +0900
+Subject: [PATCH 43/85] BugTrackingSystem
 
-697 : Change strings 'chrome&google' to gooroom on gooroom:// pages
-697-6 : Change default ntp (google webstore -> gooroom.kr)
+355 : Re-register the whitelist upon trust/untrust judgement module.
 ---
- chrome/app/generated_resources.grd                 |  3 +++
- chrome/app/resources/locale_settings.grd           |  3 +++
- chrome/app/theme/theme_resources.grd               |  1 +
- .../log_sources/chrome_internal_log_source.cc      |  2 +-
- chrome/browser/history/top_sites_factory.cc        |  8 ++++----
- chrome/browser/resources/inspect/inspect.html      |  2 +-
- .../resources/net_internals/events_view.html       |  2 +-
- chrome/browser/ui/webui/about_ui.cc                | 14 +++++++++++---
- .../supervised_user_internals_message_handler.cc   |  2 ++
- .../service_worker/serviceworker_internals.html    |  2 +-
- 10 files changed, 28 insertions(+), 11 deletions(-)
+ content/browser/web_contents/web_contents_impl.cc |  3 +++
+ gooroom/browser/gooroom_pref.cc                   | 12 +++++++++---
+ gooroom/browser/gooroom_pref.h                    |  2 ++
+ 3 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/chrome/app/generated_resources.grd b/chrome/app/generated_resources.grd
-index 2af89a7e76f7..1c92459af147 100644
---- a/chrome/app/generated_resources.grd
-+++ b/chrome/app/generated_resources.grd
-@@ -4615,6 +4615,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
-       <message name="IDS_EXTENSION_WEB_STORE_TITLE_SHORT" desc="Shortened version of text for the Chrome Web Store">
-         Web Store
-       </message>
-+      <message name="IDS_GOOROOM_TITLE_SHORT" desc="Shortened version of text for the Gooroom.kr">
-+        Gooroom Flatform
-+      </message>
-       <message name="IDS_EXTENSIONS_SHOW_DETAILS" desc="Tooltip for the button next to an extension that shows more details">
-         Show Details
-       </message>
-diff --git a/chrome/app/resources/locale_settings.grd b/chrome/app/resources/locale_settings.grd
-index 0cc26c78ba32..3caf5112bce2 100644
---- a/chrome/app/resources/locale_settings.grd
-+++ b/chrome/app/resources/locale_settings.grd
-@@ -172,6 +172,9 @@
-       <message name="IDS_WEBSTORE_URL" translateable="false">
-         https://chrome.google.com/webstore?hl=[GRITLANGCODE]
-       </message>
-+      <message name="IDS_GOOROOM_URL" translateable="false">
-+        https://www.gooroom.kr
-+      </message>
- 
-       <!-- The width of the media galleries configuration dialog in characters. -->
-       <message name="IDS_MEDIA_GALLERIES_DIALOG_CONTENT_WIDTH_CHARS" use_name_for_id="true">
-diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index c740f5ea556c..a369265eea52 100644
---- a/chrome/app/theme/theme_resources.grd
-+++ b/chrome/app/theme/theme_resources.grd
-@@ -141,6 +141,7 @@
-         <structure type="chrome_scaled_image" name="IDR_ICON_USER_MANAGER_TUTORIAL_COMPLETE" file="common/user_manager_tutorial/complete.png" />
-         </if>
-       </if>
-+      <structure type="chrome_scaled_image" name="IDR_GOOROOM_ICON" file="gooroom/product_logo_32.png" />
-       <structure type="chrome_scaled_image" name="IDR_INPUT_ALERT" file="common/input_alert.png" />
-       <structure type="chrome_scaled_image" name="IDR_INPUT_ALERT_MENU" file="common/input_alert_menu.png" />
-       <if expr="enable_service_discovery">
-diff --git a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-index 3267d8a52c8b..576dc903ff6f 100644
---- a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-+++ b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-@@ -77,7 +77,7 @@ constexpr char kSyncDataKey[] = "about_sync_data";
- constexpr char kExtensionsListKey[] = "extensions";
- constexpr char kPowerApiListKey[] = "chrome.power extensions";
- constexpr char kDataReductionProxyKey[] = "data_reduction_proxy";
--constexpr char kChromeVersionTag[] = "CHROME VERSION";
-+constexpr char kChromeVersionTag[] = "GOOROOM VERSION";
- 
- #if defined(OS_CHROMEOS) || BUILDFLAG(IS_LACROS)
- constexpr char kLacrosChromeVersionPrefix[] = "Lacros ";
-diff --git a/chrome/browser/history/top_sites_factory.cc b/chrome/browser/history/top_sites_factory.cc
-index 95eab51ddaf7..0285d374b1ff 100644
---- a/chrome/browser/history/top_sites_factory.cc
-+++ b/chrome/browser/history/top_sites_factory.cc
-@@ -57,10 +57,10 @@ struct RawPrepopulatedPage {
- // Android does not use prepopulated pages.
- const RawPrepopulatedPage kRawPrepopulatedPages[] = {
-     {
--        IDS_WEBSTORE_URL,
--        IDS_EXTENSION_WEB_STORE_TITLE_SHORT,
--        IDR_WEBSTORE_ICON_32,
--        SkColorSetRGB(63, 132, 197),
-+        IDS_GOOROOM_URL,
-+        IDS_GOOROOM_TITLE_SHORT,
-+        IDR_GOOROOM_ICON,
-+        SkColorSetRGB(52, 132, 197),
-     },
- };
+diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
+index 57b457dd3346..ef9753b16f1e 100644
+--- a/content/browser/web_contents/web_contents_impl.cc
++++ b/content/browser/web_contents/web_contents_impl.cc
+@@ -15,6 +15,7 @@
+ #if BUILDFLAG(ENABLE_GOOROOM)
+ #include "base/path_service.h"
+ #include "gooroom/base/gooroom_base.h"
++#include "gooroom/browser/gooroom_pref.h"
+ #include "chrome/common/chrome_switches.h"
  #endif
-diff --git a/chrome/browser/resources/inspect/inspect.html b/chrome/browser/resources/inspect/inspect.html
-index ea5cccb11c94..cc6fb931046f 100644
---- a/chrome/browser/resources/inspect/inspect.html
-+++ b/chrome/browser/resources/inspect/inspect.html
-@@ -7,7 +7,7 @@ found in the LICENSE file.
- -->
- <head>
- <meta charset="utf-8">
--<title>Inspect with Chrome Developer Tools</title>
-+<title>Inspect with Gooroom Developer Tools</title>
- <link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
- <link rel="stylesheet" href="inspect.css">
- <script src="chrome://resources/js/assert.js"></script>
-diff --git a/chrome/browser/resources/net_internals/events_view.html b/chrome/browser/resources/net_internals/events_view.html
-index 950e3ca8236f..e231bfd341ca 100644
---- a/chrome/browser/resources/net_internals/events_view.html
-+++ b/chrome/browser/resources/net_internals/events_view.html
-@@ -1,6 +1,6 @@
- <!-- ================= Events view =================== -->
- <div id=events-view-tab-content class=content-box>
-   The net-internals events viewer and related functionality has been removed.
--  Please use <a href="chrome://net-export">chrome://net-export</a> to save netlogs and the external <a href="https://netlog-viewer.appspot.com/">netlog_viewer</a> to view them.
-+  Please use <a href="chrome://net-export">gooroom://net-export</a> to save netlogs and the external <a href="https://netlog-viewer.appspot.com/">netlog_viewer</a> to view them.
- </div>
  
-diff --git a/chrome/browser/ui/webui/about_ui.cc b/chrome/browser/ui/webui/about_ui.cc
-index ea457a333aa2..fe895cce75a7 100644
---- a/chrome/browser/ui/webui/about_ui.cc
-+++ b/chrome/browser/ui/webui/about_ui.cc
-@@ -13,6 +13,7 @@
- #include <utility>
- #include <vector>
+@@ -5102,6 +5103,8 @@ const char kUserDataDir[] = "user-data-dir";
+ // It is a function that determines whether it is trusted mode or untrusted mode.
+ // and exec if necessary (browser switching).
+ bool RequestCurrentUserDataDir(GURL url) {
++  //set whitelist mainpref.json again
++  gooroom::g_gooroom->setMainpref();
+   base::GooroomUrlFilter* pFilter = base::GetGooroomBase()->getUrlFilter();
  
-+#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
- #include "base/bind.h"
- #include "base/callback.h"
- #include "base/callback_helpers.h"
-@@ -543,17 +544,17 @@ namespace {
+   if (!pFilter) return false;
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index f99165641f52..a288d46ce67a 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -32,9 +32,8 @@ PrefService* GooroomPref::pref() {
+   return pref_.get();
+ }
  
- std::string ChromeURLs() {
-   std::string html;
--  AppendHeader(&html, 0, "Chrome URLs");
-+  AppendHeader(&html, 0, "Gooroom URLs");
-   AppendBody(&html);
+-void GooroomPref::setup() {
+-  DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
+-
++//Separate from setup() to apply the mainpref.json dynamically
++GooroomUrlFilterImpl* GooroomPref::setMainpref() {
+   // read CORE policy file from ... ==================================
+   // TODO use constant value
+   base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
+@@ -60,6 +59,13 @@ void GooroomPref::setup() {
+   if (p != nullptr)
+     pfilterImpl->setWhiteList(p->GetValue());
+   base::GetGooroomBase()->setUrlFilter(pfilterImpl);
++  return pfilterImpl;
++}
++
++void GooroomPref::setup() {
++  DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
++
++  GooroomUrlFilterImpl* pfilterImpl = setMainpref();
  
--  html += "<h2>List of Chrome URLs</h2>\n<ul>\n";
-+  html += "<h2>List of Gooroom URLs</h2>\n<ul>\n";
-   std::vector<std::string> hosts(
-       chrome::kChromeHostURLs,
-       chrome::kChromeHostURLs + chrome::kNumberOfChromeHostURLs);
-   std::sort(hosts.begin(), hosts.end());
-   for (const std::string& host : hosts) {
-     html +=
--        "<li><a href='chrome://" + host + "/'>chrome://" + host + "</a></li>\n";
-+        "<li><a href='chrome://" + host + "/'>gooroom://" + host + "</a></li>\n";
-   }
+   // if there is a url in command line, check the url is trust to determine the
+   // mode whether trust or not.
+diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
+index 0c18a6f86f80..c85a112964cd 100644
+--- a/gooroom/browser/gooroom_pref.h
++++ b/gooroom/browser/gooroom_pref.h
+@@ -9,6 +9,7 @@
+ #define GOOROOM_BROWSER_GOOROOM_PREF_H_
  
-   html += "</ul><h2>List of chrome://internals pages</h2>\n<ul>\n";
-@@ -572,7 +573,14 @@ std::string ChromeURLs() {
-       "crash or hang the renderer, they're not linked directly; you can type "
-       "them into the address bar if you need them.</p>\n<ul>";
-   for (size_t i = 0; i < chrome::kNumberOfChromeDebugURLs; i++)
-+#if defined(GOOROOM_BUILD)
-+  {
-+    GURL changed_url = GooroomURLRewrite::ChangeGooroomScheme(GURL(std::string(chrome::kChromeDebugURLs[i])));
-+    html += "<li>" + std::string(changed_url.spec()) + "</li>\n";
-+  }
-+#else
-     html += "<li>" + std::string(chrome::kChromeDebugURLs[i]) + "</li>\n";
-+#endif
-   html += "</ul>\n";
+ #include "components/prefs/pref_service.h"
++#include "gooroom/browser/gooroom_url_filter_impl.h"
  
-   AppendFooter(&html);
-diff --git a/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc b/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
-index 2665254f0ff6..5cfbb55758c7 100644
---- a/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
-+++ b/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
-@@ -204,6 +204,8 @@ void SupervisedUserInternalsMessageHandler::SendBasicInfo() {
-   std::unique_ptr<base::ListValue> section_list(new base::ListValue);
+ namespace gooroom {
  
-   base::ListValue* section_general = AddSection(section_list.get(), "General");
-+  AddSectionEntry(section_general, "Gooroom version",
-+                  chrome::GetVersionString());
-   AddSectionEntry(section_general, "Child detection enabled",
-                   ChildAccountService::IsChildAccountDetectionEnabled());
+@@ -30,6 +31,7 @@ class GooroomPref {
+   ~GooroomPref();
  
-diff --git a/content/browser/resources/service_worker/serviceworker_internals.html b/content/browser/resources/service_worker/serviceworker_internals.html
-index 34d292762a80..180ce757be56 100644
---- a/content/browser/resources/service_worker/serviceworker_internals.html
-+++ b/content/browser/resources/service_worker/serviceworker_internals.html
-@@ -2,7 +2,7 @@
- <html dir="ltr" lang="en">
- <head>
-   <meta charset="utf-8">
--  <title>chrome://serviceworker-internals</title>
-+  <title>gooroom://serviceworker-internals</title>
-   <link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
-   <link rel="stylesheet" href="chrome://resources/css/widgets.css">
-   <link rel="stylesheet" href="serviceworker_internals.css">
+   PrefService* pref();
++  GooroomUrlFilterImpl* setMainpref();
+   void setup();
+ 
+   bool useWebSocket();
 -- 
 2.20.1
 

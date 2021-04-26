@@ -1,17 +1,17 @@
-From 9c7d06a8b342de4f8e99e5fea1d585c84d4258f0 Mon Sep 17 00:00:00 2001
+From 2a2de660590c87c7fb2534168e57c3b8121455dc Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 10:28:07 +0900
-Subject: [PATCH 34/71] Remove 'Cast...'
+Subject: [PATCH 34/85] Remove 'Cast...'
 
 ---
  chrome/browser/media/router/media_router_feature.cc | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/chrome/browser/media/router/media_router_feature.cc b/chrome/browser/media/router/media_router_feature.cc
-index 52716b28a9b6..3b2b056190ec 100644
+index 487542297e5f..fd7d805cf0c3 100644
 --- a/chrome/browser/media/router/media_router_feature.cc
 +++ b/chrome/browser/media/router/media_router_feature.cc
-@@ -60,6 +60,9 @@ const PrefService::Preference* GetMediaRouterPref(
+@@ -64,6 +64,9 @@ const PrefService::Preference* GetMediaRouterPref(
  #endif  // defined(OS_ANDROID) || BUILDFLAG(ENABLE_EXTENSIONS)
  
  bool MediaRouterEnabled(content::BrowserContext* context) {

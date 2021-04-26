@@ -1,0 +1,138 @@
+From bc8ff4b9d6c31da30648583a19fac8dab0743633 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 13:45:46 +0900
+Subject: [PATCH 41/85] BugTrackingSystem
+
+746 : Change string Chromium to Gooroom Browser on gooroom://flags page
+743 : Remove Translate option on settings language page
+741 : Remove report function on settings person security page
+740 : Remove 'USB not found'strings on content settings usb page
+738 : Change string 'Chromium' to 'Open Project(Chromium)'on reset settings page
+731 : Update adobe-flash version
+728 : Remove browser-login on gooroom://devices page
+726 : Change string 'chrome' to 'gooroom' on man page
+723 : Change strings 'About Chromium' to 'About Gooroom Browser' on settings icon
+722 : Remove browser-login on gooroom://history page
+721 : Restrict secret mode access on bookmark
+714 : Remove browser-login on gooroom://welcome page
+205 : Remove google-cloud-login on print page
+---
+ chrome/app/resources/manpage.1.in               | 10 +++++-----
+ chrome/browser/resources/history/side_bar.html  |  5 -----
+ .../settings/languages_page/languages_page.html | 17 -----------------
+ .../bookmark_context_menu_controller.cc         |  4 ++--
+ .../browser/web_contents/web_contents_impl.cc   |  1 +
+ 5 files changed, 8 insertions(+), 29 deletions(-)
+
+diff --git a/chrome/app/resources/manpage.1.in b/chrome/app/resources/manpage.1.in
+index 1e4fe85907e3..085cbe85ff3a 100644
+--- a/chrome/app/resources/manpage.1.in
++++ b/chrome/app/resources/manpage.1.in
+@@ -3,16 +3,16 @@
+ .TH @@PACKAGE@@ 1 "" "" "USER COMMANDS"
+ 
+ .SH NAME
+-@@PACKAGE@@ \- the web browser from Google
++@@PACKAGE@@ \- the web browser from Gooroom
+ 
+ .SH SYNOPSIS
+ .B @@PACKAGE@@
+ [\fIOPTION\fR] [\fIPATH\fR|\fIURL\fR]
+ 
+ .SH DESCRIPTION
+-See the Google Chrome help center for help on using the browser.
++See the Gooroom help center for help on using the browser.
+ .IP
+-<https://support.google.com/chrome/>
++<https://www.gooroom.kr/>
+ .PP
+ This manpage only describes invocation, environment, and arguments.
+ 
+@@ -150,11 +150,11 @@ Comma separated list of hosts or patterns to bypass proxying.
+ 
+ .SH FILES
+ .TP
+-.I $HOME/.config/@@PACKAGE@@
++.I $HOME/.config/gooroom
+ Default directory for configuration data.
+ 
+ .TP
+-.I $HOME/.cache/@@PACKAGE@@
++.I $HOME/.cache/gooroom
+ Default directory for cache data.  (Why?  See
+ <http://standards.freedesktop.org/basedir-spec/latest/> .)
+ 
+diff --git a/chrome/browser/resources/history/side_bar.html b/chrome/browser/resources/history/side_bar.html
+index dbd42713864f..c78ddfd0380d 100644
+--- a/chrome/browser/resources/history/side_bar.html
++++ b/chrome/browser/resources/history/side_bar.html
+@@ -104,11 +104,6 @@
+           $i18n{historyMenuItem}
+           <paper-ripple></paper-ripple>
+         </a>
+-        <a role="menuitem" href="/syncedTabs" class="page-item"
+-            path="syncedTabs" on-click="onItemClick_">
+-          $i18n{openTabsMenuItem}
+-          <paper-ripple></paper-ripple>
+-        </a>
+         <div class="separator"></div>
+         <a role="menuitem" id="clear-browsing-data"
+             href="chrome://settings/clearBrowserData"
+diff --git a/chrome/browser/resources/settings/languages_page/languages_page.html b/chrome/browser/resources/settings/languages_page/languages_page.html
+index 10c2a50d3ca0..385540c1514c 100644
+--- a/chrome/browser/resources/settings/languages_page/languages_page.html
++++ b/chrome/browser/resources/settings/languages_page/languages_page.html
+@@ -350,23 +350,6 @@
+                   </iron-icon>
+                 </cr-checkbox>
+ </if> <!-- chromeos or is_win -->
+-                <cr-checkbox id="offerTranslations"
+-                    class="dropdown-item"
+-                    checked="[[detailLanguage_.translateEnabled]]"
+-                    on-change="onTranslateCheckboxChange_"
+-                    hidden="[[!prefs.translate.enabled.value]]"
+-                    disabled="[[disableTranslateCheckbox_(
+-                        detailLanguage_, languages.translateTarget)]]">
+-                  $i18n{offerToTranslateInThisLanguage}
+-                </cr-checkbox>
+-                <hr hidden="[[!shouldShowDialogSeparator_(
+-                    languages.enabled.*)]]">
+-                <button class="dropdown-item" role="menuitem"
+-                    on-click="onMoveToTopTap_"
+-                    hidden="[[isNthLanguage_(
+-                        0, detailLanguage_, languages.enabled.*)]]">
+-                  $i18n{moveToTop}
+-                </button>
+                 <button class="dropdown-item" role="menuitem"
+                     on-click="onMoveUpTap_"
+                     hidden="[[!showMoveUp_(detailLanguage_,
+diff --git a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+index 45606dcb8a3a..efbd52803718 100644
+--- a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
++++ b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+@@ -124,8 +124,8 @@ void BookmarkContextMenuController::BuildMenu() {
+             IDS_BOOKMARK_BAR_OPEN_IN_NEW_TAB);
+     AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_NEW_WINDOW,
+             IDS_BOOKMARK_BAR_OPEN_IN_NEW_WINDOW);
+-    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
+-            IDS_BOOKMARK_BAR_OPEN_INCOGNITO);
++//    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
++//            IDS_BOOKMARK_BAR_OPEN_INCOGNITO);
+   } else {
+     int count = chrome::OpenCount(parent_window_, selection_);
+     AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
+diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
+index 0e7e869cfe86..57b457dd3346 100644
+--- a/content/browser/web_contents/web_contents_impl.cc
++++ b/content/browser/web_contents/web_contents_impl.cc
+@@ -15,6 +15,7 @@
+ #if BUILDFLAG(ENABLE_GOOROOM)
+ #include "base/path_service.h"
+ #include "gooroom/base/gooroom_base.h"
++#include "chrome/common/chrome_switches.h"
+ #endif
+ 
+ #include "base/bind.h"
+-- 
+2.20.1
+

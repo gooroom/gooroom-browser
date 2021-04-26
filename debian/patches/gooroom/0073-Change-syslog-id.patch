@@ -1,0 +1,25 @@
+From a6971fa47ab5c30103777361c235521622639bc8 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 10:16:19 +0900
+Subject: [PATCH 73/85] Change syslog id
+
+---
+ base/syslog_logging.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/base/syslog_logging.cc b/base/syslog_logging.cc
+index ae507b2d8b8f..700abeb53af4 100644
+--- a/base/syslog_logging.cc
++++ b/base/syslog_logging.cc
+@@ -135,7 +135,7 @@ EventLogMessage::~EventLogMessage() {
+   if (user_sid != nullptr)
+     ::LocalFree(user_sid);
+ #elif defined(OS_LINUX) || defined(OS_CHROMEOS)
+-  const char kEventSource[] = "chrome";
++  const char kEventSource[] = "gooroom-browser";
+   openlog(kEventSource, LOG_NOWAIT | LOG_PID, LOG_USER);
+   // We can't use the defined names for the logging severity from syslog.h
+   // because they collide with the names of our own severity levels. Therefore
+-- 
+2.20.1
+

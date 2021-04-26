@@ -1,0 +1,22 @@
+From 20112f8b94c4a7527d6aea08172a1c49e0dfc5c1 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Mon, 26 Apr 2021 11:26:52 +0900
+Subject: [PATCH 85/85] Remove newtab page registerModule
+
+---
+ chrome/browser/resources/new_tab_page/modules/modules.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/new_tab_page/modules/modules.js b/chrome/browser/resources/new_tab_page/modules/modules.js
+index b9bd0a6c674b..a29c4d3ef327 100644
+--- a/chrome/browser/resources/new_tab_page/modules/modules.js
++++ b/chrome/browser/resources/new_tab_page/modules/modules.js
+@@ -41,4 +41,4 @@ descriptors.push(dummyDescriptor);
+ descriptors.push(dummyDescriptor2);
+ // </if>
+ 
+-ModuleRegistry.getInstance().registerModules(descriptors);
++//ModuleRegistry.getInstance().registerModules(descriptors);
+-- 
+2.20.1
+

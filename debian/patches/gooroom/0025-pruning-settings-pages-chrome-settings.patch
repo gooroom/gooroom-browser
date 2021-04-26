@@ -1,0 +1,97 @@
+From c88b3f92a48763300e6c59292ef50a86f1547763 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:46:38 +0900
+Subject: [PATCH 25/85] pruning settings pages(chrome://settings)
+
+---
+ chrome/browser/resources/settings/about_page/about_page.html  | 2 ++
+ chrome/browser/resources/settings/basic_page/basic_page.html  | 4 ++++
+ .../resources/settings/settings_menu/settings_menu.html       | 4 ++++
+ 3 files changed, 10 insertions(+)
+
+diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
+index e8299dcfeb8b..f5588a5094cb 100644
+--- a/chrome/browser/resources/settings/about_page/about_page.html
++++ b/chrome/browser/resources/settings/about_page/about_page.html
+@@ -124,8 +124,10 @@
+         </div>
+       </template>
+ </if>
++<if expr="not _gooroom">
+       <cr-link-row class="hr" id="help" on-click="onHelpTap_"
+           label="$i18n{aboutGetHelpUsingChrome}" external></cr-link-row>
++</if>
+ <if expr="_google_chrome">
+       <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueTap_"
+           hidden="[[!prefs.feedback_allowed.value]]"
+diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
+index d93129142268..701a0e022dd6 100644
+--- a/chrome/browser/resources/settings/basic_page/basic_page.html
++++ b/chrome/browser/resources/settings/basic_page/basic_page.html
+@@ -76,6 +76,7 @@
+           </div>
+         </template>
+ </if>
++<if expr="not _gooroom">
+         <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
+           <settings-section page-title="$i18n{peoplePageTitle}"
+               section="people">
+@@ -109,6 +110,7 @@
+             </settings-privacy-page>
+           </settings-section>
+         </template>
++</if>
+         <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
+             restamp>
+           <settings-section page-title="$i18n{appearancePageTitle}"
+@@ -176,6 +178,7 @@
+                 </settings-downloads-page>
+               </settings-section>
+             </template>
++<if expr="not _gooroom">
+             <template is="dom-if" if="[[showPage_(pageVisibility.a11y)]]"
+                 restamp>
+               <settings-section page-title="$i18n{a11yPageTitle}"
+@@ -183,6 +186,7 @@
+                 <settings-a11y-page prefs="{{prefs}}"></settings-a11y-page>
+               </settings-section>
+             </template>
++</if>
+ <if expr="not chromeos and not lacros">
+             <settings-section page-title="$i18n{systemPageTitle}"
+                 section="system">
+diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+index 2ecb98793707..5d2915c19613 100644
+--- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
++++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+@@ -101,11 +101,13 @@
+         <iron-selector id="topMenu" selectable="a:not(#extensionsLink)"
+             attr-for-selected="href" on-iron-activate="onSelectorActivate_"
+             on-click="onLinkClick_">
++<if expr="not _gooroom">
+           <a role="menuitem"
+               id="people" href="/people" hidden="[[!pageVisibility.people]]">
+             <iron-icon icon="cr:person"></iron-icon>
+             $i18n{peoplePageTitle}
+           </a>
++</if>
+           <a role="menuitem" id="autofill" href="/autofill"
+               hidden="[[!pageVisibility.autofill]]">
+             <iron-icon icon="settings:assignment"></iron-icon>
+@@ -167,11 +169,13 @@
+                 <iron-icon icon="cr:file-download"></iron-icon>
+                 $i18n{downloadsPageTitle}
+               </a>
++<if expr="not _gooroom">
+               <a role="menuitem" href="/accessibility"
+                 disabled$="[[!advancedOpened]]">
+                 <iron-icon icon="settings:accessibility"></iron-icon>
+                 $i18n{a11yPageTitle}
+               </a>
++</if>
+     <if expr="not chromeos and not lacros">
+               <a role="menuitem" href="/system"
+                   disabled$="[[!advancedOpened]]">
+-- 
+2.20.1
+

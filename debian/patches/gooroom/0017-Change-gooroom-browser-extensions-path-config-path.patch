@@ -1,0 +1,41 @@
+From d7a2ce72aa2fa814dd35b386f9010f418f5578ec Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:08:07 +0900
+Subject: [PATCH 17/85] Change gooroom-browser extensions path & config path
+
+---
+ chrome/common/chrome_paths.cc       | 3 +++
+ chrome/common/chrome_paths_linux.cc | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
+index fef80b760915..c755cd87ab3f 100644
+--- a/chrome/common/chrome_paths.cc
++++ b/chrome/common/chrome_paths.cc
+@@ -54,6 +54,9 @@ const base::FilePath::CharType kPepperFlashBaseDirectory[] =
+ const base::FilePath::CharType kFilepathSinglePrefExtensions[] =
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+     FILE_PATH_LITERAL("/usr/share/google-chrome/extensions");
++#elif defined(GOOROOM_BUILD)
++// change gooroom extensions dir
++    FILE_PATH_LITERAL("/usr/share/gooroom/browser/extensions");
+ #else
+     FILE_PATH_LITERAL("/usr/share/chromium/extensions");
+ #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+diff --git a/chrome/common/chrome_paths_linux.cc b/chrome/common/chrome_paths_linux.cc
+index fc9d67e87247..faa061ed436c 100644
+--- a/chrome/common/chrome_paths_linux.cc
++++ b/chrome/common/chrome_paths_linux.cc
+@@ -91,6 +91,9 @@ bool GetDefaultUserDataDirectory(base::FilePath* result) {
+ 
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
+   std::string data_dir_basename = "google-chrome";
++#elif defined(GOOROOM_BUILD)
++  //change gooroom config dir 
++  std::string data_dir_basename = "gooroom";
+ #else
+   std::string data_dir_basename = "chromium";
+ #endif
+-- 
+2.20.1
+

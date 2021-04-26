@@ -1,0 +1,45 @@
+From b0cf116494880e90638df7f3470d8e709acc9a99 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:23:10 +0900
+Subject: [PATCH 24/85] disable chrome login shortcut(ctrl+shift+m) and hide
+ login icon
+
+---
+ chrome/browser/ui/browser_command_controller.cc | 3 +++
+ chrome/browser/ui/views/toolbar/toolbar_view.cc | 4 ++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
+index a1be94bef8a3..e72a9c54ff72 100644
+--- a/chrome/browser/ui/browser_command_controller.cc
++++ b/chrome/browser/ui/browser_command_controller.cc
+@@ -763,8 +763,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+       break;
+ #if !BUILDFLAG(IS_CHROMEOS_ASH)
+     case IDC_SHOW_SIGNIN:
++#if !defined(GOOROOM_BUILD)
++//Disable chrome login shortcut (ctrl + shift + m) on gooroom-browser
+       ShowBrowserSigninOrSettings(
+           browser_, signin_metrics::AccessPoint::ACCESS_POINT_MENU);
++#endif
+       break;
+ #endif
+     case IDC_DISTILL_PAGE:
+diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
+index ae3fc740beca..d62e1d8a54d7 100644
+--- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
++++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
+@@ -248,6 +248,10 @@ void ToolbarView::Init() {
+     show_avatar_toolbar_button = browser_->profile()->IsOffTheRecord() ||
+                                  browser_->profile()->IsGuestSession();
+   }
++#endif
++#if defined(GOOROOM_BUILD)
++//Hide show_avatar_toolbar_button
++  show_avatar_toolbar_button = false;
+ #endif
+   if (base::FeatureList::IsEnabled(
+           autofill::features::kAutofillEnableToolbarStatusChip)) {
+-- 
+2.20.1
+

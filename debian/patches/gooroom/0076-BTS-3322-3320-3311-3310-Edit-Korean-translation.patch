@@ -1,0 +1,68 @@
+From dc9795c37b928b5b3c238c10d0e7c74918c27c66 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 10:21:11 +0900
+Subject: [PATCH 76/85] [BTS:3322-3320-3311-3310] Edit Korean translation
+
+---
+ chrome/app/resources/generated_resources_ko.xtb | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/chrome/app/resources/generated_resources_ko.xtb b/chrome/app/resources/generated_resources_ko.xtb
+index 93b4574fd3f0..205a715c36b4 100644
+--- a/chrome/app/resources/generated_resources_ko.xtb
++++ b/chrome/app/resources/generated_resources_ko.xtb
+@@ -1,6 +1,8 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE translationbundle>
+ <translationbundle lang="ko">
++<translation id="2273707414284427980">웹 소켓 사용 설정</translation>
++<translation id="4851515493665413363">웹 워커 사용 설정</translation>
+ <translation id="1001307489511021749">앱, 설정 및 기타 맞춤설정이 내 Google 계정으로 로그인된 모든 Chrome OS 기기에서 동기화됩니다.</translation>
+ <translation id="1003088604756913841">새 <ph name="APP" /> 창에서 링크 열기</translation>
+ <translation id="1004218526896219317">사이트 액세스</translation>
+@@ -2229,7 +2231,7 @@
+ <translation id="3492788708641132712">동기화가 작동하지 않습니다. 다시 로그인하세요.</translation>
+ <translation id="3493486281776271508">인터넷에 연결되어 있어야 합니다.</translation>
+ <translation id="3493881266323043047">유효성</translation>
+-<translation id="3494769164076977169">사이트에서 첫 파일 다운로드 후 자동으로 파일을 다운로드하려고 할 때 확인(권장)</translation>
++<translation id="3494769164076977169">사이트에서 자동 파일 다운로드 허용</translation>
+ <translation id="3495496470825196617">충전 시 전력 유휴 상태로 설정</translation>
+ <translation id="3495660573538963482">Google 어시스턴트 설정</translation>
+ <translation id="3496213124478423963">축소</translation>
+@@ -3313,7 +3315,7 @@
+ <translation id="4739639199548674512">티켓</translation>
+ <translation id="4742334355511750246">이미지 표시가 허용되지 않음</translation>
+ <translation id="4743260470722568160"><ph name="BEGIN_LINK" />애플리케이션 업데이트 방법 알아보기<ph name="END_LINK" /></translation>
+-<translation id="4744981231093950366">{NUM_TABS,plural, =1{사이트 숨기기 취소}other{사이트 숨기기 취소}}</translation>
++<translation id="4744981231093950366">{NUM_TABS,plural, =1{소리 켜기}other{소리 켜기}}</translation>
+ <translation id="4746351372139058112">메시지</translation>
+ <translation id="4750394297954878236">추천</translation>
+ <translation id="475088594373173692">첫 번째 사용자</translation>
+@@ -3504,7 +3506,7 @@
+ <translation id="4972164225939028131">잘못된 비밀번호</translation>
+ <translation id="4972737347717125191">사이트에서 가상 현실 기기 및 데이터의 사용을 요청할 수 있음</translation>
+ <translation id="4973307593867026061">프린터 추가</translation>
+-<translation id="4973325300212422370">{NUM_TABS,plural, =1{사이트 숨기기}other{사이트 숨기기}}</translation>
++<translation id="4973325300212422370">{NUM_TABS,plural, =1{소리 끄기}other{소리 끄기}}</translation>
+ <translation id="4974733135013075877">종료 및 자녀 보호 잠금</translation>
+ <translation id="4976009197147810135">수직 분할</translation>
+ <translation id="4977942889532008999">액세스 확인</translation>
+@@ -3545,7 +3547,7 @@
+ <translation id="5029568752722684782">사본 지우기</translation>
+ <translation id="5033137252639132982">움직임 감지 센서 사용이 허용되지 않음</translation>
+ <translation id="5033266061063942743">기하학적 모양</translation>
+-<translation id="5036662165765606524">사이트에서 여러 파일을 자동으로 다운로드하도록 허용하지 않음</translation>
++<translation id="5036662165765606524">사이트에서 파일을 자동으로 다운로드하도록 허용하지 않음</translation>
+ <translation id="5037676449506322593">모두 선택</translation>
+ <translation id="5038022729081036555">내일 <ph name="TIME_LIMIT" /> 동안 다시 사용할 수 있습니다.</translation>
+ <translation id="5038863510258510803">사용 설정 중...</translation>
+@@ -7282,4 +7284,4 @@
+ <translation id="996250603853062861">안전한 연결 설정 중...</translation>
+ <translation id="99731366405731005">Wi-Fi 동기화를 사용하려면 <ph name="LINK1_BEGIN" />Chrome 동기화<ph name="LINK1_END" />를 사용 설정하세요. <ph name="LINK2_BEGIN" />자세히 알아보기<ph name="LINK2_END" /></translation>
+ <translation id="998747458861718449">검사(&amp;N)</translation>
+-</translationbundle>
+\ No newline at end of file
++</translationbundle>
+-- 
+2.20.1
+

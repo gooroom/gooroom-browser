@@ -1,28 +1,50 @@
-From 2bbdcdc51d0fc9d7051067ac0105c971246a8e72 Mon Sep 17 00:00:00 2001
+From fef364ed6ef481e29068a86d9fbe337caf5b5108 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Mon, 27 Jul 2020 14:10:06 +0900
-Subject: [PATCH 45/71] BugTrackingSystem
+Date: Mon, 27 Jul 2020 14:12:50 +0900
+Subject: [PATCH 45/85] BugTrackingSystem
 
-650 - Client redirection URL does not apply Trust/Untrust judgement module.
+507 : Disable 'Open as window' on making shortcut app popup
 ---
- content/browser/web_contents/web_contents_impl.cc | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../ui/views/web_apps/web_app_confirmation_view.cc     | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 70c5222aabb7..a7c2a7adbc41 100644
---- a/content/browser/web_contents/web_contents_impl.cc
-+++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -5335,7 +5335,9 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
- 
- #if BUILDFLAG(ENABLE_GOOROOM)
- //If browser is switched, the current page is closed.
--  if (navigation_handle->IsInMainFrame() && RequestCurrentUserDataDir(navigation_handle->GetURL())) {
-+  if (navigation_handle->IsInMainFrame()
-+      && (navigation_handle->GetPageTransition() & ui::PAGE_TRANSITION_CLIENT_REDIRECT) == 0
-+      && RequestCurrentUserDataDir(navigation_handle->GetURL())) {
-     ClosePage();
+diff --git a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
+index 4ed7a592569d..36a74a08cd40 100644
+--- a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
++++ b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
+@@ -129,7 +129,9 @@ WebAppConfirmationView::WebAppConfirmationView(
+       open_as_window_radio_->SetChecked(true);
+     else
+       open_as_tabbed_window_radio_->SetChecked(true);
+-  } else {
++  }
++#if !defined(GOOROOM_BUILD)
++  else {
+     auto open_as_window_checkbox = std::make_unique<views::Checkbox>(
+         l10n_util::GetStringUTF16(IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_WINDOW));
+     open_as_window_checkbox->SetChecked(web_app_info_->open_as_window);
+@@ -145,6 +147,7 @@ WebAppConfirmationView::WebAppConfirmationView(
+     else
+       open_as_window_checkbox_->SetChecked(true);
    }
- #endif
++#endif
+ 
+   title_tf_->SelectAll(true);
+   chrome::RecordDialogCreation(chrome::DialogIdentifier::WEB_APP_CONFIRMATION);
+@@ -180,9 +183,12 @@ bool WebAppConfirmationView::Accept() {
+       web_app_info_->open_as_window = open_as_window_radio_->GetChecked();
+       web_app_info_->enable_experimental_tabbed_window = false;
+     }
+-  } else {
++  }
++#if !defined(GOOROOM_BUILD)
++  else {
+     web_app_info_->open_as_window = open_as_window_checkbox_->GetChecked();
+   }
++#endif
+   std::move(callback_).Run(true, std::move(web_app_info_));
+   return true;
+ }
 -- 
 2.20.1
 

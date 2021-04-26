@@ -1,0 +1,29 @@
+From 7b1029e5331d504bd2d4783248d5174d0d779bfc Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 14:23:53 +0900
+Subject: [PATCH 52/85] BugTrackingSystem 1693 : Remove route to enter
+ incognito mode from link
+
+---
+ .../renderer_context_menu/render_view_context_menu.cc        | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+index 2984ce2f740b..5bce55f9bd2f 100644
+--- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
++++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+@@ -1186,11 +1186,6 @@ void RenderViewContextMenu::AppendLinkItems() {
+       AppendProtocolHandlerSubMenu();
+     }
+ 
+-    menu_model_.AddItemWithStringId(
+-        IDC_CONTENT_CONTEXT_OPENLINKOFFTHERECORD,
+-        in_app ? IDS_CONTENT_CONTEXT_OPENLINKOFFTHERECORD_INAPP
+-               : IDS_CONTENT_CONTEXT_OPENLINKOFFTHERECORD);
+-
+     AppendOpenInWebAppLinkItems();
+     AppendOpenWithLinkItems();
+ 
+-- 
+2.20.1
+

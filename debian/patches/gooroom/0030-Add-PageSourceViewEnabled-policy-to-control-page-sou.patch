@@ -1,7 +1,7 @@
-From 0d319a34d390854cce2888928ab4302f1d5c808c Mon Sep 17 00:00:00 2001
+From 85358e3c3b8282b602b166856f4cc665d0c44d7f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 11:44:17 +0900
-Subject: [PATCH 30/71] Add PageSourceViewEnabled policy to control
+Subject: [PATCH 30/85] Add PageSourceViewEnabled policy to control
  page-source-view
 
 ---
@@ -12,12 +12,13 @@ Subject: [PATCH 30/71] Add PageSourceViewEnabled policy to control
  .../browser/configuration_policy_handler.cc   | 45 +++++++++++++++++++
  .../browser/configuration_policy_handler.h    | 25 +++++++++++
  .../policy/resources/policy_templates.json    | 20 +++++++++
- content/browser/BUILD.gn                      |  2 +
+ content/browser/BUILD.gn                      |  1 +
+ .../navigation_controller_impl.cc             |  9 ++++
  tools/metrics/histograms/enums.xml            |  1 +
- 9 files changed, 117 insertions(+), 2 deletions(-)
+ 10 files changed, 125 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/policy/configuration_policy_handler_list_factory.cc b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
-index b832898d2997..d76aa11b2061 100644
+index 451da6f6562e..2295b52fe241 100644
 --- a/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 +++ b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 @@ -10,6 +10,10 @@
@@ -31,7 +32,7 @@ index b832898d2997..d76aa11b2061 100644
  #include "base/bind.h"
  #include "base/command_line.h"
  #include "base/memory/ptr_util.h"
-@@ -159,6 +163,11 @@ namespace {
+@@ -158,6 +162,11 @@ namespace {
  // that directly map to a single preference.
  // clang-format off
  const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
@@ -43,7 +44,7 @@ index b832898d2997..d76aa11b2061 100644
    { key::kHomepageIsNewTabPage,
      prefs::kHomePageIsNewTabPage,
      base::Value::Type::BOOLEAN },
-@@ -1895,7 +1904,9 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
+@@ -1910,7 +1919,9 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
        std::make_unique<SpellcheckLanguageBlocklistPolicyHandler>(
            policy::key::kSpellcheckLanguageBlocklist));
  #endif  // BUILDFLAG(ENABLE_SPELLCHECK)
@@ -55,10 +56,10 @@ index b832898d2997..d76aa11b2061 100644
  }
  
 diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index 91b1aa78ff1f..5508919c3258 100644
+index d8965f7dce37..98a8cca46604 100644
 --- a/chrome/common/pref_names.cc
 +++ b/chrome/common/pref_names.cc
-@@ -21,6 +21,10 @@ namespace prefs {
+@@ -22,6 +22,10 @@ namespace prefs {
  // successfully checked via ChildAccountService.
  const char kChildAccountStatusKnown[] = "child_account_status_known";
  
@@ -70,7 +71,7 @@ index 91b1aa78ff1f..5508919c3258 100644
  // in this profile.  Use the value "install" to enable defaults apps, or
  // "noinstall" to disable them.  This property is usually set in the
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index d2689209a6d8..55afbd0a5ecc 100644
+index 5d15501a6225..0d78b865f03f 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
 @@ -22,6 +22,10 @@
@@ -85,7 +86,7 @@ index d2689209a6d8..55afbd0a5ecc 100644
  extern const char kChildAccountStatusKnown[];
  extern const char kDefaultApps[];
 diff --git a/components/policy/core/browser/BUILD.gn b/components/policy/core/browser/BUILD.gn
-index d56d4eb34b8d..c179ff063611 100644
+index f33b4c660e3c..5fa3a2b9ae8c 100644
 --- a/components/policy/core/browser/BUILD.gn
 +++ b/components/policy/core/browser/BUILD.gn
 @@ -13,7 +13,10 @@ group("browser") {
@@ -200,10 +201,10 @@ index 87c33e37a549..b704d7fec96e 100644
  // single type. |schema| is the schema used for this policy, and |strategy| is
  // the strategy used for schema validation errors.
 diff --git a/components/policy/resources/policy_templates.json b/components/policy/resources/policy_templates.json
-index a4544ff8695e..46b1bda6e587 100644
+index 05a9904e9325..dd192f9b5059 100644
 --- a/components/policy/resources/policy_templates.json
 +++ b/components/policy/resources/policy_templates.json
-@@ -1308,6 +1308,26 @@
+@@ -1311,6 +1311,26 @@
        Note: For <ph name="MS_WIN_NAME">Microsoft®Windows®</ph> administrators, turning this setting on only works for machines running Windows 7. For later versions, you must deploy a "default application associations" file that makes <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> the handler for the <ph name="HTTPS_PROTOCOL">https</ph> and <ph name="HTTP_PROTOCOL">http</ph> protocols (and, optionally, the <ph name="FTP_PROTOCOL">ftp</ph> protocol and other file formats). See Chrome Help ( https://support.google.com/chrome?p=make_chrome_default_win ).''',
        'label': '''Set <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> as Default Browser''',
      },
@@ -231,36 +232,19 @@ index a4544ff8695e..46b1bda6e587 100644
        'name': 'ApplicationLocaleValue',
        'owners': ['file://components/policy/resources/OWNERS'],
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index 47d520e8c05c..687546856e78 100644
+index 266fd660ec0c..52745877a37a 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
-@@ -251,10 +251,12 @@ source_set("browser") {
-     "//ui/snapshot",
-     "//ui/touch_selection",
-     "//v8:v8_version",
-+    "//dbus",
+@@ -257,6 +257,7 @@ source_set("browser") {
    ]
  
    public_deps = [
-     ":accessibility_buildflags",
 +    "//components/policy/core/browser:internal",
      "//base/util/memory_pressure",
      "//base/util/type_safety",
      "//ipc",
-diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
-index e7d209b39fde..17fbc0a8fc69 100644
---- a/tools/metrics/histograms/enums.xml
-+++ b/tools/metrics/histograms/enums.xml
-@@ -22605,6 +22605,7 @@ Called by update_document_policy_enum.py.-->
-   <int value="806" label="BasicAuthOverHttpEnabled"/>
-   <int value="810" label="ProfilePickerOnStartupAvailability"/>
-   <int value="811" label="SigninInterceptionEnabled"/>
-+  <int value="999" label="PageSourceViewEnabled"/>
- </enum>
- 
- <enum name="EnterprisePolicyDeviceIdValidity">
 diff --git a/content/browser/renderer_host/navigation_controller_impl.cc b/content/browser/renderer_host/navigation_controller_impl.cc
-index 6dcdf8985017..1b3037e73a1a 100644
+index 2c1ace66fecf..6a589e4ab416 100644
 --- a/content/browser/renderer_host/navigation_controller_impl.cc
 +++ b/content/browser/renderer_host/navigation_controller_impl.cc
 @@ -91,6 +91,10 @@
@@ -274,7 +258,7 @@ index 6dcdf8985017..1b3037e73a1a 100644
  namespace content {
  namespace {
  
-@@ -765,6 +769,11 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
+@@ -805,6 +809,11 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
  }
  
  bool NavigationControllerImpl::CanViewSource() {
@@ -286,6 +270,18 @@ index 6dcdf8985017..1b3037e73a1a 100644
    const std::string& mime_type = delegate_->GetContentsMimeType();
    bool is_viewable_mime_type = blink::IsSupportedNonImageMimeType(mime_type) &&
                                 !media::IsSupportedMediaMimeType(mime_type);
+diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
+index 37c0027b6581..0b7afa839c30 100644
+--- a/tools/metrics/histograms/enums.xml
++++ b/tools/metrics/histograms/enums.xml
+@@ -23220,6 +23220,7 @@ Called by update_document_policy_enum.py.-->
+   <int value="814" label="RemoteAccessHostMaximumSessionDurationMinutes"/>
+   <int value="815" label="EnableDeprecatedPrivetPrinting"/>
+   <int value="816" label="BrowserLabsEnabled"/>
++  <int value="999" label="PageSourceViewEnabled"/>
+ </enum>
+ 
+ <enum name="EnterprisePolicyDeviceIdValidity">
 -- 
 2.20.1
 

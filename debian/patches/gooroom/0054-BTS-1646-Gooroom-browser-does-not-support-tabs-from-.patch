@@ -1,0 +1,31 @@
+From d09e4f8e9cd0c7d7897f1faf05b30760beee2234 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 14:24:47 +0900
+Subject: [PATCH 54/85] [BTS} 1646 : Gooroom browser does not support tabs from
+ other devices.
+
+---
+ chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc b/chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc
+index 3e14de58d81a..46f470248c15 100644
+--- a/chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc
++++ b/chrome/browser/ui/toolbar/recent_tabs_sub_menu_model.cc
+@@ -441,9 +441,10 @@ void RecentTabsSubMenuModel::BuildTabsFromOtherDevices() {
+   sync_sessions::OpenTabsUIDelegate* open_tabs = GetOpenTabsUIDelegate();
+   std::vector<const sync_sessions::SyncedSession*> sessions;
+   if (!open_tabs || !open_tabs->GetAllForeignSessions(&sessions)) {
+-    AddSeparator(ui::NORMAL_SEPARATOR);
+-    AddItemWithStringId(IDC_RECENT_TABS_NO_DEVICE_TABS,
+-                        IDS_RECENT_TABS_NO_DEVICE_TABS);
++// Gooroom browser does not support tabs from other devices.
++//    AddSeparator(ui::NORMAL_SEPARATOR);
++//    AddItemWithStringId(IDC_RECENT_TABS_NO_DEVICE_TABS,
++//                        IDS_RECENT_TABS_NO_DEVICE_TABS);
+     return;
+   }
+ 
+-- 
+2.20.1
+
