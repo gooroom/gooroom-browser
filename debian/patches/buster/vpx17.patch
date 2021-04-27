@@ -1,9 +1,223 @@
-description: maintain compatibility with vpx 1.7
-author: Michael Gilbert <mgilbert@debian.org>
-
---- a/third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc
-+++ b/third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc
-@@ -216,39 +216,6 @@ std::unique_ptr<ScalableVideoController>
+--- a/third_party/webrtc/modules/video_coding/codecs/interface/libvpx_interface.h
++++ b/third_party/webrtc/modules/video_coding/codecs/interface/libvpx_interface.h
+@@ -84,9 +84,6 @@ class LibvpxInterface {
+   virtual vpx_codec_err_t codec_control(vpx_codec_ctx_t* ctx,
+                                         vp8e_enc_control_id ctrl_id,
+                                         vpx_svc_extra_cfg_t* param) const = 0;
+-  virtual vpx_codec_err_t codec_control(vpx_codec_ctx_t* ctx,
+-                                        vp8e_enc_control_id ctrl_id,
+-                                        vpx_svc_frame_drop_t* param) const = 0;
+   virtual vpx_codec_err_t codec_control(vpx_codec_ctx_t* ctx,
+                                         vp8e_enc_control_id ctrl_id,
+                                         void* param) const = 0;
+@@ -97,10 +94,6 @@ class LibvpxInterface {
+       vpx_codec_ctx_t* ctx,
+       vp8e_enc_control_id ctrl_id,
+       vpx_svc_ref_frame_config_t* param) const = 0;
+-  virtual vpx_codec_err_t codec_control(
+-      vpx_codec_ctx_t* ctx,
+-      vp8e_enc_control_id ctrl_id,
+-      vpx_svc_spatial_layer_sync_t* param) const = 0;
+   virtual vpx_codec_err_t codec_control(vpx_codec_ctx_t* ctx,
+                                         vp8e_enc_control_id ctrl_id,
+                                         vpx_rc_funcs_t* param) const = 0;
+--- a/third_party/webrtc/modules/video_coding/codecs/interface/libvpx_interface.cc
++++ b/third_party/webrtc/modules/video_coding/codecs/interface/libvpx_interface.cc
+@@ -97,8 +97,6 @@ class LibvpxFacade : public LibvpxInterface {
+         return vpx_codec_control(ctx, VP8E_SET_CQ_LEVEL, param);
+       case VP8E_SET_MAX_INTRA_BITRATE_PCT:
+         return vpx_codec_control(ctx, VP8E_SET_MAX_INTRA_BITRATE_PCT, param);
+-      case VP9E_SET_MAX_INTER_BITRATE_PCT:
+-        return vpx_codec_control(ctx, VP9E_SET_MAX_INTER_BITRATE_PCT, param);
+       case VP8E_SET_GF_CBR_BOOST_PCT:
+         return vpx_codec_control(ctx, VP8E_SET_GF_CBR_BOOST_PCT, param);
+       case VP8E_SET_SCREEN_CONTENT_MODE:
+@@ -126,12 +124,6 @@ class LibvpxFacade : public LibvpxInterface {
+       case VP9E_ENABLE_MOTION_VECTOR_UNIT_TEST:
+         return vpx_codec_control(ctx, VP9E_ENABLE_MOTION_VECTOR_UNIT_TEST,
+                                  param);
+-      case VP9E_SET_SVC_INTER_LAYER_PRED:
+-        return vpx_codec_control(ctx, VP9E_SET_SVC_INTER_LAYER_PRED, param);
+-      case VP9E_SET_SVC_GF_TEMPORAL_REF:
+-        return vpx_codec_control(ctx, VP9E_SET_SVC_GF_TEMPORAL_REF, param);
+-      case VP9E_SET_POSTENCODE_DROP:
+-        return vpx_codec_control(ctx, VP9E_SET_POSTENCODE_DROP, param);
+       default:
+         RTC_NOTREACHED() << "Unsupported libvpx ctrl_id: " << ctrl_id;
+     }
+@@ -146,8 +138,6 @@ class LibvpxFacade : public LibvpxInterface {
+         return vpx_codec_control(ctx, VP8E_SET_FRAME_FLAGS, param);
+       case VP8E_SET_TEMPORAL_LAYER_ID:
+         return vpx_codec_control(ctx, VP8E_SET_TEMPORAL_LAYER_ID, param);
+-      case VP9E_SET_SVC:
+-        return vpx_codec_control(ctx, VP9E_SET_SVC, param);
+       case VP8E_SET_CPUUSED:
+         return vpx_codec_control(ctx, VP8E_SET_CPUUSED, param);
+       case VP8E_SET_TOKEN_PARTITIONS:
+@@ -158,8 +148,6 @@ class LibvpxFacade : public LibvpxInterface {
+         return vpx_codec_control(ctx, VP9E_SET_TILE_COLUMNS, param);
+       case VP9E_SET_TILE_ROWS:
+         return vpx_codec_control(ctx, VP9E_SET_TILE_ROWS, param);
+-      case VP9E_SET_TPL:
+-        return vpx_codec_control(ctx, VP9E_SET_TPL, param);
+       case VP9E_SET_ALT_REF_AQ:
+         return vpx_codec_control(ctx, VP9E_SET_ALT_REF_AQ, param);
+       case VP9E_SET_TUNE_CONTENT:
+@@ -168,8 +156,6 @@ class LibvpxFacade : public LibvpxInterface {
+         return vpx_codec_control(ctx, VP9E_SET_COLOR_SPACE, param);
+       case VP9E_SET_COLOR_RANGE:
+         return vpx_codec_control(ctx, VP9E_SET_COLOR_RANGE, param);
+-      case VP9E_SET_DELTA_Q_UV:
+-        return vpx_codec_control(ctx, VP9E_SET_DELTA_Q_UV, param);
+ 
+       default:
+         if (param >= 0) {
+@@ -203,10 +189,6 @@ class LibvpxFacade : public LibvpxInterface {
+                                 vp8e_enc_control_id ctrl_id,
+                                 vpx_roi_map* param) const override {
+     switch (ctrl_id) {
+-      case VP8E_SET_ROI_MAP:
+-        return vpx_codec_control(ctx, VP8E_SET_ROI_MAP, param);
+-      case VP9E_SET_ROI_MAP:
+-        return vpx_codec_control(ctx, VP9E_SET_ROI_MAP, param);
+       default:
+         RTC_NOTREACHED() << "Unsupported libvpx ctrl_id: " << ctrl_id;
+     }
+@@ -251,18 +233,6 @@ class LibvpxFacade : public LibvpxInterface {
+     return VPX_CODEC_ERROR;
+   }
+ 
+-  vpx_codec_err_t codec_control(vpx_codec_ctx_t* ctx,
+-                                vp8e_enc_control_id ctrl_id,
+-                                vpx_svc_frame_drop_t* param) const override {
+-    switch (ctrl_id) {
+-      case VP9E_SET_SVC_FRAME_DROP_LAYER:
+-        return vpx_codec_control_(ctx, VP9E_SET_SVC_FRAME_DROP_LAYER, param);
+-      default:
+-        RTC_NOTREACHED() << "Unsupported libvpx ctrl_id: " << ctrl_id;
+-    }
+-    return VPX_CODEC_ERROR;
+-  }
+-
+   vpx_codec_err_t codec_control(vpx_codec_ctx_t* ctx,
+                                 vp8e_enc_control_id ctrl_id,
+                                 void* param) const override {
+@@ -298,21 +268,6 @@ class LibvpxFacade : public LibvpxInterface {
+     switch (ctrl_id) {
+       case VP9E_SET_SVC_REF_FRAME_CONFIG:
+         return vpx_codec_control_(ctx, VP9E_SET_SVC_REF_FRAME_CONFIG, param);
+-      case VP9E_GET_SVC_REF_FRAME_CONFIG:
+-        return vpx_codec_control_(ctx, VP9E_GET_SVC_REF_FRAME_CONFIG, param);
+-      default:
+-        RTC_NOTREACHED() << "Unsupported libvpx ctrl_id: " << ctrl_id;
+-    }
+-    return VPX_CODEC_ERROR;
+-  }
+-
+-  vpx_codec_err_t codec_control(
+-      vpx_codec_ctx_t* ctx,
+-      vp8e_enc_control_id ctrl_id,
+-      vpx_svc_spatial_layer_sync_t* param) const override {
+-    switch (ctrl_id) {
+-      case VP9E_SET_SVC_SPATIAL_LAYER_SYNC:
+-        return vpx_codec_control_(ctx, VP9E_SET_SVC_SPATIAL_LAYER_SYNC, param);
+       default:
+         RTC_NOTREACHED() << "Unsupported libvpx ctrl_id: " << ctrl_id;
+     }
+--- a/media/video/vpx_video_encoder.cc
++++ b/media/video/vpx_video_encoder.cc
+@@ -319,28 +319,14 @@ void VpxVideoEncoder::Encode(scoped_refptr<VideoFrame> frame,
+       NOTREACHED();
+       break;
+     default:
+-      vpx_img_fmt_t fmt = frame->format() == PIXEL_FORMAT_NV12
+-                              ? VPX_IMG_FMT_NV12
+-                              : VPX_IMG_FMT_I420;
++      vpx_img_fmt_t fmt = VPX_IMG_FMT_I420;
+       Status status = ReallocateVpxImageIfNeeded(
+           &vpx_image_, fmt, codec_config_.g_w, codec_config_.g_h);
+       if (!status.is_ok()) {
+         std::move(done_cb).Run(status);
+         return;
+       }
+-      if (fmt == VPX_IMG_FMT_NV12) {
+-        vpx_image_.planes[VPX_PLANE_Y] =
+-            const_cast<uint8_t*>(frame->visible_data(VideoFrame::kYPlane));
+-        vpx_image_.planes[VPX_PLANE_U] =
+-            const_cast<uint8_t*>(frame->visible_data(VideoFrame::kUVPlane));
+-        // In NV12 Y and U samples are combined in one plane (bytes go YUYUYU),
+-        // but libvpx treats them as two planes with the same stride but shifted
+-        // by one byte.
+-        vpx_image_.planes[VPX_PLANE_V] = vpx_image_.planes[VPX_PLANE_U] + 1;
+-        vpx_image_.stride[VPX_PLANE_Y] = frame->stride(VideoFrame::kYPlane);
+-        vpx_image_.stride[VPX_PLANE_U] = frame->stride(VideoFrame::kUVPlane);
+-        vpx_image_.stride[VPX_PLANE_V] = frame->stride(VideoFrame::kUVPlane);
+-      } else {
++      {
+         vpx_image_.planes[VPX_PLANE_Y] =
+             const_cast<uint8_t*>(frame->visible_data(VideoFrame::kYPlane));
+         vpx_image_.planes[VPX_PLANE_U] =
+--- a/third_party/webrtc/modules/video_coding/codecs/vp8/libvpx_vp8_encoder.cc
++++ b/third_party/webrtc/modules/video_coding/codecs/vp8/libvpx_vp8_encoder.cc
+@@ -954,9 +954,6 @@ int LibvpxVp8Encoder::Encode(const Video
+     case VideoFrameBuffer::Type::kI420:
+       PrepareI420Image(input_image->GetI420());
+       break;
+-    case VideoFrameBuffer::Type::kNV12:
+-      PrepareNV12Image(input_image->GetNV12());
+-      break;
+     default: {
+       rtc::scoped_refptr<I420BufferInterface> i420_image =
+           input_image->ToI420();
+@@ -1062,25 +1062,9 @@ void LibvpxVp8Encoder::PopulateCodecSpecific(CodecSpecificInfo* codec_specific,
+ 
+   int qp = 0;
+   vpx_codec_control(&encoders_[encoder_idx], VP8E_GET_LAST_QUANTIZER_64, &qp);
+-  bool is_keyframe = (pkt.data.frame.flags & VPX_FRAME_IS_KEY) != 0;
+-  frame_buffer_controller_->OnEncodeDone(stream_idx, timestamp,
+-                                         encoded_images_[encoder_idx].size(),
+-                                         is_keyframe, qp, codec_specific);
+-  if (is_keyframe && codec_specific->template_structure != absl::nullopt) {
+-    // Number of resolutions must match number of spatial layers, VP8 structures
+-    // expected to use single spatial layer. Templates must be ordered by
+-    // spatial_id, so assumption there is exactly one spatial layer is same as
+-    // assumption last template uses spatial_id = 0.
+-    // This check catches potential scenario where template_structure is shared
+-    // across multiple vp8 streams and they are distinguished using spatial_id.
+-    // Assigning single resolution doesn't support such scenario, i.e. assumes
+-    // vp8 simulcast is sent using multiple ssrcs.
+-    RTC_DCHECK(!codec_specific->template_structure->templates.empty());
+-    RTC_DCHECK_EQ(
+-        codec_specific->template_structure->templates.back().spatial_id, 0);
+-    codec_specific->template_structure->resolutions = {
+-        RenderResolution(pkt.data.frame.width[0], pkt.data.frame.height[0])};
+-  }
++  frame_buffer_controller_->OnEncodeDone(
++      stream_idx, timestamp, encoded_images_[encoder_idx].size(),
++      (pkt.data.frame.flags & VPX_FRAME_IS_KEY) != 0, qp, codec_specific);
+ }
+ 
+ int LibvpxVp8Encoder::GetEncodedPartitions(const VideoFrame& input_image,
+@@ -1240,8 +1237,6 @@ void LibvpxVp8Encoder::MaybeUpdatePixelF
+         << "Not all raw images had the right format!";
+     return;
+   }
+-  RTC_LOG(INFO) << "Updating vp8 encoder pixel format to "
+-                << (fmt == VPX_IMG_FMT_NV12 ? "NV12" : "I420");
+   for (size_t i = 0; i < raw_images_.size(); ++i) {
+     vpx_image_t& img = raw_images_[i];
+     auto d_w = img.d_w;
+@@ -1288,7 +1283,6 @@ void LibvpxVp8Encoder::PrepareI420Image(
+ 
+ void LibvpxVp8Encoder::PrepareNV12Image(const NV12BufferInterface* frame) {
+   RTC_DCHECK(!raw_images_.empty());
+-  MaybeUpdatePixelFormat(VPX_IMG_FMT_NV12);
+   // Image in vpx_image_t format.
+   // Input image is const. VP8's raw image is not defined as const.
+   raw_images_[0].planes[VPX_PLANE_Y] = const_cast<uint8_t*>(frame->DataY());
+--- a/third_party/webrtc/modules/video_coding/codecs/vp9/libvpx_vp9_encoder.cc
++++ b/third_party/webrtc/modules/video_coding/codecs/vp9/libvpx_vp9_encoder.cc
+@@ -150,39 +150,6 @@ std::unique_ptr<ScalableVideoController> CreateVp9ScalabilityStructure(
    return scalability_structure_controller;
  }
  
@@ -42,8 +256,8 @@ author: Michael Gilbert <mgilbert@debian.org>
 -
  }  // namespace
  
- void VP9EncoderImpl::EncoderOutputCodedPacketCallback(vpx_codec_cx_pkt* pkt,
-@@ -455,15 +422,6 @@ bool VP9EncoderImpl::SetSvcRates(
+ void LibvpxVp9Encoder::EncoderOutputCodedPacketCallback(vpx_codec_cx_pkt* pkt,
+@@ -388,15 +355,6 @@ bool LibvpxVp9Encoder::SetSvcRates(
      }
    }
  
@@ -59,7 +273,7 @@ author: Michael Gilbert <mgilbert@debian.org>
    if (svc_controller_) {
      VideoBitrateAllocation allocation;
      for (int sid = 0; sid < num_spatial_layers_; ++sid) {
-@@ -810,8 +768,6 @@ int VP9EncoderImpl::InitAndSetControlSet
+@@ -743,8 +701,6 @@ int LibvpxVp9Encoder::InitAndSetControlSettings(const VideoCodec* inst) {
      for (int si = 0; si < num_spatial_layers_; ++si) {
        svc_params_.speed_per_layer[si] =
            performance_flags_by_spatial_index_[si].base_layer_speed;
@@ -68,28 +282,28 @@ author: Michael Gilbert <mgilbert@debian.org>
      }
    }
  
-@@ -821,7 +777,6 @@ int VP9EncoderImpl::InitAndSetControlSet
-                     inst->VP9().adaptiveQpMode ? 3 : 0);
+@@ -754,7 +710,6 @@ int LibvpxVp9Encoder::InitAndSetControlSettings(const VideoCodec* inst) {
+                          inst->VP9().adaptiveQpMode ? 3 : 0);
  
-   vpx_codec_control(encoder_, VP9E_SET_FRAME_PARALLEL_DECODING, 0);
--  vpx_codec_control(encoder_, VP9E_SET_SVC_GF_TEMPORAL_REF, 0);
+   libvpx_->codec_control(encoder_, VP9E_SET_FRAME_PARALLEL_DECODING, 0);
+-  libvpx_->codec_control(encoder_, VP9E_SET_SVC_GF_TEMPORAL_REF, 0);
  
    if (is_svc_) {
-     vpx_codec_control(encoder_, VP9E_SET_SVC, 1);
-@@ -833,56 +788,6 @@ int VP9EncoderImpl::InitAndSetControlSet
+     libvpx_->codec_control(encoder_, VP9E_SET_SVC, 1);
+@@ -766,56 +721,6 @@ int LibvpxVp9Encoder::InitAndSetControlSettings(const VideoCodec* inst) {
          performance_flags_by_spatial_index_.rbegin()->base_layer_speed);
    }
  
 -  if (num_spatial_layers_ > 1) {
 -    switch (inter_layer_pred_) {
 -      case InterLayerPredMode::kOn:
--        vpx_codec_control(encoder_, VP9E_SET_SVC_INTER_LAYER_PRED, 0);
+-        libvpx_->codec_control(encoder_, VP9E_SET_SVC_INTER_LAYER_PRED, 0);
 -        break;
 -      case InterLayerPredMode::kOff:
--        vpx_codec_control(encoder_, VP9E_SET_SVC_INTER_LAYER_PRED, 1);
+-        libvpx_->codec_control(encoder_, VP9E_SET_SVC_INTER_LAYER_PRED, 1);
 -        break;
 -      case InterLayerPredMode::kOnKeyPic:
--        vpx_codec_control(encoder_, VP9E_SET_SVC_INTER_LAYER_PRED, 2);
+-        libvpx_->codec_control(encoder_, VP9E_SET_SVC_INTER_LAYER_PRED, 2);
 -        break;
 -      default:
 -        RTC_NOTREACHED();
@@ -126,14 +340,14 @@ author: Michael Gilbert <mgilbert@debian.org>
 -        svc_drop_frame_.framedrop_thresh[i] = config_->rc_dropframe_thresh;
 -      }
 -    }
--    vpx_codec_control(encoder_, VP9E_SET_SVC_FRAME_DROP_LAYER,
--                      &svc_drop_frame_);
+-    libvpx_->codec_control(encoder_, VP9E_SET_SVC_FRAME_DROP_LAYER,
+-                           &svc_drop_frame_);
 -  }
 -
    // Register callback for getting each spatial layer.
    vpx_codec_priv_output_cx_pkt_cb_pair_t cbp = {
-       VP9EncoderImpl::EncoderOutputCodedPacketCallback,
-@@ -1025,52 +930,10 @@ int VP9EncoderImpl::Encode(const VideoFr
+       LibvpxVp9Encoder::EncoderOutputCodedPacketCallback,
+@@ -959,52 +864,10 @@ int LibvpxVp9Encoder::Encode(const VideoFrame& input_image,
      }
    }
  
@@ -171,22 +385,22 @@ author: Michael Gilbert <mgilbert@debian.org>
 -      }
 -    }
 -    if (speed_updated) {
--      vpx_codec_control(encoder_, VP9E_SET_SVC_PARAMETERS, &svc_params_);
+-      libvpx_->codec_control(encoder_, VP9E_SET_SVC_PARAMETERS, &svc_params_);
 -    }
 -  }
 -
--  vpx_codec_control(encoder_, VP9E_SET_SVC_LAYER_ID, &layer_id);
+-  libvpx_->codec_control(encoder_, VP9E_SET_SVC_LAYER_ID, &layer_id);
 -
 -  if (num_spatial_layers_ > 1) {
 -    // Update frame dropping settings as they may change on per-frame basis.
--    vpx_codec_control(encoder_, VP9E_SET_SVC_FRAME_DROP_LAYER,
--                      &svc_drop_frame_);
+-    libvpx_->codec_control(encoder_, VP9E_SET_SVC_FRAME_DROP_LAYER,
+-                           &svc_drop_frame_);
 -  }
 -
    if (config_changed_) {
-     if (vpx_codec_enc_config_set(encoder_, config_)) {
+     if (libvpx_->codec_enc_config_set(encoder_, config_)) {
        return WEBRTC_VIDEO_CODEC_ERROR;
-@@ -1112,19 +975,7 @@ int VP9EncoderImpl::Encode(const VideoFr
+@@ -1046,19 +909,7 @@ int LibvpxVp9Encoder::Encode(const VideoFrame& input_image,
    rtc::scoped_refptr<const I010BufferInterface> i010_copy;
    switch (profile_) {
      case VP9Profile::kProfile0: {
@@ -203,17 +417,18 @@ author: Michael Gilbert <mgilbert@debian.org>
 -        raw_->stride[VPX_PLANE_U] = nv12_buffer->StrideUV();
 -        raw_->stride[VPX_PLANE_V] = nv12_buffer->StrideUV();
 -      } else {
-+      if (true) {
++      {
          rtc::scoped_refptr<I420BufferInterface> i420_buffer =
              input_image.video_frame_buffer()->ToI420();
          video_frame_buffer = i420_buffer;
-@@ -1176,24 +1027,6 @@ int VP9EncoderImpl::Encode(const VideoFr
+@@ -1110,26 +961,6 @@ int LibvpxVp9Encoder::Encode(const VideoFrame& input_image,
      flags = VPX_EFLAG_FORCE_KF;
    }
  
 -  if (svc_controller_) {
 -    vpx_svc_ref_frame_config_t ref_config = Vp9References(layer_frames_);
--    vpx_codec_control(encoder_, VP9E_SET_SVC_REF_FRAME_CONFIG, &ref_config);
+-    libvpx_->codec_control(encoder_, VP9E_SET_SVC_REF_FRAME_CONFIG,
+-                           &ref_config);
 -  } else if (external_ref_control_) {
 -    vpx_svc_ref_frame_config_t ref_config =
 -        SetReferences(force_key_frame_, layer_id.spatial_layer_id);
@@ -226,13 +441,14 @@ author: Michael Gilbert <mgilbert@debian.org>
 -      }
 -    }
 -
--    vpx_codec_control(encoder_, VP9E_SET_SVC_REF_FRAME_CONFIG, &ref_config);
+-    libvpx_->codec_control(encoder_, VP9E_SET_SVC_REF_FRAME_CONFIG,
+-                           &ref_config);
 -  }
 -
    first_frame_in_picture_ = true;
  
    // TODO(ssilkin): Frame duration should be specified per spatial layer
-@@ -1300,11 +1133,7 @@ void VP9EncoderImpl::PopulateCodecSpecif
+@@ -1236,11 +1067,7 @@ void LibvpxVp9Encoder::PopulateCodecSpecific(CodecSpecificInfo* codec_specific,
    vp9_info->first_active_layer = first_active_layer_;
  
    vp9_info->num_ref_pics = 0;
@@ -241,27 +457,273 @@ author: Michael Gilbert <mgilbert@debian.org>
 -  if (vp9_info->flexible_mode) {
 -    vp9_info->gof_idx = kNoGofIdx;
 -  } else {
-+  if (true) {
++  {
      vp9_info->gof_idx =
          static_cast<uint8_t>(pics_since_key_ % gof_.num_frames_in_gof);
      vp9_info->temporal_up_switch = gof_.temporal_up_switch[vp9_info->gof_idx];
-@@ -1372,6 +1201,7 @@ void VP9EncoderImpl::PopulateCodecSpecif
+@@ -1308,261 +1135,6 @@ void LibvpxVp9Encoder::PopulateCodecSpecific(CodecSpecificInfo* codec_specific,
    }
  }
  
-+/*
- void VP9EncoderImpl::FillReferenceIndices(const vpx_codec_cx_pkt& pkt,
-                                           const size_t pic_num,
-                                           const bool inter_layer_predicted,
-@@ -1624,6 +1454,7 @@ vpx_svc_ref_frame_config_t VP9EncoderImp
- 
-   return ref_config;
- }
-+*/
- 
- int VP9EncoderImpl::GetEncodedLayerFrame(const vpx_codec_cx_pkt* pkt) {
+-void LibvpxVp9Encoder::FillReferenceIndices(const vpx_codec_cx_pkt& pkt,
+-                                            const size_t pic_num,
+-                                            const bool inter_layer_predicted,
+-                                            CodecSpecificInfoVP9* vp9_info) {
+-  vpx_svc_layer_id_t layer_id = {0};
+-  libvpx_->codec_control(encoder_, VP9E_GET_SVC_LAYER_ID, &layer_id);
+-
+-  const bool is_key_frame =
+-      (pkt.data.frame.flags & VPX_FRAME_IS_KEY) ? true : false;
+-
+-  std::vector<RefFrameBuffer> ref_buf_list;
+-
+-  if (is_svc_) {
+-    vpx_svc_ref_frame_config_t enc_layer_conf = {{0}};
+-    libvpx_->codec_control(encoder_, VP9E_GET_SVC_REF_FRAME_CONFIG,
+-                           &enc_layer_conf);
+-    int ref_buf_flags = 0;
+-
+-    if (enc_layer_conf.reference_last[layer_id.spatial_layer_id]) {
+-      const size_t fb_idx =
+-          enc_layer_conf.lst_fb_idx[layer_id.spatial_layer_id];
+-      RTC_DCHECK(ref_buf_.find(fb_idx) != ref_buf_.end());
+-      if (std::find(ref_buf_list.begin(), ref_buf_list.end(),
+-                    ref_buf_.at(fb_idx)) == ref_buf_list.end()) {
+-        ref_buf_list.push_back(ref_buf_.at(fb_idx));
+-        ref_buf_flags |= 1 << fb_idx;
+-      }
+-    }
+-
+-    if (enc_layer_conf.reference_alt_ref[layer_id.spatial_layer_id]) {
+-      const size_t fb_idx =
+-          enc_layer_conf.alt_fb_idx[layer_id.spatial_layer_id];
+-      RTC_DCHECK(ref_buf_.find(fb_idx) != ref_buf_.end());
+-      if (std::find(ref_buf_list.begin(), ref_buf_list.end(),
+-                    ref_buf_.at(fb_idx)) == ref_buf_list.end()) {
+-        ref_buf_list.push_back(ref_buf_.at(fb_idx));
+-        ref_buf_flags |= 1 << fb_idx;
+-      }
+-    }
+-
+-    if (enc_layer_conf.reference_golden[layer_id.spatial_layer_id]) {
+-      const size_t fb_idx =
+-          enc_layer_conf.gld_fb_idx[layer_id.spatial_layer_id];
+-      RTC_DCHECK(ref_buf_.find(fb_idx) != ref_buf_.end());
+-      if (std::find(ref_buf_list.begin(), ref_buf_list.end(),
+-                    ref_buf_.at(fb_idx)) == ref_buf_list.end()) {
+-        ref_buf_list.push_back(ref_buf_.at(fb_idx));
+-        ref_buf_flags |= 1 << fb_idx;
+-      }
+-    }
+-
+-    RTC_LOG(LS_VERBOSE) << "Frame " << pic_num << " sl "
+-                        << layer_id.spatial_layer_id << " tl "
+-                        << layer_id.temporal_layer_id << " refered buffers "
+-                        << (ref_buf_flags & (1 << 0) ? 1 : 0)
+-                        << (ref_buf_flags & (1 << 1) ? 1 : 0)
+-                        << (ref_buf_flags & (1 << 2) ? 1 : 0)
+-                        << (ref_buf_flags & (1 << 3) ? 1 : 0)
+-                        << (ref_buf_flags & (1 << 4) ? 1 : 0)
+-                        << (ref_buf_flags & (1 << 5) ? 1 : 0)
+-                        << (ref_buf_flags & (1 << 6) ? 1 : 0)
+-                        << (ref_buf_flags & (1 << 7) ? 1 : 0);
+-
+-  } else if (!is_key_frame) {
+-    RTC_DCHECK_EQ(num_spatial_layers_, 1);
+-    RTC_DCHECK_EQ(num_temporal_layers_, 1);
+-    // In non-SVC mode encoder doesn't provide reference list. Assume each frame
+-    // refers previous one, which is stored in buffer 0.
+-    ref_buf_list.push_back(ref_buf_.at(0));
+-  }
+-
+-  size_t max_ref_temporal_layer_id = 0;
+-
+-  std::vector<size_t> ref_pid_list;
+-
+-  vp9_info->num_ref_pics = 0;
+-  for (const RefFrameBuffer& ref_buf : ref_buf_list) {
+-    RTC_DCHECK_LE(ref_buf.pic_num, pic_num);
+-    if (ref_buf.pic_num < pic_num) {
+-      if (inter_layer_pred_ != InterLayerPredMode::kOn) {
+-        // RTP spec limits temporal prediction to the same spatial layer.
+-        // It is safe to ignore this requirement if inter-layer prediction is
+-        // enabled for all frames when all base frames are relayed to receiver.
+-        RTC_DCHECK_EQ(ref_buf.spatial_layer_id, layer_id.spatial_layer_id);
+-      } else {
+-        RTC_DCHECK_LE(ref_buf.spatial_layer_id, layer_id.spatial_layer_id);
+-      }
+-      RTC_DCHECK_LE(ref_buf.temporal_layer_id, layer_id.temporal_layer_id);
+-
+-      // Encoder may reference several spatial layers on the same previous
+-      // frame in case if some spatial layers are skipped on the current frame.
+-      // We shouldn't put duplicate references as it may break some old
+-      // clients and isn't RTP compatible.
+-      if (std::find(ref_pid_list.begin(), ref_pid_list.end(),
+-                    ref_buf.pic_num) != ref_pid_list.end()) {
+-        continue;
+-      }
+-      ref_pid_list.push_back(ref_buf.pic_num);
+-
+-      const size_t p_diff = pic_num - ref_buf.pic_num;
+-      RTC_DCHECK_LE(p_diff, 127UL);
+-
+-      vp9_info->p_diff[vp9_info->num_ref_pics] = static_cast<uint8_t>(p_diff);
+-      ++vp9_info->num_ref_pics;
+-
+-      max_ref_temporal_layer_id =
+-          std::max(max_ref_temporal_layer_id, ref_buf.temporal_layer_id);
+-    } else {
+-      RTC_DCHECK(inter_layer_predicted);
+-      // RTP spec only allows to use previous spatial layer for inter-layer
+-      // prediction.
+-      RTC_DCHECK_EQ(ref_buf.spatial_layer_id + 1, layer_id.spatial_layer_id);
+-    }
+-  }
+-
+-  vp9_info->temporal_up_switch =
+-      (max_ref_temporal_layer_id <
+-       static_cast<size_t>(layer_id.temporal_layer_id));
+-}
+-
+-void LibvpxVp9Encoder::UpdateReferenceBuffers(const vpx_codec_cx_pkt& pkt,
+-                                              const size_t pic_num) {
+-  vpx_svc_layer_id_t layer_id = {0};
+-  libvpx_->codec_control(encoder_, VP9E_GET_SVC_LAYER_ID, &layer_id);
+-
+-  RefFrameBuffer frame_buf(pic_num, layer_id.spatial_layer_id,
+-                           layer_id.temporal_layer_id);
+-
+-  if (is_svc_) {
+-    vpx_svc_ref_frame_config_t enc_layer_conf = {{0}};
+-    libvpx_->codec_control(encoder_, VP9E_GET_SVC_REF_FRAME_CONFIG,
+-                           &enc_layer_conf);
+-    const int update_buffer_slot =
+-        enc_layer_conf.update_buffer_slot[layer_id.spatial_layer_id];
+-
+-    for (size_t i = 0; i < kNumVp9Buffers; ++i) {
+-      if (update_buffer_slot & (1 << i)) {
+-        ref_buf_[i] = frame_buf;
+-      }
+-    }
+-
+-    RTC_LOG(LS_VERBOSE) << "Frame " << pic_num << " sl "
+-                        << layer_id.spatial_layer_id << " tl "
+-                        << layer_id.temporal_layer_id << " updated buffers "
+-                        << (update_buffer_slot & (1 << 0) ? 1 : 0)
+-                        << (update_buffer_slot & (1 << 1) ? 1 : 0)
+-                        << (update_buffer_slot & (1 << 2) ? 1 : 0)
+-                        << (update_buffer_slot & (1 << 3) ? 1 : 0)
+-                        << (update_buffer_slot & (1 << 4) ? 1 : 0)
+-                        << (update_buffer_slot & (1 << 5) ? 1 : 0)
+-                        << (update_buffer_slot & (1 << 6) ? 1 : 0)
+-                        << (update_buffer_slot & (1 << 7) ? 1 : 0);
+-  } else {
+-    RTC_DCHECK_EQ(num_spatial_layers_, 1);
+-    RTC_DCHECK_EQ(num_temporal_layers_, 1);
+-    // In non-svc mode encoder doesn't provide reference list. Assume each frame
+-    // is reference and stored in buffer 0.
+-    ref_buf_[0] = frame_buf;
+-  }
+-}
+-
+-vpx_svc_ref_frame_config_t LibvpxVp9Encoder::SetReferences(
+-    bool is_key_pic,
+-    size_t first_active_spatial_layer_id) {
+-  // kRefBufIdx, kUpdBufIdx need to be updated to support longer GOFs.
+-  RTC_DCHECK_LE(gof_.num_frames_in_gof, 4);
+-
+-  vpx_svc_ref_frame_config_t ref_config;
+-  memset(&ref_config, 0, sizeof(ref_config));
+-
+-  const size_t num_temporal_refs = std::max(1, num_temporal_layers_ - 1);
+-  const bool is_inter_layer_pred_allowed =
+-      inter_layer_pred_ == InterLayerPredMode::kOn ||
+-      (inter_layer_pred_ == InterLayerPredMode::kOnKeyPic && is_key_pic);
+-  absl::optional<int> last_updated_buf_idx;
+-
+-  // Put temporal reference to LAST and spatial reference to GOLDEN. Update
+-  // frame buffer (i.e. store encoded frame) if current frame is a temporal
+-  // reference (i.e. it belongs to a low temporal layer) or it is a spatial
+-  // reference. In later case, always store spatial reference in the last
+-  // reference frame buffer.
+-  // For the case of 3 temporal and 3 spatial layers we need 6 frame buffers
+-  // for temporal references plus 1 buffer for spatial reference. 7 buffers
+-  // in total.
+-
+-  for (size_t sl_idx = first_active_spatial_layer_id;
+-       sl_idx < num_active_spatial_layers_; ++sl_idx) {
+-    const size_t curr_pic_num = is_key_pic ? 0 : pics_since_key_ + 1;
+-    const size_t gof_idx = curr_pic_num % gof_.num_frames_in_gof;
+-
+-    if (!is_key_pic) {
+-      // Set up temporal reference.
+-      const int buf_idx = sl_idx * num_temporal_refs + kRefBufIdx[gof_idx];
+-
+-      // Last reference frame buffer is reserved for spatial reference. It is
+-      // not supposed to be used for temporal prediction.
+-      RTC_DCHECK_LT(buf_idx, kNumVp9Buffers - 1);
+-
+-      const int pid_diff = curr_pic_num - ref_buf_[buf_idx].pic_num;
+-      // Incorrect spatial layer may be in the buffer due to a key-frame.
+-      const bool same_spatial_layer =
+-          ref_buf_[buf_idx].spatial_layer_id == sl_idx;
+-      bool correct_pid = false;
+-      if (is_flexible_mode_) {
+-        correct_pid = pid_diff > 0 && pid_diff < kMaxAllowedPidDiff;
+-      } else {
+-        // Below code assumes single temporal referecence.
+-        RTC_DCHECK_EQ(gof_.num_ref_pics[gof_idx], 1);
+-        correct_pid = pid_diff == gof_.pid_diff[gof_idx][0];
+-      }
+-
+-      if (same_spatial_layer && correct_pid) {
+-        ref_config.lst_fb_idx[sl_idx] = buf_idx;
+-        ref_config.reference_last[sl_idx] = 1;
+-      } else {
+-        // This reference doesn't match with one specified by GOF. This can
+-        // only happen if spatial layer is enabled dynamically without key
+-        // frame. Spatial prediction is supposed to be enabled in this case.
+-        RTC_DCHECK(is_inter_layer_pred_allowed &&
+-                   sl_idx > first_active_spatial_layer_id);
+-      }
+-    }
+-
+-    if (is_inter_layer_pred_allowed && sl_idx > first_active_spatial_layer_id) {
+-      // Set up spatial reference.
+-      RTC_DCHECK(last_updated_buf_idx);
+-      ref_config.gld_fb_idx[sl_idx] = *last_updated_buf_idx;
+-      ref_config.reference_golden[sl_idx] = 1;
+-    } else {
+-      RTC_DCHECK(ref_config.reference_last[sl_idx] != 0 ||
+-                 sl_idx == first_active_spatial_layer_id ||
+-                 inter_layer_pred_ == InterLayerPredMode::kOff);
+-    }
+-
+-    last_updated_buf_idx.reset();
+-
+-    if (gof_.temporal_idx[gof_idx] < num_temporal_layers_ - 1 ||
+-        num_temporal_layers_ == 1) {
+-      last_updated_buf_idx = sl_idx * num_temporal_refs + kUpdBufIdx[gof_idx];
+-
+-      // Ensure last frame buffer is not used for temporal prediction (it is
+-      // reserved for spatial reference).
+-      RTC_DCHECK_LT(*last_updated_buf_idx, kNumVp9Buffers - 1);
+-    } else if (is_inter_layer_pred_allowed) {
+-      last_updated_buf_idx = kNumVp9Buffers - 1;
+-    }
+-
+-    if (last_updated_buf_idx) {
+-      ref_config.update_buffer_slot[sl_idx] = 1 << *last_updated_buf_idx;
+-    }
+-  }
+-
+-  return ref_config;
+-}
+-
+ int LibvpxVp9Encoder::GetEncodedLayerFrame(const vpx_codec_cx_pkt* pkt) {
    RTC_DCHECK_EQ(pkt->kind, VPX_CODEC_CX_FRAME_PKT);
-@@ -1665,14 +1496,10 @@ int VP9EncoderImpl::GetEncodedLayerFrame
+ 
+@@ -1603,14 +1175,10 @@ int LibvpxVp9Encoder::GetEncodedLayerFrame(const vpx_codec_cx_pkt* pkt) {
                          input_image_->timestamp());
    encoded_image_.SetSpatialIndex(spatial_index);
  
@@ -276,11 +738,11 @@ author: Michael Gilbert <mgilbert@debian.org>
 +  encoded_image_._encodedHeight = raw_->d_h;
 +  encoded_image_._encodedWidth = raw_->d_w;
    int qp = -1;
-   vpx_codec_control(encoder_, VP8E_GET_LAST_QUANTIZER, &qp);
+   libvpx_->codec_control(encoder_, VP8E_GET_LAST_QUANTIZER, &qp);
    encoded_image_.qp_ = qp;
-@@ -1688,14 +1515,6 @@ int VP9EncoderImpl::GetEncodedLayerFrame
+@@ -1626,14 +1194,6 @@ int LibvpxVp9Encoder::GetEncodedLayerFrame(const vpx_codec_cx_pkt* pkt) {
  
- void VP9EncoderImpl::DeliverBufferedFrame(bool end_of_picture) {
+ void LibvpxVp9Encoder::DeliverBufferedFrame(bool end_of_picture) {
    if (encoded_image_.size() > 0) {
 -    if (num_spatial_layers_ > 1) {
 -      // Restore frame dropping settings, as dropping may be temporary forbidden
@@ -293,16 +755,28 @@ author: Michael Gilbert <mgilbert@debian.org>
      codec_specific_.end_of_picture = end_of_picture;
  
      encoded_complete_callback_->OnEncodedImage(encoded_image_,
-@@ -1931,8 +1750,6 @@ void VP9EncoderImpl::MaybeRewrapRawWithF
-   if (!raw_) {
-     raw_ = vpx_img_wrap(nullptr, fmt, codec_.width, codec_.height, 1, nullptr);
+@@ -1871,8 +1431,6 @@ void LibvpxVp9Encoder::MaybeRewrapRawWithFormat(const vpx_img_fmt fmt) {
+     raw_ = libvpx_->img_wrap(nullptr, fmt, codec_.width, codec_.height, 1,
+                              nullptr);
    } else if (raw_->fmt != fmt) {
 -    RTC_LOG(INFO) << "Switching VP9 encoder pixel format to "
 -                  << (fmt == VPX_IMG_FMT_NV12 ? "NV12" : "I420");
-     vpx_img_free(raw_);
-     raw_ = vpx_img_wrap(nullptr, fmt, codec_.width, codec_.height, 1, nullptr);
-   }
-@@ -2028,14 +1845,6 @@ int VP9DecoderImpl::InitDecode(const Vid
+     libvpx_->img_free(raw_);
+     raw_ = libvpx_->img_wrap(nullptr, fmt, codec_.width, codec_.height, 1,
+                              nullptr);
+--- a/third_party/webrtc/modules/video_coding/codecs/vp9/libvpx_vp9_encoder.h
++++ b/third_party/webrtc/modules/video_coding/codecs/vp9/libvpx_vp9_encoder.h
+@@ -133,7 +133,6 @@ class VP9EncoderImpl : public VP9Encoder
+   const bool trusted_rate_controller_;
+   bool layer_buffering_;
+   const bool full_superframe_drop_;
+-  vpx_svc_frame_drop_t svc_drop_frame_;
+   bool first_frame_in_picture_;
+   VideoBitrateAllocation current_bitrate_allocation_;
+   bool ss_info_needed_;
+--- a/third_party/webrtc/modules/video_coding/codecs/vp9/libvpx_vp9_decoder.cc
++++ b/third_party/webrtc/modules/video_coding/codecs/vp9/libvpx_vp9_decoder.cc
+@@ -185,14 +185,6 @@ int LibvpxVp9Decoder::InitDecode(const VideoCodec* inst, int number_of_cores) {
      }
    }
  
@@ -317,318 +791,3 @@ author: Michael Gilbert <mgilbert@debian.org>
    return WEBRTC_VIDEO_CODEC_OK;
  }
  
---- a/third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h
-+++ b/third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h
-@@ -133,7 +133,6 @@ class VP9EncoderImpl : public VP9Encoder
-   const bool trusted_rate_controller_;
-   bool layer_buffering_;
-   const bool full_superframe_drop_;
--  vpx_svc_frame_drop_t svc_drop_frame_;
-   bool first_frame_in_picture_;
-   VideoBitrateAllocation current_bitrate_allocation_;
-   bool ss_info_needed_;
---- a/third_party/webrtc/modules/video_coding/codecs/vp8/libvpx_vp8_encoder.cc
-+++ b/third_party/webrtc/modules/video_coding/codecs/vp8/libvpx_vp8_encoder.cc
-@@ -954,9 +954,6 @@ int LibvpxVp8Encoder::Encode(const Video
-     case VideoFrameBuffer::Type::kI420:
-       PrepareI420Image(input_image->GetI420());
-       break;
--    case VideoFrameBuffer::Type::kNV12:
--      PrepareNV12Image(input_image->GetNV12());
--      break;
-     default: {
-       rtc::scoped_refptr<I420BufferInterface> i420_image =
-           input_image->ToI420();
-@@ -1240,8 +1237,6 @@ void LibvpxVp8Encoder::MaybeUpdatePixelF
-         << "Not all raw images had the right format!";
-     return;
-   }
--  RTC_LOG(INFO) << "Updating vp8 encoder pixel format to "
--                << (fmt == VPX_IMG_FMT_NV12 ? "NV12" : "I420");
-   for (size_t i = 0; i < raw_images_.size(); ++i) {
-     vpx_image_t& img = raw_images_[i];
-     auto d_w = img.d_w;
-@@ -1288,7 +1283,6 @@ void LibvpxVp8Encoder::PrepareI420Image(
- 
- void LibvpxVp8Encoder::PrepareNV12Image(const NV12BufferInterface* frame) {
-   RTC_DCHECK(!raw_images_.empty());
--  MaybeUpdatePixelFormat(VPX_IMG_FMT_NV12);
-   // Image in vpx_image_t format.
-   // Input image is const. VP8's raw image is not defined as const.
-   raw_images_[0].planes[VPX_PLANE_Y] = const_cast<uint8_t*>(frame->DataY());
---- a/media/gpu/vaapi/BUILD.gn
-+++ b/media/gpu/vaapi/BUILD.gn
-@@ -65,8 +65,6 @@ source_set("vaapi") {
-     "vp8_vaapi_video_decoder_delegate.h",
-     "vp9_encoder.cc",
-     "vp9_encoder.h",
--    "vp9_rate_control.cc",
--    "vp9_rate_control.h",
-     "vp9_temporal_layers.cc",
-     "vp9_temporal_layers.h",
-     "vp9_vaapi_video_decoder_delegate.cc",
-@@ -81,7 +79,6 @@ source_set("vaapi") {
- 
-   configs += [
-     "//build/config/linux/libva",
--    "//third_party/libvpx:libvpx_config",
-   ]
- 
-   deps = [
-@@ -96,7 +93,6 @@ source_set("vaapi") {
-     "//media/gpu/chromeos:common",
-     "//media/parsers",
-     "//mojo/public/cpp/bindings",
--    "//third_party/libvpx:libvp9rc",
-     "//third_party/libyuv",
-     "//ui/gfx",
-     "//ui/gfx/geometry",
-@@ -218,7 +214,6 @@ source_set("unit_test") {
-     "vp9_encoder_unittest.cc",
-     "vp9_temporal_layers_unittest.cc",
-   ]
--  configs += [ "//third_party/libvpx:libvpx_config" ]
-   deps = [
-     ":common",
-     ":vaapi",
-@@ -230,7 +225,6 @@ source_set("unit_test") {
-     "//mojo/core/embedder",
-     "//testing/gmock",
-     "//testing/gtest",
--    "//third_party/libvpx:libvp9rc",
-     "//ui/gfx:test_support",
-     "//ui/gfx/geometry",
-   ]
---- a/media/filters/vpx_video_decoder.cc
-+++ b/media/filters/vpx_video_decoder.cc
-@@ -242,13 +242,6 @@ bool VpxVideoDecoder::ConfigureDecoder(c
-       return false;
-     }
- 
--    vpx_codec_err_t status =
--        vpx_codec_control(vpx_codec_.get(), VP9D_SET_LOOP_FILTER_OPT, 1);
--    if (status != VPX_CODEC_OK) {
--      DLOG(ERROR) << "Failed to enable VP9D_SET_LOOP_FILTER_OPT. "
--                  << vpx_codec_error(vpx_codec_.get());
--      return false;
--    }
-   }
- 
-   if (config.alpha_mode() == VideoDecoderConfig::AlphaMode::kIsOpaque)
---- a/media/gpu/vaapi/vp9_encoder.cc
-+++ b/media/gpu/vaapi/vp9_encoder.cc
-@@ -12,7 +12,6 @@
- #include "media/gpu/macros.h"
- #include "media/gpu/vaapi/vp9_rate_control.h"
- #include "media/gpu/vaapi/vp9_temporal_layers.h"
--#include "third_party/libvpx/source/libvpx/vp9/ratectrl_rtc.h"
- 
- namespace media {
- 
-@@ -114,47 +113,6 @@ VideoBitrateAllocation GetDefaultVideoBi
-   return bitrate_allocation;
- }
- 
--libvpx::VP9RateControlRtcConfig CreateRateControlConfig(
--    const gfx::Size encode_size,
--    const VP9Encoder::EncodeParams& encode_params,
--    const VideoBitrateAllocation& bitrate_allocation,
--    const size_t num_temporal_layers) {
--  libvpx::VP9RateControlRtcConfig rc_cfg{};
--  rc_cfg.width = encode_size.width();
--  rc_cfg.height = encode_size.height();
--  rc_cfg.max_quantizer =
--      QindexToQuantizer(encode_params.scaling_settings.max_qp);
--  rc_cfg.min_quantizer =
--      QindexToQuantizer(encode_params.scaling_settings.min_qp);
--  // libvpx::VP9RateControlRtcConfig is kbps.
--  rc_cfg.target_bandwidth = encode_params.bitrate_allocation.GetSumBps() / 1000;
--  // These default values come from
--  // //third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc.
--  rc_cfg.buf_initial_sz = 500;
--  rc_cfg.buf_optimal_sz = 600;
--  rc_cfg.buf_sz = 1000;
--  rc_cfg.undershoot_pct = 50;
--  rc_cfg.overshoot_pct = 50;
--  rc_cfg.max_intra_bitrate_pct = MaxSizeOfKeyframeAsPercentage(
--      rc_cfg.buf_optimal_sz, encode_params.framerate);
--  rc_cfg.framerate = encode_params.framerate;
--
--  // Spatial layers variables.
--  rc_cfg.ss_number_layers = 1;
--  rc_cfg.scaling_factor_num[0] = 1;
--  rc_cfg.scaling_factor_den[0] = 1;
--  // Fill temporal layers variables.
--  rc_cfg.ts_number_layers = num_temporal_layers;
--  int bitrate_sum = 0;
--  for (size_t ti = 0; ti < num_temporal_layers; ti++) {
--    rc_cfg.max_quantizers[ti] = rc_cfg.max_quantizer;
--    rc_cfg.min_quantizers[ti] = rc_cfg.min_quantizer;
--    bitrate_sum += bitrate_allocation.GetBitrateBps(0, ti);
--    rc_cfg.layer_target_bitrate[ti] = bitrate_sum / 1000;
--    rc_cfg.ts_rate_decimator[ti] = 1u << (num_temporal_layers - ti - 1);
--  }
--  return rc_cfg;
--}
- }  // namespace
- 
- VP9Encoder::EncodeParams::EncodeParams()
-@@ -166,11 +124,6 @@ VP9Encoder::EncodeParams::EncodeParams()
-       scaling_settings(kMinQP, kMaxQP),
-       error_resilient_mode(false) {}
- 
--void VP9Encoder::set_rate_ctrl_for_testing(
--    std::unique_ptr<VP9RateControl> rate_ctrl) {
--  rate_ctrl_ = std::move(rate_ctrl);
--}
--
- void VP9Encoder::Reset() {
-   current_params_ = EncodeParams();
-   reference_frames_.Clear();
-@@ -226,22 +179,12 @@ bool VP9Encoder::Initialize(const VideoE
-     }
-     current_params_.scaling_settings.max_qp = kMaxQPForSoftwareRateCtrl;
- 
--    // |rate_ctrl_| might be injected for tests.
--    if (!rate_ctrl_) {
--      rate_ctrl_ = VP9RateControl::Create(CreateRateControlConfig(
--          visible_size_, current_params_, initial_bitrate_allocation,
--          num_temporal_layers));
--    }
--    if (!rate_ctrl_)
--      return false;
-   } else {
-     if (config.HasTemporalLayer()) {
-       DVLOGF(1) << "Temporal layer encoding works only when in "
-                 << "kConstantQuantizationParameter";
-       return false;
-     }
--    DCHECK(!rate_ctrl_) << "|rate_ctrl_| should only be configured when in "
--                           "kConstantQuantizationParameter";
-   }
- 
-   return UpdateRates(initial_bitrate_allocation,
-@@ -309,14 +252,12 @@ BitstreamBufferMetadata VP9Encoder::GetM
- 
- void VP9Encoder::BitrateControlUpdate(uint64_t encoded_chunk_size_bytes) {
-   if (accelerator_->bitrate_control() !=
--          BitrateControl::kConstantQuantizationParameter ||
--      !rate_ctrl_) {
-+          BitrateControl::kConstantQuantizationParameter) {
-     DLOG(ERROR) << __func__ << "() is called when no bitrate controller exists";
-     return;
-   }
- 
-   DVLOGF(4) << "|encoded_chunk_size_bytes|=" << encoded_chunk_size_bytes;
--  rate_ctrl_->PostEncodeUpdate(encoded_chunk_size_bytes);
- }
- 
- bool VP9Encoder::UpdateRates(const VideoBitrateAllocation& bitrate_allocation,
-@@ -340,13 +281,8 @@ bool VP9Encoder::UpdateRates(const Video
-       current_params_.bitrate_allocation.GetSumBps() *
-       current_params_.cpb_window_size_ms / 1000;
- 
--  if (!rate_ctrl_)
--    return true;
--
-   const size_t num_temporal_layers =
-       temporal_layers_ ? temporal_layers_->num_layers() : 1u;
--  rate_ctrl_->UpdateRateControl(CreateRateControlConfig(
--      visible_size_, current_params_, bitrate_allocation, num_temporal_layers));
-   return true;
- }
- 
-@@ -397,21 +333,6 @@ void VP9Encoder::SetFrameHeader(
-     }
-   }
- 
--  if (!rate_ctrl_)
--    return;
--
--  libvpx::VP9FrameParamsQpRTC frame_params{};
--  frame_params.frame_type =
--      keyframe ? FRAME_TYPE::KEY_FRAME : FRAME_TYPE::INTER_FRAME;
--  if (picture->metadata_for_encoding) {
--    frame_params.temporal_layer_id =
--        picture->metadata_for_encoding->temporal_idx;
--  }
--  rate_ctrl_->ComputeQP(frame_params);
--  picture->frame_hdr->quant_params.base_q_idx = rate_ctrl_->GetQP();
--  picture->frame_hdr->loop_filter.level = rate_ctrl_->GetLoopfilterLevel();
--  DVLOGF(4) << "qp=" << rate_ctrl_->GetQP()
--            << ", filter_level=" << rate_ctrl_->GetLoopfilterLevel();
- }
- 
- void VP9Encoder::UpdateReferenceFrames(scoped_refptr<VP9Picture> picture) {
---- a/media/gpu/vaapi/vp9_encoder.h
-+++ b/media/gpu/vaapi/vp9_encoder.h
-@@ -20,7 +20,6 @@
- 
- namespace media {
- class VP9TemporalLayers;
--class VP9RateControl;
- 
- class VP9Encoder : public AcceleratedVideoEncoder {
-  public:
-@@ -101,8 +100,6 @@ class VP9Encoder : public AcceleratedVid
-  private:
-   friend class VP9EncoderTest;
- 
--  void set_rate_ctrl_for_testing(std::unique_ptr<VP9RateControl> rate_ctrl);
--
-   Vp9FrameHeader GetDefaultFrameHeader(const bool keyframe) const;
-   void SetFrameHeader(bool keyframe,
-                       VP9Picture* picture,
-@@ -122,7 +119,6 @@ class VP9Encoder : public AcceleratedVid
-   Vp9ReferenceFrameVector reference_frames_;
-   std::unique_ptr<VP9TemporalLayers> temporal_layers_;
- 
--  std::unique_ptr<VP9RateControl> rate_ctrl_;
-   const std::unique_ptr<Accelerator> accelerator_;
- 
-   SEQUENCE_CHECKER(sequence_checker_);
---- a/third_party/blink/renderer/modules/mediarecorder/vpx_encoder.cc
-+++ b/third_party/blink/renderer/modules/mediarecorder/vpx_encoder.cc
-@@ -72,14 +72,6 @@ void VpxEncoder::EncodeOnEncodingTaskRun
-   TRACE_EVENT0("media", "VpxEncoder::EncodeOnEncodingTaskRunner");
-   DCHECK_CALLED_ON_VALID_SEQUENCE(encoding_sequence_checker_);
- 
--  if (frame->format() == media::PIXEL_FORMAT_NV12 &&
--      frame->storage_type() == media::VideoFrame::STORAGE_GPU_MEMORY_BUFFER)
--    frame = WrapMappedGpuMemoryBufferVideoFrame(frame);
--  if (!frame) {
--    LOG(WARNING) << "Invalid video frame to encode";
--    return;
--  }
--
-   const gfx::Size frame_size = frame->visible_rect().size();
-   base::TimeDelta duration = EstimateFrameDuration(*frame);
-   const media::WebmMuxer::VideoParameters video_params(frame);
-@@ -95,18 +87,6 @@ void VpxEncoder::EncodeOnEncodingTaskRun
-   std::string data;
-   std::string alpha_data;
-   switch (frame->format()) {
--    case media::PIXEL_FORMAT_NV12: {
--      last_frame_had_alpha_ = false;
--      DoEncode(encoder_.get(), frame_size, frame->data(VideoFrame::kYPlane),
--               frame->visible_data(VideoFrame::kYPlane),
--               frame->stride(VideoFrame::kYPlane),
--               frame->visible_data(VideoFrame::kUVPlane),
--               frame->stride(VideoFrame::kUVPlane),
--               frame->visible_data(VideoFrame::kUVPlane) + 1,
--               frame->stride(VideoFrame::kUVPlane), duration, force_keyframe,
--               data, &keyframe, VPX_IMG_FMT_NV12);
--      break;
--    }
-     case media::PIXEL_FORMAT_I420: {
-       last_frame_had_alpha_ = false;
-       DoEncode(encoder_.get(), frame_size, frame->data(VideoFrame::kYPlane),
-@@ -195,7 +175,7 @@ void VpxEncoder::DoEncode(vpx_codec_ctx_
-                           bool* const keyframe,
-                           vpx_img_fmt_t img_fmt) {
-   DCHECK_CALLED_ON_VALID_SEQUENCE(encoding_sequence_checker_);
--  DCHECK(img_fmt == VPX_IMG_FMT_I420 || img_fmt == VPX_IMG_FMT_NV12);
-+  DCHECK(img_fmt == VPX_IMG_FMT_I420);
- 
-   vpx_image_t vpx_image;
-   vpx_image_t* const result =

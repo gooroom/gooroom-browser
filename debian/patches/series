@@ -6,7 +6,6 @@ debianization/master-preferences.patch
 gn/libcxx.patch
 gn/parallel.patch
 
-fixes/mojo.patch
 fixes/gnu-as.patch
 fixes/closure.patch
 fixes/no-ozone.patch
@@ -21,9 +20,10 @@ fixes/widevine-locations.patch
 fixes/connection-message.patch
 fixes/nullptr-dereference.patch
 fixes/multiple-destruction.patch
-fixes/building-against-libstdc.patch
-fixes/ideographic-space-character-constant.patch
+fixes/quiche.patch
+fixes/chromeos_devicetype.patch
 
+disable/mojo.patch
 disable/tests.patch
 disable/unrar.patch
 disable/glmark.patch
@@ -45,6 +45,7 @@ disable/widevine-cdm-cu.patch
 disable/angle-perftests.patch
 disable/web-ui-tests.patch
 disable/ozone-unittests.patch
+disable/devtools-unittests.patch
 
 warnings/restrict.patch
 warnings/multichar.patch
@@ -60,6 +61,7 @@ system/vpx.patch
 system/jpeg.patch
 system/node.patch
 system/nspr.patch
+system/opus.patch
 system/zlib.patch
 system/event.patch
 system/ffmpeg.patch
@@ -68,6 +70,7 @@ system/harfbuzz.patch
 system/openjpeg.patch
 system/convertutf.patch
 system/clang-format.patch
+system/use-desktop-gl-as-default.patch
 
 buster/re2.patch
 buster/drm97.patch
@@ -160,3 +163,4 @@ gooroom/0082-BTS-3316-Remove-secret-mode-on-cookies-page.patch
 gooroom/0083-BTS-3307-Fix-wrong-highlight-on-settings-page.patch
 gooroom/0084-Change-Cookie-default-value-to-easily-use.patch
 gooroom/0085-Remove-newtab-page-registerModule.patch
+
