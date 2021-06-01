@@ -162,4 +162,4 @@ gooroom/0082-BTS-3316-Remove-secret-mode-on-cookies-page.patch
 gooroom/0083-BTS-3307-Fix-wrong-highlight-on-settings-page.patch
 gooroom/0084-Change-Cookie-default-value-to-easily-use.patch
 gooroom/0085-Remove-newtab-page-registerModule.patch
-
+gooroom/linking-yelp-to-the-gooroom-browser.patch

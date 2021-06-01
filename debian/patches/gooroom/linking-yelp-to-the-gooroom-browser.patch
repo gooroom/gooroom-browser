@@ -1,0 +1,27 @@
+diff --git a/chrome/browser/ui/chrome_pages.cc b/chrome/browser/ui/chrome_pages.cc
+index 5246dbb25678..54916488f160 100644
+--- a/chrome/browser/ui/chrome_pages.cc
++++ b/chrome/browser/ui/chrome_pages.cc
+@@ -176,8 +176,22 @@ void ShowHelpImpl(Browser* browser, Profile* profile, HelpSource source) {
+     displayer = std::make_unique<ScopedTabbedBrowserDisplayer>(profile);
+     browser = displayer->browser();
+   }
++#if defined(GOOROOM_BUILD)
++  struct stat statbuf;
++  if(stat("/usr/share/gooroom-yelp-adjustments", &statbuf) == 0)
++  {
++    int pid = fork();
++    if (pid == 0) {
++      execl("/usr/bin/yelp", "yelp", "help:gooroom-help-gooroom-browser", NULL);
++	  exit(0);
++    }
++  } else {
++    ShowSingletonTab(browser, url);
++  }
++#else
+   ShowSingletonTab(browser, url);
+ #endif
++#endif
+ }
+ 
+ std::string GenerateContentSettingsExceptionsSubPage(ContentSettingsType type) {
