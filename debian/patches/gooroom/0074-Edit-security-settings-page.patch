@@ -1,0 +1,45 @@
+From 7a758793f6191352396814e89f6fe929359c7a25 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 10:18:35 +0900
+Subject: [PATCH 74/84] Edit security settings page
+
+---
+ .../settings/privacy_page/security_page.html      | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
+index 5e24fa6af3cd..7b7989048d48 100644
+--- a/chrome/browser/resources/settings/privacy_page/security_page.html
++++ b/chrome/browser/resources/settings/privacy_page/security_page.html
+@@ -155,14 +155,6 @@
+     <template is="dom-if" if="[[showSecureDnsSetting_]]">
+       <settings-secure-dns prefs="{{prefs}}"></settings-secure-dns>
+     </template>
+-    <template is="dom-if" if="[[enableSecurityKeysSubpage_]]">
+-        <cr-link-row id="security-keys-subpage-trigger"
+-          class="hr"
+-          label="$i18n{securityKeysTitle}"
+-          sub-label="$i18n{securityKeysDesc}"
+-          on-click="onSecurityKeysClick_"
+-          role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
+-    </template>
+ <if expr="use_nss_certs or is_win or is_macosx">
+     <cr-link-row id="manageCertificates"
+         class="hr"
+@@ -176,13 +168,6 @@
+         sub-label="$i18n{manageCertificatesDescription}"
+         on-click="onManageCertificatesClick_"></cr-link-row>
+ </if>
+-    <cr-link-row id="advanced-protection-program-link"
+-        class="hr"
+-        label="$i18n{advancedProtectionProgramTitle}"
+-        sub-label="$i18n{advancedProtectionProgramDesc}"
+-        on-click="onAdvancedProtectionProgramLinkClick_"
+-        external>
+-    </cr-link-row>
+     <template is="dom-if" if="[[showDisableSafebrowsingDialog_]]" restamp>
+       <settings-disable-safebrowsing-dialog prefs="{{prefs}}"
+           on-close="onDisableSafebrowsingDialogClose_">
+-- 
+2.20.1
+

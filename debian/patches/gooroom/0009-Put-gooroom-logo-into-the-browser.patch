@@ -1,7 +1,7 @@
-From 54d33ddeb84702597c6fc299f41e283433660b3c Mon Sep 17 00:00:00 2001
+From c3b43d70ea3a6818c9c65ab9e71b3be3eadeb6ee Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:34:42 +0900
-Subject: [PATCH 09/85] Put gooroom logo into the browser
+Subject: [PATCH 09/84] Put gooroom logo into the browser
 
 ---
  .../app/theme/chrome_unscaled_resources.grd   |   8 +++++++-

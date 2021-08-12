@@ -1,0 +1,30 @@
+From 1cc81319de1b98179f15154274e8d029d3946766 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 15:37:06 +0900
+Subject: [PATCH 61/84] disable voice search on newtab page
+
+---
+ chrome/browser/resources/local_ntp/local_ntp.js | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
+index 1172e0187e21..43464d3e9344 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.js
++++ b/chrome/browser/resources/local_ntp/local_ntp.js
+@@ -958,9 +958,10 @@ function init() {
+           configData.translatedStrings.searchboxPlaceholder;
+ 
+       if (!iframesAndVoiceSearchDisabledForTesting) {
+-        speech.init(
+-            configData.googleBaseUrl, configData.translatedStrings,
+-            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
++// Voice search is not supported on gooroom-browser
++//        speech.init(
++//            configData.googleBaseUrl, configData.translatedStrings,
++//            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
+       }
+ 
+       // Listener for updating the key capture state.
+-- 
+2.20.1
+

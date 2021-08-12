@@ -1,0 +1,44 @@
+From 045a71dc486480054bb7d7280eef2a42996ab749 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 16:10:50 +0900
+Subject: [PATCH 65/84] Hide voice search
+
+---
+ chrome/browser/resources/local_ntp/local_ntp.js | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
+index 43464d3e9344..4e10ca508bd9 100644
+--- a/chrome/browser/resources/local_ntp/local_ntp.js
++++ b/chrome/browser/resources/local_ntp/local_ntp.js
+@@ -939,9 +939,10 @@ function init() {
+           autocompleteMatchImageAvailable;
+ 
+       if (!iframesAndVoiceSearchDisabledForTesting) {
+-        speech.init(
+-            configData.googleBaseUrl, configData.translatedStrings,
+-            $(IDS.REALBOX_MICROPHONE), searchboxApiHandle);
++// Voice search is not supported on gooroom-browser
++//        speech.init(
++//            configData.googleBaseUrl, configData.translatedStrings,
++//            $(IDS.REALBOX_MICROPHONE), searchboxApiHandle);
+       }
+ 
+       utils.disableOutlineOnMouseClick($(IDS.REALBOX_MICROPHONE));
+@@ -958,10 +959,9 @@ function init() {
+           configData.translatedStrings.searchboxPlaceholder;
+ 
+       if (!iframesAndVoiceSearchDisabledForTesting) {
+-// Voice search is not supported on gooroom-browser
+-//        speech.init(
+-//            configData.googleBaseUrl, configData.translatedStrings,
+-//            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
++        speech.init(
++            configData.googleBaseUrl, configData.translatedStrings,
++            $(IDS.FAKEBOX_MICROPHONE), searchboxApiHandle);
+       }
+ 
+       // Listener for updating the key capture state.
+-- 
+2.20.1
+

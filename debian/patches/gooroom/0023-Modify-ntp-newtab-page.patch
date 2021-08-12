@@ -1,7 +1,7 @@
-From 0df655b663b47f6cb71dda0284d3109694c9aba7 Mon Sep 17 00:00:00 2001
+From d930d59ad02af4331201fdb6fdd83c7e4a435c6e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:22:30 +0900
-Subject: [PATCH 23/85] Modify ntp(newtab) page
+Subject: [PATCH 23/84] Modify ntp(newtab) page
 
 ---
  chrome/browser/resources/local_ntp/doodles.css    | 14 ++++++++------
@@ -51,10 +51,10 @@ index 25191935104b..abc9f707d56a 100644
    -webkit-mask-size: 100%;
    background: var(--logo-color);
 diff --git a/chrome/browser/resources/local_ntp/doodles.js b/chrome/browser/resources/local_ntp/doodles.js
-index b1b7d6e04732..96b23e119011 100644
+index 0cef8f5cd28a..e6a71dca1ab1 100644
 --- a/chrome/browser/resources/local_ntp/doodles.js
 +++ b/chrome/browser/resources/local_ntp/doodles.js
-@@ -132,12 +132,13 @@ doodles.init = function() {
+@@ -136,12 +136,13 @@ doodles.init = function() {
    // Load the Doodle. After the first request completes (getting cached
    // data), issue a second request for fresh Doodle data.
    doodles.loadDoodle(/*v=*/ null, function(ddl) {
@@ -105,10 +105,10 @@ index 1608f7574403..52bd3edeb741 100644
    <div id="ntp-contents">
      <div id="logo">
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
-index d9d58e1ddef9..aea45abf1f2b 100644
+index 518f03dfc10a..d2be5b612a84 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.js
 +++ b/chrome/browser/resources/local_ntp/local_ntp.js
-@@ -896,6 +896,12 @@ function init() {
+@@ -900,6 +900,12 @@ function init() {
  
    const searchboxApiHandle = embeddedSearchApiHandle.searchBox;
  

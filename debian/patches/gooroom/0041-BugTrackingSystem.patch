@@ -1,7 +1,7 @@
-From bc8ff4b9d6c31da30648583a19fac8dab0743633 Mon Sep 17 00:00:00 2001
+From ee866dd444cba4ca72dc2ed30db3ceeaf22497a8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 13:45:46 +0900
-Subject: [PATCH 41/85] BugTrackingSystem
+Subject: [PATCH 41/84] BugTrackingSystem
 
 746 : Change string Chromium to Gooroom Browser on gooroom://flags page
 743 : Remove Translate option on settings language page
@@ -17,12 +17,11 @@ Subject: [PATCH 41/85] BugTrackingSystem
 714 : Remove browser-login on gooroom://welcome page
 205 : Remove google-cloud-login on print page
 ---
- chrome/app/resources/manpage.1.in               | 10 +++++-----
- chrome/browser/resources/history/side_bar.html  |  5 -----
- .../settings/languages_page/languages_page.html | 17 -----------------
- .../bookmark_context_menu_controller.cc         |  4 ++--
- .../browser/web_contents/web_contents_impl.cc   |  1 +
- 5 files changed, 8 insertions(+), 29 deletions(-)
+ chrome/app/resources/manpage.1.in                      | 10 +++++-----
+ chrome/browser/resources/history/side_bar.html         |  5 -----
+ .../ui/bookmarks/bookmark_context_menu_controller.cc   |  4 ++--
+ content/browser/web_contents/web_contents_impl.cc      |  1 +
+ 4 files changed, 8 insertions(+), 12 deletions(-)
 
 diff --git a/chrome/app/resources/manpage.1.in b/chrome/app/resources/manpage.1.in
 index 1e4fe85907e3..085cbe85ff3a 100644
@@ -78,39 +77,11 @@ index dbd42713864f..c78ddfd0380d 100644
          <div class="separator"></div>
          <a role="menuitem" id="clear-browsing-data"
              href="chrome://settings/clearBrowserData"
-diff --git a/chrome/browser/resources/settings/languages_page/languages_page.html b/chrome/browser/resources/settings/languages_page/languages_page.html
-index 10c2a50d3ca0..385540c1514c 100644
---- a/chrome/browser/resources/settings/languages_page/languages_page.html
-+++ b/chrome/browser/resources/settings/languages_page/languages_page.html
-@@ -350,23 +350,6 @@
-                   </iron-icon>
-                 </cr-checkbox>
- </if> <!-- chromeos or is_win -->
--                <cr-checkbox id="offerTranslations"
--                    class="dropdown-item"
--                    checked="[[detailLanguage_.translateEnabled]]"
--                    on-change="onTranslateCheckboxChange_"
--                    hidden="[[!prefs.translate.enabled.value]]"
--                    disabled="[[disableTranslateCheckbox_(
--                        detailLanguage_, languages.translateTarget)]]">
--                  $i18n{offerToTranslateInThisLanguage}
--                </cr-checkbox>
--                <hr hidden="[[!shouldShowDialogSeparator_(
--                    languages.enabled.*)]]">
--                <button class="dropdown-item" role="menuitem"
--                    on-click="onMoveToTopTap_"
--                    hidden="[[isNthLanguage_(
--                        0, detailLanguage_, languages.enabled.*)]]">
--                  $i18n{moveToTop}
--                </button>
-                 <button class="dropdown-item" role="menuitem"
-                     on-click="onMoveUpTap_"
-                     hidden="[[!showMoveUp_(detailLanguage_,
 diff --git a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
-index 45606dcb8a3a..efbd52803718 100644
+index b863197bb720..9722b30ed069 100644
 --- a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
 +++ b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
-@@ -124,8 +124,8 @@ void BookmarkContextMenuController::BuildMenu() {
+@@ -140,8 +140,8 @@ void BookmarkContextMenuController::BuildMenu() {
              IDS_BOOKMARK_BAR_OPEN_IN_NEW_TAB);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_NEW_WINDOW,
              IDS_BOOKMARK_BAR_OPEN_IN_NEW_WINDOW);
@@ -122,7 +93,7 @@ index 45606dcb8a3a..efbd52803718 100644
      int count = chrome::OpenCount(parent_window_, selection_);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 0e7e869cfe86..57b457dd3346 100644
+index 2ef581730433..822e235ac850 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -15,6 +15,7 @@

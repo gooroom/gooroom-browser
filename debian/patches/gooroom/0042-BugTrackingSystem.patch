@@ -1,7 +1,7 @@
-From 23e5e648e2e0cb0aef4d5b17dde5c9f68733a3a9 Mon Sep 17 00:00:00 2001
+From aa5466b00ec6b0dc9338231ed728f65685874291 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 13:47:13 +0900
-Subject: [PATCH 42/85] BugTrackingSystem
+Subject: [PATCH 42/84] BugTrackingSystem
 
 697 : Change strings 'chrome&google' to gooroom on gooroom:// pages
 697-6 : Change default ntp (google webstore -> gooroom.kr)
@@ -12,17 +12,15 @@ Subject: [PATCH 42/85] BugTrackingSystem
  .../log_sources/chrome_internal_log_source.cc      |  2 +-
  chrome/browser/history/top_sites_factory.cc        |  8 ++++----
  chrome/browser/resources/inspect/inspect.html      |  2 +-
- .../resources/net_internals/events_view.html       |  2 +-
  chrome/browser/ui/webui/about_ui.cc                | 14 +++++++++++---
- .../supervised_user_internals_message_handler.cc   |  2 ++
  .../service_worker/serviceworker_internals.html    |  2 +-
- 10 files changed, 28 insertions(+), 11 deletions(-)
+ 8 files changed, 25 insertions(+), 10 deletions(-)
 
 diff --git a/chrome/app/generated_resources.grd b/chrome/app/generated_resources.grd
-index 3173fac28aa8..8b0cfbd91dd0 100644
+index 43f5940e58ba..5c54d2201f48 100644
 --- a/chrome/app/generated_resources.grd
 +++ b/chrome/app/generated_resources.grd
-@@ -4607,6 +4607,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
+@@ -4643,6 +4643,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
        <message name="IDS_EXTENSION_WEB_STORE_TITLE_SHORT" desc="Shortened version of text for the Chrome Web Store">
          Web Store
        </message>
@@ -33,10 +31,10 @@ index 3173fac28aa8..8b0cfbd91dd0 100644
          Show Details
        </message>
 diff --git a/chrome/app/resources/locale_settings.grd b/chrome/app/resources/locale_settings.grd
-index 0cc26c78ba32..3caf5112bce2 100644
+index 977121fb1951..f131ffbbd59c 100644
 --- a/chrome/app/resources/locale_settings.grd
 +++ b/chrome/app/resources/locale_settings.grd
-@@ -172,6 +172,9 @@
+@@ -180,6 +180,9 @@
        <message name="IDS_WEBSTORE_URL" translateable="false">
          https://chrome.google.com/webstore?hl=[GRITLANGCODE]
        </message>
@@ -59,17 +57,17 @@ index 878734a162a1..8c6974e463d3 100644
        <structure type="chrome_scaled_image" name="IDR_INPUT_ALERT_MENU" file="common/input_alert_menu.png" />
        <if expr="enable_service_discovery">
 diff --git a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-index b001aa3db63f..1661d6006014 100644
+index 44e96c687520..b47a34a302ec 100644
 --- a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
 +++ b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-@@ -77,7 +77,7 @@ constexpr char kSyncDataKey[] = "about_sync_data";
+@@ -76,7 +76,7 @@ constexpr char kSyncDataKey[] = "about_sync_data";
  constexpr char kExtensionsListKey[] = "extensions";
  constexpr char kPowerApiListKey[] = "chrome.power extensions";
  constexpr char kDataReductionProxyKey[] = "data_reduction_proxy";
 -constexpr char kChromeVersionTag[] = "CHROME VERSION";
 +constexpr char kChromeVersionTag[] = "GOOROOM VERSION";
  
- #if BUILDFLAG(IS_CHROMEOS_ASH) || BUILDFLAG(IS_CHROMEOS_LACROS)
+ #if BUILDFLAG(IS_CHROMEOS_ASH)
  constexpr char kLacrosChromeVersionPrefix[] = "Lacros ";
 diff --git a/chrome/browser/history/top_sites_factory.cc b/chrome/browser/history/top_sites_factory.cc
 index 6dbb94b5e77b..c53603ed80b2 100644
@@ -103,20 +101,8 @@ index ea5cccb11c94..cc6fb931046f 100644
  <link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
  <link rel="stylesheet" href="inspect.css">
  <script src="chrome://resources/js/assert.js"></script>
-diff --git a/chrome/browser/resources/net_internals/events_view.html b/chrome/browser/resources/net_internals/events_view.html
-index 950e3ca8236f..e231bfd341ca 100644
---- a/chrome/browser/resources/net_internals/events_view.html
-+++ b/chrome/browser/resources/net_internals/events_view.html
-@@ -1,6 +1,6 @@
- <!-- ================= Events view =================== -->
- <div id=events-view-tab-content class=content-box>
-   The net-internals events viewer and related functionality has been removed.
--  Please use <a href="chrome://net-export">chrome://net-export</a> to save netlogs and the external <a href="https://netlog-viewer.appspot.com/">netlog_viewer</a> to view them.
-+  Please use <a href="chrome://net-export">gooroom://net-export</a> to save netlogs and the external <a href="https://netlog-viewer.appspot.com/">netlog_viewer</a> to view them.
- </div>
- 
 diff --git a/chrome/browser/ui/webui/about_ui.cc b/chrome/browser/ui/webui/about_ui.cc
-index 6c2f12505e01..96a530d78bf2 100644
+index 3d0d6375ec14..4fd7070c86fa 100644
 --- a/chrome/browser/ui/webui/about_ui.cc
 +++ b/chrome/browser/ui/webui/about_ui.cc
 @@ -13,6 +13,7 @@
@@ -163,21 +149,8 @@ index 6c2f12505e01..96a530d78bf2 100644
    html += "</ul>\n";
  
    AppendFooter(&html);
-diff --git a/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc b/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
-index 3235dec03929..f4f4c8ac7621 100644
---- a/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
-+++ b/chrome/browser/ui/webui/supervised_user_internals_message_handler.cc
-@@ -204,6 +204,8 @@ void SupervisedUserInternalsMessageHandler::SendBasicInfo() {
-   std::unique_ptr<base::ListValue> section_list(new base::ListValue);
- 
-   base::ListValue* section_general = AddSection(section_list.get(), "General");
-+  AddSectionEntry(section_general, "Gooroom version",
-+                  chrome::GetVersionString());
-   AddSectionEntry(section_general, "Child detection enabled",
-                   ChildAccountService::IsChildAccountDetectionEnabled());
- 
 diff --git a/content/browser/resources/service_worker/serviceworker_internals.html b/content/browser/resources/service_worker/serviceworker_internals.html
-index 34d292762a80..180ce757be56 100644
+index f486ea9d362d..849d616d864a 100644
 --- a/content/browser/resources/service_worker/serviceworker_internals.html
 +++ b/content/browser/resources/service_worker/serviceworker_internals.html
 @@ -2,7 +2,7 @@

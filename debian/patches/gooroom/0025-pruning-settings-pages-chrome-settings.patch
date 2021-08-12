@@ -1,7 +1,7 @@
-From c88b3f92a48763300e6c59292ef50a86f1547763 Mon Sep 17 00:00:00 2001
+From f389a8fc3b53a0fae06144b0c97d416360377a21 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:46:38 +0900
-Subject: [PATCH 25/85] pruning settings pages(chrome://settings)
+Subject: [PATCH 25/84] pruning settings pages(chrome://settings)
 
 ---
  chrome/browser/resources/settings/about_page/about_page.html  | 2 ++
@@ -25,7 +25,7 @@ index e8299dcfeb8b..f5588a5094cb 100644
        <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueTap_"
            hidden="[[!prefs.feedback_allowed.value]]"
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index d93129142268..701a0e022dd6 100644
+index f36c113b42c5..646e4c4f4e79 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
 @@ -76,6 +76,7 @@

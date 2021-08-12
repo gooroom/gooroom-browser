@@ -1,7 +1,7 @@
-From c1600f6f718143aca546d0a5ff414ba617c7ebd6 Mon Sep 17 00:00:00 2001
+From 516eb84e696a51f2e7de1bdb794b163fd0b36bc2 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 16:40:08 +0900
-Subject: [PATCH 15/85] add extension for disable google.com's browser version
+Subject: [PATCH 15/84] add extension for disable google.com's browser version
  warning
 
 ---
@@ -22,10 +22,10 @@ Subject: [PATCH 15/85] add extension for disable google.com's browser version
  create mode 100644 gooroom/browser/dgw/disable_google_warning.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index c99ad11d3fc9..6ff27e769937 100644
+index 974c20f48a4c..d9108b31b8fd 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -182,6 +182,9 @@
+@@ -208,6 +208,9 @@
        <include name="IDR_ORIGIN_MOJO_JS" file="${root_gen_dir}\url\mojom\origin.mojom-lite.js" use_base_dir="false" type="BINDATA"/>
        <if expr="enable_plugins">
          <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
@@ -36,10 +36,10 @@ index c99ad11d3fc9..6ff27e769937 100644
        <if expr="is_win">
          <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_win.json" type="BINDATA" />
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index bc3aca2dc790..64640e46bf55 100644
+index 2a3890ab1ec1..149c6bbf1372 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
-@@ -72,6 +72,10 @@
+@@ -74,6 +74,10 @@
  #include "chrome/browser/defaults.h"
  #endif
  
@@ -50,7 +50,7 @@ index bc3aca2dc790..64640e46bf55 100644
  using content::BrowserThread;
  
  namespace extensions {
-@@ -499,6 +503,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+@@ -504,6 +508,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
  #if BUILDFLAG(ENABLE_PDF)
    Add(pdf_extension_util::GetManifest(),
        base::FilePath(FILE_PATH_LITERAL("pdf")));
@@ -62,10 +62,10 @@ index bc3aca2dc790..64640e46bf55 100644
  }
  
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index d56d4e617b0a..a772ed97c828 100644
+index 349356fa190c..cd5f62b493e9 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
-@@ -92,6 +92,10 @@
+@@ -97,6 +97,10 @@
          <include name="IDR_ARC_SUPPORT_ICON_HEADER" file="chromeos/arc_support/images/header.png" type="BINDATA" />
          <include name="IDR_ARC_SUPPORT_RECOMMEND_APP_LIST_VIEW_JS" file="chromeos/arc_support/recommend_app_list_view.js" type="BINDATA" />
          <include name="IDR_ARC_SUPPORT_RECOMMEND_APP_LIST_VIEW_HTML" file="chromeos/arc_support/recommend_app_list_view.html" type="chrome_html" flattenhtml="true" />
@@ -110,7 +110,7 @@ index 000000000000..0f4b1e504496
 +}
 +
 diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
-index 0a26c4f69dec..8b7e0cc7c6d5 100644
+index 21c399eaf976..2ce2b9d124c2 100644
 --- a/extensions/common/constants.cc
 +++ b/extensions/common/constants.cc
 @@ -110,6 +110,9 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
@@ -124,10 +124,10 @@ index 0a26c4f69dec..8b7e0cc7c6d5 100644
      "bpmcpldpdmajfigpchkicefoigmkfalc";
  const char kQuickOfficeInternalExtensionId[] =
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index f65699e909fa..a70fef2c42ba 100644
+index 782a171adf03..80e28d003141 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
-@@ -182,6 +182,11 @@ extern const char kFeedbackExtensionId[];
+@@ -185,6 +185,11 @@ extern const char kFeedbackExtensionId[];
  // The extension id of the PDF extension.
  extern const char kPdfExtensionId[];
  

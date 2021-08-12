@@ -1,7 +1,7 @@
-From c181e98b7c11dc2406c9225c3289bf96d0ada34d Mon Sep 17 00:00:00 2001
+From 3412b8c312aba2d66a83dd647bc1a259ae60af5c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:08:02 +0900
-Subject: [PATCH 13/85] Add and show gooroom protocol logo with short brand
+Subject: [PATCH 13/84] Add and show gooroom protocol logo with short brand
  text and fake scheme gooroom:// instead of chrome:// in omnibox.
 
 ---
@@ -33,10 +33,10 @@ index e159c9231d0c..810929629280 100644
  }
  
 diff --git a/chrome/browser/ui/views/location_bar/location_icon_view.cc b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-index de836abcf94a..03c79e572c6f 100644
+index 8c38af079abb..d1c1afa7afd7 100644
 --- a/chrome/browser/ui/views/location_bar/location_icon_view.cc
 +++ b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-@@ -135,6 +135,10 @@ bool LocationIconView::ShouldShowText() const {
+@@ -135,6 +135,10 @@ bool LocationIconView::GetShowText() const {
    const GURL& url = location_bar_model->GetURL();
    if (url.SchemeIs(content::kChromeUIScheme) ||
        url.SchemeIs(extensions::kExtensionScheme) ||
@@ -52,7 +52,7 @@ index de836abcf94a..03c79e572c6f 100644
      return base::string16();
  
 +#if defined(GOOROOM_BUILD)
-+  // Show a string "안전한 Gooroom 페이지를..." after clicking Gooroom protocol logo
++  // Show a string " Gooroom 댁瑜.." after clicking Gooroom protocol logo
 +  if (delegate_->GetLocationBarModel()->GetURL().SchemeIs(content::kGooroomUIScheme)) {
 +    return l10n_util::GetStringUTF16(IDS_SHORT_PRODUCT_NAME);
 +  }
@@ -65,10 +65,10 @@ index de836abcf94a..03c79e572c6f 100644
    if (delegate_->GetLocationBarModel()->GetURL().SchemeIs(url::kFileScheme))
      return l10n_util::GetStringUTF16(IDS_OMNIBOX_FILE);
 diff --git a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-index f960f3659f73..f3d58929227b 100644
+index 4a4327075bc5..072cbf786043 100644
 --- a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
 +++ b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-@@ -386,7 +386,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
+@@ -393,7 +393,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
      } else {
        text = IDS_PAGE_INFO_READER_MODE_PAGE;
      }
@@ -81,7 +81,7 @@ index f960f3659f73..f3d58929227b 100644
      NOTREACHED();
    }
  
-@@ -438,6 +442,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
+@@ -448,6 +452,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
    gfx::NativeView parent_view = platform_util::GetViewForWindow(parent_window);
  
    if (PageInfo::IsFileOrInternalPage(url) ||
@@ -92,7 +92,7 @@ index f960f3659f73..f3d58929227b 100644
        url.SchemeIs(dom_distiller::kDomDistillerScheme)) {
      return new InternalPageInfoBubbleView(anchor_view, anchor_rect, parent_view,
 diff --git a/components/omnibox/browser/BUILD.gn b/components/omnibox/browser/BUILD.gn
-index 06ca8e270053..a3c753668f68 100644
+index 10486d7e067e..40eb3951bba0 100644
 --- a/components/omnibox/browser/BUILD.gn
 +++ b/components/omnibox/browser/BUILD.gn
 @@ -64,6 +64,9 @@ aggregate_vector_icons("omnibox_vector_icons") {

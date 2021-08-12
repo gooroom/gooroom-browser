@@ -1,7 +1,7 @@
-From f10afc37de1151e5133d0f1a4a6af9738167de1a Mon Sep 17 00:00:00 2001
+From a36291d8f5ca2e0583eab54bee66c994c59d9473 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 16:12:43 +0900
-Subject: [PATCH 14/85] pruning extensions pages(chrome://extensions)
+Subject: [PATCH 14/84] pruning extensions pages(chrome://extensions)
 
 ---
  chrome/browser/resources/extensions/sidebar.html | 2 ++

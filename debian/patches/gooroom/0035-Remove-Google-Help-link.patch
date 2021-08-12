@@ -1,7 +1,7 @@
-From 54099d55ff5d2d333e85194a348ebcd09c30e282 Mon Sep 17 00:00:00 2001
+From 3c581baa372a518d9830376ae8123830ed9c9fc1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 10:28:35 +0900
-Subject: [PATCH 35/85] Remove Google-Help link
+Subject: [PATCH 35/84] Remove Google-Help link
 
 ---
  .../browser/resources/settings/settings_main/settings_main.html | 2 ++

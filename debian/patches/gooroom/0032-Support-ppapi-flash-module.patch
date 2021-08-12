@@ -1,17 +1,17 @@
-From 105f3737a98b5c67218bf61fe711cff4f352e5f6 Mon Sep 17 00:00:00 2001
+From 7b77ef7ec12db1aab1ed4cded212af0ab2f76bd2 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 12:00:11 +0900
-Subject: [PATCH 32/85] Support ppapi-flash module
+Subject: [PATCH 32/84] Support ppapi-flash module
 
 ---
  gooroom/browser/gooroom_pref.cc | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index ae91b7f036be..f99165641f52 100644
+index 3e33505a8f99..bffa5fb2a517 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
-@@ -80,6 +80,9 @@ void GooroomPref::setup() {
+@@ -82,6 +82,9 @@ void GooroomPref::setup() {
    std::string untrust_user_data_dir_option =
        "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
        "/.config/gooroom/untrust";
@@ -21,7 +21,7 @@ index ae91b7f036be..f99165641f52 100644
  
    bool use_user_data_dir = false;
    for (base::CommandLine::StringVector::const_iterator it = argv.begin();
-@@ -107,7 +110,7 @@ void GooroomPref::setup() {
+@@ -109,7 +112,7 @@ void GooroomPref::setup() {
            exit(0);
          } else {
            execl(exe_path.c_str(), "gooroom-browser",
@@ -30,7 +30,7 @@ index ae91b7f036be..f99165641f52 100644
                  NULL);
            exit(0);
          }
-@@ -117,7 +120,7 @@ void GooroomPref::setup() {
+@@ -119,7 +122,7 @@ void GooroomPref::setup() {
            exit(0);
          } else {
            execl(exe_path.c_str(), "gooroom-browser",

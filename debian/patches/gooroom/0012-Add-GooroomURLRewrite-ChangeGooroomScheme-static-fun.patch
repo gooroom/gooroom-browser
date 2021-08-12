@@ -1,7 +1,7 @@
-From 72ab49a41a031c0c3c098b73b1d1f64b27a61a2a Mon Sep 17 00:00:00 2001
+From 908c80c57c89523396afe67d462d7487f4b0200d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:03:53 +0900
-Subject: [PATCH 12/85] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
+Subject: [PATCH 12/84] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
  function
 
 ---
@@ -12,7 +12,7 @@ Subject: [PATCH 12/85] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
  4 files changed, 29 insertions(+)
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index af5a31d3411a..c7cff03dc8bc 100644
+index 1eda3efe1fc2..cd0c8e59babf 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -10,6 +10,10 @@
@@ -26,7 +26,7 @@ index af5a31d3411a..c7cff03dc8bc 100644
  #include "base/base_switches.h"
  #include "base/bind.h"
  #include "base/callback_helpers.h"
-@@ -1342,6 +1346,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
+@@ -1243,6 +1247,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
  #endif
  
    extra_parts_.push_back(new ChromeContentBrowserClientPerformanceManagerPart);
@@ -65,7 +65,7 @@ index 2cb705c606d5..e159c9231d0c 100644
  }
  
 diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.cc b/gooroom/URLRewrite/gooroom_url_rewrite.cc
-index e73b8893d292..dbdb8b11955a 100644
+index 4443c996f560..ebc8ce7bd9b3 100644
 --- a/gooroom/URLRewrite/gooroom_url_rewrite.cc
 +++ b/gooroom/URLRewrite/gooroom_url_rewrite.cc
 @@ -8,6 +8,16 @@
@@ -86,7 +86,7 @@ index e73b8893d292..dbdb8b11955a 100644
                               content::BrowserContext* browser_context) {
    // change "gooroom://*" to "chrome://*"
 diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.h b/gooroom/URLRewrite/gooroom_url_rewrite.h
-index 98d2febbe74f..bf2c00313b3a 100644
+index a3e0e2ad948b..015ce0a313c2 100644
 --- a/gooroom/URLRewrite/gooroom_url_rewrite.h
 +++ b/gooroom/URLRewrite/gooroom_url_rewrite.h
 @@ -34,6 +34,8 @@ class GooroomURLRewrite : public ChromeContentBrowserClientParts {
@@ -97,7 +97,7 @@ index 98d2febbe74f..bf2c00313b3a 100644
 +
    void BrowserURLHandlerCreated(content::BrowserURLHandler* handler) override;
    // ChromeContentBrowserClientParts:
-   void OverrideWebkitPrefs(content::RenderViewHost* rvh,
+   void OverrideWebkitPrefs(content::WebContents* web_contents,
 -- 
 2.20.1
 

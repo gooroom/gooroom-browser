@@ -1,0 +1,25 @@
+From 38eca9736b8eabd2644d88ef4d3e7ac6a070ee54 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:02:16 +0900
+Subject: [PATCH 77/84] Change Chromium String on media
+
+---
+ media/audio/pulse/pulse_util.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/media/audio/pulse/pulse_util.cc b/media/audio/pulse/pulse_util.cc
+index d8e6ce1ca5c5..c901df6a4c25 100644
+--- a/media/audio/pulse/pulse_util.cc
++++ b/media/audio/pulse/pulse_util.cc
+@@ -38,7 +38,7 @@ constexpr char kBrowserDisplayName[] = "google-chrome";
+ #define PRODUCT_STRING "Google Chrome"
+ #else
+ constexpr char kBrowserDisplayName[] = "chromium-browser";
+-#define PRODUCT_STRING "Chromium"
++#define PRODUCT_STRING "Gooroom Browser"
+ #endif
+ 
+ #if defined(DLOPEN_PULSEAUDIO)
+-- 
+2.20.1
+

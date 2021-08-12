@@ -1,46 +1,190 @@
-gooroom-browser (2.9.0-1+grm2u2) stretch; urgency=medium
+gooroom-browser (2.10.0-1+grm2u1) stretch; urgency=medium
 
-  * Linking gooroom-yelp to the gooroom-browser.
+  * Init Gooroom Browser Version 2.10.0-1+grm2u1
 
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 01 Jun 2021 16:20:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Thu, 12 Aug 2021 17:50:00 +0900
 
-gooroom-browser (2.9.0-1+grm2u1) stretch; urgency=medium
-  
-  * Init Gooroom Browser Version 2.9.0-1+grm2u1
+chromium (90.0.4430.212-1~deb10u1) buster-security; urgency=medium
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 26 Apr 2021 18:02:00 +0900
+  * New upstream security release.
+    - CVE-2021-30506: Incorrect security UI in Web App Installs. Reported by
+      @retsew0x01
+    - CVE-2021-30507: Inappropriate implementation in Offline. Reported by
+      Alison Huffman
+    - CVE-2021-30508: Heap buffer overflow in Media Feeds. Reported by Leecraso
+      and Guang Gong
+    - CVE-2021-30509: Out of bounds write in Tab Strip. Reported by David Erceg
+    - CVE-2021-30510: Race in Aura. Reported by Weipeng Jiang
+    - CVE-2021-30511: Out of bounds read in Tab Groups. Reported by David Erceg
+    - CVE-2021-30512: Use after free in Notifications. Reported by ZhanJia Song
+    - CVE-2021-30513: Type Confusion in V8. Reported by Man Yue Mo
+    - CVE-2021-30514: Use after free in Autofill. Reported by koocola and Wang
+    - CVE-2021-30515: Use after free in File API. Reported by Rong Jian and
+      Guang Gong
+    - CVE-2021-30516: Heap buffer overflow in History. Reported by ZhanJia Song
+    - CVE-2021-30517: Type Confusion in V8. Reported by laural
+    - CVE-2021-30518: Heap buffer overflow in Reader Mode. Reported by Jun
+      Kokatsu
+    - CVE-2021-30519: Use after free in Payments. Reported by asnine
+    - CVE-2021-30520: Use after free in Tab Strip. Reported by Khalil Zhani
 
-gooroom-browser (2.8.0-1+grm2u5) stretch; urgency=medium
-  
-  * Changed Cookie default value by gooroom policy
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 15 May 2021 20:39:40 +0000
 
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 16 Apr 2021 16:31:00 +0900
+chromium (90.0.4430.93-1~deb10u1) buster-security; urgency=medium
 
-gooroom-browser (2.8.0-1+grm2u4) stretch; urgency=medium
-  
-  * Bug Fix (3307 3343)
-    - Fix Highlight bug
-    - Fix bookmark broken ui bug
+  * New upstream security release.
+    - CVE-2021-21227: Insufficient data validation in V8. Reported by Gengming
+      Liu
+    - CVE-2021-21228: Insufficient policy enforcement in extensions. Reported
+      by Rob Wu
+    - CVE-2021-21229: Incorrect security UI in downloads. Reported by Mohit Raj
+    - CVE-2021-21230: Type Confusion in V8. Reported by Manfred Paul
+    - CVE-2021-21231: Insufficient data validation in V8. Reported by Sergei
+      Glazunov
+    - CVE-2021-21232: Use after free in Dev Tools. Reported by Abdulrahman
+      Alqabandi
+    - CVE-2021-21233: Heap buffer overflow in ANGLE. Reported by Omair
 
- -- Choi J.S. <junsungc91@gmail.com>  Thu, 1 Apr 2021 13:29:00 +0900
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 01 May 2021 09:35:19 +0000
 
-gooroom-browser (2.8.0-1+grm2u3) stretch; urgency=medium
-  
-  * Bug Fix (3101 3309 3313 3315 3316 3320)
+chromium (90.0.4430.85-1~deb10u1) buster-security; urgency=medium
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 22 Mar 2021 15:49:00 +0900
+  * New upstream stable release.
+    - CVE-2021-21201: Use after free in permissions. Reported by Gengming Liu
+      and Jianyu Chen
+    - CVE-2021-21202: Use after free in extensions. Reported by David Erceg
+    - CVE-2021-21203: Use after free in Blink. Reported by asnine
+    - CVE-2021-21204: Use after free in Blink. Reported by Chelse Tsai-Simek,
+      Jeanette Ulloa, and Emily Voigtlander
+    - CVE-2021-21205: Insufficient policy enforcement in navigation. Reported
+      by Alison Huffman
+    - CVE-2021-21221: Insufficient validation of untrusted input in Mojo.
+      Reported by Guang Gong
+    - CVE-2021-21207: Use after free in IndexedDB. Reported by koocola and
+      Nan Wang
+    - CVE-2021-21208: Insufficient data validation in QR scanner. Reported by
+      Ahmed Elsobky
+    - CVE-2021-21209: Inappropriate implementation in storage. Reported by Tom
+      Van Goethem
+    - CVE-2021-21210: Inappropriate implementation in Network. Reported by
+      @bananabr
+    - CVE-2021-21211: Inappropriate implementation in Navigation. Reported by
+      Akash Labade
+    - CVE-2021-21212: Incorrect security UI in Network Config UI. Reported by
+      Hugo Hue and Sze Yiu Chau
+    - CVE-2021-21213: Use after free in WebMIDI. Reported by raven
+    - CVE-2021-21214: Use after free in Network API. Reported by Anonymous
+    - CVE-2021-21215: Inappropriate implementation in Autofill. Reported by
+      Abdulrahman Alqabandi
+    - CVE-2021-21216: Inappropriate implementation in Autofill. Reported by
+      Abdulrahman Alqabandi
+    - CVE-2021-21217: Uninitialized Use in PDFium. Reported by Zhou Aiting
+    - CVE-2021-21218: Uninitialized Use in PDFium. Reported by Zhou Aiting
+    - CVE-2021-21219: Uninitialized Use in PDFium. Reported by Zhou Aiting
+    - CVE-2021-21222: Heap buffer overflow in V8. Reported by Guang Gong
+    - CVE-2021-21223: Integer overflow in Mojo. Reported by Guang Gong
+    - CVE-2021-21224: Type Confusion in V8. Reported by Jose Martinez
+    - CVE-2021-21225: Out of bounds memory access in V8. Reported by Brendon
+      Tiszka
+    - CVE-2021-21226: Use after free in navigation. Reported by Brendon Tiszka
 
-gooroom-browser (2.8.0-1+grm2u2) stretch; urgency=medium
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 24 Apr 2021 20:09:16 +0000
 
-  * Bug Fix (3304 3323 3308 3312 3324 3322 3311 3310 3318 3319)
+chromium (89.0.4389.114-1~deb10u1) buster-security; urgency=medium
 
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 09 Mar 2021 18:31:00 +0900
+  * New upstream security release.
+    - CVE-2021-21159: Heap buffer overflow in TabStrip. Reported by Khalil
+      Zhani
+    - CVE-2021-21160: Heap buffer overflow in WebAudio. Reported by Marcin
+      Noga
+    - CVE-2021-21161: Heap buffer overflow in TabStrip. Reported by Khalil
+      Zhani
+    - CVE-2021-21162: Use after free in WebRTC. Reported by Anonymous
+    - CVE-2021-21163: Insufficient data validation in Reader Mode. Reported by
+      Alison Huffman
+    - CVE-2021-21165: Object lifecycle issue in audio. Reported by Alison
+      Huffman
+    - CVE-2021-21166: Object lifecycle issue in audio. Reported by Alison
+      Huffman
+    - CVE-2021-21167: Use after free in bookmarks. Reported by Leecraso and
+      Guang Gong
+    - CVE-2021-21168: Insufficient policy enforcement in appcache. Reported by
+      Luan Herrera
+    - CVE-2021-21169: Out of bounds memory access in V8. Reported by Bohan Liu
+      and Moon Liang
+    - CVE-2021-21170: Incorrect security UI in Loader. Reported by David Erceg
+    - CVE-2021-21171: Incorrect security UI in TabStrip and Navigation.
+      Reported by Irvan Kurniawan
+    - CVE-2021-21172: Insufficient policy enforcement in File System API.
+      Reported by Maciej Pulikowski
+    - CVE-2021-21173: Side-channel information leakage in Network Internals.
+      Reported by Tom Van Goethem
+    - CVE-2021-21174: Inappropriate implementation in Referrer. Reported by
+      Ashish Gautam Kamble
+    - CVE-2021-21175: Inappropriate implementation in Site isolation. Reported
+      by Jun Kokatsu
+    - CVE-2021-21176: Inappropriate implementation in full screen mode.
+      Reported by Luan Herrera
+    - CVE-2021-21177: Insufficient policy enforcement in Autofill. Reported by
+      Abdulrahman Alqabandi
+    - CVE-2021-21178: Inappropriate implementation in Compositing. Reported by
+      Japong
+    - CVE-2021-21179: Use after free in Network Internals. Reported by
+      Anonymous
+    - CVE-2021-21180: Use after free in tab search. Reported by Abdulrahman
+      Alqabandi
+    - CVE-2021-21181: Side-channel information leakage in autofill. Reported by
+      Xu Lin, Panagiotis Ilias, Jason Polakis
+    - CVE-2021-21182: Insufficient policy enforcement in navigations. Reported
+      by Luan Herrera
+    - CVE-2021-21183: Inappropriate implementation in performance APIs.
+      Reported by Takashi Yoneuchi
+    - CVE-2021-21184: Inappropriate implementation in performance APIs.
+      Reported by James Hartig
+    - CVE-2021-21185: Insufficient policy enforcement in extensions. Reported
+      by David Erceg
+    - CVE-2021-21186: Insufficient policy enforcement in QR scanning. Reported
+      by dhirajkumarnifty
+    - CVE-2021-21187: Insufficient data validation in URL formatting. Reported
+      by Kirtikumar Anandrao Ramchandani
+    - CVE-2021-21188: Use after free in Blink. Reported by Woojin Oh
+    - CVE-2021-21189: Insufficient policy enforcement in payments. Reported by
+      Khalil Zhani
+    - CVE-2021-21190: Uninitialized Use in PDFium. Reported by Zhou Aiting
+    - CVE-2021-21191: Use after free in WebRTC. Reported by raven
+    - CVE-2021-21192: Heap buffer overflow in tab groups. Reported by
+      Abdulrahman Alqabandi
+    - CVE-2021-21193: Use after free in Blink. Reported by Anonymous
+    - CVE-2021-21194: Use after free in screen capture. Reported by Leecraso
+      and Guang Gong
+    - CVE-2021-21195: Use after free in V8. Reported by Liu and Liang
+    - CVE-2021-21196: Heap buffer overflow in TabStrip. Reported by Khalil
+      Zhani
+    - CVE-2021-21197: Heap buffer overflow in TabStrip. Reported by Abdulrahman
+      Alqabandi
+    - CVE-2021-21198: Out of bounds read in IPC. Reported by Mark Brand
+    - CVE-2021-21199: Use after free in Aura. Reported by Weipeng Jiang
 
-gooroom-browser (2.8.0-1+grm2u1) stretch; urgency=medium
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 04 Apr 2021 13:39:43 +0000
 
-  * Init Gooroom Browser Version 2.8.0-1+grm2u1
+chromium (88.0.4324.182-1~deb10u1) buster-security; urgency=medium
 
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 10 Feb 2021 14:04:00 +0900
+  * New upstream security release.
+    - CVE-2021-21148: Heap buffer overflow in V8. Reported by Mattias Buelens
+    - CVE-2021-21149: Stack overflow in Data Transfer. Reported by Ryoya
+      Tsukasaki
+    - CVE-2021-21150: Use after free in Downloads. Reported by Woojin Oh
+    - CVE-2021-21151: Use after free in Payments. Reported by Khalil Zhani
+    - CVE-2021-21152: Heap buffer overflow in Media. Reported by Anonymous
+    - CVE-2021-21153: Stack overflow in GPU Process. Reported by Jan Ruge
+    - CVE-2021-21154: Heap buffer overflow in Tab Strip . Reported by
+      Abdulrahman Alqabandi
+    - CVE-2021-21155: Heap buffer overflow in Tab Strip . Reported by Khalil
+      Zhani
+    - CVE-2021-21156: Heap buffer overflow in V8. Reported by Sergei Glazunov
+    - CVE-2021-21157: Use after free in Web Sockets. Reported by Anonymous
+
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 18 Feb 2021 15:04:44 +0000
 
 chromium (88.0.4324.146-1~deb10u1) buster-security; urgency=medium
 

@@ -1,0 +1,29 @@
+From 83dbbe553ab2462a4eea09b62127464db78abba3 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 14:25:17 +0900
+Subject: [PATCH 54/84] tab.
+
+---
+ chrome/browser/resources/settings/system_page/system_page.html | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/resources/settings/system_page/system_page.html b/chrome/browser/resources/settings/system_page/system_page.html
+index 8470efd1d09b..0ce288db1d63 100644
+--- a/chrome/browser/resources/settings/system_page/system_page.html
++++ b/chrome/browser/resources/settings/system_page/system_page.html
+@@ -1,10 +1,12 @@
+     <style include="cr-shared-style settings-shared iron-flex"></style>
+ <if expr="not is_macosx">
++<if expr="not _gooroom">
+     <settings-toggle-button
+         pref="{{prefs.background_mode.enabled}}"
+         label="$i18n{backgroundAppsLabel}">
+     </settings-toggle-button>
+     <div class="hr"></div>
++</if>
+ </if>
+     <settings-toggle-button id="hardwareAcceleration"
+         pref="{{prefs.hardware_acceleration_mode.enabled}}"
+-- 
+2.20.1
+

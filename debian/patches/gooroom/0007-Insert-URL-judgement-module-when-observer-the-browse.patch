@@ -1,14 +1,14 @@
-From beafb4220b24ce84641c8b155f52954bdd50ed0c Mon Sep 17 00:00:00 2001
+From 2ef2f069c3d6c858a7bcbd2392859ca105e71914 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:31:12 +0900
-Subject: [PATCH 07/85] Insert URL judgement module when observer the browser.
+Subject: [PATCH 07/84] Insert URL judgement module when observer the browser.
 
 ---
  .../browser/web_contents/web_contents_impl.cc | 101 ++++++++++++++++++
  1 file changed, 101 insertions(+)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index f4751d821d34..0e7e869cfe86 100644
+index 3c29748aac1f..2ef581730433 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -12,6 +12,11 @@
@@ -23,7 +23,7 @@ index f4751d821d34..0e7e869cfe86 100644
  #include "base/bind.h"
  #include "base/command_line.h"
  #include "base/containers/flat_set.h"
-@@ -5084,6 +5089,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
+@@ -5160,6 +5165,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
    }
  }
  
@@ -119,7 +119,7 @@ index f4751d821d34..0e7e869cfe86 100644
  void WebContentsImpl::DidRedirectNavigation(
      NavigationHandle* navigation_handle) {
    TRACE_EVENT1("navigation", "WebContentsImpl::DidRedirectNavigation",
-@@ -5219,6 +5313,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -5303,6 +5397,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
          GetMainFrame()->frame_tree_node()->GetFrameTreeSize();
    }
  

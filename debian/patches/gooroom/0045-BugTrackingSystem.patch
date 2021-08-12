@@ -1,7 +1,7 @@
-From fef364ed6ef481e29068a86d9fbe337caf5b5108 Mon Sep 17 00:00:00 2001
+From eaa91f021cc6170aa33251f1fa91f544fb31374e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:12:50 +0900
-Subject: [PATCH 45/85] BugTrackingSystem
+Subject: [PATCH 45/84] BugTrackingSystem
 
 507 : Disable 'Open as window' on making shortcut app popup
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 45/85] BugTrackingSystem
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
-index 4ed7a592569d..36a74a08cd40 100644
+index 46d52ac593b1..cd28d8450947 100644
 --- a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
 +++ b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
-@@ -129,7 +129,9 @@ WebAppConfirmationView::WebAppConfirmationView(
+@@ -131,7 +131,9 @@ WebAppConfirmationView::WebAppConfirmationView(
        open_as_window_radio_->SetChecked(true);
      else
        open_as_tabbed_window_radio_->SetChecked(true);
@@ -23,7 +23,7 @@ index 4ed7a592569d..36a74a08cd40 100644
      auto open_as_window_checkbox = std::make_unique<views::Checkbox>(
          l10n_util::GetStringUTF16(IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_WINDOW));
      open_as_window_checkbox->SetChecked(web_app_info_->open_as_window);
-@@ -145,6 +147,7 @@ WebAppConfirmationView::WebAppConfirmationView(
+@@ -147,6 +149,7 @@ WebAppConfirmationView::WebAppConfirmationView(
      else
        open_as_window_checkbox_->SetChecked(true);
    }
@@ -31,7 +31,7 @@ index 4ed7a592569d..36a74a08cd40 100644
  
    title_tf_->SelectAll(true);
    chrome::RecordDialogCreation(chrome::DialogIdentifier::WEB_APP_CONFIRMATION);
-@@ -180,9 +183,12 @@ bool WebAppConfirmationView::Accept() {
+@@ -178,9 +181,12 @@ bool WebAppConfirmationView::Accept() {
        web_app_info_->open_as_window = open_as_window_radio_->GetChecked();
        web_app_info_->enable_experimental_tabbed_window = false;
      }

@@ -1,0 +1,33 @@
+From b0e3bbb0671098280e11a4c39e373ff6ed6ba4fa Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 15:35:47 +0900
+Subject: [PATCH 59/84] Remove manage security key on settings page
+
+---
+ .../browser/resources/settings/privacy_page/privacy_page.html  | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index ebd135b85ccc..d44554f184a2 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -88,7 +88,7 @@
+         </settings-subpage>
+       </template>
+ </if>
+-
++<if expr="not _gooroom">
+       <template is="dom-if" if="[[enableSecurityKeysSubpage_]]">
+         <template is="dom-if" route-path="/securityKeys">
+           <settings-subpage associated-control="[[$$('#securityLinkRow')]]"
+@@ -97,6 +97,7 @@
+           </settings-subpage>
+         </template>
+       </template>
++</if>
+ 
+       <template is="dom-if" route-path="/content">
+         <settings-subpage
+-- 
+2.20.1
+

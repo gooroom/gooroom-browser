@@ -1,7 +1,7 @@
-From 32051fc12cd466abd73c12aef971aaf420c8b0d9 Mon Sep 17 00:00:00 2001
+From c5999d4761c36493fecc38c68a766f14ab261a57 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 12:23:32 +0900
-Subject: [PATCH 40/85] Remove 'Export to JSON' button on gooroom://policy page
+Subject: [PATCH 40/84] Remove 'Export to JSON' button on gooroom://policy page
  [Gooroom Bug Tracking System - 0000560] Change 'Chrome policies' to 'Gooroom
  policies' string on gooroom://policy page
 
@@ -11,10 +11,10 @@ Subject: [PATCH 40/85] Remove 'Export to JSON' button on gooroom://policy page
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/ui/webui/policy/policy_ui_handler.cc b/chrome/browser/ui/webui/policy/policy_ui_handler.cc
-index 328e1c446862..f621bc55eeb6 100644
+index 0c7732c61292..185afc58213b 100644
 --- a/chrome/browser/ui/webui/policy/policy_ui_handler.cc
 +++ b/chrome/browser/ui/webui/policy/policy_ui_handler.cc
-@@ -999,7 +999,7 @@ base::Value PolicyUIHandler::GetPolicyNames() const {
+@@ -1025,7 +1025,7 @@ base::Value PolicyUIHandler::GetPolicyNames() const {
      chrome_policy_names.Append(base::Value(it.key()));
    }
    base::Value chrome_values(base::Value::Type::DICTIONARY);
@@ -24,7 +24,7 @@ index 328e1c446862..f621bc55eeb6 100644
    names.SetKey("chrome", std::move(chrome_values));
  
 diff --git a/components/policy/resources/webui/policy.html b/components/policy/resources/webui/policy.html
-index d4ce42bd6f93..9df223228c8d 100644
+index 3889cc31722a..5ad3d4246691 100644
 --- a/components/policy/resources/webui/policy.html
 +++ b/components/policy/resources/webui/policy.html
 @@ -32,7 +32,7 @@

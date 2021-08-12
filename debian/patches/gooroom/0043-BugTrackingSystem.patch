@@ -1,7 +1,7 @@
-From 3698be1bbc33856b8164edc96e13feb6a908729f Mon Sep 17 00:00:00 2001
+From 1e67f7c8dfa685bab168495eea1ce3d7c4283c2e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:09:39 +0900
-Subject: [PATCH 43/85] BugTrackingSystem
+Subject: [PATCH 43/84] BugTrackingSystem
 
 355 : Re-register the whitelist upon trust/untrust judgement module.
 ---
@@ -11,7 +11,7 @@ Subject: [PATCH 43/85] BugTrackingSystem
  3 files changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 57b457dd3346..ef9753b16f1e 100644
+index 822e235ac850..b26e4367de62 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -15,6 +15,7 @@
@@ -22,7 +22,7 @@ index 57b457dd3346..ef9753b16f1e 100644
  #include "chrome/common/chrome_switches.h"
  #endif
  
-@@ -5102,6 +5103,8 @@ const char kUserDataDir[] = "user-data-dir";
+@@ -5178,6 +5179,8 @@ const char kUserDataDir[] = "user-data-dir";
  // It is a function that determines whether it is trusted mode or untrusted mode.
  // and exec if necessary (browser switching).
  bool RequestCurrentUserDataDir(GURL url) {
@@ -32,10 +32,10 @@ index 57b457dd3346..ef9753b16f1e 100644
  
    if (!pFilter) return false;
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index f99165641f52..a288d46ce67a 100644
+index bffa5fb2a517..aa48152e87e6 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
-@@ -32,9 +32,8 @@ PrefService* GooroomPref::pref() {
+@@ -34,9 +34,8 @@ PrefService* GooroomPref::pref() {
    return pref_.get();
  }
  
@@ -47,7 +47,7 @@ index f99165641f52..a288d46ce67a 100644
    // read CORE policy file from ... ==================================
    // TODO use constant value
    base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
-@@ -60,6 +59,13 @@ void GooroomPref::setup() {
+@@ -62,6 +61,13 @@ void GooroomPref::setup() {
    if (p != nullptr)
      pfilterImpl->setWhiteList(p->GetValue());
    base::GetGooroomBase()->setUrlFilter(pfilterImpl);

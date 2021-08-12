@@ -1,7 +1,7 @@
-From 6e79be11abab43f35dc3a05b7539bfe3ef57c10a Mon Sep 17 00:00:00 2001
+From 6e1ad632d17a537a1322e8ea2b6b4f6ce0701099 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 13:43:23 +0900
-Subject: [PATCH 33/85] * Remove page-translation function.
+Subject: [PATCH 33/82] * Remove page-translation function.
 
 ---
  .../browser/renderer_context_menu/render_view_context_menu.cc | 3 +++
@@ -9,10 +9,10 @@ Subject: [PATCH 33/85] * Remove page-translation function.
  2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-index 822c2e34203b..2984ce2f740b 100644
+index b88a6eabb..672bd3041 100644
 --- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
 +++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-@@ -1555,6 +1555,8 @@ void RenderViewContextMenu::AppendPageItems() {
+@@ -1575,6 +1575,8 @@ void RenderViewContextMenu::AppendPageItems() {
  
    ChromeTranslateClient* chrome_translate_client =
        ChromeTranslateClient::FromWebContents(embedder_web_contents_);
@@ -21,7 +21,7 @@ index 822c2e34203b..2984ce2f740b 100644
    const bool canTranslate =
        chrome_translate_client &&
        chrome_translate_client->GetTranslateManager()->CanManuallyTranslate(
-@@ -1574,6 +1576,7 @@ void RenderViewContextMenu::AppendPageItems() {
+@@ -1594,6 +1596,7 @@ void RenderViewContextMenu::AppendPageItems() {
          IDC_CONTENT_CONTEXT_TRANSLATE,
          l10n_util::GetStringFUTF16(IDS_CONTENT_CONTEXT_TRANSLATE, language));
    }
@@ -30,10 +30,10 @@ index 822c2e34203b..2984ce2f740b 100644
  
  void RenderViewContextMenu::AppendExitFullscreenItem() {
 diff --git a/chrome/browser/resources/ntp4/new_tab.html b/chrome/browser/resources/ntp4/new_tab.html
-index d753a9a4d297..e219d1b9431d 100644
+index eca1c674f..4bc6f7318 100644
 --- a/chrome/browser/resources/ntp4/new_tab.html
 +++ b/chrome/browser/resources/ntp4/new_tab.html
-@@ -101,9 +101,9 @@ $('themecss').href = 'chrome://theme/css/new_tab_theme.css?' + Date.now();
+@@ -72,9 +72,9 @@ document.getElementById('themecss').href = 'chrome://theme/css/new_tab_theme.css
  
    <div id="login-container" hidden>
      <div id="login-status-header-container" class="login-status-row">

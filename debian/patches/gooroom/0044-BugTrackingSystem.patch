@@ -1,7 +1,7 @@
-From 56f76ee388c3bec9c34e0c6e54f2d7587bc81816 Mon Sep 17 00:00:00 2001
+From dd5a151d24652820abbf25f3f1ffc3db6f8ddfd7 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:10:06 +0900
-Subject: [PATCH 44/85] BugTrackingSystem
+Subject: [PATCH 44/84] BugTrackingSystem
 
 650 - Client redirection URL does not apply Trust/Untrust judgement module.
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 44/85] BugTrackingSystem
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index ef9753b16f1e..4515868df392 100644
+index b26e4367de62..f2ec9d3b39e6 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -5319,7 +5319,9 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -5403,7 +5403,9 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
  
  #if BUILDFLAG(ENABLE_GOOROOM)
  //If browser is switched, the current page is closed.

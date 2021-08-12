@@ -1,7 +1,7 @@
-From 0a76257b972b6e48650c13e35a4aa58f11ba8f4b Mon Sep 17 00:00:00 2001
+From af6b474344cc7fea90d22a7ec332d3111cf64e74 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:13:47 +0900
-Subject: [PATCH 04/85] add GooroomPrefs that parse mainpref.json and
+Subject: [PATCH 04/84] add GooroomPrefs that parse mainpref.json and
  initializes GooroomBase and GooroomUrlFilter based on the result
 
 ---
@@ -13,11 +13,11 @@ Subject: [PATCH 04/85] add GooroomPrefs that parse mainpref.json and
  gooroom/base/gooroom_url_filter.cc         |  10 ++
  gooroom/base/gooroom_url_filter.h          |  30 +++++
  gooroom/browser/BUILD.gn                   |   4 +
- gooroom/browser/gooroom_pref.cc            | 134 +++++++++++++++++++++
+ gooroom/browser/gooroom_pref.cc            | 136 +++++++++++++++++++++
  gooroom/browser/gooroom_pref.h             |  42 +++++++
  gooroom/browser/gooroom_url_filter_impl.cc |  58 +++++++++
  gooroom/browser/gooroom_url_filter_impl.h  |  30 +++++
- 12 files changed, 395 insertions(+), 1 deletion(-)
+ 12 files changed, 397 insertions(+), 1 deletion(-)
  create mode 100644 gooroom/base/gooroom_base.cc
  create mode 100644 gooroom/base/gooroom_base.h
  create mode 100644 gooroom/base/gooroom_url_filter.cc
@@ -28,7 +28,7 @@ Subject: [PATCH 04/85] add GooroomPrefs that parse mainpref.json and
  create mode 100644 gooroom/browser/gooroom_url_filter_impl.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index d8c359f1db74..54491f6cb1bb 100644
+index 19b4b9e1a28f..8cedf296a59f 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -226,6 +226,16 @@ if (!is_android && !is_mac) {
@@ -251,11 +251,13 @@ index 309bd48c7d9b..57f5f21afd23 100644
    deps = [
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
 new file mode 100644
-index 000000000000..115ac6f499e9
+index 000000000000..d0de138d55da
 --- /dev/null
 +++ b/gooroom/browser/gooroom_pref.cc
-@@ -0,0 +1,134 @@
+@@ -0,0 +1,136 @@
 +#include "gooroom_pref.h"
++
++#include "url/gurl.h"
 +
 +#include "gooroom/base/gooroom_base.h"
 +#include "gooroom/browser/gooroom_url_filter_impl.h"
