@@ -1,4 +1,4 @@
-From a918472c676d07b5585b4b933a72d2db15c21ba1 Mon Sep 17 00:00:00 2001
+From d4a1ab826e7d0e2baf210e5a892b0b2f6c125b22 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 15:44:10 +0900
 Subject: [PATCH 64/84] Built in vqa extension
@@ -11,7 +11,7 @@ Subject: [PATCH 64/84] Built in vqa extension
  4 files changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/extensions/item_list.html b/chrome/browser/resources/extensions/item_list.html
-index 56b2f7b6b8a6..9577c0c53d6c 100644
+index 56b2f7b6b..9577c0c53 100644
 --- a/chrome/browser/resources/extensions/item_list.html
 +++ b/chrome/browser/resources/extensions/item_list.html
 @@ -105,7 +105,7 @@
@@ -24,7 +24,7 @@ index 56b2f7b6b8a6..9577c0c53d6c 100644
        </template>
      </div>
 diff --git a/chrome/browser/resources/extensions/item_list.js b/chrome/browser/resources/extensions/item_list.js
-index 22b1ef2f95f2..7de5a0541177 100644
+index 22b1ef2f9..7de5a0541 100644
 --- a/chrome/browser/resources/extensions/item_list.js
 +++ b/chrome/browser/resources/extensions/item_list.js
 @@ -72,6 +72,16 @@ Polymer({
@@ -45,7 +45,7 @@ index 22b1ef2f95f2..7de5a0541177 100644
     * @param {string} id
     * @return {?Element}
 diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.cc b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-index c53e4af2016c..c62ac8170b6b 100644
+index c53e4af20..c62ac8170 100644
 --- a/chrome/browser/ui/toolbar/toolbar_actions_model.cc
 +++ b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
 @@ -409,6 +409,8 @@ void ToolbarActionsModel::AddAction(const ActionId& action_id) {
@@ -58,7 +58,7 @@ index c53e4af2016c..c62ac8170b6b 100644
  
  void ToolbarActionsModel::RemoveAction(const ActionId& action_id) {
 diff --git a/chrome/browser/ui/views/toolbar/browser_actions_container.cc b/chrome/browser/ui/views/toolbar/browser_actions_container.cc
-index 1c8f37272053..cd417033edee 100644
+index 1c8f37272..cd417033e 100644
 --- a/chrome/browser/ui/views/toolbar/browser_actions_container.cc
 +++ b/chrome/browser/ui/views/toolbar/browser_actions_container.cc
 @@ -487,6 +487,10 @@ void BrowserActionsContainer::Layout() {

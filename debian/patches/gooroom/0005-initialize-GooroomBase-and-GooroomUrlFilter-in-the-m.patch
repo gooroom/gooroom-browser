@@ -1,4 +1,4 @@
-From fac00f154b0e0e7870336f7b6c4de0fbb3bfe21a Mon Sep 17 00:00:00 2001
+From 513daed543bc9754279fd7e90787cd8802c0f746 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:14:16 +0900
 Subject: [PATCH 05/84] initialize GooroomBase and GooroomUrlFilter in the
@@ -9,7 +9,7 @@ Subject: [PATCH 05/84] initialize GooroomBase and GooroomUrlFilter in the
  1 file changed, 3 insertions(+)
 
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.cc b/gooroom/browser/gooroom_browser_extra_parts_security.cc
-index c1ca04e9a19a..3a28b20e9d4a 100644
+index c1ca04e9a..3a28b20e9 100644
 --- a/gooroom/browser/gooroom_browser_extra_parts_security.cc
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.cc
 @@ -3,6 +3,7 @@

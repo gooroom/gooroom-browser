@@ -1,4 +1,4 @@
-From 883e4fe3aee594b90d7bc3ebc5a8ef8592ff7c8a Mon Sep 17 00:00:00 2001
+From f01b1717fd8d395c4056c06967a2d43efb7b1c3e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:05:46 +0900
 Subject: [PATCH 16/84] Add odf viewer
@@ -30,7 +30,7 @@ Subject: [PATCH 16/84] Add odf viewer
  create mode 100644 gooroom/browser/odf/odf_extension_util.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index d9108b31b8fd..953b76982d25 100644
+index d9108b31b..953b76982 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
 @@ -209,6 +209,7 @@
@@ -42,7 +42,7 @@ index d9108b31b8fd..953b76982d25 100644
          </if>
        </if>
 diff --git a/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc b/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
-index 8c28e60ab01d..2a3cb1ab4a70 100644
+index 8c28e60ab..2a3cb1ab4 100644
 --- a/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
 +++ b/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
 @@ -30,6 +30,7 @@ bool IsComponentExtensionAllowlisted(const std::string& extension_id) {
@@ -54,7 +54,7 @@ index 8c28e60ab01d..2a3cb1ab4a70 100644
      extension_misc::kAccessibilityCommonExtensionId,
      extension_misc::kAssessmentAssistantExtensionId,
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index 149c6bbf1372..d0df18fe925b 100644
+index 149c6bbf1..d0df18fe9 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
 @@ -75,6 +75,7 @@
@@ -86,7 +86,7 @@ index 149c6bbf1372..d0df18fe925b 100644
        base::FilePath(FILE_PATH_LITERAL("dgw")));
  #endif
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index cd5f62b493e9..68d9e22e3140 100644
+index cd5f62b49..68d9e22e3 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
 @@ -97,10 +97,13 @@
@@ -109,7 +109,7 @@ index cd5f62b493e9..68d9e22e3140 100644
        <include name="IDR_CRYPTOTOKEN_B64_JS" file="cryptotoken/b64.js" type="BINDATA" />
 diff --git a/chrome/browser/resources/odf/browser_api.js b/chrome/browser/resources/odf/browser_api.js
 new file mode 100644
-index 000000000000..8c08a866cf25
+index 000000000..8c08a866c
 --- /dev/null
 +++ b/chrome/browser/resources/odf/browser_api.js
 @@ -0,0 +1,204 @@
@@ -319,7 +319,7 @@ index 000000000000..8c08a866cf25
 +}
 diff --git a/chrome/browser/resources/odf/index.html b/chrome/browser/resources/odf/index.html
 new file mode 100644
-index 000000000000..bd38f7ae092f
+index 000000000..bd38f7ae0
 --- /dev/null
 +++ b/chrome/browser/resources/odf/index.html
 @@ -0,0 +1,14 @@
@@ -339,7 +339,7 @@ index 000000000000..bd38f7ae092f
 +</html>
 diff --git a/chrome/browser/resources/odf/main.js b/chrome/browser/resources/odf/main.js
 new file mode 100644
-index 000000000000..c5d88bb347d7
+index 000000000..c5d88bb34
 --- /dev/null
 +++ b/chrome/browser/resources/odf/main.js
 @@ -0,0 +1,54 @@
@@ -400,7 +400,7 @@ index 000000000000..c5d88bb347d7
 \ No newline at end of file
 diff --git a/chrome/browser/resources/odf/manifest.json b/chrome/browser/resources/odf/manifest.json
 new file mode 100644
-index 000000000000..e8d17016054f
+index 000000000..e8d170160
 --- /dev/null
 +++ b/chrome/browser/resources/odf/manifest.json
 @@ -0,0 +1,24 @@
@@ -430,7 +430,7 @@ index 000000000000..e8d17016054f
 +}
 diff --git a/chrome/browser/resources/odf/webodf.js b/chrome/browser/resources/odf/webodf.js
 new file mode 100644
-index 000000000000..d85372a4c202
+index 000000000..d85372a4c
 --- /dev/null
 +++ b/chrome/browser/resources/odf/webodf.js
 @@ -0,0 +1,920 @@
@@ -1355,7 +1355,7 @@ index 000000000000..d85372a4c202
 +3);send_all_trees(s,s.l_desc.max_code+1,s.d_desc.max_code+1,max_blindex+1);compress_block(s,s.dyn_ltree,s.dyn_dtree)}init_block(s);if(last)bi_windup(s)}function _tr_tally(s,dist,lc){s.pending_buf[s.d_buf+s.last_lit*2]=dist>>>8&255;s.pending_buf[s.d_buf+s.last_lit*2+1]=dist&255;s.pending_buf[s.l_buf+s.last_lit]=lc&255;s.last_lit++;if(dist===0)s.dyn_ltree[lc*2]++;else{s.matches++;dist--;s.dyn_ltree[(_length_code[lc]+LITERALS+1)*2]++;s.dyn_dtree[d_code(dist)*2]++}return s.last_lit===s.lit_bufsize-1}
 +exports._tr_init=_tr_init;exports._tr_stored_block=_tr_stored_block;exports._tr_flush_block=_tr_flush_block;exports._tr_tally=_tr_tally;exports._tr_align=_tr_align},{"../utils/common":27}],39:[function(_dereq_,module,exports){function ZStream(){this.input=null;this.next_in=0;this.avail_in=0;this.total_in=0;this.output=null;this.next_out=0;this.avail_out=0;this.total_out=0;this.msg="";this.state=null;this.data_type=2;this.adler=0}module.exports=ZStream},{}]},{},[9])(9)});
 diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
-index 2ce2b9d124c2..cc5bbbcb2feb 100644
+index 2ce2b9d12..cc5bbbcb2 100644
 --- a/extensions/common/constants.cc
 +++ b/extensions/common/constants.cc
 @@ -111,6 +111,7 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
@@ -1367,7 +1367,7 @@ index 2ce2b9d124c2..cc5bbbcb2feb 100644
  #endif
  const char kQuickOfficeComponentExtensionId[] =
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index 80e28d003141..cb67e08f92eb 100644
+index 80e28d003..cb67e08f9 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
 @@ -186,6 +186,9 @@ extern const char kFeedbackExtensionId[];
@@ -1381,7 +1381,7 @@ index 80e28d003141..cb67e08f92eb 100644
  extern const char kDgwExtensionId[];
  #endif
 diff --git a/extensions/common/manifest_handlers/mime_types_handler.cc b/extensions/common/manifest_handlers/mime_types_handler.cc
-index 8a43f5632ecf..0e3258c46d3e 100644
+index 8a43f5632..0e3258c46 100644
 --- a/extensions/common/manifest_handlers/mime_types_handler.cc
 +++ b/extensions/common/manifest_handlers/mime_types_handler.cc
 @@ -28,6 +28,7 @@ namespace {
@@ -1402,7 +1402,7 @@ index 8a43f5632ecf..0e3258c46d3e 100644
  
  constexpr SkColor kPdfExtensionBackgroundColor = SkColorSetRGB(82, 86, 89);
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
-index 920dfedf3d21..e99a2c958833 100644
+index 920dfedf3..e99a2c958 100644
 --- a/gooroom/browser/BUILD.gn
 +++ b/gooroom/browser/BUILD.gn
 @@ -19,6 +19,8 @@ static_library("gooroom_browser") {
@@ -1416,7 +1416,7 @@ index 920dfedf3d21..e99a2c958833 100644
    deps = [
 diff --git a/gooroom/browser/odf/odf_extension_util.cc b/gooroom/browser/odf/odf_extension_util.cc
 new file mode 100644
-index 000000000000..98ffea7f8034
+index 000000000..98ffea7f8
 --- /dev/null
 +++ b/gooroom/browser/odf/odf_extension_util.cc
 @@ -0,0 +1,37 @@
@@ -1459,7 +1459,7 @@ index 000000000000..98ffea7f8034
 +}  // namespace odf_extension_util
 diff --git a/gooroom/browser/odf/odf_extension_util.h b/gooroom/browser/odf/odf_extension_util.h
 new file mode 100644
-index 000000000000..26b585dabd6b
+index 000000000..26b585dab
 --- /dev/null
 +++ b/gooroom/browser/odf/odf_extension_util.h
 @@ -0,0 +1,22 @@
@@ -1486,7 +1486,7 @@ index 000000000000..26b585dabd6b
 +
 +#endif  // CHROME_BROWSER_ODF_ODF_EXTENSION_UTIL_H_
 diff --git a/net/base/mime_util.cc b/net/base/mime_util.cc
-index 200d668f591a..c2b9e1ac0b26 100644
+index 200d668f5..c2b9e1ac0 100644
 --- a/net/base/mime_util.cc
 +++ b/net/base/mime_util.cc
 @@ -188,6 +188,9 @@ static const MimeInfo kSecondaryMappings[] = {

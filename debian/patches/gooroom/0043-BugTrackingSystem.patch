@@ -1,4 +1,4 @@
-From 1e67f7c8dfa685bab168495eea1ce3d7c4283c2e Mon Sep 17 00:00:00 2001
+From ba74aab3215cc55f48a3625591a6e621766111bb Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:09:39 +0900
 Subject: [PATCH 43/84] BugTrackingSystem
@@ -11,7 +11,7 @@ Subject: [PATCH 43/84] BugTrackingSystem
  3 files changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 822e235ac850..b26e4367de62 100644
+index 822e235ac..b26e4367d 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -15,6 +15,7 @@
@@ -32,7 +32,7 @@ index 822e235ac850..b26e4367de62 100644
  
    if (!pFilter) return false;
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index bffa5fb2a517..aa48152e87e6 100644
+index bffa5fb2a..aa48152e8 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -34,9 +34,8 @@ PrefService* GooroomPref::pref() {
@@ -62,7 +62,7 @@ index bffa5fb2a517..aa48152e87e6 100644
    // if there is a url in command line, check the url is trust to determine the
    // mode whether trust or not.
 diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
-index 0c18a6f86f80..c85a112964cd 100644
+index 0c18a6f86..c85a11296 100644
 --- a/gooroom/browser/gooroom_pref.h
 +++ b/gooroom/browser/gooroom_pref.h
 @@ -9,6 +9,7 @@

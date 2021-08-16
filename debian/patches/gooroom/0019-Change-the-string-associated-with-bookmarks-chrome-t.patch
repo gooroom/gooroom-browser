@@ -1,4 +1,4 @@
-From ad3b433830314576a6abe4edb55e502b3008df7f Mon Sep 17 00:00:00 2001
+From 53b553bbb0ac2f12772b0f8d824f51583bdb79e1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:11:36 +0900
 Subject: [PATCH 19/84] Change the string associated with bookmarks (chrome://
@@ -10,7 +10,7 @@ Subject: [PATCH 19/84] Change the string associated with bookmarks (chrome://
  2 files changed, 25 insertions(+)
 
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
-index 371bcf5d3c4b..df60e97b7f8b 100644
+index 371bcf5d3..df60e97b7 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
 @@ -250,6 +250,14 @@ class BookmarkButton : public BookmarkButtonBase {
@@ -29,7 +29,7 @@ index 371bcf5d3c4b..df60e97b7f8b 100644
    }
  
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
-index d05e30738245..6b0dcf973075 100644
+index d05e30738..6b0dcf973 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
 @@ -331,7 +331,17 @@ void BookmarkEditorView::Init() {

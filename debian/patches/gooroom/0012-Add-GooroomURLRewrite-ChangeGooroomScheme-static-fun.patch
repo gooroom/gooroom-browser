@@ -1,4 +1,4 @@
-From 908c80c57c89523396afe67d462d7487f4b0200d Mon Sep 17 00:00:00 2001
+From d540c8b63c37c056f74546305977c9101deb705a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:03:53 +0900
 Subject: [PATCH 12/84] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
@@ -12,7 +12,7 @@ Subject: [PATCH 12/84] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
  4 files changed, 29 insertions(+)
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 1eda3efe1fc2..cd0c8e59babf 100644
+index 1eda3efe1..cd0c8e59b 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -10,6 +10,10 @@
@@ -38,7 +38,7 @@ index 1eda3efe1fc2..cd0c8e59babf 100644
  
  ChromeContentBrowserClient::~ChromeContentBrowserClient() {
 diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-index 2cb705c606d5..e159c9231d0c 100644
+index 2cb705c60..e159c9231 100644
 --- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 +++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 @@ -4,6 +4,10 @@
@@ -65,7 +65,7 @@ index 2cb705c606d5..e159c9231d0c 100644
  }
  
 diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.cc b/gooroom/URLRewrite/gooroom_url_rewrite.cc
-index 4443c996f560..ebc8ce7bd9b3 100644
+index 4443c996f..ebc8ce7bd 100644
 --- a/gooroom/URLRewrite/gooroom_url_rewrite.cc
 +++ b/gooroom/URLRewrite/gooroom_url_rewrite.cc
 @@ -8,6 +8,16 @@
@@ -86,7 +86,7 @@ index 4443c996f560..ebc8ce7bd9b3 100644
                               content::BrowserContext* browser_context) {
    // change "gooroom://*" to "chrome://*"
 diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.h b/gooroom/URLRewrite/gooroom_url_rewrite.h
-index a3e0e2ad948b..015ce0a313c2 100644
+index a3e0e2ad9..015ce0a31 100644
 --- a/gooroom/URLRewrite/gooroom_url_rewrite.h
 +++ b/gooroom/URLRewrite/gooroom_url_rewrite.h
 @@ -34,6 +34,8 @@ class GooroomURLRewrite : public ChromeContentBrowserClientParts {

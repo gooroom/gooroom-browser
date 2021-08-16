@@ -1,4 +1,4 @@
-From 045a71dc486480054bb7d7280eef2a42996ab749 Mon Sep 17 00:00:00 2001
+From ca9fc71a3c6d05044adf1ba17815299396b74605 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 16:10:50 +0900
 Subject: [PATCH 65/84] Hide voice search
@@ -8,7 +8,7 @@ Subject: [PATCH 65/84] Hide voice search
  1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
-index 43464d3e9344..4e10ca508bd9 100644
+index 43464d3e9..4e10ca508 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.js
 +++ b/chrome/browser/resources/local_ntp/local_ntp.js
 @@ -939,9 +939,10 @@ function init() {

@@ -1,4 +1,4 @@
-From 2ef2f069c3d6c858a7bcbd2392859ca105e71914 Mon Sep 17 00:00:00 2001
+From e8091289f6b4d6200a2f63a4fb5e895017bff77a Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:31:12 +0900
 Subject: [PATCH 07/84] Insert URL judgement module when observer the browser.
@@ -8,7 +8,7 @@ Subject: [PATCH 07/84] Insert URL judgement module when observer the browser.
  1 file changed, 101 insertions(+)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 3c29748aac1f..2ef581730433 100644
+index 3c29748aa..2ef581730 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -12,6 +12,11 @@

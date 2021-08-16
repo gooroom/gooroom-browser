@@ -1,4 +1,4 @@
-From 3ade664f048cf77e4c8602d31ec2ae39e446e743 Mon Sep 17 00:00:00 2001
+From 98120e18cb07c5523c729f74cf8ee52cd6eb3207 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:20:10 +0900
 Subject: [PATCH 48/84] BugTrackingSystem 1656 : 'devtools://' scheme is
@@ -9,7 +9,7 @@ Subject: [PATCH 48/84] BugTrackingSystem 1656 : 'devtools://' scheme is
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index b2f927602e67..a14b39ee6365 100644
+index b2f927602..a14b39ee6 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -5188,7 +5188,7 @@ bool RequestCurrentUserDataDir(GURL url) {

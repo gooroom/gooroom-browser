@@ -1,4 +1,4 @@
-From d32d1d6e0a8273c12ac814c161420b1847ceee65 Mon Sep 17 00:00:00 2001
+From 6fc0b298b18e31e8ee9e154a50c593f4903af6da Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 11:43:14 +0900
 Subject: [PATCH 28/84] enable/disable WebSocket & WebWorker according to
@@ -25,7 +25,7 @@ Subject: [PATCH 28/84] enable/disable WebSocket & WebWorker according to
  17 files changed, 160 insertions(+), 4 deletions(-)
 
 diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
-index d182b43ada04..c0667f5b5ab0 100644
+index d182b43ad..c0667f5b5 100644
 --- a/chrome/app/settings_strings.grdp
 +++ b/chrome/app/settings_strings.grdp
 @@ -1413,6 +1413,20 @@
@@ -50,7 +50,7 @@ index d182b43ada04..c0667f5b5ab0 100644
      Safe Browsing (protects you and your device from dangerous sites)
    </message>
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index dc0692379ab1..2fbdcdd0c2cd 100644
+index dc0692379..2fbdcdd0c 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
 @@ -771,6 +771,13 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
@@ -68,7 +68,7 @@ index dc0692379ab1..2fbdcdd0c2cd 100644
    (*s_allowlist)[media_router::prefs::kMediaRouterMediaRemotingEnabled] =
        settings_api::PrefType::PREF_TYPE_BOOLEAN;
 diff --git a/chrome/browser/resources/settings/settings_ui/settings_ui.js b/chrome/browser/resources/settings/settings_ui/settings_ui.js
-index 05560e75967d..1c2df1a08cc6 100644
+index 05560e759..1c2df1a08 100644
 --- a/chrome/browser/resources/settings/settings_ui/settings_ui.js
 +++ b/chrome/browser/resources/settings/settings_ui/settings_ui.js
 @@ -117,6 +117,47 @@ Polymer({
@@ -120,7 +120,7 @@ index 05560e75967d..1c2df1a08cc6 100644
        controlledSettingExtension:
            loadTimeData.getString('controlledSettingExtension'),
 diff --git a/chrome/browser/ui/prefs/pref_watcher.cc b/chrome/browser/ui/prefs/pref_watcher.cc
-index 919746a2f39a..607195520ec2 100644
+index 919746a2f..607195520 100644
 --- a/chrome/browser/ui/prefs/pref_watcher.cc
 +++ b/chrome/browser/ui/prefs/pref_watcher.cc
 @@ -61,6 +61,10 @@ const char* const kWebPrefsToObserve[] = {
@@ -135,7 +135,7 @@ index 919746a2f39a..607195520ec2 100644
  
  const int kWebPrefsToObserveLength = base::size(kWebPrefsToObserve);
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index ca7a6ebbecf4..4609ce259626 100644
+index ca7a6ebbe..4609ce259 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
 @@ -430,6 +430,13 @@ void PrefsTabHelper::RegisterProfilePrefs(
@@ -153,7 +153,7 @@ index ca7a6ebbecf4..4609ce259626 100644
  
  // static
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index f384bc355db0..a2c1cb380c9e 100644
+index f384bc355..a2c1cb380 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 @@ -1354,6 +1354,8 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
@@ -166,7 +166,7 @@ index f384bc355db0..a2c1cb380c9e 100644
        {"syncAndGoogleServicesPrivacyDescription",
         IDS_SETTINGS_SYNC_AND_GOOGLE_SERVICES_PRIVACY_DESC_UNIFIED_CONSENT},
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index ae1a6e96af2c..bf2d2b3ff7c3 100644
+index ae1a6e96a..bf2d2b3ff 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
 @@ -133,6 +133,10 @@
@@ -193,7 +193,7 @@ index ae1a6e96af2c..bf2d2b3ff7c3 100644
  
    content::WebUIDataSource::Add(web_ui->GetWebContents()->GetBrowserContext(),
 diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index c2dd0c67c5da..dc3d79843d97 100644
+index c2dd0c67c..dc3d79843 100644
 --- a/chrome/common/pref_names.cc
 +++ b/chrome/common/pref_names.cc
 @@ -2981,6 +2981,11 @@ const char kIsolateOrigins[] = "site_isolation.isolate_origins";
@@ -209,7 +209,7 @@ index c2dd0c67c5da..dc3d79843d97 100644
  // Boolean that specifies whether media (audio/video) autoplay is allowed.
  const char kAutoplayAllowed[] = "media.autoplay_allowed";
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index 961e65aed34a..8dfd4c44b4a0 100644
+index 961e65aed..8dfd4c44b 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
 @@ -1025,6 +1025,11 @@ extern const char kUnsafelyTreatInsecureOriginAsSecure[];
@@ -225,7 +225,7 @@ index 961e65aed34a..8dfd4c44b4a0 100644
  extern const char kAutoplayAllowed[];
  extern const char kAutoplayWhitelist[];
 diff --git a/gooroom/WebKit/gooroom_enabled_features.cc b/gooroom/WebKit/gooroom_enabled_features.cc
-index 1e665323d252..26485d0e9fc0 100644
+index 1e665323d..26485d0e9 100644
 --- a/gooroom/WebKit/gooroom_enabled_features.cc
 +++ b/gooroom/WebKit/gooroom_enabled_features.cc
 @@ -4,5 +4,7 @@ namespace blink {
@@ -237,7 +237,7 @@ index 1e665323d252..26485d0e9fc0 100644
  
  } // end of content namespace
 diff --git a/gooroom/WebKit/gooroom_enabled_features.h b/gooroom/WebKit/gooroom_enabled_features.h
-index 70b4f9f59f35..15a2befec211 100644
+index 70b4f9f59..15a2befec 100644
 --- a/gooroom/WebKit/gooroom_enabled_features.h
 +++ b/gooroom/WebKit/gooroom_enabled_features.h
 @@ -15,9 +15,18 @@ class PLATFORM_EXPORT GooroomEnabledFeatures {
@@ -260,7 +260,7 @@ index 70b4f9f59f35..15a2befec211 100644
  
  } // end of blink namespace
 diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
-index 44d63d22bf83..0c18a6f86f80 100644
+index 44d63d22b..0c18a6f86 100644
 --- a/gooroom/browser/gooroom_pref.h
 +++ b/gooroom/browser/gooroom_pref.h
 @@ -19,6 +19,11 @@ const char kPolicyGooroomWebSocket[] = "gooroom.policy.websocket";
@@ -276,7 +276,7 @@ index 44d63d22bf83..0c18a6f86f80 100644
   public:
    GooroomPref();
 diff --git a/gooroom/content/gooroom_safety_policy_part.cc b/gooroom/content/gooroom_safety_policy_part.cc
-index d57cfcdf4230..86b07d583879 100644
+index d57cfcdf4..86b07d583 100644
 --- a/gooroom/content/gooroom_safety_policy_part.cc
 +++ b/gooroom/content/gooroom_safety_policy_part.cc
 @@ -15,15 +15,19 @@ GooroomSafetyPolicyPart::~GooroomSafetyPolicyPart() {}
@@ -302,7 +302,7 @@ index d57cfcdf4230..86b07d583879 100644
      web_prefs->webworker_enabled = false;
    }
 diff --git a/third_party/blink/public/platform/web_runtime_features.h b/third_party/blink/public/platform/web_runtime_features.h
-index 633727e4885a..9374a417cef8 100644
+index 633727e48..9374a417c 100644
 --- a/third_party/blink/public/platform/web_runtime_features.h
 +++ b/third_party/blink/public/platform/web_runtime_features.h
 @@ -44,6 +44,8 @@ class WebRuntimeFeatures {
@@ -315,7 +315,7 @@ index 633727e4885a..9374a417cef8 100644
  
    // Enable or disable features with status=experimental listed in
 diff --git a/third_party/blink/renderer/core/workers/dedicated_worker.cc b/third_party/blink/renderer/core/workers/dedicated_worker.cc
-index 39ebcef3f86e..cd3517497d7d 100644
+index 39ebcef3f..3d73be06a 100644
 --- a/third_party/blink/renderer/core/workers/dedicated_worker.cc
 +++ b/third_party/blink/renderer/core/workers/dedicated_worker.cc
 @@ -4,6 +4,19 @@
@@ -364,7 +364,7 @@ index 39ebcef3f86e..cd3517497d7d 100644
    if (context->IsContextDestroyed()) {
      exception_state.ThrowDOMException(DOMExceptionCode::kInvalidAccessError,
 diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
-index 190b0d4a009f..9c796687b67d 100644
+index d72671917..be72f96bf 100644
 --- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 +++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 @@ -275,7 +275,7 @@ void DOMWebSocket::Connect(const String& url,
@@ -387,7 +387,7 @@ index 190b0d4a009f..9c796687b67d 100644
      //    frm, "External connection attempts were blocked by policy.");
   
 diff --git a/third_party/blink/renderer/platform/exported/web_runtime_features.cc b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-index 1732bd36b1cc..6ce1285a17fe 100644
+index 1732bd36b..6ce1285a1 100644
 --- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 +++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 @@ -551,6 +551,14 @@ void WebRuntimeFeatures::EnableWebSocket(bool enable) {

@@ -1,4 +1,4 @@
-From afe3fb36a38c1a23c6b3c53c1ff25852a276aa58 Mon Sep 17 00:00:00 2001
+From 94e05d7a49619bf0c3e8cc1ca0076f274900d0ae Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:26:05 +0900
 Subject: [PATCH 56/84] option with url bug
@@ -8,7 +8,7 @@ Subject: [PATCH 56/84] option with url bug
  1 file changed, 26 deletions(-)
 
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index 75a92cd48e69..22a9222cecb2 100644
+index 75a92cd48..22a9222ce 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -107,32 +107,6 @@ void GooroomPref::setup() {

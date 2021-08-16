@@ -1,4 +1,4 @@
-From 5f00473bbad4acea7bce59c796ef1e80e7519288 Mon Sep 17 00:00:00 2001
+From 92dfdfbcf8a28239f599ab42fac4305e968ce39d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 15:33:23 +0900
 Subject: [PATCH 58/84] Apply adobe flash
@@ -8,7 +8,7 @@ Subject: [PATCH 58/84] Apply adobe flash
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index 22a9222cecb2..5e36cefcb172 100644
+index 22a9222ce..5e36cefcb 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -109,13 +109,14 @@ void GooroomPref::setup() {

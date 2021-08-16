@@ -1,4 +1,4 @@
-From 9bd426b51317f0c3a988b35a54fa711a444f49d7 Mon Sep 17 00:00:00 2001
+From 4770ee74473e345e997d6657f679cc93e03ffc8f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 11:59:22 +0900
 Subject: [PATCH 38/84] change chrome to gooroom scheme on error page [Gooroom
@@ -11,7 +11,7 @@ Subject: [PATCH 38/84] change chrome to gooroom scheme on error page [Gooroom
  2 files changed, 18 insertions(+)
 
 diff --git a/chrome/browser/ui/content_settings/content_setting_bubble_model.cc b/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
-index b36d7cc55bdd..143f798a7b4f 100644
+index b36d7cc55..143f798a7 100644
 --- a/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
 +++ b/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
 @@ -9,6 +9,7 @@
@@ -39,7 +39,7 @@ index b36d7cc55bdd..143f798a7b4f 100644
    PageSpecificContentSettings* content_settings =
        PageSpecificContentSettings::GetForFrame(web_contents()->GetMainFrame());
 diff --git a/components/error_page/common/localized_error.cc b/components/error_page/common/localized_error.cc
-index dda4072bd70d..1fa1e4651c5b 100644
+index dda4072bd..1fa1e4651 100644
 --- a/components/error_page/common/localized_error.cc
 +++ b/components/error_page/common/localized_error.cc
 @@ -9,6 +9,7 @@

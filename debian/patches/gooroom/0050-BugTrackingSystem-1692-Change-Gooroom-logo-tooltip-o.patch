@@ -1,4 +1,4 @@
-From 23a1f1ce832aea907ad8a086918176121706101a Mon Sep 17 00:00:00 2001
+From 346edbddfcbb15c4f2d253a6988a4fa275e8d56b Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:23:23 +0900
 Subject: [PATCH 50/84] BugTrackingSystem 1692 : Change Gooroom logo tooltip on
@@ -9,7 +9,7 @@ Subject: [PATCH 50/84] BugTrackingSystem 1692 : Change Gooroom logo tooltip on
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.html b/chrome/browser/resources/local_ntp/local_ntp.html
-index 52bd3edeb741..f4381c2dce32 100644
+index 52bd3edeb..f4381c2dc 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.html
 +++ b/chrome/browser/resources/local_ntp/local_ntp.html
 @@ -41,9 +41,9 @@

@@ -1,4 +1,4 @@
-From f389a8fc3b53a0fae06144b0c97d416360377a21 Mon Sep 17 00:00:00 2001
+From ca2fd23cab8daf87e86f4843d2cb37c977f97560 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:46:38 +0900
 Subject: [PATCH 25/84] pruning settings pages(chrome://settings)
@@ -10,7 +10,7 @@ Subject: [PATCH 25/84] pruning settings pages(chrome://settings)
  3 files changed, 10 insertions(+)
 
 diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
-index e8299dcfeb8b..f5588a5094cb 100644
+index e8299dcfe..f5588a509 100644
 --- a/chrome/browser/resources/settings/about_page/about_page.html
 +++ b/chrome/browser/resources/settings/about_page/about_page.html
 @@ -124,8 +124,10 @@
@@ -25,7 +25,7 @@ index e8299dcfeb8b..f5588a5094cb 100644
        <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueTap_"
            hidden="[[!prefs.feedback_allowed.value]]"
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index f36c113b42c5..646e4c4f4e79 100644
+index f36c113b4..646e4c4f4 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
 @@ -76,6 +76,7 @@
@@ -61,7 +61,7 @@ index f36c113b42c5..646e4c4f4e79 100644
              <settings-section page-title="$i18n{systemPageTitle}"
                  section="system">
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 2ecb98793707..5d2915c19613 100644
+index 2ecb98793..5d2915c19 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 @@ -101,11 +101,13 @@

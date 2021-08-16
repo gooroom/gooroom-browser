@@ -1,4 +1,4 @@
-From 6a0b4c345b4301cb9bb67ef318a6e5b296ae7e6a Mon Sep 17 00:00:00 2001
+From 62ae47e16ba6ee3d66137c0fb6f4276d3d4beeca Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 14:59:35 +0900
 Subject: [PATCH 10/84] register /gooroom/ as a external protocol and scheme
@@ -11,7 +11,7 @@ Subject: [PATCH 10/84] register /gooroom/ as a external protocol and scheme
  4 files changed, 10 insertions(+)
 
 diff --git a/chrome/browser/profiles/profile_io_data.cc b/chrome/browser/profiles/profile_io_data.cc
-index 1f049d67b6c1..8aa067a67380 100644
+index 1f049d67b..8aa067a67 100644
 --- a/chrome/browser/profiles/profile_io_data.cc
 +++ b/chrome/browser/profiles/profile_io_data.cc
 @@ -246,6 +246,10 @@ bool ProfileIOData::IsHandledProtocol(const std::string& scheme) {
@@ -26,7 +26,7 @@ index 1f049d67b6c1..8aa067a67380 100644
      url::kDataScheme,
  #if BUILDFLAG(IS_CHROMEOS_ASH)
 diff --git a/content/common/url_schemes.cc b/content/common/url_schemes.cc
-index dc37f121130d..091337d2918c 100644
+index dc37f1211..091337d29 100644
 --- a/content/common/url_schemes.cc
 +++ b/content/common/url_schemes.cc
 @@ -59,6 +59,10 @@ void RegisterContentSchemes() {
@@ -41,7 +41,7 @@ index dc37f121130d..091337d2918c 100644
    url::AddStandardScheme(kGuestScheme, url::SCHEME_WITH_HOST);
    url::AddStandardScheme(kChromeErrorScheme, url::SCHEME_WITH_HOST);
 diff --git a/content/public/common/url_constants.cc b/content/public/common/url_constants.cc
-index f928bec6ad4e..5eb92a52cfe2 100644
+index f928bec6a..5eb92a52c 100644
 --- a/content/public/common/url_constants.cc
 +++ b/content/public/common/url_constants.cc
 @@ -13,6 +13,7 @@ namespace content {
@@ -53,7 +53,7 @@ index f928bec6ad4e..5eb92a52cfe2 100644
  const char kChromeUIUntrustedScheme[] = "chrome-untrusted";
  const char kGuestScheme[] = "chrome-guest";
 diff --git a/content/public/common/url_constants.h b/content/public/common/url_constants.h
-index 5bad5bc7dd22..af34fe254bf6 100644
+index 5bad5bc7d..af34fe254 100644
 --- a/content/public/common/url_constants.h
 +++ b/content/public/common/url_constants.h
 @@ -21,6 +21,7 @@ namespace content {

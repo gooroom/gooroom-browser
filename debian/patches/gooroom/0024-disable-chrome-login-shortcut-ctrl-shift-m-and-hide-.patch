@@ -1,4 +1,4 @@
-From 56d6ba173f5382889443dacbd7d0179bad22504f Mon Sep 17 00:00:00 2001
+From cb4d0297d8f89344606a50df7a0d39ab2984f3da Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:23:10 +0900
 Subject: [PATCH 24/84] disable chrome login shortcut(ctrl+shift+m) and hide
@@ -10,7 +10,7 @@ Subject: [PATCH 24/84] disable chrome login shortcut(ctrl+shift+m) and hide
  2 files changed, 7 insertions(+)
 
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index 8faaa9afc1e6..e8e7c11fac5d 100644
+index 8faaa9afc..e8e7c11fa 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
 @@ -779,8 +779,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
@@ -26,7 +26,7 @@ index 8faaa9afc1e6..e8e7c11fac5d 100644
  #endif
      case IDC_DISTILL_PAGE:
 diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-index 54ba2047729f..0c66fd6f988e 100644
+index 54ba20477..0c66fd6f9 100644
 --- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
 +++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
 @@ -250,6 +250,10 @@ void ToolbarView::Init() {

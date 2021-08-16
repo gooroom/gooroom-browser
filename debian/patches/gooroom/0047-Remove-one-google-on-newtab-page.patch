@@ -1,4 +1,4 @@
-From 508f7b8d0f82163e9dd3daeaf3bbe525b9e2573f Mon Sep 17 00:00:00 2001
+From cdfc4ff0387640235f9a7b22ec25673813b433d6 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:18:54 +0900
 Subject: [PATCH 47/84] Remove one google on newtab page
@@ -8,7 +8,7 @@ Subject: [PATCH 47/84] Remove one google on newtab page
  1 file changed, 3 deletions(-)
 
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
-index d2be5b612a84..1172e0187e21 100644
+index d2be5b612..1172e0187 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.js
 +++ b/chrome/browser/resources/local_ntp/local_ntp.js
 @@ -816,7 +816,6 @@ function handlePostMessage(event) {

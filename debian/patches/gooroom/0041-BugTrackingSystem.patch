@@ -1,4 +1,4 @@
-From ee866dd444cba4ca72dc2ed30db3ceeaf22497a8 Mon Sep 17 00:00:00 2001
+From b27f94c4559f37c917d0855172b6cbd190d6e3cd Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 13:45:46 +0900
 Subject: [PATCH 41/84] BugTrackingSystem
@@ -24,7 +24,7 @@ Subject: [PATCH 41/84] BugTrackingSystem
  4 files changed, 8 insertions(+), 12 deletions(-)
 
 diff --git a/chrome/app/resources/manpage.1.in b/chrome/app/resources/manpage.1.in
-index 1e4fe85907e3..085cbe85ff3a 100644
+index b9c99a11f..48992ea1c 100644
 --- a/chrome/app/resources/manpage.1.in
 +++ b/chrome/app/resources/manpage.1.in
 @@ -3,16 +3,16 @@
@@ -47,7 +47,7 @@ index 1e4fe85907e3..085cbe85ff3a 100644
  .PP
  This manpage only describes invocation, environment, and arguments.
  
-@@ -150,11 +150,11 @@ Comma separated list of hosts or patterns to bypass proxying.
+@@ -168,11 +168,11 @@ Comma separated list of hosts or patterns to bypass proxying.
  
  .SH FILES
  .TP
@@ -62,7 +62,7 @@ index 1e4fe85907e3..085cbe85ff3a 100644
  <http://standards.freedesktop.org/basedir-spec/latest/> .)
  
 diff --git a/chrome/browser/resources/history/side_bar.html b/chrome/browser/resources/history/side_bar.html
-index dbd42713864f..c78ddfd0380d 100644
+index dbd427138..c78ddfd03 100644
 --- a/chrome/browser/resources/history/side_bar.html
 +++ b/chrome/browser/resources/history/side_bar.html
 @@ -104,11 +104,6 @@
@@ -78,7 +78,7 @@ index dbd42713864f..c78ddfd0380d 100644
          <a role="menuitem" id="clear-browsing-data"
              href="chrome://settings/clearBrowserData"
 diff --git a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
-index b863197bb720..9722b30ed069 100644
+index b863197bb..9722b30ed 100644
 --- a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
 +++ b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
 @@ -140,8 +140,8 @@ void BookmarkContextMenuController::BuildMenu() {
@@ -93,7 +93,7 @@ index b863197bb720..9722b30ed069 100644
      int count = chrome::OpenCount(parent_window_, selection_);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 2ef581730433..822e235ac850 100644
+index 2ef581730..822e235ac 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -15,6 +15,7 @@

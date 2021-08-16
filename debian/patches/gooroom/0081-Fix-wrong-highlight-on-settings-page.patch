@@ -1,0 +1,25 @@
+From f865df906f0ac33a9af4862921ef7d0e263666a9 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:10:53 +0900
+Subject: [PATCH 81/84] Fix wrong highlight on settings page
+
+---
+ ui/webui/resources/js/search_highlight_utils.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ui/webui/resources/js/search_highlight_utils.js b/ui/webui/resources/js/search_highlight_utils.js
+index aca22d545..06d9dbd0f 100644
+--- a/ui/webui/resources/js/search_highlight_utils.js
++++ b/ui/webui/resources/js/search_highlight_utils.js
+@@ -165,7 +165,7 @@ cr.define('cr.search_highlight_utils', function() {
+    * @return {string}
+    */
+   /* #export */ function stripDiacritics(text) {
+-    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
++    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC');
+   }
+ 
+   // #cr_define_end
+-- 
+2.20.1
+

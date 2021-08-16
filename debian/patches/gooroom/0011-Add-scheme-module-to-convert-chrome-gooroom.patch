@@ -1,4 +1,4 @@
-From 2a768b6f66e47b15906b436aa9884cf0bd8b4cf3 Mon Sep 17 00:00:00 2001
+From 779fcb6f812de0aa84e7f3dbc4913210f502c979 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:01:01 +0900
 Subject: [PATCH 11/84] Add scheme module to convert (chrome://->gooroom://)
@@ -13,7 +13,7 @@ Subject: [PATCH 11/84] Add scheme module to convert (chrome://->gooroom://)
  create mode 100644 gooroom/URLRewrite/gooroom_url_rewrite.h
 
 diff --git a/chrome/browser/extensions/extension_web_ui.cc b/chrome/browser/extensions/extension_web_ui.cc
-index 0a4332a9827e..1e9e75ebb64d 100644
+index 0a4332a98..1e9e75ebb 100644
 --- a/chrome/browser/extensions/extension_web_ui.cc
 +++ b/chrome/browser/extensions/extension_web_ui.cc
 @@ -433,8 +433,13 @@ void ExtensionWebUI::RegisterProfilePrefs(
@@ -43,7 +43,7 @@ index 0a4332a9827e..1e9e75ebb64d 100644
                            url->spec().substr(override.length()));
          *url = original_url;
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 8cedf296a59f..d523b0b3d912 100644
+index 8cedf296a..d523b0b3d 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -236,6 +236,10 @@ if (!is_android && !is_mac) {
@@ -59,7 +59,7 @@ index 8cedf296a59f..d523b0b3d912 100644
    }
 diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.cc b/gooroom/URLRewrite/gooroom_url_rewrite.cc
 new file mode 100644
-index 000000000000..4443c996f560
+index 000000000..4443c996f
 --- /dev/null
 +++ b/gooroom/URLRewrite/gooroom_url_rewrite.cc
 @@ -0,0 +1,34 @@
@@ -99,7 +99,7 @@ index 000000000000..4443c996f560
 +}
 diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.h b/gooroom/URLRewrite/gooroom_url_rewrite.h
 new file mode 100644
-index 000000000000..a3e0e2ad948b
+index 000000000..a3e0e2ad9
 --- /dev/null
 +++ b/gooroom/URLRewrite/gooroom_url_rewrite.h
 @@ -0,0 +1,43 @@

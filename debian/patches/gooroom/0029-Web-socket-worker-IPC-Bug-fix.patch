@@ -1,4 +1,4 @@
-From 7483277b61a0fda842ae4e5a4f2ef936c6fc2669 Mon Sep 17 00:00:00 2001
+From c28c453e3ccd5d71750e2a893eaa7fcd47712bac Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 5 Mar 2021 09:48:26 +0900
 Subject: [PATCH 29/84] Web socket-worker IPC Bug fix
@@ -16,7 +16,7 @@ Subject: [PATCH 29/84] Web socket-worker IPC Bug fix
  9 files changed, 43 insertions(+), 17 deletions(-)
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 6421c8be6ecb..2d72e65c9f50 100644
+index 6421c8be6..2d72e65c9 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -3282,8 +3282,6 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
@@ -29,7 +29,7 @@ index 6421c8be6ecb..2d72e65c9f50 100644
  
    web_prefs->dom_paste_enabled =
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index aa41922b9cd2..ebd135b85ccc 100644
+index aa41922b9..ebd135b85 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 @@ -64,6 +64,19 @@
@@ -53,7 +53,7 @@ index aa41922b9cd2..ebd135b85ccc 100644
  
  <if expr="use_nss_certs">
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index 4609ce259626..aa9dfcbd7567 100644
+index 4609ce259..aa9dfcbd7 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
 @@ -337,9 +337,9 @@ void PrefsTabHelper::RegisterProfilePrefs(
@@ -69,7 +69,7 @@ index 4609ce259626..aa9dfcbd7567 100644
    registry->RegisterBooleanPref(prefs::kWebKitJavascriptEnabled,
                                  pref_defaults.javascript_enabled);
 diff --git a/gooroom/content/gooroom_safety_policy_part.cc b/gooroom/content/gooroom_safety_policy_part.cc
-index 86b07d583879..a391de1187d3 100644
+index 86b07d583..a391de118 100644
 --- a/gooroom/content/gooroom_safety_policy_part.cc
 +++ b/gooroom/content/gooroom_safety_policy_part.cc
 @@ -22,14 +22,14 @@ void GooroomSafetyPolicyPart::OverrideWebkitPrefs(
@@ -90,7 +90,7 @@ index 86b07d583879..a391de1187d3 100644
  
    return;
 diff --git a/third_party/blink/common/web_preferences/web_preferences.cc b/third_party/blink/common/web_preferences/web_preferences.cc
-index 7089cc5629a8..76e89640ad2c 100644
+index 7089cc562..76e89640a 100644
 --- a/third_party/blink/common/web_preferences/web_preferences.cc
 +++ b/third_party/blink/common/web_preferences/web_preferences.cc
 @@ -39,13 +39,13 @@ WebPreferences::WebPreferences()
@@ -110,7 +110,7 @@ index 7089cc5629a8..76e89640ad2c 100644
        web_security_enabled(true),
        loads_images_automatically(true),
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences.h b/third_party/blink/public/common/web_preferences/web_preferences.h
-index a834796105a7..5ab84c28a204 100644
+index a83479610..5ab84c28a 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences.h
 @@ -56,8 +56,8 @@ struct BLINK_COMMON_EXPORT WebPreferences {
@@ -125,7 +125,7 @@ index a834796105a7..5ab84c28a204 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
-index 1985caca3af5..3a82235e5650 100644
+index 1985caca3..3a82235e5 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 @@ -75,12 +75,12 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::WebPreferencesDataView,
@@ -144,7 +144,7 @@ index 1985caca3af5..3a82235e5650 100644
      return r.websocket_enabled;
    }
 diff --git a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
-index fd1dd67466c6..0b4c5e7fca98 100644
+index fd1dd6746..0b4c5e7fc 100644
 --- a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 +++ b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 @@ -110,8 +110,8 @@ struct WebPreferences {
@@ -159,7 +159,7 @@ index fd1dd67466c6..0b4c5e7fca98 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/renderer/core/exported/web_view_impl.cc b/third_party/blink/renderer/core/exported/web_view_impl.cc
-index 2b699b407df4..647bc9c3ec02 100644
+index 2b699b407..647bc9c3e 100644
 --- a/third_party/blink/renderer/core/exported/web_view_impl.cc
 +++ b/third_party/blink/renderer/core/exported/web_view_impl.cc
 @@ -1397,9 +1397,6 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,

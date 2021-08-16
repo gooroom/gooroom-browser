@@ -1,4 +1,4 @@
-From 2979507cdab05dee04bee34f2a468435ebc9b034 Mon Sep 17 00:00:00 2001
+From da872c52a83fa6c4d897d9c8483977468bf945e1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 18:11:31 +0900
 Subject: [PATCH 26/84] enable/disable WebSocket according to policy, but, need
@@ -31,7 +31,7 @@ Subject: [PATCH 26/84] enable/disable WebSocket according to policy, but, need
  create mode 100644 gooroom/content/gooroom_safety_policy_part.h
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index cd0c8e59babf..6421c8be6ecb 100644
+index cd0c8e59b..6421c8be6 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -12,6 +12,7 @@
@@ -60,7 +60,7 @@ index cd0c8e59babf..6421c8be6ecb 100644
  
    web_prefs->dom_paste_enabled =
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index 5b89ba63e771..ca7a6ebbecf4 100644
+index 5b89ba63e..ca7a6ebbe 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
 @@ -337,6 +337,10 @@ void PrefsTabHelper::RegisterProfilePrefs(
@@ -75,7 +75,7 @@ index 5b89ba63e771..ca7a6ebbecf4 100644
                                  pref_defaults.javascript_enabled);
    registry->RegisterBooleanPref(prefs::kWebKitWebSecurityEnabled,
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index d523b0b3d912..0c60a00bfa3b 100644
+index d523b0b3d..0c60a00bf 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -240,6 +240,10 @@ if (!is_android && !is_mac) {
@@ -91,7 +91,7 @@ index d523b0b3d912..0c60a00bfa3b 100644
    }
 diff --git a/gooroom/WebKit/gooroom_enabled_features.cc b/gooroom/WebKit/gooroom_enabled_features.cc
 new file mode 100644
-index 000000000000..1e665323d252
+index 000000000..1e665323d
 --- /dev/null
 +++ b/gooroom/WebKit/gooroom_enabled_features.cc
 @@ -0,0 +1,8 @@
@@ -105,7 +105,7 @@ index 000000000000..1e665323d252
 +} // end of content namespace
 diff --git a/gooroom/WebKit/gooroom_enabled_features.h b/gooroom/WebKit/gooroom_enabled_features.h
 new file mode 100644
-index 000000000000..70b4f9f59f35
+index 000000000..70b4f9f59
 --- /dev/null
 +++ b/gooroom/WebKit/gooroom_enabled_features.h
 @@ -0,0 +1,25 @@
@@ -135,7 +135,7 @@ index 000000000000..70b4f9f59f35
 +
 +#endif /* GOOROOM_ENABLED_FEATURES_H_ */
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index 8d5bd131d4c1..3e33505a8f99 100644
+index 8d5bd131d..3e33505a8 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -42,8 +42,8 @@ void GooroomPref::setup() {
@@ -184,7 +184,7 @@ index 8d5bd131d4c1..3e33505a8f99 100644
 +
  }  // namespace gooroom
 diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
-index 3e94b7fb6b22..44d63d22bf83 100644
+index 3e94b7fb6..44d63d22b 100644
 --- a/gooroom/browser/gooroom_pref.h
 +++ b/gooroom/browser/gooroom_pref.h
 @@ -15,13 +15,9 @@ namespace gooroom {
@@ -215,7 +215,7 @@ index 3e94b7fb6b22..44d63d22bf83 100644
  };
 diff --git a/gooroom/content/gooroom_safety_policy_part.cc b/gooroom/content/gooroom_safety_policy_part.cc
 new file mode 100644
-index 000000000000..d57cfcdf4230
+index 000000000..d57cfcdf4
 --- /dev/null
 +++ b/gooroom/content/gooroom_safety_policy_part.cc
 @@ -0,0 +1,34 @@
@@ -255,7 +255,7 @@ index 000000000000..d57cfcdf4230
 +}  // namespace content
 diff --git a/gooroom/content/gooroom_safety_policy_part.h b/gooroom/content/gooroom_safety_policy_part.h
 new file mode 100644
-index 000000000000..e536dd3dc941
+index 000000000..e536dd3dc
 --- /dev/null
 +++ b/gooroom/content/gooroom_safety_policy_part.h
 @@ -0,0 +1,24 @@
@@ -284,7 +284,7 @@ index 000000000000..e536dd3dc941
 +#endif  // GOOROOM_SAFETY_POLICY_PART_H_
 +
 diff --git a/third_party/blink/common/web_preferences/web_preferences.cc b/third_party/blink/common/web_preferences/web_preferences.cc
-index 758b0b1616ec..7089cc5629a8 100644
+index 758b0b161..7089cc562 100644
 --- a/third_party/blink/common/web_preferences/web_preferences.cc
 +++ b/third_party/blink/common/web_preferences/web_preferences.cc
 @@ -44,6 +44,8 @@ WebPreferences::WebPreferences()
@@ -297,7 +297,7 @@ index 758b0b1616ec..7089cc5629a8 100644
        web_security_enabled(true),
        loads_images_automatically(true),
 diff --git a/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc b/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
-index ba1ba323ec45..3b4761573813 100644
+index ba1ba323e..3b4761573 100644
 --- a/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
 +++ b/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
 @@ -55,6 +55,8 @@ bool StructTraits<blink::mojom::WebPreferencesDataView,
@@ -310,7 +310,7 @@ index ba1ba323ec45..3b4761573813 100644
    out->default_fixed_font_size = data.default_fixed_font_size();
    out->minimum_font_size = data.minimum_font_size();
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences.h b/third_party/blink/public/common/web_preferences/web_preferences.h
-index ab727750abcb..a834796105a7 100644
+index ab727750a..a83479610 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences.h
 @@ -56,6 +56,8 @@ struct BLINK_COMMON_EXPORT WebPreferences {
@@ -323,7 +323,7 @@ index ab727750abcb..a834796105a7 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
-index 68d33ca3be29..1985caca3af5 100644
+index 68d33ca3b..1985caca3 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 @@ -75,6 +75,16 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::WebPreferencesDataView,
@@ -344,7 +344,7 @@ index 68d33ca3be29..1985caca3af5 100644
        const blink::web_pref::WebPreferences& r) {
      return r.context_menu_on_mouse_up;
 diff --git a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
-index 5428fa6e79ed..fd1dd67466c6 100644
+index 5428fa6e7..fd1dd6746 100644
 --- a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 +++ b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 @@ -110,6 +110,8 @@ struct WebPreferences {
@@ -357,7 +357,7 @@ index 5428fa6e79ed..fd1dd67466c6 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/public/platform/web_runtime_features.h b/third_party/blink/public/platform/web_runtime_features.h
-index 1f57717773af..633727e4885a 100644
+index 1f5771777..633727e48 100644
 --- a/third_party/blink/public/platform/web_runtime_features.h
 +++ b/third_party/blink/public/platform/web_runtime_features.h
 @@ -41,6 +41,11 @@ namespace blink {
@@ -373,7 +373,7 @@ index 1f57717773af..633727e4885a 100644
    // Source/platform/runtime_enabled_features.json5.
    BLINK_PLATFORM_EXPORT static void EnableExperimentalFeatures(bool);
 diff --git a/third_party/blink/renderer/core/exported/web_view_impl.cc b/third_party/blink/renderer/core/exported/web_view_impl.cc
-index a8e1730397b7..2b699b407df4 100644
+index a8e173039..2b699b407 100644
 --- a/third_party/blink/renderer/core/exported/web_view_impl.cc
 +++ b/third_party/blink/renderer/core/exported/web_view_impl.cc
 @@ -1397,6 +1397,9 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
@@ -387,7 +387,7 @@ index a8e1730397b7..2b699b407df4 100644
    settings->SetLoadsImagesAutomatically(prefs.loads_images_automatically);
    settings->SetImagesEnabled(prefs.images_enabled);
 diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
-index 7d16ecdde4ae..190b0d4a009f 100644
+index 7d16ecdde..d72671917 100644
 --- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 +++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 @@ -30,6 +30,19 @@
@@ -448,7 +448,7 @@ index 7d16ecdde4ae..190b0d4a009f 100644
      case WebSocketCommon::ConnectResult::kSuccess:
        DCHECK(!exception_state.HadException());
 diff --git a/third_party/blink/renderer/platform/BUILD.gn b/third_party/blink/renderer/platform/BUILD.gn
-index ca52366fe2eb..2eb6296d0d9d 100644
+index ca52366fe..2eb6296d0 100644
 --- a/third_party/blink/renderer/platform/BUILD.gn
 +++ b/third_party/blink/renderer/platform/BUILD.gn
 @@ -1542,6 +1542,12 @@ component("platform") {
@@ -465,7 +465,7 @@ index ca52366fe2eb..2eb6296d0d9d 100644
  
    # Add in the generated files.
 diff --git a/third_party/blink/renderer/platform/exported/web_runtime_features.cc b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-index 674b14492c04..1732bd36b1cc 100644
+index 674b14492..1732bd36b 100644
 --- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 +++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 @@ -34,6 +34,10 @@

@@ -1,4 +1,4 @@
-From c5999d4761c36493fecc38c68a766f14ab261a57 Mon Sep 17 00:00:00 2001
+From 993125c3cb7620e14986572fc38266d8f13ef910 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 12:23:32 +0900
 Subject: [PATCH 40/84] Remove 'Export to JSON' button on gooroom://policy page
@@ -11,7 +11,7 @@ Subject: [PATCH 40/84] Remove 'Export to JSON' button on gooroom://policy page
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/ui/webui/policy/policy_ui_handler.cc b/chrome/browser/ui/webui/policy/policy_ui_handler.cc
-index 0c7732c61292..185afc58213b 100644
+index 0c7732c61..185afc582 100644
 --- a/chrome/browser/ui/webui/policy/policy_ui_handler.cc
 +++ b/chrome/browser/ui/webui/policy/policy_ui_handler.cc
 @@ -1025,7 +1025,7 @@ base::Value PolicyUIHandler::GetPolicyNames() const {
@@ -24,7 +24,7 @@ index 0c7732c61292..185afc58213b 100644
    names.SetKey("chrome", std::move(chrome_values));
  
 diff --git a/components/policy/resources/webui/policy.html b/components/policy/resources/webui/policy.html
-index 3889cc31722a..5ad3d4246691 100644
+index 3889cc317..5ad3d4246 100644
 --- a/components/policy/resources/webui/policy.html
 +++ b/components/policy/resources/webui/policy.html
 @@ -32,7 +32,7 @@

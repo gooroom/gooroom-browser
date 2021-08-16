@@ -1,4 +1,4 @@
-From 3c581baa372a518d9830376ae8123830ed9c9fc1 Mon Sep 17 00:00:00 2001
+From a81b425ab9aea8e50b77b05f6654f3a86d2265fe Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 10:28:35 +0900
 Subject: [PATCH 35/84] Remove Google-Help link
@@ -8,7 +8,7 @@ Subject: [PATCH 35/84] Remove Google-Help link
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
-index 665ba985b267..d1be276e88b7 100644
+index 665ba985b..d1be276e8 100644
 --- a/chrome/browser/resources/settings/settings_main/settings_main.html
 +++ b/chrome/browser/resources/settings/settings_main/settings_main.html
 @@ -34,7 +34,9 @@

@@ -1,4 +1,4 @@
-From 23056dc235837332e89b9b27e8ddf469f7f7b273 Mon Sep 17 00:00:00 2001
+From 6989ca994af708d174bbff4e11a0864d93536fa2 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 16:18:47 +0900
 Subject: [PATCH 66/84] Fix adobe flash bug
@@ -9,7 +9,7 @@ Subject: [PATCH 66/84] Fix adobe flash bug
  2 files changed, 30 insertions(+), 14 deletions(-)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index a14b39ee6365..3b5dc8fa60ba 100644
+index a14b39ee6..3b5dc8fa6 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -16,6 +16,7 @@
@@ -50,7 +50,7 @@ index a14b39ee6365..3b5dc8fa60ba 100644
      }
    }
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index 5e36cefcb172..2a0b8ac6c687 100644
+index 5e36cefcb..2a0b8ac6c 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -89,7 +89,15 @@ void GooroomPref::setup() {

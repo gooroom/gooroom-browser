@@ -1,4 +1,4 @@
-From 3793c1e7cd816a326606dbeb60e3621987574fac Mon Sep 17 00:00:00 2001
+From f160b948b0ce9314cfde43339ceb0b2e4b653fe6 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc91@gmail.com>
 Date: Fri, 23 Apr 2021 10:16:19 +0900
 Subject: [PATCH 72/84] Change syslog id
@@ -8,7 +8,7 @@ Subject: [PATCH 72/84] Change syslog id
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/base/syslog_logging.cc b/base/syslog_logging.cc
-index ae507b2d8b8f..700abeb53af4 100644
+index ae507b2d8..700abeb53 100644
 --- a/base/syslog_logging.cc
 +++ b/base/syslog_logging.cc
 @@ -135,7 +135,7 @@ EventLogMessage::~EventLogMessage() {

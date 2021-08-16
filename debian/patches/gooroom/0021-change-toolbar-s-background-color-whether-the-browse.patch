@@ -1,4 +1,4 @@
-From 8e816accfcb240600840e6d6f7066c82aa8051b5 Mon Sep 17 00:00:00 2001
+From bc3622a62414ec1184bee149a2394efd8124d59c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:16:15 +0900
 Subject: [PATCH 21/84] change toolbar's background color whether the browser's
@@ -9,7 +9,7 @@ Subject: [PATCH 21/84] change toolbar's background color whether the browser's
  1 file changed, 26 insertions(+)
 
 diff --git a/chrome/browser/themes/theme_properties.cc b/chrome/browser/themes/theme_properties.cc
-index 2d4ac8baca10..a3839862a64f 100644
+index 2d4ac8bac..a3839862a 100644
 --- a/chrome/browser/themes/theme_properties.cc
 +++ b/chrome/browser/themes/theme_properties.cc
 @@ -19,6 +19,10 @@

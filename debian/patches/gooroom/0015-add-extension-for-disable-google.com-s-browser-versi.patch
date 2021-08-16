@@ -1,4 +1,4 @@
-From 516eb84e696a51f2e7de1bdb794b163fd0b36bc2 Mon Sep 17 00:00:00 2001
+From ec4d048a700a5d97a3f2e471f7da595450af3af1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 16:40:08 +0900
 Subject: [PATCH 15/84] add extension for disable google.com's browser version
@@ -22,7 +22,7 @@ Subject: [PATCH 15/84] add extension for disable google.com's browser version
  create mode 100644 gooroom/browser/dgw/disable_google_warning.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index 974c20f48a4c..d9108b31b8fd 100644
+index 974c20f48..d9108b31b 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
 @@ -208,6 +208,9 @@
@@ -36,7 +36,7 @@ index 974c20f48a4c..d9108b31b8fd 100644
        <if expr="is_win">
          <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_win.json" type="BINDATA" />
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index 2a3890ab1ec1..149c6bbf1372 100644
+index 2a3890ab1..149c6bbf1 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
 @@ -74,6 +74,10 @@
@@ -62,7 +62,7 @@ index 2a3890ab1ec1..149c6bbf1372 100644
  }
  
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index 349356fa190c..cd5f62b493e9 100644
+index 349356fa1..cd5f62b49 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
 @@ -97,6 +97,10 @@
@@ -78,7 +78,7 @@ index 349356fa190c..cd5f62b493e9 100644
        <include name="IDR_CRYPTOTOKEN_B64_JS" file="cryptotoken/b64.js" type="BINDATA" />
 diff --git a/chrome/browser/resources/dgw/inject.css b/chrome/browser/resources/dgw/inject.css
 new file mode 100644
-index 000000000000..10894976cc58
+index 000000000..10894976c
 --- /dev/null
 +++ b/chrome/browser/resources/dgw/inject.css
 @@ -0,0 +1,6 @@
@@ -91,7 +91,7 @@ index 000000000000..10894976cc58
 \ No newline at end of file
 diff --git a/chrome/browser/resources/dgw/manifest.json b/chrome/browser/resources/dgw/manifest.json
 new file mode 100644
-index 000000000000..0f4b1e504496
+index 000000000..0f4b1e504
 --- /dev/null
 +++ b/chrome/browser/resources/dgw/manifest.json
 @@ -0,0 +1,14 @@
@@ -110,7 +110,7 @@ index 000000000000..0f4b1e504496
 +}
 +
 diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
-index 21c399eaf976..2ce2b9d124c2 100644
+index 21c399eaf..2ce2b9d12 100644
 --- a/extensions/common/constants.cc
 +++ b/extensions/common/constants.cc
 @@ -110,6 +110,9 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
@@ -124,7 +124,7 @@ index 21c399eaf976..2ce2b9d124c2 100644
      "bpmcpldpdmajfigpchkicefoigmkfalc";
  const char kQuickOfficeInternalExtensionId[] =
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index 782a171adf03..80e28d003141 100644
+index 782a171ad..80e28d003 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
 @@ -185,6 +185,11 @@ extern const char kFeedbackExtensionId[];
@@ -140,7 +140,7 @@ index 782a171adf03..80e28d003141 100644
  extern const char kQuickOfficeComponentExtensionId[];
  
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
-index 57f5f21afd23..920dfedf3d21 100644
+index 57f5f21af..920dfedf3 100644
 --- a/gooroom/browser/BUILD.gn
 +++ b/gooroom/browser/BUILD.gn
 @@ -17,6 +17,8 @@ static_library("gooroom_browser") {
@@ -154,7 +154,7 @@ index 57f5f21afd23..920dfedf3d21 100644
    deps = [
 diff --git a/gooroom/browser/dgw/disable_google_warning.cc b/gooroom/browser/dgw/disable_google_warning.cc
 new file mode 100644
-index 000000000000..93b4b33dc1a4
+index 000000000..93b4b33dc
 --- /dev/null
 +++ b/gooroom/browser/dgw/disable_google_warning.cc
 @@ -0,0 +1,29 @@
@@ -190,7 +190,7 @@ index 000000000000..93b4b33dc1a4
 \ No newline at end of file
 diff --git a/gooroom/browser/dgw/disable_google_warning.h b/gooroom/browser/dgw/disable_google_warning.h
 new file mode 100644
-index 000000000000..b10a3fee18bf
+index 000000000..b10a3fee1
 --- /dev/null
 +++ b/gooroom/browser/dgw/disable_google_warning.h
 @@ -0,0 +1,19 @@

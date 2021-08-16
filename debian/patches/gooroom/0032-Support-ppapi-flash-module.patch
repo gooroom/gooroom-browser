@@ -1,4 +1,4 @@
-From 7b77ef7ec12db1aab1ed4cded212af0ab2f76bd2 Mon Sep 17 00:00:00 2001
+From 8b139dc4cecbf6cdef1af9ed9ce9a6a531325718 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 12:00:11 +0900
 Subject: [PATCH 32/84] Support ppapi-flash module
@@ -8,7 +8,7 @@ Subject: [PATCH 32/84] Support ppapi-flash module
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index 3e33505a8f99..bffa5fb2a517 100644
+index 3e33505a8..bffa5fb2a 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -82,6 +82,9 @@ void GooroomPref::setup() {

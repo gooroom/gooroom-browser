@@ -1,4 +1,4 @@
-From 7c2512478335a44725756abd7ad08860f839d079 Mon Sep 17 00:00:00 2001
+From 9497d1f0b215b591d155c6ed5eaefafa3c253337 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:09:28 +0900
 Subject: [PATCH 18/84] Remove gooroom://settings appearance theme page
@@ -8,7 +8,7 @@ Subject: [PATCH 18/84] Remove gooroom://settings appearance theme page
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
-index 894b7cf9dc9b..0e5ce0802032 100644
+index 894b7cf9d..0e5ce0802 100644
 --- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
 +++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
 @@ -23,7 +23,7 @@

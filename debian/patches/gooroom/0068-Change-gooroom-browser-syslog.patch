@@ -1,4 +1,4 @@
-From a1cb52e9cb10494b9ad7aad6be204a54ea6c165b Mon Sep 17 00:00:00 2001
+From 36fa2a9a2d79d9b6b487fbfc81949d66f5c28c5d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 16:25:54 +0900
 Subject: [PATCH 68/84] Change gooroom browser syslog
@@ -8,7 +8,7 @@ Subject: [PATCH 68/84] Change gooroom browser syslog
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
-index a625b0664cf4..2a19d1ca3fd6 100644
+index a625b0664..2a19d1ca3 100644
 --- a/gooroom/browser/gooroom_url_filter_impl.cc
 +++ b/gooroom/browser/gooroom_url_filter_impl.cc
 @@ -16,8 +16,11 @@ bool GooroomUrlFilterImpl::isTrustUrl(std::string url) {

@@ -1,4 +1,4 @@
-From e2971ca1bc9a8c2658efa796210d09261fb9e56e Mon Sep 17 00:00:00 2001
+From 070a5d4b499da2d698b0cfadc066133d5d936575 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:11:59 +0900
 Subject: [PATCH 20/84] add 'setTrustMode()' path in GooroomPref
@@ -8,7 +8,7 @@ Subject: [PATCH 20/84] add 'setTrustMode()' path in GooroomPref
  1 file changed, 7 insertions(+)
 
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index d0de138d55da..8d5bd131d4c1 100644
+index d0de138d5..8d5bd131d 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -90,6 +90,13 @@ void GooroomPref::setup() {

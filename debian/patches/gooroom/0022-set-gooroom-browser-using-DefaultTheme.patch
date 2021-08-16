@@ -1,4 +1,4 @@
-From 77e52d3c43f916bb425ead7466dd6d228306c2dd Mon Sep 17 00:00:00 2001
+From d69f9da6ad0e8ede6262fd966ed5a0fd74fe35b1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:21:40 +0900
 Subject: [PATCH 22/84] set gooroom-browser using DefaultTheme
@@ -8,7 +8,7 @@ Subject: [PATCH 22/84] set gooroom-browser using DefaultTheme
  1 file changed, 4 insertions(+)
 
 diff --git a/chrome/browser/themes/theme_service_aura_linux.cc b/chrome/browser/themes/theme_service_aura_linux.cc
-index 02655be5b6ff..2303f3f3da6a 100644
+index 02655be5b..2303f3f3d 100644
 --- a/chrome/browser/themes/theme_service_aura_linux.cc
 +++ b/chrome/browser/themes/theme_service_aura_linux.cc
 @@ -105,6 +105,10 @@ bool ThemeServiceAuraLinux::UsingSystemTheme() const {

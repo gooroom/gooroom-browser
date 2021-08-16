@@ -1,4 +1,4 @@
-From fda8ae8daded6063ae0c6fcf8da6855733a2131e Mon Sep 17 00:00:00 2001
+From ea3f2fc27da67a3203f0613dea2e291181416055 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:33:29 +0900
 Subject: [PATCH 08/84] disable prerender
@@ -8,7 +8,7 @@ Subject: [PATCH 08/84] disable prerender
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
-index bc9336a74bbf..90f530b5f8c5 100644
+index bc9336a74..90f530b5f 100644
 --- a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
 +++ b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
 @@ -351,10 +351,12 @@ void ChromeOmniboxClient::OnTextChanged(const AutocompleteMatch& current_match,

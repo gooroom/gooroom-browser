@@ -1,4 +1,4 @@
-From eaa91f021cc6170aa33251f1fa91f544fb31374e Mon Sep 17 00:00:00 2001
+From bb5146a96de061212c61e5d034338f7e4d6917c3 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:12:50 +0900
 Subject: [PATCH 45/84] BugTrackingSystem
@@ -9,7 +9,7 @@ Subject: [PATCH 45/84] BugTrackingSystem
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
-index 46d52ac593b1..cd28d8450947 100644
+index 46d52ac59..cd28d8450 100644
 --- a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
 +++ b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
 @@ -131,7 +131,9 @@ WebAppConfirmationView::WebAppConfirmationView(

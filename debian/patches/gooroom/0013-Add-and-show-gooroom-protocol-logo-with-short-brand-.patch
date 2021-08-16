@@ -1,4 +1,4 @@
-From 3412b8c312aba2d66a83dd647bc1a259ae60af5c Mon Sep 17 00:00:00 2001
+From bcc51b62903258ed12c9cb134cf538e6c575a7bd Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:08:02 +0900
 Subject: [PATCH 13/84] Add and show gooroom protocol logo with short brand
@@ -16,7 +16,7 @@ Subject: [PATCH 13/84] Add and show gooroom protocol logo with short brand
  create mode 100644 components/omnibox/browser/vector_icons/gooroom_product_1x.icon
 
 diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-index e159c9231d0c..810929629280 100644
+index e159c9231..810929629 100644
 --- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 +++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 @@ -179,6 +179,12 @@ const gfx::VectorIcon* ChromeLocationBarModelDelegate::GetVectorIconOverride()
@@ -33,7 +33,7 @@ index e159c9231d0c..810929629280 100644
  }
  
 diff --git a/chrome/browser/ui/views/location_bar/location_icon_view.cc b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-index 8c38af079abb..d1c1afa7afd7 100644
+index 8c38af079..1fc2b9b91 100644
 --- a/chrome/browser/ui/views/location_bar/location_icon_view.cc
 +++ b/chrome/browser/ui/views/location_bar/location_icon_view.cc
 @@ -135,6 +135,10 @@ bool LocationIconView::GetShowText() const {
@@ -65,7 +65,7 @@ index 8c38af079abb..d1c1afa7afd7 100644
    if (delegate_->GetLocationBarModel()->GetURL().SchemeIs(url::kFileScheme))
      return l10n_util::GetStringUTF16(IDS_OMNIBOX_FILE);
 diff --git a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-index 4a4327075bc5..072cbf786043 100644
+index 4a4327075..072cbf786 100644
 --- a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
 +++ b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
 @@ -393,7 +393,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
@@ -92,7 +92,7 @@ index 4a4327075bc5..072cbf786043 100644
        url.SchemeIs(dom_distiller::kDomDistillerScheme)) {
      return new InternalPageInfoBubbleView(anchor_view, anchor_rect, parent_view,
 diff --git a/components/omnibox/browser/BUILD.gn b/components/omnibox/browser/BUILD.gn
-index 10486d7e067e..40eb3951bba0 100644
+index 10486d7e0..40eb3951b 100644
 --- a/components/omnibox/browser/BUILD.gn
 +++ b/components/omnibox/browser/BUILD.gn
 @@ -64,6 +64,9 @@ aggregate_vector_icons("omnibox_vector_icons") {
@@ -107,7 +107,7 @@ index 10486d7e067e..40eb3951bba0 100644
  
 diff --git a/components/omnibox/browser/vector_icons/gooroom_product.icon b/components/omnibox/browser/vector_icons/gooroom_product.icon
 new file mode 100644
-index 000000000000..b62188f9d43f
+index 000000000..b62188f9d
 --- /dev/null
 +++ b/components/omnibox/browser/vector_icons/gooroom_product.icon
 @@ -0,0 +1,47 @@
@@ -160,7 +160,7 @@ index 000000000000..b62188f9d43f
 +CLOSE
 diff --git a/components/omnibox/browser/vector_icons/gooroom_product_1x.icon b/components/omnibox/browser/vector_icons/gooroom_product_1x.icon
 new file mode 100644
-index 000000000000..b62188f9d43f
+index 000000000..b62188f9d
 --- /dev/null
 +++ b/components/omnibox/browser/vector_icons/gooroom_product_1x.icon
 @@ -0,0 +1,47 @@

@@ -1,4 +1,4 @@
-From d930d59ad02af4331201fdb6fdd83c7e4a435c6e Mon Sep 17 00:00:00 2001
+From 4e5846669e455f140bac5a871a722f0a2452223f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:22:30 +0900
 Subject: [PATCH 23/84] Modify ntp(newtab) page
@@ -12,7 +12,7 @@ Subject: [PATCH 23/84] Modify ntp(newtab) page
  5 files changed, 24 insertions(+), 11 deletions(-)
 
 diff --git a/chrome/browser/resources/local_ntp/doodles.css b/chrome/browser/resources/local_ntp/doodles.css
-index 25191935104b..abc9f707d56a 100644
+index 251919351..abc9f707d 100644
 --- a/chrome/browser/resources/local_ntp/doodles.css
 +++ b/chrome/browser/resources/local_ntp/doodles.css
 @@ -9,7 +9,9 @@
@@ -51,7 +51,7 @@ index 25191935104b..abc9f707d56a 100644
    -webkit-mask-size: 100%;
    background: var(--logo-color);
 diff --git a/chrome/browser/resources/local_ntp/doodles.js b/chrome/browser/resources/local_ntp/doodles.js
-index 0cef8f5cd28a..e6a71dca1ab1 100644
+index 0cef8f5cd..e6a71dca1 100644
 --- a/chrome/browser/resources/local_ntp/doodles.js
 +++ b/chrome/browser/resources/local_ntp/doodles.js
 @@ -136,12 +136,13 @@ doodles.init = function() {
@@ -71,7 +71,7 @@ index 0cef8f5cd28a..e6a71dca1ab1 100644
      const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
      darkMode.addListener(doodles.fadeToLogoOrDoodle);
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.css b/chrome/browser/resources/local_ntp/local_ntp.css
-index d972497fb8d1..1996a8a22c5b 100644
+index d972497fb..1996a8a22 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.css
 +++ b/chrome/browser/resources/local_ntp/local_ntp.css
 @@ -105,10 +105,14 @@ button {
@@ -92,7 +92,7 @@ index d972497fb8d1..1996a8a22c5b 100644
  
  body.hide-fakebox #fakebox {
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.html b/chrome/browser/resources/local_ntp/local_ntp.html
-index 1608f7574403..52bd3edeb741 100644
+index 1608f7574..52bd3edeb 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.html
 +++ b/chrome/browser/resources/local_ntp/local_ntp.html
 @@ -36,7 +36,7 @@
@@ -105,7 +105,7 @@ index 1608f7574403..52bd3edeb741 100644
    <div id="ntp-contents">
      <div id="logo">
 diff --git a/chrome/browser/resources/local_ntp/local_ntp.js b/chrome/browser/resources/local_ntp/local_ntp.js
-index 518f03dfc10a..d2be5b612a84 100644
+index 518f03dfc..d2be5b612 100644
 --- a/chrome/browser/resources/local_ntp/local_ntp.js
 +++ b/chrome/browser/resources/local_ntp/local_ntp.js
 @@ -900,6 +900,12 @@ function init() {

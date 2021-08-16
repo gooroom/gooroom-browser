@@ -1,4 +1,4 @@
-From 985375bcc46dd0cb8ae49bf222c7807224959bff Mon Sep 17 00:00:00 2001
+From c8d23e429d9afdd664bfc5ae294b0436c35d671f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 12:00:59 +0900
 Subject: [PATCH 39/84] Remove Incognito mode in gooroom-browser
@@ -10,7 +10,7 @@ Subject: [PATCH 39/84] Remove Incognito mode in gooroom-browser
  3 files changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/bookmarks/command_manager.js b/chrome/browser/resources/bookmarks/command_manager.js
-index ea223392a987..d0fdb965ff44 100644
+index ea223392a..d0fdb965f 100644
 --- a/chrome/browser/resources/bookmarks/command_manager.js
 +++ b/chrome/browser/resources/bookmarks/command_manager.js
 @@ -765,7 +765,6 @@ export const CommandManager = Polymer({
@@ -22,7 +22,7 @@ index ea223392a987..d0fdb965ff44 100644
        case MenuSource.TOOLBAR:
          return [
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index e8e7c11fac5d..0e34c8b2c867 100644
+index e8e7c11fa..0e34c8b2c 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
 @@ -410,7 +410,9 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
@@ -36,7 +36,7 @@ index e8e7c11fac5d..0e34c8b2c867 100644
      case IDC_CLOSE_WINDOW:
        base::RecordAction(base::UserMetricsAction("CloseWindowByKey"));
 diff --git a/chrome/browser/ui/toolbar/app_menu_model.cc b/chrome/browser/ui/toolbar/app_menu_model.cc
-index cdd29338b6e5..c48cd66bda40 100644
+index cdd29338b..c48cd66bd 100644
 --- a/chrome/browser/ui/toolbar/app_menu_model.cc
 +++ b/chrome/browser/ui/toolbar/app_menu_model.cc
 @@ -985,6 +985,10 @@ void AppMenuModel::UpdateZoomControls() {

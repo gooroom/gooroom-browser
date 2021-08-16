@@ -1,4 +1,4 @@
-From c3b43d70ea3a6818c9c65ab9e71b3be3eadeb6ee Mon Sep 17 00:00:00 2001
+From 87c1145955af4bcd5c5463e825186599378115b7 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:34:42 +0900
 Subject: [PATCH 09/84] Put gooroom logo into the browser
@@ -92,7 +92,7 @@ Subject: [PATCH 09/84] Put gooroom logo into the browser
  create mode 100644 components/resources/default_200_percent/gooroom/product_logo_white.png
 
 diff --git a/chrome/app/theme/chrome_unscaled_resources.grd b/chrome/app/theme/chrome_unscaled_resources.grd
-index b4e4545e3520..79f2331e49ef 100644
+index b4e4545e3..79f2331e4 100644
 --- a/chrome/app/theme/chrome_unscaled_resources.grd
 +++ b/chrome/app/theme/chrome_unscaled_resources.grd
 @@ -61,7 +61,7 @@
@@ -3786,7 +3786,7 @@ HcmV?d00001
 
 diff --git a/chrome/app/theme/gooroom/BRANDING b/chrome/app/theme/gooroom/BRANDING
 new file mode 100644
-index 000000000000..152889e75936
+index 000000000..152889e75
 --- /dev/null
 +++ b/chrome/app/theme/gooroom/BRANDING
 @@ -0,0 +1,7 @@
@@ -12124,7 +12124,7 @@ literal 0
 HcmV?d00001
 
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index b689a2d10e5a..878734a162a1 100644
+index b689a2d10..878734a16 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
 @@ -158,12 +158,19 @@
@@ -12352,7 +12352,7 @@ literal 0
 HcmV?d00001
 
 diff --git a/components/infobars/core/infobar_delegate.cc b/components/infobars/core/infobar_delegate.cc
-index 7c39dc2c7131..e87e6e19efee 100644
+index 7c39dc2c7..e87e6e19e 100644
 --- a/components/infobars/core/infobar_delegate.cc
 +++ b/components/infobars/core/infobar_delegate.cc
 @@ -38,7 +38,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
@@ -13025,7 +13025,7 @@ literal 0
 HcmV?d00001
 
 diff --git a/components/resources/version_ui_scaled_resources.grdp b/components/resources/version_ui_scaled_resources.grdp
-index b199a552b60d..db1e11927334 100644
+index b199a552b..db1e11927 100644
 --- a/components/resources/version_ui_scaled_resources.grdp
 +++ b/components/resources/version_ui_scaled_resources.grdp
 @@ -1,8 +1,8 @@
@@ -13040,7 +13040,7 @@ index b199a552b60d..db1e11927334 100644
    <if expr="_google_chrome">
      <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO" file="google_chrome/product_logo.png" />
 diff --git a/components/version_ui/resources/about_version.css b/components/version_ui/resources/about_version.css
-index bd7da3a627c6..06298f8ca02b 100644
+index bd7da3a62..06298f8ca 100644
 --- a/components/version_ui/resources/about_version.css
 +++ b/components/version_ui/resources/about_version.css
 @@ -53,7 +53,7 @@ body {
@@ -13053,7 +13053,7 @@ index bd7da3a627c6..06298f8ca02b 100644
  
  #company {
 diff --git a/tools/grit/grit_defines.gni b/tools/grit/grit_defines.gni
-index 5b92d7a6cd92..47802dd4c706 100644
+index 5b92d7a6c..47802dd4c 100644
 --- a/tools/grit/grit_defines.gni
 +++ b/tools/grit/grit_defines.gni
 @@ -39,6 +39,13 @@ if (is_chrome_branded) {

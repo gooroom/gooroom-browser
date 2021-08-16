@@ -1,4 +1,4 @@
-From af6b474344cc7fea90d22a7ec332d3111cf64e74 Mon Sep 17 00:00:00 2001
+From 472c2a503b5a715cf7e68fa92da2be5c7be809da Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:13:47 +0900
 Subject: [PATCH 04/84] add GooroomPrefs that parse mainpref.json and
@@ -28,7 +28,7 @@ Subject: [PATCH 04/84] add GooroomPrefs that parse mainpref.json and
  create mode 100644 gooroom/browser/gooroom_url_filter_impl.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 19b4b9e1a28f..8cedf296a59f 100644
+index 19b4b9e1a..8cedf296a 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -226,6 +226,16 @@ if (!is_android && !is_mac) {
@@ -49,7 +49,7 @@ index 19b4b9e1a28f..8cedf296a59f 100644
      }
    }
 diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
-index 683b83c46d7e..d0a7807d179c 100644
+index 683b83c46..d0a7807d1 100644
 --- a/gooroom/app/gooroom_main_delegate.cc
 +++ b/gooroom/app/gooroom_main_delegate.cc
 @@ -3,6 +3,7 @@
@@ -69,7 +69,7 @@ index 683b83c46d7e..d0a7807d179c 100644
  }
  
 diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
-index 5d2797d678da..b49912b0b3fd 100644
+index 5d2797d67..b49912b0b 100644
 --- a/gooroom/app/gooroom_main_delegate.h
 +++ b/gooroom/app/gooroom_main_delegate.h
 @@ -5,6 +5,9 @@
@@ -101,7 +101,7 @@ index 5d2797d678da..b49912b0b3fd 100644
  #endif
 diff --git a/gooroom/base/gooroom_base.cc b/gooroom/base/gooroom_base.cc
 new file mode 100644
-index 000000000000..c6af40d3405e
+index 000000000..c6af40d34
 --- /dev/null
 +++ b/gooroom/base/gooroom_base.cc
 @@ -0,0 +1,33 @@
@@ -140,7 +140,7 @@ index 000000000000..c6af40d3405e
 +}  // namespace base
 diff --git a/gooroom/base/gooroom_base.h b/gooroom/base/gooroom_base.h
 new file mode 100644
-index 000000000000..c64ed691b678
+index 000000000..c64ed691b
 --- /dev/null
 +++ b/gooroom/base/gooroom_base.h
 @@ -0,0 +1,37 @@
@@ -183,7 +183,7 @@ index 000000000000..c64ed691b678
 +#endif /* GOOROOM_BASE_H_ */
 diff --git a/gooroom/base/gooroom_url_filter.cc b/gooroom/base/gooroom_url_filter.cc
 new file mode 100644
-index 000000000000..a9f34a0963e6
+index 000000000..a9f34a096
 --- /dev/null
 +++ b/gooroom/base/gooroom_url_filter.cc
 @@ -0,0 +1,10 @@
@@ -200,7 +200,7 @@ index 000000000000..a9f34a0963e6
 \ No newline at end of file
 diff --git a/gooroom/base/gooroom_url_filter.h b/gooroom/base/gooroom_url_filter.h
 new file mode 100644
-index 000000000000..a12f394eb75a
+index 000000000..a12f394eb
 --- /dev/null
 +++ b/gooroom/base/gooroom_url_filter.h
 @@ -0,0 +1,30 @@
@@ -235,7 +235,7 @@ index 000000000000..a12f394eb75a
 +
 +#endif /* GOOROOM_URL_FILTER_H_ */
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
-index 309bd48c7d9b..57f5f21afd23 100644
+index 309bd48c7..57f5f21af 100644
 --- a/gooroom/browser/BUILD.gn
 +++ b/gooroom/browser/BUILD.gn
 @@ -13,6 +13,10 @@ static_library("gooroom_browser") {
@@ -251,7 +251,7 @@ index 309bd48c7d9b..57f5f21afd23 100644
    deps = [
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
 new file mode 100644
-index 000000000000..d0de138d55da
+index 000000000..d0de138d5
 --- /dev/null
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -0,0 +1,136 @@
@@ -393,7 +393,7 @@ index 000000000000..d0de138d55da
 +}  // namespace gooroom
 diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
 new file mode 100644
-index 000000000000..3e94b7fb6b22
+index 000000000..3e94b7fb6
 --- /dev/null
 +++ b/gooroom/browser/gooroom_pref.h
 @@ -0,0 +1,42 @@
@@ -441,7 +441,7 @@ index 000000000000..3e94b7fb6b22
 +#endif /* GOOROOM_BROWSER_GOOROOM_PREF_H_ */
 diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
 new file mode 100644
-index 000000000000..a625b0664cf4
+index 000000000..a625b0664
 --- /dev/null
 +++ b/gooroom/browser/gooroom_url_filter_impl.cc
 @@ -0,0 +1,58 @@
@@ -505,7 +505,7 @@ index 000000000000..a625b0664cf4
 +}
 diff --git a/gooroom/browser/gooroom_url_filter_impl.h b/gooroom/browser/gooroom_url_filter_impl.h
 new file mode 100644
-index 000000000000..58b942869a2c
+index 000000000..58b942869
 --- /dev/null
 +++ b/gooroom/browser/gooroom_url_filter_impl.h
 @@ -0,0 +1,30 @@

@@ -1,4 +1,4 @@
-From 8cb68a33b9d5ecbd64e41d4fa50e8d6adab898ae Mon Sep 17 00:00:00 2001
+From 47a988da53fb0dd3b609bc511a2c3f7aedd7e798 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 15:36:42 +0900
 Subject: [PATCH 60/84] Change scheme chrome ://to gooroom:// on print preview
@@ -9,7 +9,7 @@ Subject: [PATCH 60/84] Change scheme chrome ://to gooroom:// on print preview
  1 file changed, 9 insertions(+)
 
 diff --git a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
-index 5beb6ac1f575..dc8c85e76658 100644
+index 5beb6ac1f..dc8c85e76 100644
 --- a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
 +++ b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
 @@ -12,6 +12,10 @@

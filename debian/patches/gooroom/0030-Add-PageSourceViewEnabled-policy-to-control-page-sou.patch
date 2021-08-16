@@ -1,4 +1,4 @@
-From d096a3408181e183a05fddd14c5bb796dec6fc33 Mon Sep 17 00:00:00 2001
+From 6f19d468ed2e3b7c6b86beef23b7942bbaff7e18 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 11:44:17 +0900
 Subject: [PATCH 30/84] Add PageSourceViewEnabled policy to control
@@ -11,14 +11,13 @@ Subject: [PATCH 30/84] Add PageSourceViewEnabled policy to control
  components/policy/core/browser/BUILD.gn       |  5 ++-
  .../browser/configuration_policy_handler.cc   | 45 +++++++++++++++++++
  .../browser/configuration_policy_handler.h    | 25 +++++++++++
- .../policy/resources/policy_templates.json    | 20 +++++++++
  content/browser/BUILD.gn                      |  1 +
  .../navigation_controller_impl.cc             | 10 +++++
  tools/metrics/histograms/enums.xml            |  1 +
- 10 files changed, 127 insertions(+), 1 deletion(-)
+ 9 files changed, 107 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/policy/configuration_policy_handler_list_factory.cc b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
-index 509bbcc71625..c174d8b45470 100644
+index 509bbcc71..c174d8b45 100644
 --- a/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 +++ b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 @@ -10,6 +10,10 @@
@@ -56,7 +55,7 @@ index 509bbcc71625..c174d8b45470 100644
  // of lacros-chrome is complete.
  #if defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
 diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index dc3d79843d97..f07bb66a9b89 100644
+index dc3d79843..f07bb66a9 100644
 --- a/chrome/common/pref_names.cc
 +++ b/chrome/common/pref_names.cc
 @@ -22,6 +22,10 @@ namespace prefs {
@@ -71,7 +70,7 @@ index dc3d79843d97..f07bb66a9b89 100644
  // in this profile.  Use the value "install" to enable defaults apps, or
  // "noinstall" to disable them.  This property is usually set in the
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index 8dfd4c44b4a0..808844d68d6f 100644
+index 8dfd4c44b..808844d68 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
 @@ -22,6 +22,10 @@
@@ -86,7 +85,7 @@ index 8dfd4c44b4a0..808844d68d6f 100644
  extern const char kChildAccountStatusKnown[];
  extern const char kDefaultApps[];
 diff --git a/components/policy/core/browser/BUILD.gn b/components/policy/core/browser/BUILD.gn
-index 58fd373e7623..5ef3c56c024a 100644
+index 58fd373e7..5ef3c56c0 100644
 --- a/components/policy/core/browser/BUILD.gn
 +++ b/components/policy/core/browser/BUILD.gn
 @@ -13,7 +13,10 @@ group("browser") {
@@ -102,7 +101,7 @@ index 58fd373e7623..5ef3c56c024a 100644
      "browser_policy_connector.cc",
      "browser_policy_connector.h",
 diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
-index a9611ceea200..4ec264fbd604 100644
+index a9611ceea..4ec264fbd 100644
 --- a/components/policy/core/browser/configuration_policy_handler.cc
 +++ b/components/policy/core/browser/configuration_policy_handler.cc
 @@ -352,6 +352,51 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
@@ -158,7 +157,7 @@ index a9611ceea200..4ec264fbd604 100644
  
  SchemaValidatingPolicyHandler::SchemaValidatingPolicyHandler(
 diff --git a/components/policy/core/browser/configuration_policy_handler.h b/components/policy/core/browser/configuration_policy_handler.h
-index 87c33e37a549..b704d7fec96e 100644
+index 87c33e37a..b704d7fec 100644
 --- a/components/policy/core/browser/configuration_policy_handler.h
 +++ b/components/policy/core/browser/configuration_policy_handler.h
 @@ -15,6 +15,7 @@
@@ -201,7 +200,7 @@ index 87c33e37a549..b704d7fec96e 100644
  // single type. |schema| is the schema used for this policy, and |strategy| is
  // the strategy used for schema validation errors.
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index 84d3efba4e18..a67dd4c92abc 100644
+index 22c005a40..8e3b02041 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
 @@ -263,6 +263,7 @@ source_set("browser") {
@@ -213,7 +212,7 @@ index 84d3efba4e18..a67dd4c92abc 100644
      "//base/util/type_safety",
      "//ipc",
 diff --git a/content/browser/renderer_host/navigation_controller_impl.cc b/content/browser/renderer_host/navigation_controller_impl.cc
-index b2b48bda88f7..edb41a6dc802 100644
+index b2b48bda8..edb41a6dc 100644
 --- a/content/browser/renderer_host/navigation_controller_impl.cc
 +++ b/content/browser/renderer_host/navigation_controller_impl.cc
 @@ -97,6 +97,10 @@
@@ -241,7 +240,7 @@ index b2b48bda88f7..edb41a6dc802 100644
                                       ->current_frame_host()
                                       ->render_view_host()
 diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
-index b1256b43af17..53de2c50bdf8 100644
+index b1256b43a..53de2c50b 100644
 --- a/tools/metrics/histograms/enums.xml
 +++ b/tools/metrics/histograms/enums.xml
 @@ -23846,6 +23846,7 @@ Called by update_document_policy_enum.py.-->

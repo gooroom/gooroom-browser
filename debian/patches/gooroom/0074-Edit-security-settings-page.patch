@@ -1,4 +1,4 @@
-From 7a758793f6191352396814e89f6fe929359c7a25 Mon Sep 17 00:00:00 2001
+From 23dbbaac2e3f6b224e99bb330842e4727be1a593 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc91@gmail.com>
 Date: Fri, 23 Apr 2021 10:18:35 +0900
 Subject: [PATCH 74/84] Edit security settings page
@@ -8,7 +8,7 @@ Subject: [PATCH 74/84] Edit security settings page
  1 file changed, 15 deletions(-)
 
 diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
-index 5e24fa6af3cd..7b7989048d48 100644
+index 5e24fa6af..7b7989048 100644
 --- a/chrome/browser/resources/settings/privacy_page/security_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/security_page.html
 @@ -155,14 +155,6 @@

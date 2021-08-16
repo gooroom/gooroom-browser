@@ -1,4 +1,4 @@
-From 1bd2933649f61615bb0b1ecbffe38e034131977b Mon Sep 17 00:00:00 2001
+From e240abb9ebafcc1f1f64c694ab38496f15ee0329 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:17:56 +0900
 Subject: [PATCH 46/84] Add AdobeFlash-Version Reader module
@@ -14,7 +14,7 @@ Subject: [PATCH 46/84] Add AdobeFlash-Version Reader module
  create mode 100644 gooroom/flash/flash_version.h
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index f2ec9d3b39e6..b2f927602e67 100644
+index f2ec9d3b3..b2f927602 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -5227,9 +5227,7 @@ bool RequestCurrentUserDataDir(GURL url) {
@@ -46,7 +46,7 @@ index f2ec9d3b39e6..b2f927602e67 100644
      }
    }
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 0c60a00bfa3b..11f5ceb02951 100644
+index 0c60a00bf..11f5ceb02 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -244,6 +244,9 @@ if (!is_android && !is_mac) {
@@ -60,7 +60,7 @@ index 0c60a00bfa3b..11f5ceb02951 100644
      }
    }
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index aa48152e87e6..75a92cd48e69 100644
+index aa48152e8..75a92cd48 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -4,6 +4,7 @@
@@ -116,7 +116,7 @@ index aa48152e87e6..75a92cd48e69 100644
  bool GooroomPref::useWebSocket() {
 diff --git a/gooroom/flash/flash_version.cc b/gooroom/flash/flash_version.cc
 new file mode 100644
-index 000000000000..2e9dbf3a7e8d
+index 000000000..2e9dbf3a7
 --- /dev/null
 +++ b/gooroom/flash/flash_version.cc
 @@ -0,0 +1,35 @@
@@ -157,7 +157,7 @@ index 000000000000..2e9dbf3a7e8d
 +}
 diff --git a/gooroom/flash/flash_version.h b/gooroom/flash/flash_version.h
 new file mode 100644
-index 000000000000..31e72b7c0fab
+index 000000000..31e72b7c0
 --- /dev/null
 +++ b/gooroom/flash/flash_version.h
 @@ -0,0 +1,13 @@

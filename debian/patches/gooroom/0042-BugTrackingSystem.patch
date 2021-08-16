@@ -1,4 +1,4 @@
-From aa5466b00ec6b0dc9338231ed728f65685874291 Mon Sep 17 00:00:00 2001
+From 93f8921e7e904dae04fcdbe31a22e7d92af5c310 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 13:47:13 +0900
 Subject: [PATCH 42/84] BugTrackingSystem
@@ -17,7 +17,7 @@ Subject: [PATCH 42/84] BugTrackingSystem
  8 files changed, 25 insertions(+), 10 deletions(-)
 
 diff --git a/chrome/app/generated_resources.grd b/chrome/app/generated_resources.grd
-index 43f5940e58ba..5c54d2201f48 100644
+index 43f5940e5..5c54d2201 100644
 --- a/chrome/app/generated_resources.grd
 +++ b/chrome/app/generated_resources.grd
 @@ -4643,6 +4643,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
@@ -31,7 +31,7 @@ index 43f5940e58ba..5c54d2201f48 100644
          Show Details
        </message>
 diff --git a/chrome/app/resources/locale_settings.grd b/chrome/app/resources/locale_settings.grd
-index 977121fb1951..f131ffbbd59c 100644
+index 977121fb1..f131ffbbd 100644
 --- a/chrome/app/resources/locale_settings.grd
 +++ b/chrome/app/resources/locale_settings.grd
 @@ -180,6 +180,9 @@
@@ -45,7 +45,7 @@ index 977121fb1951..f131ffbbd59c 100644
        <!-- The width of the media galleries configuration dialog in characters. -->
        <message name="IDS_MEDIA_GALLERIES_DIALOG_CONTENT_WIDTH_CHARS" use_name_for_id="true">
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index 878734a162a1..8c6974e463d3 100644
+index 878734a16..8c6974e46 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
 @@ -135,6 +135,7 @@
@@ -57,7 +57,7 @@ index 878734a162a1..8c6974e463d3 100644
        <structure type="chrome_scaled_image" name="IDR_INPUT_ALERT_MENU" file="common/input_alert_menu.png" />
        <if expr="enable_service_discovery">
 diff --git a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-index 44e96c687520..b47a34a302ec 100644
+index 44e96c687..b47a34a30 100644
 --- a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
 +++ b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
 @@ -76,7 +76,7 @@ constexpr char kSyncDataKey[] = "about_sync_data";
@@ -70,7 +70,7 @@ index 44e96c687520..b47a34a302ec 100644
  #if BUILDFLAG(IS_CHROMEOS_ASH)
  constexpr char kLacrosChromeVersionPrefix[] = "Lacros ";
 diff --git a/chrome/browser/history/top_sites_factory.cc b/chrome/browser/history/top_sites_factory.cc
-index 6dbb94b5e77b..c53603ed80b2 100644
+index 6dbb94b5e..c53603ed8 100644
 --- a/chrome/browser/history/top_sites_factory.cc
 +++ b/chrome/browser/history/top_sites_factory.cc
 @@ -57,10 +57,10 @@ struct RawPrepopulatedPage {
@@ -89,7 +89,7 @@ index 6dbb94b5e77b..c53603ed80b2 100644
  };
  #endif
 diff --git a/chrome/browser/resources/inspect/inspect.html b/chrome/browser/resources/inspect/inspect.html
-index ea5cccb11c94..cc6fb931046f 100644
+index ea5cccb11..cc6fb9310 100644
 --- a/chrome/browser/resources/inspect/inspect.html
 +++ b/chrome/browser/resources/inspect/inspect.html
 @@ -7,7 +7,7 @@ found in the LICENSE file.
@@ -102,7 +102,7 @@ index ea5cccb11c94..cc6fb931046f 100644
  <link rel="stylesheet" href="inspect.css">
  <script src="chrome://resources/js/assert.js"></script>
 diff --git a/chrome/browser/ui/webui/about_ui.cc b/chrome/browser/ui/webui/about_ui.cc
-index 3d0d6375ec14..4fd7070c86fa 100644
+index 3d0d6375e..4fd7070c8 100644
 --- a/chrome/browser/ui/webui/about_ui.cc
 +++ b/chrome/browser/ui/webui/about_ui.cc
 @@ -13,6 +13,7 @@
@@ -150,7 +150,7 @@ index 3d0d6375ec14..4fd7070c86fa 100644
  
    AppendFooter(&html);
 diff --git a/content/browser/resources/service_worker/serviceworker_internals.html b/content/browser/resources/service_worker/serviceworker_internals.html
-index f486ea9d362d..849d616d864a 100644
+index f486ea9d3..849d616d8 100644
 --- a/content/browser/resources/service_worker/serviceworker_internals.html
 +++ b/content/browser/resources/service_worker/serviceworker_internals.html
 @@ -2,7 +2,7 @@

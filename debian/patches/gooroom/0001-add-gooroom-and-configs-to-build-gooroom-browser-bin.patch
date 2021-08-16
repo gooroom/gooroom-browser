@@ -1,4 +1,4 @@
-From d3de2559f55264771d88f4d54ad291b31615d572 Mon Sep 17 00:00:00 2001
+From 398816b44568c396394d071649e005f1b85d17a7 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc91@gmail.com>
 Date: Tue, 20 Apr 2021 13:26:08 +0900
 Subject: [PATCH 01/84] add /gooroom and configs to build gooroom-browser
@@ -31,10 +31,10 @@ Subject: [PATCH 01/84] add /gooroom and configs to build gooroom-browser
  create mode 100644 gooroom/browser/gooroom_content_client.h
 
 diff --git a/BUILD.gn b/BUILD.gn
-index 6df566bd7df4..437d671697fa 100644
+index f6ef59d0f..ef76116f6 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
-@@ -161,6 +161,8 @@ group("gn_all") {
+@@ -159,6 +159,8 @@ group("gn_all") {
        "//ui/accessibility:accessibility_unittests",
        "//ui/accessibility/extensions:extension_tests",
        "//ui/accessibility/extensions:extensions",
@@ -44,7 +44,7 @@ index 6df566bd7df4..437d671697fa 100644
    }
  
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 2166af00a6cc..a19304ae77b5 100644
+index a40c9d5b6..be4afd968 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
 @@ -241,6 +241,9 @@ config("compiler") {
@@ -58,7 +58,7 @@ index 2166af00a6cc..a19304ae77b5 100644
    # categories here, add it to the associated file to keep this shared config
    # smaller.
 diff --git a/chrome/browser/chrome_content_browser_client.h b/chrome/browser/chrome_content_browser_client.h
-index 792e69483a89..8cfb931932fd 100644
+index 792e69483..8cfb93193 100644
 --- a/chrome/browser/chrome_content_browser_client.h
 +++ b/chrome/browser/chrome_content_browser_client.h
 @@ -736,6 +736,7 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
@@ -79,7 +79,7 @@ index 792e69483a89..8cfb931932fd 100644
    std::unique_ptr<ChromeSerialDelegate> serial_delegate_;
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
 new file mode 100644
-index 000000000000..6d8d5945cb42
+index 000000000..6d8d5945c
 --- /dev/null
 +++ b/gooroom/BUILD.gn
 @@ -0,0 +1,384 @@
@@ -469,7 +469,7 @@ index 000000000000..6d8d5945cb42
 +}
 diff --git a/gooroom/app/gooroom_exe_main_aura.cc b/gooroom/app/gooroom_exe_main_aura.cc
 new file mode 100644
-index 000000000000..50053010c311
+index 000000000..50053010c
 --- /dev/null
 +++ b/gooroom/app/gooroom_exe_main_aura.cc
 @@ -0,0 +1,22 @@
@@ -497,7 +497,7 @@ index 000000000000..50053010c311
 +}
 diff --git a/gooroom/app/gooroom_main.cc b/gooroom/app/gooroom_main.cc
 new file mode 100644
-index 000000000000..4922c63a193d
+index 000000000..4922c63a1
 --- /dev/null
 +++ b/gooroom/app/gooroom_main.cc
 @@ -0,0 +1,115 @@
@@ -618,7 +618,7 @@ index 000000000000..4922c63a193d
 +}
 diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
 new file mode 100644
-index 000000000000..683b83c46d7e
+index 000000000..683b83c46
 --- /dev/null
 +++ b/gooroom/app/gooroom_main_delegate.cc
 @@ -0,0 +1,86 @@
@@ -710,7 +710,7 @@ index 000000000000..683b83c46d7e
 +}
 diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
 new file mode 100644
-index 000000000000..5d2797d678da
+index 000000000..5d2797d67
 --- /dev/null
 +++ b/gooroom/app/gooroom_main_delegate.h
 @@ -0,0 +1,51 @@
@@ -767,7 +767,7 @@ index 000000000000..5d2797d678da
 +#endif  // CHROME_APP_CHROME_MAIN_DELEGATE_H_
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
 new file mode 100644
-index 000000000000..4a87b03520b4
+index 000000000..4a87b0352
 --- /dev/null
 +++ b/gooroom/browser/BUILD.gn
 @@ -0,0 +1,20 @@
@@ -793,7 +793,7 @@ index 000000000000..4a87b03520b4
 +}
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
 new file mode 100644
-index 000000000000..52776071ccac
+index 000000000..52776071c
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
 @@ -0,0 +1,766 @@
@@ -1565,7 +1565,7 @@ index 000000000000..52776071ccac
 +
 diff --git a/gooroom/browser/gooroom_content_browser_client.h b/gooroom/browser/gooroom_content_browser_client.h
 new file mode 100644
-index 000000000000..c9e2b0934066
+index 000000000..c9e2b0934
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_browser_client.h
 @@ -0,0 +1,26 @@
@@ -1597,14 +1597,14 @@ index 000000000000..c9e2b0934066
 +#endif  // CHROME_BROWSER_CHROME_CONTENT_BROWSER_CLIENT_H_
 diff --git a/gooroom/browser/gooroom_content_client.cc b/gooroom/browser/gooroom_content_client.cc
 new file mode 100644
-index 000000000000..e5a79cdf3834
+index 000000000..e5a79cdf3
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_client.cc
 @@ -0,0 +1 @@
 +#include "gooroom_content_client.h"
 diff --git a/gooroom/browser/gooroom_content_client.h b/gooroom/browser/gooroom_content_client.h
 new file mode 100644
-index 000000000000..242ba77e419e
+index 000000000..242ba77e4
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_client.h
 @@ -0,0 +1,13 @@

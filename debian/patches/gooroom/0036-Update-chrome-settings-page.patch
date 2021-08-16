@@ -1,4 +1,4 @@
-From 5e2cefae9156b4441f9dfc3efc031c9e52b856e9 Mon Sep 17 00:00:00 2001
+From 527f1b6f75c3b87baf42c074a91f72cfec125567 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 11:52:13 +0900
 Subject: [PATCH 36/84] Update chrome://settings/ page
@@ -8,7 +8,7 @@ Subject: [PATCH 36/84] Update chrome://settings/ page
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index 646e4c4f4e79..4c063f94f625 100644
+index 646e4c4f4..4c063f94f 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
 @@ -92,6 +92,7 @@

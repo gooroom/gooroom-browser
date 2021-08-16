@@ -1,7 +1,7 @@
-From 6e1ad632d17a537a1322e8ea2b6b4f6ce0701099 Mon Sep 17 00:00:00 2001
+From 4d59bd7345bbcdb450e768ab8c28cd64b8291c1e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 13:43:23 +0900
-Subject: [PATCH 33/82] * Remove page-translation function.
+Subject: [PATCH 33/84] * Remove page-translation function.
 
 ---
  .../browser/renderer_context_menu/render_view_context_menu.cc | 3 +++

@@ -1,4 +1,4 @@
-From b0e3bbb0671098280e11a4c39e373ff6ed6ba4fa Mon Sep 17 00:00:00 2001
+From 9a082d4b14b60cefae6ae97ff8aff25fa715b2ec Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 15:35:47 +0900
 Subject: [PATCH 59/84] Remove manage security key on settings page
@@ -8,7 +8,7 @@ Subject: [PATCH 59/84] Remove manage security key on settings page
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index ebd135b85ccc..d44554f184a2 100644
+index ebd135b85..d44554f18 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
 @@ -88,7 +88,7 @@

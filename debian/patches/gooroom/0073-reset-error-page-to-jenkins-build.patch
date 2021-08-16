@@ -1,4 +1,4 @@
-From 64fbf4de253729d25a2ce780189dfbfa90ce6f74 Mon Sep 17 00:00:00 2001
+From 8c9a3032170a49782924fb293f846fb8a11515fd Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc91@gmail.com>
 Date: Fri, 23 Apr 2021 10:17:40 +0900
 Subject: [PATCH 73/84] reset error page to jenkins build
@@ -8,7 +8,7 @@ Subject: [PATCH 73/84] reset error page to jenkins build
  1 file changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/components/error_page/common/localized_error.cc b/components/error_page/common/localized_error.cc
-index 1fa1e4651c5b..2caa18d88f1f 100644
+index 1fa1e4651..2caa18d88 100644
 --- a/components/error_page/common/localized_error.cc
 +++ b/components/error_page/common/localized_error.cc
 @@ -9,7 +9,6 @@

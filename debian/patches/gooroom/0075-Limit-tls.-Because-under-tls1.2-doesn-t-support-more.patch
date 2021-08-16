@@ -1,0 +1,25 @@
+From 538fe72bb572186952a3a8fdd40bfd088f4d074e Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 10:45:55 +0900
+Subject: [PATCH 75/84] Limit tls. Because under tls1.2 doesn't support
+ moreover.
+
+---
+ chrome/browser/ssl/ssl_config_service_manager_pref.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/chrome/browser/ssl/ssl_config_service_manager_pref.cc b/chrome/browser/ssl/ssl_config_service_manager_pref.cc
+index cbf4c3df0..9b78e57c3 100644
+--- a/chrome/browser/ssl/ssl_config_service_manager_pref.cc
++++ b/chrome/browser/ssl/ssl_config_service_manager_pref.cc
+@@ -251,6 +251,7 @@ SSLConfigServiceManagerPref::GetSSLConfigFromPrefs() const {
+   std::string version_min_str = ssl_version_min_.GetValue();
+   std::string version_max_str = ssl_version_max_.GetValue();
+ 
++  version_min_str = "tls1.2";
+   network::mojom::SSLVersion version_min;
+   if (SSLProtocolVersionFromString(version_min_str, &version_min)) {
+     config->version_min = version_min;
+-- 
+2.20.1
+

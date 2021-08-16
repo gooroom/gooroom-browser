@@ -1,4 +1,4 @@
-From 37074095962d0e7e3afa5dfd90af09aeab7d7acc Mon Sep 17 00:00:00 2001
+From 6ce2b4646c2f22d911747f8cb06375fbb7a14f9e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 11:53:12 +0900
 Subject: [PATCH 37/84] Remove reset-profile-dialog 'learn more' on settings
@@ -9,7 +9,7 @@ Subject: [PATCH 37/84] Remove reset-profile-dialog 'learn more' on settings
  1 file changed, 4 insertions(+)
 
 diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
-index fdc696d48682..ac0ee70799e1 100644
+index fdc696d48..ac0ee7079 100644
 --- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
 +++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
 @@ -18,9 +18,13 @@

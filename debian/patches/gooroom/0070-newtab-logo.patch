@@ -1,4 +1,4 @@
-From a09efa7d2fb85903e3eea31d5533002953b8d2fd Mon Sep 17 00:00:00 2001
+From 3d94ac20f17e3cb00469a5fcee49a531822436b0 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 19 Feb 2021 15:36:27 +0900
 Subject: [PATCH 70/84] newtab logo
@@ -9,7 +9,7 @@ Subject: [PATCH 70/84] newtab logo
  2 files changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/chrome/browser/resources/new_tab_page/icons/BUILD.gn b/chrome/browser/resources/new_tab_page/icons/BUILD.gn
-index 3b594424fc73..bba7f2561709 100644
+index 3b594424f..bba7f2561 100644
 --- a/chrome/browser/resources/new_tab_page/icons/BUILD.gn
 +++ b/chrome/browser/resources/new_tab_page/icons/BUILD.gn
 @@ -21,6 +21,7 @@ generate_grd("build_grdp") {
@@ -21,7 +21,7 @@ index 3b594424fc73..bba7f2561709 100644
      "info.svg",
      "link.svg",
 diff --git a/chrome/browser/resources/new_tab_page/logo.html b/chrome/browser/resources/new_tab_page/logo.html
-index 02ab0a21c9da..7569d7155e57 100644
+index 02ab0a21c..7569d7155 100644
 --- a/chrome/browser/resources/new_tab_page/logo.html
 +++ b/chrome/browser/resources/new_tab_page/logo.html
 @@ -14,8 +14,8 @@

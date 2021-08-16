@@ -1,4 +1,4 @@
-From c8eff4627d155d90275725410cbafc211c379277 Mon Sep 17 00:00:00 2001
+From b67e1b4f7535924f1de02e6190045a7be0744c6d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:23:53 +0900
 Subject: [PATCH 51/84] BugTrackingSystem 1693 : Remove route to enter
@@ -9,7 +9,7 @@ Subject: [PATCH 51/84] BugTrackingSystem 1693 : Remove route to enter
  1 file changed, 5 deletions(-)
 
 diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-index 672bd3041ab5..25ea484b0555 100644
+index 672bd3041..25ea484b0 100644
 --- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
 +++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
 @@ -1190,11 +1190,6 @@ void RenderViewContextMenu::AppendLinkItems() {
