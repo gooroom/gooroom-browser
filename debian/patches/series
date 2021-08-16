@@ -20,8 +20,8 @@ fixes/widevine-locations.patch
 fixes/connection-message.patch
 fixes/nullptr-dereference.patch
 fixes/multiple-destruction.patch
-fixes/quiche.patch
 fixes/chromeos_devicetype.patch
+fixes/nomerge.patch
 
 disable/mojo.patch
 disable/tests.patch
@@ -46,6 +46,9 @@ disable/angle-perftests.patch
 disable/web-ui-tests.patch
 disable/ozone-unittests.patch
 disable/devtools-unittests.patch
+disable/ios.patch
+disable/tflite-test.patch
+disable/libaom-arm.patch
 
 warnings/restrict.patch
 warnings/multichar.patch
@@ -73,6 +76,7 @@ system/clang-format.patch
 system/use-desktop-gl-as-default.patch
 
 buster/re2.patch
+buster/va24.patch
 buster/drm97.patch
 buster/icu63.patch
 buster/vpx17.patch
@@ -162,4 +166,3 @@ gooroom/0081-Remove-secret-mode-on-cookies-page.patch
 gooroom/0082-Fix-wrong-highlight-on-settings-page.patch
 gooroom/0083-Change-Cookie-default-value-to-easily-use.patch
 gooroom/0084-Remove-newtab-page-registerModule.patch
-
