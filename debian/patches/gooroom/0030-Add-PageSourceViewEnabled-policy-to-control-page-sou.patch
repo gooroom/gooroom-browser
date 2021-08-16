@@ -200,37 +200,6 @@ index 87c33e37a549..b704d7fec96e 100644
  // Like TypeCheckingPolicyHandler, but validates against a schema instead of a
  // single type. |schema| is the schema used for this policy, and |strategy| is
  // the strategy used for schema validation errors.
-diff --git a/components/policy/resources/policy_templates.json b/components/policy/resources/policy_templates.json
-index 44c412ddaef6..b06cf4ad47f7 100644
---- a/components/policy/resources/policy_templates.json
-+++ b/components/policy/resources/policy_templates.json
-@@ -1320,6 +1320,26 @@
-       Note: For <ph name="MS_WIN_NAME">Microsoft짰Windows짰</ph> administrators, turning this setting on only works for machines running Windows 7. For later versions, you must deploy a "default application associations" file that makes <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> the handler for the <ph name="HTTPS_PROTOCOL">https</ph> and <ph name="HTTP_PROTOCOL">http</ph> protocols (and, optionally, the <ph name="FTP_PROTOCOL">ftp</ph> protocol and other file formats). See Chrome Help ( https://support.google.com/chrome?p=make_chrome_default_win ).''',
-       'label': '''Set <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> as Default Browser''',
-     },
-+    {
-+      'name': 'PageSourceViewEnabled',
-+      'type': 'main',
-+      'schema': { 'type': 'boolean' },
-+      'supported_on': ['chrome.*:11-'],
-+      'features': {
-+        'dynamic_refresh': True,
-+        'per_profile': False,
-+      },
-+      'example_value': False,
-+      'id': 555,
-+      'caption': '''Set page view enable/disable.''',
-+      'tags': [],
-+      'desc': '''If you enable this setting, User can view page sources.
-+
-+      If this setting is disabled, User can't access page sources.
-+
-+      Default is enable.''',
-+      'label': '''Set page view enable/disable.''',
-+    },
-     {
-       'name': 'ApplicationLocaleValue',
-       'owners': ['file://components/policy/resources/OWNERS', 'hendrich@chromium.org'],
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
 index 84d3efba4e18..a67dd4c92abc 100644
 --- a/content/browser/BUILD.gn
