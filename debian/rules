@@ -133,6 +133,7 @@ override_dh_auto_build-indep: out/Release/gn
 
 override_dh_auto_install-arch:
 	dh_auto_install
+	mkdir -p debian/gooroom-browser/usr/bin
 	# update launcher script with build information
 	sed 's|@BUILD_DIST@|$(shell cat /etc/debian_version)|' \
 	    < debian/scripts/gooroom-browser > debian/gooroom-browser/usr/bin/gooroom-browser
