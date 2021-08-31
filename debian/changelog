@@ -1,8 +1,8 @@
-gooroom-browser (2.10.0-1+grm2u1) stretch; urgency=medium
+gooroom-browser (3.1.0-1+grm2u1) stretch; urgency=medium
 
-  * Init Gooroom Browser Version 2.10.0-1+grm2u1
+  * Init Gooroom Browser Version 3.1.0-1+grm3u1
 
- -- Choi J.S. <junsungc91@gmail.com>  Thu, 12 Aug 2021 17:50:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 31 Aug 2021 11:30:00 +0900
 
 chromium (90.0.4430.212-1~deb10u1) buster-security; urgency=medium
 
