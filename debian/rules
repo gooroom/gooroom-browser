@@ -6,6 +6,9 @@ export DH_VERBOSE=1
 # enable all build hardening flags
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
+# disable unsupported flag in clang 7
+export DEB_BUILD_MAINT_OPTIONS+=reproducible=-fixfilepath
+
 # indicate that binary targets do not require root
 export DEB_RULES_REQUIRES_ROOT=no
 
@@ -30,6 +33,9 @@ export CXXFLAGS+=-Wno-conversion \
                  -Wno-deprecated-declarations \
                  -Wno-unknown-pragmas \
 
+# do not optimize away null pointer safety checks
+export CXXFLAGS+=-fno-delete-null-pointer-checks
+
 # disable clang plugins
 defines=clang_use_chrome_plugins=false
 
@@ -40,23 +46,22 @@ defines+=custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
 # set the appropriate cpu architecture
 DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifeq (i386,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"x86\" symbol_level=0
+defines+=host_cpu=\"x86\" use_vaapi=true
 endif
 ifeq (amd64,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"x64\"
+defines+=host_cpu=\"x64\" use_vaapi=true
 endif
 ifeq (arm64,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"arm64\"
+defines+=host_cpu=\"arm64\" use_vaapi=true
 endif
 ifeq (armhf,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"arm\" arm_use_neon=false symbol_level=0
+defines+=host_cpu=\"arm\" use_vaapi=false arm_use_neon=false symbol_level=0
 endif
 
 # disabled features
 defines+=is_debug=false \
          use_goma=false \
          use_ozone=false \
-         use_vaapi=false \
          use_sysroot=false \
          use_allocator=\"none\" \
          use_libjpeg_turbo=true \
@@ -72,8 +77,8 @@ defines+=is_debug=false \
          enable_iterator_debugging=false \
          enable_hangout_services_extension=false \
          optimize_webui=false \
+         angle_has_histograms=false \
          enable_js_type_check=false \
-         blink_symbol_level=0 \
          treat_warnings_as_errors=false \
 
 # enabled features
@@ -84,7 +89,6 @@ defines+=use_gio=true \
          v8_enable_backtrace=true \
          use_system_zlib=true \
          use_system_lcms2=true \
-         use_system_libpng=true \
          use_system_libjpeg=true \
          use_system_freetype=true \
          use_system_harfbuzz=true \
@@ -140,7 +144,7 @@ override_dh_fixperms:
 
 override_dh_auto_clean:
 	rm -rf out
-	find . -name \*.pyc -execdir rm -f {} \;
+	find . -name \*.pyc -execdir rm -rf {} \;
 	dh_auto_clean
 
 ###################### upstream source downloading ############################
@@ -151,26 +155,31 @@ extract=chromium-$(version)
 tarfile=$(extract)-lite.tar
 tarball=$(tarfile).xz
 debvers=../chromium_$(version)
+seconds=$(debvers).seconds
 origtxz=$(debvers).orig.tar.xz
 removed=$(debvers).files-removed
-seconds=$(debvers).seconds
+options=--sort=name --owner=0 --group=0 --numeric-owner --mtime="@$$(stat --format "%Y" ../$(tarball))" --clamp-mtime
 
 get-orig-source:
 	wget -nv --show-progress -c $(url)/$(tarball) -O ../$(tarball)
 	cp /usr/share/perl5/Devscripts/MkOrigtargz.pm debian/scripts/mk-origtargz
 	patch -p1 < debian/scripts/mk-origtargz.patch
-	date +%s > $(seconds)
+	@date +%s > $(seconds)
 	perl debian/scripts/mk-origtargz ../$(tarball) > $(removed)
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo
 	test ! -e $(extract) || rm -rf $(extract)
 	tar xf ../$(tarball)
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo
 	while read line; do rm -rf $$line; done < $(removed)
 	cd $(extract) && ../debian/scripts/check-upstream
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo
 	test ! -e $(origtxz) || rm -f $(origtxz)
-	tar cf - $(extract) | xz -6 -T $(njobs) - > $(origtxz)
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	tar $(options) -cf - $(extract) | xz -6 -T $(njobs) - > $(origtxz)
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo
 	rm -rf $(extract)
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds | tee seconds
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds | tee seconds
 	@mv -f seconds $(seconds)

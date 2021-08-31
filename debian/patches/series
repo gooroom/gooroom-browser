@@ -2,13 +2,14 @@ debianization/manpage.patch
 debianization/sandbox.patch
 debianization/optimization.patch
 debianization/master-preferences.patch
+debianization/explicit-python2.patch
 
 gn/libcxx.patch
 gn/parallel.patch
+gn/explicit-python2.patch
 
 fixes/gnu-as.patch
 fixes/closure.patch
-fixes/no-ozone.patch
 fixes/ps-print.patch
 fixes/inspector.patch
 fixes/not-constexpr.patch
@@ -20,6 +21,7 @@ fixes/widevine-locations.patch
 fixes/connection-message.patch
 fixes/nullptr-dereference.patch
 fixes/multiple-destruction.patch
+fixes/no-ozone.patch
 fixes/chromeos_devicetype.patch
 fixes/nomerge.patch
 
@@ -62,9 +64,9 @@ warnings/int-in-bool-context.patch
 system/icu.patch
 system/vpx.patch
 system/jpeg.patch
+system/png.patch
 system/node.patch
 system/nspr.patch
-system/opus.patch
 system/zlib.patch
 system/event.patch
 system/ffmpeg.patch
@@ -74,9 +76,9 @@ system/openjpeg.patch
 system/convertutf.patch
 system/clang-format.patch
 system/use-desktop-gl-as-default.patch
+system/opus.patch
 
 buster/re2.patch
-buster/va24.patch
 buster/drm97.patch
 buster/icu63.patch
 buster/vpx17.patch
@@ -165,8 +167,4 @@ gooroom/0081-Fix-wrong-highlight-on-settings-page.patch
 gooroom/0082-Change-Cookie-default-value-to-easily-use.patch
 gooroom/0083-Remove-newtab-page-registerModule.patch
 gooroom/0084-Temporarily-deleted-json-contents-for-build-rollback.patch
-gooroom/Bug-3837-3836-Modify-wrong-strings-on-websocket-webw.patch
-gooroom/Bug-3838-3832-3831-Fix-Transloation-Korean-on-.xtb-f.patch
-gooroom/bug-3833-Rollback-pruning-settings-pages-for-getting.patch
-gooroom/Bug-3516-Remove-alarm-on-settings-page.patch
-gooroom/Change-String-Chrome-to-Gooroom-Browser.patch
+

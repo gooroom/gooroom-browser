@@ -1,15 +1,3 @@
-gooroom-browser (2.10.0-1+grm2u3) stretch; urgency=medium
-  
-  * Bug Fix : 3514 3516 3521
-
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 25 Aug 2021 17:31:00 +0900
-
-gooroom-browser (2.10.0-1+grm2u2) stretch; urgency=medium
-  
-  * Bug Fix : 3831 3832 3833 3836 3837 3838
-
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 25 Aug 2021 11:58:00 +0900
-
 gooroom-browser (2.10.0-1+grm2u1) stretch; urgency=medium
 
   * Init Gooroom Browser Version 2.10.0-1+grm2u1
