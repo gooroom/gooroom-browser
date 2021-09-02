@@ -1,0 +1,30 @@
+From 4b6a91edb70d5fa8d454ae559bded404347d554b Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Wed, 25 Aug 2021 17:20:39 +0900
+Subject: [PATCH 2/2] Bug-3516 : Remove alarm on settings page
+
+---
+ .../resources/settings/privacy_page/security_page.html     | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
+index 7b7989048..88d6ef976 100644
+--- a/chrome/browser/resources/settings/privacy_page/security_page.html
++++ b/chrome/browser/resources/settings/privacy_page/security_page.html
+@@ -131,13 +131,6 @@
+                 disabled="[[getDisabledExtendedSafeBrowsing_(
+                               prefs.generated.safe_browsing.*)]]">
+             </settings-toggle-button>
+-            <settings-toggle-button id="passwordsLeakToggle"
+-                label="$i18n{passwordsLeakDetectionLabel}"
+-                pref="{{prefs.generated.password_leak_detection}}"
+-                sub-label="[[getPasswordsLeakToggleSubLabel_(
+-                              prefs.profile.password_manager_leak_detection.*,
+-                              prefs.generated.password_leak_detection.*)]]">
+-            </settings-toggle-button>
+           </div>
+         </settings-collapse-radio-button>
+         <settings-collapse-radio-button id="safeBrowsingDisabled" no-collapse
+-- 
+2.20.1
+

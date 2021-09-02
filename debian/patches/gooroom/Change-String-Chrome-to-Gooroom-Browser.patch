@@ -1,0 +1,464 @@
+From 97f16da13871feb099485039fcd2f2f05212e9d6 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Wed, 25 Aug 2021 17:19:08 +0900
+Subject: [PATCH 1/2] Change String(Chrome to Gooroom Browser)
+
+---
+ components/strings/components_strings_ko.xtb | 116 +++++++++----------
+ 1 file changed, 58 insertions(+), 58 deletions(-)
+
+diff --git a/components/strings/components_strings_ko.xtb b/components/strings/components_strings_ko.xtb
+index 2fbffc3e1..dfbba7e7f 100644
+--- a/components/strings/components_strings_ko.xtb
++++ b/components/strings/components_strings_ko.xtb
+@@ -34,7 +34,7 @@
+ <translation id="1096545575934602868">입력란에 항목이 <ph name="MAX_ITEMS_LIMIT" />개 넘게 있으면 안 됩니다. 추가되는 모든 항목은 삭제됩니다.</translation>
+ <translation id="1101672080107056897">오류 작업</translation>
+ <translation id="1103523840287552314"><ph name="LANGUAGE" /> 항상 번역</translation>
+-<translation id="1107591249535594099">선택하면 Chrome에서 양식을 더 빠르게 입력할 수 있도록 이 기기에 카드 사본을 저장합니다.</translation>
++<translation id="1107591249535594099">선택하면 Gooroom Browser에서 양식을 더 빠르게 입력할 수 있도록 이 기기에 카드 사본을 저장합니다.</translation>
+ <translation id="1110994991967754504"><ph name="PERMISSION_NAME" /> 권한을 선택합니다</translation>
+ <translation id="1113869188872983271">재정렬 실행 취소(&amp;U)</translation>
+ <translation id="1125573121925420732">웹사이트에서 보안을 업데이트하는 동안에는 경고가 자주 발생할 수 있습니다. 곧 개선될 것입니다.</translation>
+@@ -93,7 +93,7 @@
+ <translation id="1270502636509132238">픽업 방법</translation>
+ <translation id="1281476433249504884">스태커 1</translation>
+ <translation id="1285320974508926690">이 사이트 번역 안함</translation>
+-<translation id="1292701964462482250">'컴퓨터의 소프트웨어로 인해 Chrome이 안전하게 웹에 접속할 수 없습니다'(Windows 컴퓨터만 해당)</translation>
++<translation id="1292701964462482250">'컴퓨터의 소프트웨어로 인해 Gooroom Browser이 안전하게 웹에 접속할 수 없습니다'(Windows 컴퓨터만 해당)</translation>
+ <translation id="1294154142200295408">명령줄 변형</translation>
+ <translation id="129553762522093515">최근에 닫은 탭</translation>
+ <translation id="129863573139666797"><ph name="BEGIN_LINK" />쿠키 삭제해 보기<ph name="END_LINK" /></translation>
+@@ -172,7 +172,7 @@
+ <translation id="154408704832528245">배달 주소 선택</translation>
+ <translation id="1549470594296187301">이 기능을 이용하려면 자바스크립트를 사용하도록 설정해야 합니다.</translation>
+ <translation id="155039086686388498">Engineering-D</translation>
+-<translation id="1553358976309200471">Chrome 업데이트</translation>
++<translation id="1553358976309200471">Gooroom Browser 업데이트</translation>
+ <translation id="1555130319947370107">파란색</translation>
+ <translation id="1559447966090556585">알림을 받으시겠습니까?</translation>
+ <translation id="1559528461873125649">해당 파일이나 디렉터리가 없습니다.</translation>
+@@ -202,12 +202,12 @@
+ <translation id="1644574205037202324">방문 기록</translation>
+ <translation id="1645368109819982629">지원되지 않는 프로토콜</translation>
+ <translation id="1652415888492971589">JIS B8</translation>
+-<translation id="1656024727720460136">Chrome에서 페이지를 읽기 쉽도록 간소화했습니다. Chrome에서 보안 연결을 통해 원본 페이지를 가져왔습니다.</translation>
++<translation id="1656024727720460136">Gooroom Browser에서 페이지를 읽기 쉽도록 간소화했습니다. Gooroom Browser에서 보안 연결을 통해 원본 페이지를 가져왔습니다.</translation>
+ <translation id="1656489000284462475">수령</translation>
+ <translation id="1662550410081243962">결제 수단 저장 및 자동 입력</translation>
+-<translation id="1663943134801823270">카드와 주소는 Chrome에서 가져왔습니다. 이 정보는 <ph name="BEGIN_LINK" />설정<ph name="END_LINK" />에서 관리할 수 있습니다.</translation>
++<translation id="1663943134801823270">카드와 주소는 Gooroom Browser에서 가져왔습니다. 이 정보는 <ph name="BEGIN_LINK" />설정<ph name="END_LINK" />에서 관리할 수 있습니다.</translation>
+ <translation id="1671391448414634642">지금부터 <ph name="SOURCE_LANGUAGE" />로 된 페이지가 <ph name="TARGET_LANGUAGE" />로 번역됩니다.</translation>
+-<translation id="1676269943528358898"><ph name="SITE" />에서는 사용자 정보를 보호하기 위해 일반적으로 암호화를 사용합니다. 이번에 Chrome에서 <ph name="SITE" />에 연결을 시도했을 때 웹사이트에서 비정상적이고 잘못된 사용자 인증 정보를 반환했습니다. 이는 공격자가 <ph name="SITE" />인 것처럼 가장하려고 하거나 Wi-Fi 로그인 화면이 연결을 방해했기 때문일 수 있습니다. 데이터 교환이 발생하기 전에 Chrome에서 연결을 중단했기 때문에 사용자 정보는 안전합니다.</translation>
++<translation id="1676269943528358898"><ph name="SITE" />에서는 사용자 정보를 보호하기 위해 일반적으로 암호화를 사용합니다. 이번에 Gooroom Browser에서 <ph name="SITE" />에 연결을 시도했을 때 웹사이트에서 비정상적이고 잘못된 사용자 인증 정보를 반환했습니다. 이는 공격자가 <ph name="SITE" />인 것처럼 가장하려고 하거나 Wi-Fi 로그인 화면이 연결을 방해했기 때문일 수 있습니다. 데이터 교환이 발생하기 전에 Gooroom Browser에서 연결을 중단했기 때문에 사용자 정보는 안전합니다.</translation>
+ <translation id="1682696192498422849">짧은 쪽 먼저</translation>
+ <translation id="168693727862418163">이 정책 값은 스키마에 대해 유효성이 확인되지 않았으므로 무시됩니다.</translation>
+ <translation id="168841957122794586">서버 인증서에 안전성이 낮은 암호화 키가 포함되어 있습니다.</translation>
+@@ -382,7 +382,7 @@
+ <translation id="2372464001869762664">카드를 확인하면 Google 계정의 카드 세부정보가 이 사이트와 공유됩니다. Plex 계정 세부정보에서 CVC를 확인하세요.</translation>
+ <translation id="2380886658946992094">Legal</translation>
+ <translation id="2384307209577226199">엔터프라이즈 기본값</translation>
+-<translation id="2385809941344967209">Chrome 설정에서 Chrome을 업데이트하세요.</translation>
++<translation id="2385809941344967209">Gooroom Browser 설정에서 Gooroom Browser을 업데이트하세요.</translation>
+ <translation id="2386255080630008482">서버 인증서가 폐기되었습니다.</translation>
+ <translation id="2392959068659972793">값이 설정되지 않은 정책 표시</translation>
+ <translation id="239429038616798445">사용할 수 없는 배송 방법입니다. 다른 방법을 선택하세요.</translation>
+@@ -432,11 +432,11 @@
+ <translation id="2609632851001447353">유사 버전</translation>
+ <translation id="2618023639789766142">C10(봉투)</translation>
+ <translation id="2625385379895617796">시간이 너무 먼 미래로 설정되어 있습니다.</translation>
+-<translation id="2629325967560697240">Chrome에서 가장 강력한 보안 기능을 사용하려면 <ph name="BEGIN_ENHANCED_PROTECTION_LINK" />향상된 보호 모드를 사용 설정<ph name="END_ENHANCED_PROTECTION_LINK" />하세요.</translation>
++<translation id="2629325967560697240">Gooroom Browser에서 가장 강력한 보안 기능을 사용하려면 <ph name="BEGIN_ENHANCED_PROTECTION_LINK" />향상된 보호 모드를 사용 설정<ph name="END_ENHANCED_PROTECTION_LINK" />하세요.</translation>
+ <translation id="2634124572758952069"><ph name="HOST_NAME" />의 서버 IP 주소를 찾을 수 없습니다.</translation>
+ <translation id="2639739919103226564">상태:</translation>
+ <translation id="2649204054376361687"><ph name="COUNTRY" />, <ph name="CITY" /></translation>
+-<translation id="2649259151839507861"><ph name="CLEAR_BROWSING_DATA_FOCUSED_FRIENDLY_MATCH_TEXT" />, Chrome 설정에서 방문 기록, 쿠키, 캐시 등을 삭제하려면 Tab을 누른 다음 Enter 누르기</translation>
++<translation id="2649259151839507861"><ph name="CLEAR_BROWSING_DATA_FOCUSED_FRIENDLY_MATCH_TEXT" />, Gooroom Browser 설정에서 방문 기록, 쿠키, 캐시 등을 삭제하려면 Tab을 누른 다음 Enter 누르기</translation>
+ <translation id="2650446666397867134">파일 액세스 거부됨</translation>
+ <translation id="2653659639078652383">제출</translation>
+ <translation id="2660779039299703961">이벤트</translation>
+@@ -459,7 +459,7 @@
+ <translation id="2705137772291741111">사이트의 저장된(캐시된) 사본을 읽을 수 없습니다.</translation>
+ <translation id="2709516037105925701">자동 완성</translation>
+ <translation id="2713444072780614174">흰색</translation>
+-<translation id="2715612312510870559"><ph name="UPDATE_CREDIT_CARD_FOCUSED_FRIENDLY_MATCH_TEXT" />, Chrome 설정에서 결제 및 신용카드 정보를 관리하려면 Tab을 누른 다음 Enter 누르기</translation>
++<translation id="2715612312510870559"><ph name="UPDATE_CREDIT_CARD_FOCUSED_FRIENDLY_MATCH_TEXT" />, Gooroom Browser 설정에서 결제 및 신용카드 정보를 관리하려면 Tab을 누른 다음 Enter 누르기</translation>
+ <translation id="2721148159707890343">요청 성공</translation>
+ <translation id="272451190272506600">센서를 터치하여 결제</translation>
+ <translation id="2728127805433021124">서버의 인증서가 안전성이 낮은 서명 알고리즘을 사용하여 서명되어 있습니다.</translation>
+@@ -589,7 +589,7 @@
+ <translation id="3286372614333682499">세로 모드</translation>
+ <translation id="3287510313208355388">온라인 상태일 때 다운로드</translation>
+ <translation id="3293642807462928945"><ph name="POLICY_NAME" /> 정책에 관해 자세히 알아보기</translation>
+-<translation id="3295444047715739395">Chrome 설정에서 비밀번호를 확인하고 관리하세요.</translation>
++<translation id="3295444047715739395">Gooroom Browser 설정에서 비밀번호를 확인하고 관리하세요.</translation>
+ <translation id="3303855915957856445">검색결과 없음</translation>
+ <translation id="3308006649705061278">조직 구성 단위(OU)</translation>
+ <translation id="3320021301628644560">청구지 주소 추가</translation>
+@@ -598,7 +598,7 @@
+ <translation id="3338095232262050444">보안 연결</translation>
+ <translation id="3355823806454867987">프록시 설정 변경...</translation>
+ <translation id="3360103848165129075">결제 핸들러 시트</translation>
+-<translation id="3361596688432910856">Chrome에 다음 정보가 <ph name="BEGIN_EMPHASIS" />저장되지 않습니다<ph name="END_EMPHASIS" />.
++<translation id="3361596688432910856">Gooroom Browser에 다음 정보가 <ph name="BEGIN_EMPHASIS" />저장되지 않습니다<ph name="END_EMPHASIS" />.
+         <ph name="BEGIN_LIST" />
+           <ph name="LIST_ITEM" />방문 기록
+           <ph name="LIST_ITEM" />쿠키 및 사이트 데이터
+@@ -667,7 +667,7 @@
+ <translation id="3567778190852720481">회사 계정으로는 등록할 수 없습니다(회사 계정을 사용할 수 없음).</translation>
+ <translation id="3574305903863751447"><ph name="COUNTRY" /> <ph name="STATE" />, <ph name="CITY" /></translation>
+ <translation id="3576616784287504635"><ph name="SITE" />에 삽입된 페이지 내용:</translation>
+-<translation id="3581089476000296252">이 페이지가 준비되면 Chrome에서 알려드립니다. &lt;a&gt;취소&lt;/a&gt;</translation>
++<translation id="3581089476000296252">이 페이지가 준비되면 Gooroom Browser에서 알려드립니다. &lt;a&gt;취소&lt;/a&gt;</translation>
+ <translation id="3582930987043644930">이름 추가</translation>
+ <translation id="3583757800736429874">이동 다시 실행(&amp;R)</translation>
+ <translation id="3584299510153766161">하단 2공 펀칭</translation>
+@@ -686,7 +686,7 @@
+     목록에서 삭제한 뒤 다시 추가합니다.</translation>
+ <translation id="3630699740441428070">이 기기의 관리자가 네트워크 연결을 구성했으며, 이를 통해 내가 방문한 웹사이트를 포함한 네트워크 트래픽을 관리자가 확인할 수 있습니다.</translation>
+ <translation id="3631244953324577188">생체 인식</translation>
+-<translation id="3633738897356909127">Chrome 업데이트 버튼, Chrome 설정에서 Chrome을 업데이트하려면 Enter 누르기</translation>
++<translation id="3633738897356909127">Gooroom Browser 업데이트 버튼, Gooroom Browser 설정에서 Gooroom Browser을 업데이트하려면 Enter 누르기</translation>
+ <translation id="3634530185120165534">트레이 5</translation>
+ <translation id="3640766068866876100">Index-4x6-Ext</translation>
+ <translation id="3642638418806704195">애플리케이션:</translation>
+@@ -771,7 +771,7 @@
+ <translation id="3964661563329879394">{COUNT,plural, =0{없음}=1{사이트 1개 }other{사이트 #개 }}</translation>
+ <translation id="397105322502079400">계산 중...</translation>
+ <translation id="3973234410852337861"><ph name="HOST_NAME" />이(가) 차단됨</translation>
+-<translation id="3987405730340719549">Chrome에서 이 사이트가 허위 또는 사기성 사이트일 수 있다고 판단했습니다.
++<translation id="3987405730340719549">Gooroom Browser에서 이 사이트가 허위 또는 사기성 사이트일 수 있다고 판단했습니다.
+ 
+     이 메시지가 실수로 표시되었다고 생각된다면 다음 페이지를 방문해 주시기 바랍니다. https://bugs.chromium.org/p/chromium/issues/entry?template=Safety+Tips+Appeals.</translation>
+ <translation id="3987940399970879459">1MB 미만</translation>
+@@ -837,11 +837,11 @@
+     &lt;/ol&gt;
+     &lt;h4&gt;2단계: 시크릿 모드로 페이지 열기(컴퓨터에서만 해당)&lt;/h4&gt;
+     &lt;p&gt;시크릿 창에서 방문하려는 페이지를 엽니다.&lt;/p&gt;
+-    &lt;p&gt;페이지가 열리면 Chrome 확장 프로그램이 제대로 작동하지 않고 있는 것입니다. 오류를 해결하려면 확장 프로그램을 사용 중지해야 합니다.&lt;/p&gt;
++    &lt;p&gt;페이지가 열리면 Gooroom Browser 확장 프로그램이 제대로 작동하지 않고 있는 것입니다. 오류를 해결하려면 확장 프로그램을 사용 중지해야 합니다.&lt;/p&gt;
+     &lt;h4&gt;3단계: 운영체제 업데이트하기&lt;/h4&gt;
+     &lt;p&gt;기기가 최신 상태인지 확인합니다.&lt;/p&gt;
+     &lt;h4&gt;4단계: 바이러스 백신 프로그램을 일시적으로 사용 중지하기&lt;/h4&gt;
+-    &lt;p&gt;’HTTPS 보호’ 또는 ‘HTTPS 검사’를 제공하는 바이러스 백신 소프트웨어를 사용 중이면 바이러스 백신이 Chrome 보안 기능을 방해하기 때문에 이 오류가 표시됩니다.&lt;/p&gt;
++    &lt;p&gt;’HTTPS 보호’ 또는 ‘HTTPS 검사’를 제공하는 바이러스 백신 소프트웨어를 사용 중이면 바이러스 백신이 Gooroom Browser 보안 기능을 방해하기 때문에 이 오류가 표시됩니다.&lt;/p&gt;
+     &lt;p&gt;문제를 해결하려면 바이러스 백신 소프트웨어를 사용 중지하세요. 소프트웨어를 사용 중지한 후 페이지가 작동하면 보안 사이트를 사용할 때는 이 소프트웨어를 사용 중지해야 합니다.&lt;/p&gt;
+     &lt;p&gt;작업을 완료한 후 다시 바이러스 백신 프로그램을 사용 설정하세요.&lt;/p&gt;
+     &lt;h4&gt;5단계: 추가 도움 받기&lt;/h4&gt;
+@@ -876,14 +876,14 @@
+ <translation id="4329871760342656885">정책 파싱 오류: <ph name="ERROR" /></translation>
+ <translation id="4331519897422864041">스태커 5</translation>
+ <translation id="4331708818696583467">주의 요함</translation>
+-<translation id="4340982228985273705">이 컴퓨터는 기업에서 관리하는 기기가 아닌 것으로 파악되므로, Chrome 웹 스토어에 호스팅된 확장 프로그램만 정책을 통해 자동으로 설치할 수 있습니다. Chrome 웹 스토어의 업데이트 URL은 '<ph name="CWS_UPDATE_URL" />'입니다.</translation>
++<translation id="4340982228985273705">이 컴퓨터는 기업에서 관리하는 기기가 아닌 것으로 파악되므로, Gooroom Browser 웹 스토어에 호스팅된 확장 프로그램만 정책을 통해 자동으로 설치할 수 있습니다. Gooroom Browser 웹 스토어의 업데이트 URL은 '<ph name="CWS_UPDATE_URL" />'입니다.</translation>
+ <translation id="4346197816712207223">사용 가능한 신용카드</translation>
+ <translation id="4346833872170306413">Roc-16K</translation>
+ <translation id="4349531505348777662">사기성 사이트에 비밀번호를 입력했습니다. 지금 바로 <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> 등 동일한 비밀번호를 사용한 사이트로 이동하여 비밀번호를 변경하시기 바랍니다.</translation>
+ <translation id="4356973930735388585">이 사이트의 공격자가 사용자 정보(예: 사진, 비밀번호, 메시지, 신용카드)를 도용하거나 삭제하는 위험한 프로그램을 컴퓨터에 설치하려고 시도할 수 있습니다.</translation>
+ <translation id="4358059973562876591">지정한 템플릿이 DnsOverHttpsMode 정책 오류로 인해 적용되지 않을 수 있습니다.</translation>
+ <translation id="4358461427845829800">결제 수단 관리...</translation>
+-<translation id="4359160567981085931">사기성 사이트에 비밀번호를 입력했습니다. Chrome이 계정 보호를 도와드립니다. 비밀번호를 변경하고 계정 보안 위험에 관해 Google에 알리려면 계정 보호를 클릭하세요.</translation>
++<translation id="4359160567981085931">사기성 사이트에 비밀번호를 입력했습니다. Gooroom Browser이 계정 보호를 도와드립니다. 비밀번호를 변경하고 계정 보안 위험에 관해 Google에 알리려면 계정 보호를 클릭하세요.</translation>
+ <translation id="4367563149485757821">Number-12(봉투)</translation>
+ <translation id="4367839622597707614">{1,plural, =0{사이트 또는 앱에서 발생한 정보 유출로 인해 <ph name="ORIGIN" />의 저장된 비밀번호가 노출되었습니다. 지금 <ph name="ORIGIN" />의 비밀번호를 변경하시기 바랍니다.}=1{사이트 또는 앱에서 발생한 정보 유출로 인해 <ph name="ORIGIN" /> 외 사이트 1곳의 저장된 비밀번호가 노출되었습니다. 지금 저장된 비밀번호를 확인해 보시기 바랍니다.}other{사이트 또는 앱에서 발생한 정보 유출로 인해 <ph name="ORIGIN" /> 외 사이트 <ph name="SITES_COUNT" />곳의 저장된 비밀번호가 노출되었습니다. 지금 저장된 비밀번호를 확인해 보시기 바랍니다.}}</translation>
+ <translation id="437058704415269440">계정 잔액</translation>
+@@ -896,7 +896,7 @@
+ <translation id="4408413947728134509">쿠키 <ph name="NUM_COOKIES" />개</translation>
+ <translation id="4414290883293381923">사기성 사이트에 비밀번호를 입력했습니다. 지금 바로 <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />, <ph name="WEBSITE_3" /> 등 동일한 비밀번호를 사용한 사이트로 이동하여 비밀번호를 변경하시기 바랍니다.</translation>
+ <translation id="4415426530740016218">픽업 주소</translation>
+-<translation id="4424024547088906515">이 서버가 <ph name="DOMAIN" />임을 입증할 수 없으며 Chrome에서 신뢰하는 보안 인증서가 아닙니다. 서버를 잘못 설정했거나 불법 사용자가 연결을 가로채고 있기 때문일 수 있습니다.</translation>
++<translation id="4424024547088906515">이 서버가 <ph name="DOMAIN" />임을 입증할 수 없으며 Gooroom Browser에서 신뢰하는 보안 인증서가 아닙니다. 서버를 잘못 설정했거나 불법 사용자가 연결을 가로채고 있기 때문일 수 있습니다.</translation>
+ <translation id="443121186588148776">직렬 포트</translation>
+ <translation id="4432688616882109544"><ph name="HOST_NAME" />에서 로그인 인증서를 승인하지 않았거나 로그인 인증서가 제공되지 않았을 수 있습니다.</translation>
+ <translation id="4432792777822557199">지금부터 <ph name="SOURCE_LANGUAGE" />로 된 페이지가 <ph name="TARGET_LANGUAGE" />로 번역됩니다.</translation>
+@@ -908,7 +908,7 @@
+ <translation id="4477350412780666475">다음 트랙</translation>
+ <translation id="4482953324121162758">이 사이트는 번역되지 않습니다.</translation>
+ <translation id="4490717597759821841">A7</translation>
+-<translation id="4492519888999857993">이 기능은 기본적으로 사용 중지되어 있습니다. Chrome의 이후 버전에서는 사용할 수 없습니다.</translation>
++<translation id="4492519888999857993">이 기능은 기본적으로 사용 중지되어 있습니다. Gooroom Browser의 이후 버전에서는 사용할 수 없습니다.</translation>
+ <translation id="4493480324863638523">잘못된 URL입니다. URL에는 표준 스키마가 있어야 합니다(예: http://example.com 또는 https://example.com).</translation>
+ <translation id="4503882053543859973">Architecture-D</translation>
+ <translation id="4506176782989081258">유효성 검사 오류 <ph name="VALIDATION_ERROR" /></translation>
+@@ -917,7 +917,7 @@
+ <translation id="4508814173490746936">Touch ID를 사용할 수 없음</translation>
+ <translation id="4509074745930862522"><ph name="TRANSLATE_FOCUSED_FRIENDLY_MATCH_TEXT" />, Google 번역으로 이 페이지를 번역하려면 Tab을 누른 다음 Enter 누르기</translation>
+ <translation id="4510487217173779431">Chou4(봉투)</translation>
+-<translation id="4515275063822566619">카드와 주소는 Chrome 및 Google 계정(<ph name="ACCOUNT_EMAIL" />)에서 가져왔습니다. 이 정보는 <ph name="BEGIN_LINK" />설정<ph name="END_LINK" />에서 관리할 수 있습니다.</translation>
++<translation id="4515275063822566619">카드와 주소는 Gooroom Browser 및 Google 계정(<ph name="ACCOUNT_EMAIL" />)에서 가져왔습니다. 이 정보는 <ph name="BEGIN_LINK" />설정<ph name="END_LINK" />에서 관리할 수 있습니다.</translation>
+ <translation id="4517607026994743406">Comm-10(봉투)</translation>
+ <translation id="4521157617044179198"><ph name="WIDTH" />×<ph name="HEIGHT" />mm(<ph name="ORIENTATION" />)</translation>
+ <translation id="4522570452068850558">세부정보</translation>
+@@ -930,7 +930,7 @@
+ <translation id="457875822857220463">배송</translation>
+ <translation id="4579056131138995126">Personal(봉투)</translation>
+ <translation id="4582204425268416675">카드 삭제</translation>
+-<translation id="4587425331216688090">Chrome에서 주소를 삭제하시겠습니까?</translation>
++<translation id="4587425331216688090">Gooroom Browser에서 주소를 삭제하시겠습니까?</translation>
+ <translation id="459089498662672729"><ph name="ORIGIN_NAME" />에서 이 위치로 붙여넣기는 관리자 정책에 따라 권장되지 않습니다.</translation>
+ <translation id="4592951414987517459"><ph name="DOMAIN" />에 대한 연결은 최신 암호화 기술을 사용하여 암호화됩니다.</translation>
+ <translation id="4594403342090139922">삭제 실행 취소(&amp;U)</translation>
+@@ -946,7 +946,7 @@
+ <translation id="4660119392514473465">이제 비공개로 인터넷을 탐색할 수 있으며, 이 기기를 사용하는 다른 사용자가 내 활동을 볼 수 없습니다. 하지만 다운로드, 북마크, 읽기 목록 항목은 계속해서 저장됩니다.</translation>
+ <translation id="4668929960204016307">,</translation>
+ <translation id="4670064810192446073">가상 현실</translation>
+-<translation id="4675657451653251260">게스트 모드에서는 Chrome 프로필 정보를 볼 수 없습니다. 비밀번호 및 결제 수단과 같은 Google 계정 정보를 보려면 <ph name="LINK_BEGIN" />로그인<ph name="LINK_END" />하세요.</translation>
++<translation id="4675657451653251260">게스트 모드에서는 Gooroom Browser 프로필 정보를 볼 수 없습니다. 비밀번호 및 결제 수단과 같은 Google 계정 정보를 보려면 <ph name="LINK_BEGIN" />로그인<ph name="LINK_END" />하세요.</translation>
+ <translation id="467662567472608290">이 서버가 <ph name="DOMAIN" />임을 입증할 수 없으며 서버의 보안 인증서에 오류가 있습니다. 서버를 잘못 설정했거나 불법 사용자가 연결을 가로채고 있기 때문일 수 있습니다.</translation>
+ <translation id="4677585247300749148"><ph name="URL" />에서 접근성 이벤트에 응답하려고 합니다</translation>
+ <translation id="467809019005607715">Google Slides</translation>
+@@ -991,7 +991,7 @@
+ <translation id="4800132727771399293">유효기간과 CVC를 확인한 후 다시 시도해 주세요.</translation>
+ <translation id="480334179571489655">기존 정책 오류</translation>
+ <translation id="4803924862070940586"><ph name="CURRENCY_CODE" /> <ph name="FORMATTED_TOTAL_AMOUNT" /></translation>
+-<translation id="4807049035289105102">현재 <ph name="SITE" />에서 Chrome이 처리할 수 없는 암호화된 자격증명 정보를 전송했기 때문에 방문할 수 없습니다. 네트워크 오류와 공격은 대부분 일시적이므로 잠시 후 페이지가 정상화될 것입니다.</translation>
++<translation id="4807049035289105102">현재 <ph name="SITE" />에서 Gooroom Browser이 처리할 수 없는 암호화된 자격증명 정보를 전송했기 때문에 방문할 수 없습니다. 네트워크 오류와 공격은 대부분 일시적이므로 잠시 후 페이지가 정상화될 것입니다.</translation>
+ <translation id="4809079943450490359">기기 관리자가 제공하는 지침:</translation>
+ <translation id="4813512666221746211">네트워크 오류</translation>
+ <translation id="4816492930507672669">페이지 맞춤</translation>
+@@ -1035,7 +1035,7 @@
+ <translation id="4989809363548539747">이 플러그인은 지원되지 않습니다.</translation>
+ <translation id="4995216769782533993">카드 세부정보를 이 사이트와 공유하려면 보안 코드를 확인하세요.</translation>
+ <translation id="4995474875135717171">수정:</translation>
+-<translation id="5002932099480077015">선택하면 Chrome에서 양식을 더 빠르게 작성할 수 있도록 이 기기에 카드 사본을 저장합니다.</translation>
++<translation id="5002932099480077015">선택하면 Gooroom Browser에서 양식을 더 빠르게 작성할 수 있도록 이 기기에 카드 사본을 저장합니다.</translation>
+ <translation id="5011561501798487822">감지된 언어</translation>
+ <translation id="5015510746216210676">컴퓨터 이름:</translation>
+ <translation id="5017554619425969104">복사한 텍스트</translation>
+@@ -1179,14 +1179,14 @@
+ <translation id="5523118979700054094">정책 이름</translation>
+ <translation id="55293785478302737">에지 스티치</translation>
+ <translation id="553484882784876924">Prc6(봉투)</translation>
+-<translation id="5535133333442455806">인터넷 사용 기록 삭제 버튼, Chrome 설정의 방문 기록, 쿠키, 캐시 등을 삭제하려면 Enter 누르기</translation>
++<translation id="5535133333442455806">인터넷 사용 기록 삭제 버튼, Gooroom Browser 설정의 방문 기록, 쿠키, 캐시 등을 삭제하려면 Enter 누르기</translation>
+ <translation id="5536214594743852365">‘<ph name="SECTION" />’ 섹션 표시</translation>
+ <translation id="5539243836947087108">래프트</translation>
+ <translation id="5540224163453853">요청한 글을 찾지 못했습니다.</translation>
+ <translation id="5541086400771735334">메일박스 7</translation>
+ <translation id="5541546772353173584">이메일 추가</translation>
+ <translation id="5545756402275714221">추천 기사</translation>
+-<translation id="5552137475244467770">Chrome에서는 온라인에 게시된 비밀번호 목록에 사용자의 비밀번호가 포함되어 있는지를 주기적으로 확인합니다. 이렇게 하면 비밀번호 및 사용자 이름이 암호화되어 Google을 포함해 누구도 읽을 수 없습니다.</translation>
++<translation id="5552137475244467770">Gooroom Browser에서는 온라인에 게시된 비밀번호 목록에 사용자의 비밀번호가 포함되어 있는지를 주기적으로 확인합니다. 이렇게 하면 비밀번호 및 사용자 이름이 암호화되어 Google을 포함해 누구도 읽을 수 없습니다.</translation>
+ <translation id="5556459405103347317">새로고침</translation>
+ <translation id="5560088892362098740">만료일</translation>
+ <translation id="55635442646131152">문서 개요</translation>
+@@ -1333,7 +1333,7 @@
+ <translation id="610911394827799129">Google 계정의 내 활동(<ph name="BEGIN_LINK" />myactivity.google.com<ph name="END_LINK" />)에는 인터넷 방문 기록이 다른 형식으로 남아 있을 수도 있습니다</translation>
+ <translation id="6116338172782435947">클립보드에 복사된 텍스트 및 이미지를 확인합니다.</translation>
+ <translation id="6120179357481664955">UPI ID를 저장하시겠습니까?</translation>
+-<translation id="6124432979022149706">Chrome Enterprise Connectors</translation>
++<translation id="6124432979022149706">Gooroom Browser Enterprise Connectors</translation>
+ <translation id="6146055958333702838">케이블을 확인하고 사용 중인 라우터, 모뎀 또는 기타 네트워크 기기를
+     재부팅하시기 바랍니다.</translation>
+ <translation id="614940544461990577">다음 방법을 시도해 보세요.</translation>
+@@ -1369,7 +1369,7 @@
+ <translation id="6289939620939689042">페이지 색상</translation>
+ <translation id="6290238015253830360">추천 콘텐츠가 여기에 표시됩니다.</translation>
+ <translation id="6293309776179964942">JIS B5</translation>
+-<translation id="6302269476990306341">Chrome의 Google 어시스턴트 중지하는 중</translation>
++<translation id="6302269476990306341">Gooroom Browser의 Google 어시스턴트 중지하는 중</translation>
+ <translation id="6305205051461490394"><ph name="URL" />에 연결할 수 없습니다.</translation>
+ <translation id="6312113039770857350">웹페이지를 사용할 수 없음</translation>
+ <translation id="6321917430147971392">DNS 설정 확인</translation>
+@@ -1422,7 +1422,7 @@
+ <translation id="6489534406876378309">비정상 종료 업로드 시작하기</translation>
+ <translation id="6499038740797743453">비밀번호를 재설정하시겠습니까?</translation>
+ <translation id="6502991525169604759">변경사항 제외</translation>
+-<translation id="6508722015517270189">Chrome 다시 시작하기</translation>
++<translation id="6508722015517270189">Gooroom Browser 다시 시작하기</translation>
+ <translation id="6517596291481585650">경고: 이 정책은 목록이 아니므로 정책에 명시된 대로 목록으로 병합되지 않았습니다.</translation>
+ <translation id="6518133107902771759">확인</translation>
+ <translation id="6521745193039995384">활성화되지 않음</translation>
+@@ -1451,7 +1451,7 @@
+ <translation id="6643016212128521049">삭제</translation>
+ <translation id="6645291930348198241">쿠키 및 사이트 데이터에 액세스합니다.</translation>
+ <translation id="6646269444027925224">{COUNT,plural, =0{없음}=1{사이트 1개(Google 계정에서 로그아웃되지 않음)}other{사이트 #개(Google 계정에서 로그아웃되지 않음)}}</translation>
+-<translation id="6648459603387803038">관리자가 원격으로 브라우저 설정을 변경할 수 있습니다. 이 기기의 활동은 Chrome 외부에서도 관리할 수 있습니다.</translation>
++<translation id="6648459603387803038">관리자가 원격으로 브라우저 설정을 변경할 수 있습니다. 이 기기의 활동은 Gooroom Browser 외부에서도 관리할 수 있습니다.</translation>
+ <translation id="6648524591329069940">Serif 체</translation>
+ <translation id="6651270836885078973">관리자:</translation>
+ <translation id="6652101503459149953">Windows Hello 사용</translation>
+@@ -1462,7 +1462,7 @@
+ <translation id="6685834062052613830">로그아웃 후 설정 완료</translation>
+ <translation id="6687335167692595844">글꼴 크기 요청됨</translation>
+ <translation id="6689249931105087298">상대적이며 흑점 보정 포함</translation>
+-<translation id="6689271823431384964">Google 계정에 로그인되어 있기 때문에 Chrome에서 계정에 카드를 저장할지 묻는 메시지가 표시됩니다. 설정에서 이 동작을 변경할 수 있습니다. 카드 소지자 이름은 계정에서 가져온 것입니다.</translation>
++<translation id="6689271823431384964">Google 계정에 로그인되어 있기 때문에 Gooroom Browser에서 계정에 카드를 저장할지 묻는 메시지가 표시됩니다. 설정에서 이 동작을 변경할 수 있습니다. 카드 소지자 이름은 계정에서 가져온 것입니다.</translation>
+ <translation id="6698381487523150993">생성됨:</translation>
+ <translation id="6702919718839027939">발표</translation>
+ <translation id="6710213216561001401">이전</translation>
+@@ -1495,7 +1495,7 @@
+ <translation id="6874604403660855544">추가 다시 실행(&amp;R)</translation>
+ <translation id="6884662655240309489">크기 1</translation>
+ <translation id="6886577214605505410"><ph name="LOCATION_TITLE" /> <ph name="SHORT_URL" /></translation>
+-<translation id="6888584790432772780">Chrome에서 페이지를 읽기 쉽도록 간소화했습니다. Chrome에서 안전하지 않은 연결을 통해 원본 페이지를 가져왔습니다.</translation>
++<translation id="6888584790432772780">Gooroom Browser에서 페이지를 읽기 쉽도록 간소화했습니다. Gooroom Browser에서 안전하지 않은 연결을 통해 원본 페이지를 가져왔습니다.</translation>
+ <translation id="6891596781022320156">정책 수준이 지원되지 않습니다.</translation>
+ <translation id="6895330447102777224">카드가 확인되었습니다.</translation>
+ <translation id="6897140037006041989">사용자 에이전트</translation>
+@@ -1615,9 +1615,9 @@
+ <translation id="7359588939039777303">광고가 차단되었습니다.</translation>
+ <translation id="7365849542400970216">기기 사용 여부를 웹사이트에 알리시겠습니까?</translation>
+ <translation id="7372973238305370288">검색결과</translation>
+-<translation id="7374733840632556089">나 또는 다른 사용자가 기기에 설치한 인증서로 인해 이 문제가 발생할 수 있습니다. 이 인증서는 네트워크를 모니터링하고 가로막는 데 사용되는 것으로 알려져 있으며, Chrome에서 신뢰하지 않습니다. 학교나 회사 네트워크에서 발생하는 합법적인 모니터링도 존재합니다. 사용자가 멈출 수는 없더라도 모니터링이 이뤄지고 있다는 사실을 Chrome에서는 알립니다. 모니터링은 웹에 액세스하는 모든 브라우저 또는 애플리케이션에서 이뤄집니다.</translation>
++<translation id="7374733840632556089">나 또는 다른 사용자가 기기에 설치한 인증서로 인해 이 문제가 발생할 수 있습니다. 이 인증서는 네트워크를 모니터링하고 가로막는 데 사용되는 것으로 알려져 있으며, Gooroom Browser에서 신뢰하지 않습니다. 학교나 회사 네트워크에서 발생하는 합법적인 모니터링도 존재합니다. 사용자가 멈출 수는 없더라도 모니터링이 이뤄지고 있다는 사실을 Gooroom Browser에서는 알립니다. 모니터링은 웹에 액세스하는 모든 브라우저 또는 애플리케이션에서 이뤄집니다.</translation>
+ <translation id="7375818412732305729">파일 첨부됨</translation>
+-<translation id="7376551888419889433">Chrome Enterprise 커넥터에서 보안 관련 활동을 신고한 경우 활동에 관한 데이터가 관리자에게 전송됩니다. 여기에는 Chrome에서 방문한 페이지 URL, 파일 이름 또는 메타데이터, 기기와 Chrome 로그인에 사용한 사용자 이름이 포함될 수 있습니다.</translation>
++<translation id="7376551888419889433">Gooroom Browser Enterprise 커넥터에서 보안 관련 활동을 신고한 경우 활동에 관한 데이터가 관리자에게 전송됩니다. 여기에는 Gooroom Browser에서 방문한 페이지 URL, 파일 이름 또는 메타데이터, 기기와 Gooroom Browser 로그인에 사용한 사용자 이름이 포함될 수 있습니다.</translation>
+ <translation id="7377249249140280793"><ph name="RELATIVE_DATE" /> - <ph name="FULL_DATE" /></translation>
+ <translation id="7378594059915113390">미디어 컨트롤</translation>
+ <translation id="7378627244592794276">안함</translation>
+@@ -1634,7 +1634,7 @@
+       &lt;li&gt;&lt;strong&gt;시작 유형&lt;/strong&gt;에서 &lt;strong&gt;사용 안 함&lt;/strong&gt;을 선택합니다.
+       &lt;li&gt;&lt;strong&gt;서비스 상태&lt;/strong&gt;에서 &lt;strong&gt;중지&lt;/strong&gt;를 클릭합니다.
+       &lt;li&gt;&lt;strong&gt;적용&lt;/strong&gt;을 클릭한 다음 &lt;strong&gt;확인&lt;/strong&gt;을 클릭합니다.
+-      &lt;li&gt;&lt;a href="https://support.google.com/chrome/answer/6098869"&gt;Chrome 고객센터&lt;/a&gt;를 방문하여 컴퓨터에서 소프트웨어를 영구적으로 삭제하는 방법을 알아보세요.      &lt;/ol&gt;</translation>
++      &lt;li&gt;&lt;a href="https://support.google.com/chrome/answer/6098869"&gt;Gooroom Browser 고객센터&lt;/a&gt;를 방문하여 컴퓨터에서 소프트웨어를 영구적으로 삭제하는 방법을 알아보세요.      &lt;/ol&gt;</translation>
+ <translation id="741007362987735528">Wide-Format</translation>
+ <translation id="7416351320495623771">비밀번호 관리...</translation>
+ <translation id="7419106976560586862">프로필 경로</translation>
+@@ -1671,12 +1671,12 @@
+ <translation id="7542995811387359312">양식에 보안 연결이 사용되지 않아 신용카드 자동 채우기가 사용 중지되었습니다.</translation>
+ <translation id="7548892272833184391">연결 문제해결</translation>
+ <translation id="7549584377607005141">이 웹페이지를 제대로 표시하려면 이전에 입력한 데이터가 필요합니다. 이 데이터를 다시 보낼 수 있지만 이 경우 해당 페이지에서 이전에 수행한 작업이 반복됩니다.</translation>
+-<translation id="7550637293666041147">기기 사용자 이름 및 Chrome 사용자 이름</translation>
++<translation id="7550637293666041147">기기 사용자 이름 및 Gooroom Browser 사용자 이름</translation>
+ <translation id="7552846755917812628">다음 도움말을 확인해 보세요.</translation>
+ <translation id="7554791636758816595">새 탭</translation>
+ <translation id="7564049878696755256"><ph name="ORG_NAME" /> 계정에 액세스할 수 없게 되거나 신원 도용이 발생할 수도 있습니다. 따라서 지금 비밀번호를 변경하는 것이 좋습니다.</translation>
+ <translation id="7567204685887185387">이 서버가 <ph name="DOMAIN" />임을 입증할 수 없으며 서버의 보안 인증서가 부정한 방식으로 발행되었을 수 있습니다. 서버를 잘못 설정했거나 불법 사용자가 연결을 가로채고 있기 때문일 수 있습니다.</translation>
+-<translation id="7569952961197462199">Chrome에서 신용카드를 삭제하시겠습니까?</translation>
++<translation id="7569952961197462199">Gooroom Browser에서 신용카드를 삭제하시겠습니까?</translation>
+ <translation id="7569983096843329377">검정색</translation>
+ <translation id="7575207903026901870">추천 삭제 버튼, Enter 키를 눌러 이 추천 삭제</translation>
+ <translation id="7578104083680115302">Google에 저장한 카드를 사용하여 어떤 기기에서든지 사이트 및 앱에서 빠르게 지불할 수 있습니다.</translation>
+@@ -1688,9 +1688,9 @@
+ <translation id="7600965453749440009"><ph name="LANGUAGE" /> 번역 안함</translation>
+ <translation id="7610193165460212391">값(<ph name="VALUE" />)이 범위를 벗어났습니다.</translation>
+ <translation id="7613889955535752492">만료일: <ph name="EXPIRATION_MONTH" />/<ph name="EXPIRATION_YEAR" /></translation>
+-<translation id="7614494068621678628"><ph name="MANAGE_PASSWORDS_FOCUSED_FRIENDLY_MATCH_TEXT" />, Chrome 설정에서 비밀번호를 확인하고 관리하려면 Tab을 누른 다음 Enter 누르기</translation>
++<translation id="7614494068621678628"><ph name="MANAGE_PASSWORDS_FOCUSED_FRIENDLY_MATCH_TEXT" />, Gooroom Browser 설정에서 비밀번호를 확인하고 관리하려면 Tab을 누른 다음 Enter 누르기</translation>
+ <translation id="7615602087246926389">다른 Google 계정 비밀번호 버전을 사용하여 암호화된 데이터가 이미 있습니다. 아래에 암호를 입력하시기 바랍니다.</translation>
+-<translation id="7616645509853975347">관리자가 브라우저에 Chrome Enterprise 커넥터를 사용 설정했습니다. 커넥터가 내 데이터 중 일부에 액세스할 수 있습니다.</translation>
++<translation id="7616645509853975347">관리자가 브라우저에 Gooroom Browser Enterprise 커넥터를 사용 설정했습니다. 커넥터가 내 데이터 중 일부에 액세스할 수 있습니다.</translation>
+ <translation id="7619838219691048931">엔드 시트</translation>
+ <translation id="762844065391966283">한 번에 하나씩</translation>
+ <translation id="7633909222644580952">성능 데이터 및 비정상 종료 보고서</translation>
+@@ -1748,7 +1748,7 @@
+ <translation id="780301667611848630">취소</translation>
+ <translation id="7805768142964895445">상태</translation>
+ <translation id="7812922009395017822">Mir</translation>
+-<translation id="7813600968533626083">Chrome에서 추천검색어를 삭제하시겠습니까?</translation>
++<translation id="7813600968533626083">Gooroom Browser에서 추천검색어를 삭제하시겠습니까?</translation>
+ <translation id="781440967107097262">클립보드를 공유하시겠습니까?</translation>
+ <translation id="7815407501681723534">'<ph name="SEARCH_STRING" />'에 대해 <ph name="SEARCH_RESULTS" /> <ph name="NUMBER_OF_RESULTS" />개의 검색 결과를 찾았습니다.</translation>
+ <translation id="782886543891417279">사용 중인 Wi-Fi(<ph name="WIFI_NAME" />)에서 로그인 페이지 방문을 요청할 수 있습니다.</translation>
+@@ -1830,7 +1830,7 @@
+ <translation id="8150722005171944719"><ph name="URL" />의 파일을 읽을 수 없습니다. 삭제 또는 이동되었거나 파일 사용 권한이 액세스를 차단할 수도 있습니다.</translation>
+ <translation id="8157295877370077682">사이트에서 나가기</translation>
+ <translation id="8163866351304776260">왼쪽 4공 펀칭</translation>
+-<translation id="8175796834047840627">로그인되어 있는 경우 Chrome에서 Google 계정에 카드를 저장할지 묻는 메시지가 표시됩니다. 설정에서 이 동작을 변경할 수 있습니다.</translation>
++<translation id="8175796834047840627">로그인되어 있는 경우 Gooroom Browser에서 Google 계정에 카드를 저장할지 묻는 메시지가 표시됩니다. 설정에서 이 동작을 변경할 수 있습니다.</translation>
+ <translation id="8184538546369750125">전체 기본값 사용(허용)</translation>
+ <translation id="8194797478851900357">이동 실행 취소(&amp;U)</translation>
+ <translation id="8201077131113104583">ID가 '<ph name="EXTENSION_ID" />'인 확장 프로그램에 대한 잘못된 업데이트 URL</translation>
+@@ -1873,7 +1873,7 @@
+ <translation id="830498451218851433">폴드 하프</translation>
+ <translation id="8307358339886459768">Small-Photo</translation>
+ <translation id="8307888238279532626">설치된 앱 및 앱의 사용 빈도</translation>
+-<translation id="831207732689920588">의심스러운 페이지(Chrome에서 보고함)</translation>
++<translation id="831207732689920588">의심스러운 페이지(Gooroom Browser에서 보고함)</translation>
+ <translation id="831997045666694187">저녁</translation>
+ <translation id="8332188693563227489"><ph name="HOST_NAME" />에 대한 액세스가 거부됨</translation>
+ <translation id="833262891116910667">강조표시</translation>
+@@ -1907,17 +1907,17 @@
+ <translation id="8473863474539038330">주소 및 기타</translation>
+ <translation id="8474910779563686872">개발자 세부정보 표시</translation>
+ <translation id="8479754468255770962">왼쪽 하단 스테이플</translation>
+-<translation id="8483780878231876732">Google 계정에서 카드를 사용하려면 Chrome에 로그인하세요.</translation>
++<translation id="8483780878231876732">Google 계정에서 카드를 사용하려면 Gooroom Browser에 로그인하세요.</translation>
+ <translation id="8485393050551136813">사기성 사이트에 비밀번호를 입력했습니다. 지금 바로 <ph name="WEBSITE_1" /> 등 동일한 비밀번호를 사용한 사이트에 저장된 비밀번호를 확인하는 것이 좋습니다.</translation>
+ <translation id="8488350697529856933">적용 대상</translation>
+ <translation id="8490137692873530638">스태커 10</translation>
+ <translation id="8498891568109133222"><ph name="HOST_NAME" />에서 응답하는 데 시간이 너무 오래 걸립니다.</translation>
+-<translation id="8503559462189395349">Chrome 비밀번호</translation>
++<translation id="8503559462189395349">Gooroom Browser 비밀번호</translation>
+ <translation id="8503813439785031346">사용자이름</translation>
+ <translation id="8507227106804027148">명령줄</translation>
+ <translation id="8508648098325802031">검색 아이콘</translation>
+-<translation id="8522552481199248698">Chrome을 통해 Google 계정을 보호하고 비밀번호를 변경할 수 있습니다.</translation>
+-<translation id="8530813470445476232">Chrome 설정에서 방문 기록, 쿠키, 캐시 등을 삭제하세요.</translation>
++<translation id="8522552481199248698">Gooroom Browser을 통해 Google 계정을 보호하고 비밀번호를 변경할 수 있습니다.</translation>
++<translation id="8530813470445476232">Gooroom Browser 설정에서 방문 기록, 쿠키, 캐시 등을 삭제하세요.</translation>
+ <translation id="8533619373899488139">차단된 URL 및 시스템 관리자가 설정한 기타 정책 목록을 확인하려면 &lt;strong&gt;chrome://policy&lt;/strong&gt;를 방문하세요.</translation>
+ <translation id="8541158209346794904">블루투스 기기</translation>
+ <translation id="8542014550340843547">하단 트리플 스테이플</translation>
+@@ -1987,11 +1987,11 @@
+ <translation id="877985182522063539">A4</translation>
+ <translation id="8790007591277257123">삭제 다시 실행(&amp;R)</translation>
+ <translation id="8792621596287649091"><ph name="ORG_NAME" /> 계정에 액세스할 수 없게 되거나 신원 도용이 발생할 수도 있습니다. 따라서 지금 비밀번호를 변경하는 것이 좋습니다.</translation>
+-<translation id="8793655568873652685"><ph name="ENROLLMENT_DOMAIN" />에서 브라우저에 Chrome Enterprise 커넥터를 사용 설정했습니다. 커넥터가 내 데이터 중 일부에 액세스할 수 있습니다.</translation>
++<translation id="8793655568873652685"><ph name="ENROLLMENT_DOMAIN" />에서 브라우저에 Gooroom Browser Enterprise 커넥터를 사용 설정했습니다. 커넥터가 내 데이터 중 일부에 액세스할 수 있습니다.</translation>
+ <translation id="8798099450830957504">기본값</translation>
+ <translation id="8805819170075074995">목록 항목 '<ph name="LANGUAGE_ID" />': SpellcheckLanguage 정책에도 포함되었기 때문에 항목이 무시되었습니다.</translation>
+ <translation id="8807160976559152894">각 페이지 뒤에 트림</translation>
+-<translation id="8816395686387277279"><ph name="UPDATE_CHROME_FOCUSED_FRIENDLY_MATCH_TEXT" />, Chrome 설정에서 Chrome을 업데이트하려면 Tab을 누른 다음 Enter 누르기</translation>
++<translation id="8816395686387277279"><ph name="UPDATE_CHROME_FOCUSED_FRIENDLY_MATCH_TEXT" />, Gooroom Browser 설정에서 Gooroom Browser을 업데이트하려면 Tab을 누른 다음 Enter 누르기</translation>
+ <translation id="8820817407110198400">북마크</translation>
+ <translation id="883848425547221593">기타 북마크</translation>
+ <translation id="884264119367021077">배송지 주소</translation>
+@@ -2011,7 +2011,7 @@
+ <translation id="890485472659500557">Engineering-C</translation>
+ <translation id="890493561996401738">추천 삭제 버튼, Enter 키를 눌러 삭제, <ph name="REMOVE_BUTTON_FOCUSED_FRIENDLY_MATCH_TEXT" /></translation>
+ <translation id="8912362522468806198">Google 계정</translation>
+-<translation id="8913778647360618320">결제 수단 관리 버튼, Chrome 설정에서 결제 및 신용카드 정보를 관리하려면 Enter 누르기</translation>
++<translation id="8913778647360618320">결제 수단 관리 버튼, Gooroom Browser 설정에서 결제 및 신용카드 정보를 관리하려면 Enter 누르기</translation>
+ <translation id="8918231688545606538">의심스러운 페이지</translation>
+ <translation id="8922013791253848639">이 사이트의 광고 항상 허용</translation>
+ <translation id="892588693504540538">오른쪽 상단 펀칭</translation>
+@@ -2065,7 +2065,7 @@
+ <translation id="9107467864910557787">내 브라우저는 <ph name="MANAGER" />에서 관리합니다</translation>
+ <translation id="91108059142052966">관리자 정책에 따라 기밀 콘텐츠가 보일 때 <ph name="APPLICATION_TITLE" />과(와)의 화면 공유가 중지됩니다.</translation>
+ <translation id="9114524666733003316">카드 확인 중...</translation>
+-<translation id="9114581008513152754">이 브라우저는 회사 또는 다른 조직에서 관리하지 않습니다. 이 기기의 활동은 Chrome 외부에서도 관리할 수 있습니다. <ph name="BEGIN_LINK" />자세히 알아보기<ph name="END_LINK" /></translation>
++<translation id="9114581008513152754">이 브라우저는 회사 또는 다른 조직에서 관리하지 않습니다. 이 기기의 활동은 Gooroom Browser 외부에서도 관리할 수 있습니다. <ph name="BEGIN_LINK" />자세히 알아보기<ph name="END_LINK" /></translation>
+ <translation id="9119042192571987207">업로드됨</translation>
+ <translation id="9128016270925453879">정책 로드됨</translation>
+ <translation id="9128870381267983090">네트워크에 연결</translation>
+@@ -2074,7 +2074,7 @@
+ <translation id="9148088599418889305">배송 방법 선택</translation>
+ <translation id="9148507642005240123">수정 실행 취소(&amp;U)</translation>
+ <translation id="9150045010208374699">카메라 사용</translation>
+-<translation id="9150685862434908345">관리자가 원격으로 브라우저 설정을 변경할 수 있습니다. 이 기기의 활동은 Chrome 외부에서도 관리할 수 있습니다. <ph name="BEGIN_LINK" />자세히 알아보기<ph name="END_LINK" /></translation>
++<translation id="9150685862434908345">관리자가 원격으로 브라우저 설정을 변경할 수 있습니다. 이 기기의 활동은 Gooroom Browser 외부에서도 관리할 수 있습니다. <ph name="BEGIN_LINK" />자세히 알아보기<ph name="END_LINK" /></translation>
+ <translation id="9154194610265714752">업데이트됨</translation>
+ <translation id="9157595877708044936">설정 중...</translation>
+ <translation id="9158625974267017556">C6(봉투)</translation>
+@@ -2086,7 +2086,7 @@
+ <translation id="9173282814238175921">단일 문서/새 시트</translation>
+ <translation id="917450738466192189">서버의 인증서가 유효하지 않습니다.</translation>
+ <translation id="9174917557437862841">탭 전환 버튼, 이 탭으로 전환하려면 Enter를 누르세요</translation>
+-<translation id="9179703756951298733">Chrome 설정에서 결제 및 신용카드 정보를 관리하세요.</translation>
++<translation id="9179703756951298733">Gooroom Browser 설정에서 결제 및 신용카드 정보를 관리하세요.</translation>
+ <translation id="9183302530794969518">Google Docs</translation>
+ <translation id="9183425211371246419"><ph name="HOST_NAME" />에서 지원되지 않는 프로토콜을 사용합니다.</translation>
+ <translation id="9191834167571392248">왼쪽 하단 펀칭</translation>
+@@ -2094,7 +2094,7 @@
+ <translation id="9205078245616868884">동기화 암호로 데이터가 암호화되어 있습니다. 동기화를 시작하려면 입력하세요.</translation>
+ <translation id="9207861905230894330">글을 추가하지 못했습니다.</translation>
+ <translation id="9213433120051936369">디자인 사용자설정</translation>
+-<translation id="9215416866750762878">애플리케이션으로 인해 Chrome이 안전하게 이 사이트에 접속할 수 없음</translation>
++<translation id="9215416866750762878">애플리케이션으로 인해 Gooroom Browser이 안전하게 이 사이트에 접속할 수 없음</translation>
+ <translation id="9219103736887031265">이미지</translation>
+ <translation id="933712198907837967">Diners Club</translation>
+ <translation id="935608979562296692">양식 지우기</translation>
+@@ -2126,4 +2126,4 @@
+     &lt;/ul&gt;</translation>
+ <translation id="994346157028146140">JIS B1</translation>
+ <translation id="997986563973421916">출처: Google Pay</translation>
+-</translationbundle>
+\ No newline at end of file
++</translationbundle>
+-- 
+2.20.1
+
