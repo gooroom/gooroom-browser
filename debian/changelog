@@ -1,3 +1,18 @@
+gooroom-browser (3.1.0-1+grm3u3) stretch; urgency=medium
+
+  * Security patch
+    - CVE-2021-30521.patch
+    - CVE-2021-30522.patch
+    - CVE-2021-30524.patch
+    - CVE-2021-30527.patch
+    - CVE-2021-30546.patch
+    - CVE-2021-30549.patch
+    - CVE-2021-30550.patch
+    - CVE-2021-30566.patch
+    - CVE-2021-30610.patch
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 18 Oct 2021 17:33:00 +0900
+
 gooroom-browser (3.1.0-1+grm3u2) stretch; urgency=medium
 
   * Bug Fix : 3514 3516 3521 3831 3832 3833 3836 3837 3838

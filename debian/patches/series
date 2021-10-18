@@ -172,3 +172,12 @@ gooroom/Bug-3838-3832-3831-Fix-Transloation-Korean-on-.xtb-f.patch
 gooroom/bug-3833-Rollback-pruning-settings-pages-for-getting.patch
 gooroom/Bug-3516-Remove-alarm-on-settings-page.patch
 gooroom/Change-String-Chrome-to-Gooroom-Browser.patch  
+gooroom/CVE-2021-30521.patch
+gooroom/CVE-2021-30522.patch
+gooroom/CVE-2021-30524.patch
+gooroom/CVE-2021-30527.patch
+gooroom/CVE-2021-30546.patch
+gooroom/CVE-2021-30549.patch
+gooroom/CVE-2021-30550.patch
+gooroom/CVE-2021-30566.patch
+gooroom/CVE-2021-30610.patch
