@@ -1,19 +1,19 @@
-From 779fcb6f812de0aa84e7f3dbc4913210f502c979 Mon Sep 17 00:00:00 2001
+From 2988d8035eb2216baa5ace31d26d5ae2e0652382 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:01:01 +0900
-Subject: [PATCH 11/84] Add scheme module to convert (chrome://->gooroom://)
+Subject: [PATCH 11/63] Add scheme module to convert (chrome://->gooroom://)
 
 ---
- chrome/browser/extensions/extension_web_ui.cc |  9 ++++
+ chrome/browser/extensions/extension_web_ui.cc |  5 +++
  gooroom/BUILD.gn                              |  4 ++
  gooroom/URLRewrite/gooroom_url_rewrite.cc     | 34 +++++++++++++++
  gooroom/URLRewrite/gooroom_url_rewrite.h      | 43 +++++++++++++++++++
- 4 files changed, 90 insertions(+)
+ 4 files changed, 86 insertions(+)
  create mode 100644 gooroom/URLRewrite/gooroom_url_rewrite.cc
  create mode 100644 gooroom/URLRewrite/gooroom_url_rewrite.h
 
 diff --git a/chrome/browser/extensions/extension_web_ui.cc b/chrome/browser/extensions/extension_web_ui.cc
-index 0a4332a98..1e9e75ebb 100644
+index 45f07e12b8cb2..cb34119f68585 100644
 --- a/chrome/browser/extensions/extension_web_ui.cc
 +++ b/chrome/browser/extensions/extension_web_ui.cc
 @@ -433,8 +433,13 @@ void ExtensionWebUI::RegisterProfilePrefs(
@@ -30,20 +30,8 @@ index 0a4332a98..1e9e75ebb 100644
  
    std::vector<GURL> overrides =
        GetOverridesForChromeURL(*url, browser_context, /*get_all=*/false);
-@@ -474,7 +479,11 @@ bool ExtensionWebUI::HandleChromeURLOverrideReverse(
-         continue;
-       if (base::StartsWith(url->spec(), override,
-                            base::CompareCase::SENSITIVE)) {
-+#if defined(GOOROOM_BUILD)
-+        GURL original_url(content::kGooroomUIScheme + std::string("://") +
-+#else
-         GURL original_url(content::kChromeUIScheme + std::string("://") +
-+#endif
-                           dict_iter.key() +
-                           url->spec().substr(override.length()));
-         *url = original_url;
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 8cedf296a..d523b0b3d 100644
+index 892c14ab050fb..83e007c59d721 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -236,6 +236,10 @@ if (!is_android && !is_mac) {
@@ -59,7 +47,7 @@ index 8cedf296a..d523b0b3d 100644
    }
 diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.cc b/gooroom/URLRewrite/gooroom_url_rewrite.cc
 new file mode 100644
-index 000000000..4443c996f
+index 0000000000000..4443c996f5605
 --- /dev/null
 +++ b/gooroom/URLRewrite/gooroom_url_rewrite.cc
 @@ -0,0 +1,34 @@
@@ -99,7 +87,7 @@ index 000000000..4443c996f
 +}
 diff --git a/gooroom/URLRewrite/gooroom_url_rewrite.h b/gooroom/URLRewrite/gooroom_url_rewrite.h
 new file mode 100644
-index 000000000..a3e0e2ad9
+index 0000000000000..a3e0e2ad948b7
 --- /dev/null
 +++ b/gooroom/URLRewrite/gooroom_url_rewrite.h
 @@ -0,0 +1,43 @@
@@ -147,5 +135,5 @@ index 000000000..a3e0e2ad9
 +
 +#endif  // GOOROOM_URL_REWRITE_H_
 -- 
-2.20.1
+2.30.2
 

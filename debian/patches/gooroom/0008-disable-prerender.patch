@@ -1,21 +1,21 @@
-From ea3f2fc27da67a3203f0613dea2e291181416055 Mon Sep 17 00:00:00 2001
+From 8d4daba4ce95e0a651b7b45b652c0315aea9517d Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:33:29 +0900
-Subject: [PATCH 08/84] disable prerender
+Subject: [PATCH 08/63] disable prerender
 
 ---
  chrome/browser/ui/omnibox/chrome_omnibox_client.cc | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
-index bc9336a74..90f530b5f 100644
+index 979f6e8b778fd..c96d2ed409768 100644
 --- a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
 +++ b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
-@@ -351,10 +351,12 @@ void ChromeOmniboxClient::OnTextChanged(const AutocompleteMatch& current_match,
+@@ -336,10 +336,12 @@ void ChromeOmniboxClient::OnTextChanged(const AutocompleteMatch& current_match,
        // (http://crbug.com/105689)
        if (!CurrentPageExists())
          break;
-+#if !BUILDFLAG(ENABLE_GOOROOM)
++#if !defined(GOOROOM_BUILD)
        // Ask for prerendering if the destination URL is different than the
        // current URL.
        if (current_match.destination_url != GetURL())
@@ -25,5 +25,5 @@ index bc9336a74..90f530b5f 100644
      case AutocompleteActionPredictor::ACTION_PRECONNECT:
        DoPreconnect(current_match);
 -- 
-2.20.1
+2.30.2
 

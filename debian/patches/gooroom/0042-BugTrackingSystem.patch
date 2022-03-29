@@ -1,26 +1,26 @@
-From 93f8921e7e904dae04fcdbe31a22e7d92af5c310 Mon Sep 17 00:00:00 2001
+From c7bd398f360e437f69b7c5fdc6aec9787468e5d0 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 13:47:13 +0900
-Subject: [PATCH 42/84] BugTrackingSystem
+Subject: [PATCH 42/63] BugTrackingSystem
 
 697 : Change strings 'chrome&google' to gooroom on gooroom:// pages
 697-6 : Change default ntp (google webstore -> gooroom.kr)
 ---
- chrome/app/generated_resources.grd                 |  3 +++
- chrome/app/resources/locale_settings.grd           |  3 +++
- chrome/app/theme/theme_resources.grd               |  1 +
- .../log_sources/chrome_internal_log_source.cc      |  2 +-
- chrome/browser/history/top_sites_factory.cc        |  8 ++++----
- chrome/browser/resources/inspect/inspect.html      |  2 +-
- chrome/browser/ui/webui/about_ui.cc                | 14 +++++++++++---
- .../service_worker/serviceworker_internals.html    |  2 +-
- 8 files changed, 25 insertions(+), 10 deletions(-)
+ chrome/app/generated_resources.grd             |  3 +++
+ chrome/app/resources/locale_settings.grd       |  3 +++
+ chrome/app/theme/theme_resources.grd           |  1 +
+ .../log_sources/chrome_internal_log_source.cc  |  2 +-
+ chrome/browser/history/top_sites_factory.cc    |  8 ++++----
+ chrome/browser/resources/inspect/inspect.html  |  2 +-
+ chrome/browser/ui/webui/about_ui.cc            | 18 +++++++++++++-----
+ .../serviceworker_internals.html               |  2 +-
+ 8 files changed, 27 insertions(+), 12 deletions(-)
 
 diff --git a/chrome/app/generated_resources.grd b/chrome/app/generated_resources.grd
-index 43f5940e5..5c54d2201 100644
+index 9fa63decc3d89..7607a33a5ab93 100644
 --- a/chrome/app/generated_resources.grd
 +++ b/chrome/app/generated_resources.grd
-@@ -4643,6 +4643,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
+@@ -4925,6 +4925,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
        <message name="IDS_EXTENSION_WEB_STORE_TITLE_SHORT" desc="Shortened version of text for the Chrome Web Store">
          Web Store
        </message>
@@ -31,10 +31,10 @@ index 43f5940e5..5c54d2201 100644
          Show Details
        </message>
 diff --git a/chrome/app/resources/locale_settings.grd b/chrome/app/resources/locale_settings.grd
-index 977121fb1..f131ffbbd 100644
+index 5c9fce928931a..f69399c3f1949 100644
 --- a/chrome/app/resources/locale_settings.grd
 +++ b/chrome/app/resources/locale_settings.grd
-@@ -180,6 +180,9 @@
+@@ -182,6 +182,9 @@
        <message name="IDS_WEBSTORE_URL" translateable="false">
          https://chrome.google.com/webstore?hl=[GRITLANGCODE]
        </message>
@@ -45,22 +45,22 @@ index 977121fb1..f131ffbbd 100644
        <!-- The width of the media galleries configuration dialog in characters. -->
        <message name="IDS_MEDIA_GALLERIES_DIALOG_CONTENT_WIDTH_CHARS" use_name_for_id="true">
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index 878734a16..8c6974e46 100644
+index df5f152d321a2..24cac01357118 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
-@@ -135,6 +135,7 @@
-         <structure type="chrome_scaled_image" name="IDR_ICON_USER_MANAGER_TUTORIAL_COMPLETE" file="common/user_manager_tutorial/complete.png" />
-         </if>
+@@ -146,6 +146,7 @@
+         <structure type="chrome_scaled_image" name="IDR_INCOGNITO_DATA_NOT_SAVED_HEADER_LIGHT" file="common/incognito_data_not_saved_header_light.png" />
        </if>
+ 
 +      <structure type="chrome_scaled_image" name="IDR_GOOROOM_ICON" file="gooroom/product_logo_32.png" />
        <structure type="chrome_scaled_image" name="IDR_INPUT_ALERT" file="common/input_alert.png" />
        <structure type="chrome_scaled_image" name="IDR_INPUT_ALERT_MENU" file="common/input_alert_menu.png" />
-       <if expr="enable_service_discovery">
+       <if expr="not is_android">
 diff --git a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-index 44e96c687..b47a34a30 100644
+index a09a1c38dc293..a5dff1e8f968f 100644
 --- a/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
 +++ b/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
-@@ -76,7 +76,7 @@ constexpr char kSyncDataKey[] = "about_sync_data";
+@@ -77,7 +77,7 @@ constexpr char kSyncDataKey[] = "about_sync_data";
  constexpr char kExtensionsListKey[] = "extensions";
  constexpr char kPowerApiListKey[] = "chrome.power extensions";
  constexpr char kDataReductionProxyKey[] = "data_reduction_proxy";
@@ -70,7 +70,7 @@ index 44e96c687..b47a34a30 100644
  #if BUILDFLAG(IS_CHROMEOS_ASH)
  constexpr char kLacrosChromeVersionPrefix[] = "Lacros ";
 diff --git a/chrome/browser/history/top_sites_factory.cc b/chrome/browser/history/top_sites_factory.cc
-index 6dbb94b5e..c53603ed8 100644
+index f999604508d0c..9294c9d356eea 100644
 --- a/chrome/browser/history/top_sites_factory.cc
 +++ b/chrome/browser/history/top_sites_factory.cc
 @@ -57,10 +57,10 @@ struct RawPrepopulatedPage {
@@ -89,7 +89,7 @@ index 6dbb94b5e..c53603ed8 100644
  };
  #endif
 diff --git a/chrome/browser/resources/inspect/inspect.html b/chrome/browser/resources/inspect/inspect.html
-index ea5cccb11..cc6fb9310 100644
+index 91fa7545b2f53..fccc5b7bb6373 100644
 --- a/chrome/browser/resources/inspect/inspect.html
 +++ b/chrome/browser/resources/inspect/inspect.html
 @@ -7,7 +7,7 @@ found in the LICENSE file.
@@ -100,9 +100,9 @@ index ea5cccb11..cc6fb9310 100644
 +<title>Inspect with Gooroom Developer Tools</title>
  <link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
  <link rel="stylesheet" href="inspect.css">
- <script src="chrome://resources/js/assert.js"></script>
+ <script type="module" src="inspect.js"></script>
 diff --git a/chrome/browser/ui/webui/about_ui.cc b/chrome/browser/ui/webui/about_ui.cc
-index 3d0d6375e..4fd7070c8 100644
+index ef4eceb17d809..1e3269358df32 100644
 --- a/chrome/browser/ui/webui/about_ui.cc
 +++ b/chrome/browser/ui/webui/about_ui.cc
 @@ -13,6 +13,7 @@
@@ -113,12 +113,12 @@ index 3d0d6375e..4fd7070c8 100644
  #include "base/bind.h"
  #include "base/callback.h"
  #include "base/callback_helpers.h"
-@@ -544,17 +545,17 @@ namespace {
+@@ -574,10 +575,10 @@ namespace {
  
  std::string ChromeURLs() {
    std::string html;
--  AppendHeader(&html, 0, "Chrome URLs");
-+  AppendHeader(&html, 0, "Gooroom URLs");
+-  AppendHeader(&html, "Chrome URLs");
++  AppendHeader(&html, "Gooroom URLs");
    AppendBody(&html);
  
 -  html += "<h2>List of Chrome URLs</h2>\n<ul>\n";
@@ -126,31 +126,44 @@ index 3d0d6375e..4fd7070c8 100644
    std::vector<std::string> hosts(
        chrome::kChromeHostURLs,
        chrome::kChromeHostURLs + chrome::kNumberOfChromeHostURLs);
-   std::sort(hosts.begin(), hosts.end());
-   for (const std::string& host : hosts) {
-     html +=
--        "<li><a href='chrome://" + host + "/'>chrome://" + host + "</a></li>\n";
-+        "<li><a href='chrome://" + host + "/'>gooroom://" + host + "</a></li>\n";
-   }
+@@ -595,9 +596,9 @@ std::string ChromeURLs() {
+       // TODO(crbug/1271718): The refactor should make sure that the provided
+       // list can be shown as is without filtering.
+       if (WebUiControllerFactory->CanHandleUrl(GURL("os://" + host)) ||
+-          WebUiControllerFactory->CanHandleUrl(GURL("chrome://" + host))) {
++          WebUiControllerFactory->CanHandleUrl(GURL("gooroom://" + host))) {
+         html +=
+-            "<li><a href='chrome://" + host + "/'>os://" + host + "</a></li>\n";
++            "<li><a href='gooroom://" + host + "/'>os://" + host + "</a></li>\n";
+       }
+     }
+   } else {
+@@ -605,7 +606,7 @@ std::string ChromeURLs() {
+   {
+ #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
+     for (const std::string& host : hosts) {
+-      html += "<li><a href='chrome://" + host + "/'>chrome://" + host +
++      html += "<li><a href='gooroom://" + host + "/'>gooroom://" + host +
+               "</a></li>\n";
+     }
  
-   html += "</ul><h2>List of chrome://internals pages</h2>\n<ul>\n";
-@@ -573,7 +574,14 @@ std::string ChromeURLs() {
-       "crash or hang the renderer, they're not linked directly; you can type "
-       "them into the address bar if you need them.</p>\n<ul>";
-   for (size_t i = 0; i < chrome::kNumberOfChromeDebugURLs; i++)
+@@ -648,7 +649,14 @@ std::string ChromeURLs() {
+   {
+ #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
+     for (size_t i = 0; i < chrome::kNumberOfChromeDebugURLs; i++)
 +#if defined(GOOROOM_BUILD)
 +  {
 +    GURL changed_url = GooroomURLRewrite::ChangeGooroomScheme(GURL(std::string(chrome::kChromeDebugURLs[i])));
 +    html += "<li>" + std::string(changed_url.spec()) + "</li>\n";
 +  }
 +#else
-     html += "<li>" + std::string(chrome::kChromeDebugURLs[i]) + "</li>\n";
+       html += "<li>" + std::string(chrome::kChromeDebugURLs[i]) + "</li>\n";
 +#endif
+   }
    html += "</ul>\n";
  
-   AppendFooter(&html);
 diff --git a/content/browser/resources/service_worker/serviceworker_internals.html b/content/browser/resources/service_worker/serviceworker_internals.html
-index f486ea9d3..849d616d8 100644
+index f486ea9d362d1..849d616d864a1 100644
 --- a/content/browser/resources/service_worker/serviceworker_internals.html
 +++ b/content/browser/resources/service_worker/serviceworker_internals.html
 @@ -2,7 +2,7 @@
@@ -163,5 +176,5 @@ index f486ea9d3..849d616d8 100644
    <link rel="stylesheet" href="chrome://resources/css/widgets.css">
    <link rel="stylesheet" href="serviceworker_internals.css">
 -- 
-2.20.1
+2.30.2
 

@@ -1,15 +1,19 @@
-From 513daed543bc9754279fd7e90787cd8802c0f746 Mon Sep 17 00:00:00 2001
+From 4c85f6455f148b0479ff45d40107d0b33a9ed571 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
-Date: Wed, 22 Jul 2020 14:14:16 +0900
-Subject: [PATCH 05/84] initialize GooroomBase and GooroomUrlFilter in the
- messageloop of GooroomBrowserExtraPartsSecurity
+Date: Thu, 10 Mar 2022 09:04:17 +0900
+Subject: [PATCH 05/63] initialize GooroomBase and GooroomUrlFilter in the
+ messageloop of GooroomBrowserExtraPartsSecurity And Fix gooroom_pref.cc
+ setup() segfault.
 
 ---
- gooroom/browser/gooroom_browser_extra_parts_security.cc | 3 +++
- 1 file changed, 3 insertions(+)
+ .../gooroom_browser_extra_parts_security.cc        | 14 ++++++++------
+ .../browser/gooroom_browser_extra_parts_security.h |  4 ++--
+ gooroom/browser/gooroom_pref.cc                    | 11 +++++------
+ gooroom/browser/gooroom_pref.h                     |  6 +++---
+ 4 files changed, 18 insertions(+), 17 deletions(-)
 
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.cc b/gooroom/browser/gooroom_browser_extra_parts_security.cc
-index c1ca04e9a..3a28b20e9 100644
+index 059b78f3d66ef..e607b693bcd50 100644
 --- a/gooroom/browser/gooroom_browser_extra_parts_security.cc
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.cc
 @@ -3,6 +3,7 @@
@@ -20,15 +24,98 @@ index c1ca04e9a..3a28b20e9 100644
  
  #include "base/command_line.h"
  #include "base/files/file_path.h"
-@@ -22,6 +23,8 @@
+@@ -20,13 +21,14 @@
+ #include "components/prefs/json_pref_store.h"
+ #include "components/prefs/pref_service_factory.h"
  
- void GooroomBrowserExtraPartsSecurity::PostMainMessageLoopStart() {
-   DLOG(INFO) << "PostMainMessageLoopStart()";
-+
+-//void GooroomBrowserExtraPartsSecurity::PostMainMessageLoopStart() {
+-//  DLOG(INFO) << "PostMainMessageLoopStart()";
+-//}
+ 
+-//void GooroomBrowserExtraPartsSecurity::PreMainMessageLoopStart() {
+-//  DLOG(INFO) << "PreMainMessageLoopStart()";
+-//}
++void GooroomBrowserExtraPartsSecurity::PostCreateMainMessageLoop() {
 +  gooroom::g_gooroom->setup();
- }
++}
++
++void GooroomBrowserExtraPartsSecurity::PreCreateMainMessageLoop() {
++}
++
  
- void GooroomBrowserExtraPartsSecurity::PreMainMessageLoopStart() {
+ //void GooroomBrowserExtraPartsSecurity::PostProfileInit() {
+ //  DLOG(INFO) << "PostProfileInit()";
+diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.h b/gooroom/browser/gooroom_browser_extra_parts_security.h
+index 979497e2c0e0f..3ec52e27183a2 100644
+--- a/gooroom/browser/gooroom_browser_extra_parts_security.h
++++ b/gooroom/browser/gooroom_browser_extra_parts_security.h
+@@ -12,10 +12,10 @@ class GooroomBrowserExtraPartsSecurity : public ChromeBrowserMainExtraParts
+ {
+  public:
+ 
+-//  void PostMainMessageLoopStart() override;
++  void PostCreateMainMessageLoop() override;
+ 
+   // Overridden from ChromeBrowserMainExtraParts:
+-//  void PreMainMessageLoopStart() override;
++  void PreCreateMainMessageLoop() override;
+ //  void PostProfileInit() override;
+   void PostBrowserStart() override;
+ 
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 0343c09c7257f..f2142c0720a34 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -28,11 +28,13 @@ GooroomPref::GooroomPref() {}
+ 
+ GooroomPref::~GooroomPref() {}
+ 
++/*
+ PrefService* GooroomPref::pref() {
+   if (pref_ == nullptr)
+     setup();
+   return pref_.get();
+ }
++*/
+ 
+ void GooroomPref::setup() {
+   DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
+@@ -47,13 +49,10 @@ void GooroomPref::setup() {
+   registry->RegisterListPref(kPolicyGooroomWhiteList);
+ 
+   PrefServiceFactory prefServiceFactory;
+-  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
+-      base::CreateSequencedTaskRunner({base::MayBlock()});
+-//  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
+-//      base::CreateSequencedTaskRunner({base::ThreadPool()});
+ 
+-  prefServiceFactory.SetUserPrefsFile(path, refTaskRunner.get());
+-  pref_ = prefServiceFactory.Create(registry);
++  prefServiceFactory.SetUserPrefsFile(
++      path, base::ThreadTaskRunnerHandle::Get().get());
++  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
+ 
+   // check a whilte list and make url filter from the list ===========
+   const PrefService::Preference* p =
+diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
+index 3e94b7fb6b223..6c888d3cfedda 100644
+--- a/gooroom/browser/gooroom_pref.h
++++ b/gooroom/browser/gooroom_pref.h
+@@ -28,11 +28,11 @@ class GooroomPref {
+   GooroomPref();
+   ~GooroomPref();
+ 
+-  PrefService* pref();
++//  PrefService* pref();
+   void setup();
+ 
+- private:
+-  std::unique_ptr<PrefService> pref_;
++// private:
++//  PrefService* pref_;
+ };
+ 
+ extern gooroom::GooroomPref* g_gooroom;
 -- 
-2.20.1
+2.30.2
 

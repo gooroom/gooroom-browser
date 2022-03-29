@@ -1,7 +1,7 @@
-From 87c1145955af4bcd5c5463e825186599378115b7 Mon Sep 17 00:00:00 2001
+From 41ce2e9fdf0660e54dfc0086b844b18e66905dc3 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:34:42 +0900
-Subject: [PATCH 09/84] Put gooroom logo into the browser
+Subject: [PATCH 09/63] Put gooroom logo into the browser
 
 ---
  .../app/theme/chrome_unscaled_resources.grd   |   8 +++++++-
@@ -41,6 +41,7 @@ Subject: [PATCH 09/84] Put gooroom logo into the browser
  chrome/app/theme/gooroom/product_logo_64.png  | Bin 0 -> 50169 bytes
  chrome/app/theme/theme_resources.grd          |   9 ++++++++-
  .../icons/gooroom_newtab_logo.png             | Bin 0 -> 10049 bytes
+ .../ui/omnibox/chrome_omnibox_client.cc       |   2 +-
  components/infobars/core/infobar_delegate.cc  |   2 +-
  .../chromium/product_logo.png                 | Bin 2435 -> 8711 bytes
  .../gooroom/product_logo.png                  | Bin 0 -> 8711 bytes
@@ -48,9 +49,9 @@ Subject: [PATCH 09/84] Put gooroom logo into the browser
  .../gooroom/product_logo.png                  | Bin 0 -> 5278 bytes
  .../gooroom/product_logo_white.png            | Bin 0 -> 4640 bytes
  .../version_ui_scaled_resources.grdp          |   4 ++--
- .../version_ui/resources/about_version.css    |   2 +-
+ .../version_ui/resources/about_version.css    |   4 ++--
  tools/grit/grit_defines.gni                   |   7 +++++++
- 46 files changed, 33 insertions(+), 6 deletions(-)
+ 47 files changed, 35 insertions(+), 8 deletions(-)
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_16.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_22.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_32.png
@@ -92,11 +93,11 @@ Subject: [PATCH 09/84] Put gooroom logo into the browser
  create mode 100644 components/resources/default_200_percent/gooroom/product_logo_white.png
 
 diff --git a/chrome/app/theme/chrome_unscaled_resources.grd b/chrome/app/theme/chrome_unscaled_resources.grd
-index b4e4545e3..79f2331e4 100644
+index 22f351f6e463b..512148e347324 100644
 --- a/chrome/app/theme/chrome_unscaled_resources.grd
 +++ b/chrome/app/theme/chrome_unscaled_resources.grd
-@@ -61,7 +61,7 @@
-           <include name="IDR_WELCOME_SET_DEFAULT_LIGHT" file="google_chrome/welcome/set_default_light.svg" type="BINDATA" />
+@@ -46,7 +46,7 @@
+           <include name="IDR_WEBSTORE_APP_ICON_128" file="google_chrome/chromeos/webstore_app_icon_128.png" type="BINDATA" />
          </if>
        </if>
 -      <if expr="not _google_chrome">
@@ -104,7 +105,7 @@ index b4e4545e3..79f2331e4 100644
          <include name="IDR_PRODUCT_LOGO_64" file="chromium/product_logo_64.png" type="BINDATA" />
          <include name="IDR_PRODUCT_LOGO_128" file="chromium/product_logo_128.png" type="BINDATA" />
          <include name="IDR_PRODUCT_LOGO_256" file="chromium/product_logo_256.png" type="BINDATA" />
-@@ -78,6 +78,12 @@
+@@ -63,6 +63,12 @@
            <include name="IDR_WEBSTORE_APP_ICON_128" file="chromium/chromeos/webstore_app_icon_128.png" type="BINDATA" />
          </if>
        </if>
@@ -3786,7 +3787,7 @@ HcmV?d00001
 
 diff --git a/chrome/app/theme/gooroom/BRANDING b/chrome/app/theme/gooroom/BRANDING
 new file mode 100644
-index 000000000..152889e75
+index 0000000000000..152889e759369
 --- /dev/null
 +++ b/chrome/app/theme/gooroom/BRANDING
 @@ -0,0 +1,7 @@
@@ -12124,10 +12125,10 @@ literal 0
 HcmV?d00001
 
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index b689a2d10..878734a16 100644
+index 83a91dd6ba8cc..df5f152d321a2 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
-@@ -158,12 +158,19 @@
+@@ -167,12 +167,19 @@
        <if expr="not is_android">
          <structure type="chrome_scaled_image" name="IDR_PRERENDER" file="common/prerender_succeed_icon.png" />
        </if>
@@ -12352,15 +12353,15 @@ literal 0
 HcmV?d00001
 
 diff --git a/components/infobars/core/infobar_delegate.cc b/components/infobars/core/infobar_delegate.cc
-index 7c39dc2c7..e87e6e19e 100644
+index 80a1d73b06b70..3cef1f4503787 100644
 --- a/components/infobars/core/infobar_delegate.cc
 +++ b/components/infobars/core/infobar_delegate.cc
-@@ -38,7 +38,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
+@@ -37,7 +37,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
  }
  
  gfx::Image InfoBarDelegate::GetIcon() const {
--#if !defined(OS_IOS) && !defined(OS_ANDROID)
-+#if !defined(OS_IOS) && !defined(OS_ANDROID) && !defined(GOOROOM_BUILD)
+-#if !BUILDFLAG(IS_IOS) && !BUILDFLAG(IS_ANDROID)
++#if !BUILDFLAG(IS_IOS) && !BUILDFLAG(IS_ANDROID) && !defined(GOOROOM_BUILD)
    const gfx::VectorIcon& vector_icon = GetVectorIcon();
    if (!vector_icon.is_empty()) {
      return gfx::Image(
@@ -13025,7 +13026,7 @@ literal 0
 HcmV?d00001
 
 diff --git a/components/resources/version_ui_scaled_resources.grdp b/components/resources/version_ui_scaled_resources.grdp
-index b199a552b..db1e11927 100644
+index b199a552b60d6..db1e11927334a 100644
 --- a/components/resources/version_ui_scaled_resources.grdp
 +++ b/components/resources/version_ui_scaled_resources.grdp
 @@ -1,8 +1,8 @@
@@ -13040,36 +13041,25 @@ index b199a552b..db1e11927 100644
    <if expr="_google_chrome">
      <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO" file="google_chrome/product_logo.png" />
 diff --git a/components/version_ui/resources/about_version.css b/components/version_ui/resources/about_version.css
-index bd7da3a62..06298f8ca 100644
+index f4a8c01aef47f..9e10bcd3e59a8 100644
 --- a/components/version_ui/resources/about_version.css
 +++ b/components/version_ui/resources/about_version.css
 @@ -53,7 +53,7 @@ body {
    float: right;
-   margin-left: 40px;
-   text-align: right;
+   margin-inline-start: 40px;
+   text-align: end;
 -  width: 180px;
 +  width: 220px;
  }
  
  #company {
-diff --git a/tools/grit/grit_defines.gni b/tools/grit/grit_defines.gni
-index 5b92d7a6c..47802dd4c 100644
---- a/tools/grit/grit_defines.gni
-+++ b/tools/grit/grit_defines.gni
-@@ -39,6 +39,13 @@ if (is_chrome_branded) {
-     "-E",
-     "CHROMIUM_BUILD=google_chrome",
-   ]
-+} else if (is_gooroom) {
-+  grit_defines += [
-+    "-D",
-+    "_gooroom",
-+    "-E",
-+    "CHROMIUM_BUILD=gooroom",
-+  ]
- } else {
-   grit_defines += [
-     "-D",
+@@ -96,4 +96,4 @@ body {
+   position: relative;
+   top: .2em;
+   width: 1em;
+-}
+\ No newline at end of file
++}
 -- 
-2.20.1
+2.30.2
 

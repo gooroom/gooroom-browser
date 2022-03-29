@@ -1,0 +1,61 @@
+From 2cb4958791b983311df48827f7c16166edeaea25 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 29 Mar 2022 14:21:45 +0900
+Subject: [PATCH] to jenkins build
+
+---
+ chrome/browser/browser_resources.grd | 4 ++--
+ content/browser/BUILD.gn             | 1 -
+ tools/grit/grit_defines.gni          | 7 +++++++
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
+index f485ba7be..72da9c76b 100644
+--- a/chrome/browser/browser_resources.grd
++++ b/chrome/browser/browser_resources.grd
+@@ -119,10 +119,10 @@
+       <include name="IDR_ORIGIN_MOJO_JS" file="${root_gen_dir}\url\mojom\origin.mojom-lite.js" use_base_dir="false" type="BINDATA"/>
+       <if expr="enable_plugins">
+         <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
+-        <if expr="_gooroom">
++<!--        <if expr="is_gooroom"> -->
+           <include name="IDR_ODF_MANIFEST" file="resources\odf\manifest.json" type="BINDATA" />
+           <include name="IDR_DGW_MANIFEST" file="resources\dgw\manifest.json" type="BINDATA" />
+-        </if>
++<!--        </if>-->
+       </if>
+       <if expr="is_win">
+         <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_win.json" type="BINDATA" />
+diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
+index 235ea28ea..f122feb83 100644
+--- a/content/browser/BUILD.gn
++++ b/content/browser/BUILD.gn
+@@ -276,7 +276,6 @@ source_set("browser") {
+   }
+ 
+   public_deps = [
+-    "//components/policy/core/browser:internal",
+     "//base",
+     "//components/memory_pressure",
+     "//ipc",
+diff --git a/tools/grit/grit_defines.gni b/tools/grit/grit_defines.gni
+index 60022cbef..0da8f4eda 100644
+--- a/tools/grit/grit_defines.gni
++++ b/tools/grit/grit_defines.gni
+@@ -46,6 +46,13 @@ if (is_chrome_branded) {
+     "-E",
+     "CHROMIUM_BUILD=google_chrome",
+   ]
++} else if (is_gooroom) {
++  grit_defines += [
++    "-D",
++    "_gooroom",
++    "-E",
++    "CHROMIUM_BUILD=gooroom",
++  ]
+ } else {
+   grit_defines += [
+     "-D",
+-- 
+2.30.2
+

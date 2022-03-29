@@ -1,7 +1,7 @@
-From ca2fd23cab8daf87e86f4843d2cb37c977f97560 Mon Sep 17 00:00:00 2001
+From 12ca63315696fe36a4832eb1160e5886f1f28b5c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:46:38 +0900
-Subject: [PATCH 25/84] pruning settings pages(chrome://settings)
+Subject: [PATCH 25/63] pruning settings pages(chrome://settings)
 
 ---
  chrome/browser/resources/settings/about_page/about_page.html  | 2 ++
@@ -10,10 +10,10 @@ Subject: [PATCH 25/84] pruning settings pages(chrome://settings)
  3 files changed, 10 insertions(+)
 
 diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
-index e8299dcfe..f5588a509 100644
+index 2de321dc92120..b3739e979fa45 100644
 --- a/chrome/browser/resources/settings/about_page/about_page.html
 +++ b/chrome/browser/resources/settings/about_page/about_page.html
-@@ -124,8 +124,10 @@
+@@ -131,8 +131,10 @@
          </div>
        </template>
  </if>
@@ -25,10 +25,10 @@ index e8299dcfe..f5588a509 100644
        <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueTap_"
            hidden="[[!prefs.feedback_allowed.value]]"
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index f36c113b4..646e4c4f4 100644
+index 2e62ebeb08bd6..b221df079ddf7 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
-@@ -76,6 +76,7 @@
+@@ -37,6 +37,7 @@
            </div>
          </template>
  </if>
@@ -36,7 +36,7 @@ index f36c113b4..646e4c4f4 100644
          <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
            <settings-section page-title="$i18n{peoplePageTitle}"
                section="people">
-@@ -109,6 +110,7 @@
+@@ -77,6 +78,7 @@
              </settings-privacy-page>
            </settings-section>
          </template>
@@ -44,7 +44,7 @@ index f36c113b4..646e4c4f4 100644
          <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
              restamp>
            <settings-section page-title="$i18n{appearancePageTitle}"
-@@ -176,6 +178,7 @@
+@@ -139,6 +141,7 @@
                  </settings-downloads-page>
                </settings-section>
              </template>
@@ -52,7 +52,7 @@ index f36c113b4..646e4c4f4 100644
              <template is="dom-if" if="[[showPage_(pageVisibility.a11y)]]"
                  restamp>
                <settings-section page-title="$i18n{a11yPageTitle}"
-@@ -183,6 +186,7 @@
+@@ -146,6 +149,7 @@
                  <settings-a11y-page prefs="{{prefs}}"></settings-a11y-page>
                </settings-section>
              </template>
@@ -61,37 +61,40 @@ index f36c113b4..646e4c4f4 100644
              <settings-section page-title="$i18n{systemPageTitle}"
                  section="system">
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index 2ecb98793..5d2915c19 100644
+index cb96e9cf76b94..53d224dae0768 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-@@ -101,11 +101,13 @@
+@@ -104,6 +104,7 @@
          <iron-selector id="topMenu" selectable="a:not(#extensionsLink)"
              attr-for-selected="href" on-iron-activate="onSelectorActivate_"
-             on-click="onLinkClick_">
+             on-click="onLinkClick_" selected-attribute="selected">
 +<if expr="not _gooroom">
            <a role="menuitem"
-               id="people" href="/people" hidden="[[!pageVisibility.people]]">
-             <iron-icon icon="cr:person"></iron-icon>
+               id="people" href="/people" hidden="[[!pageVisibility.people]]"
+               class="cr-nav-menu-item">
+@@ -111,6 +112,7 @@
              $i18n{peoplePageTitle}
+             <paper-ripple></paper-ripple>
            </a>
 +</if>
            <a role="menuitem" id="autofill" href="/autofill"
-               hidden="[[!pageVisibility.autofill]]">
-             <iron-icon icon="settings:assignment"></iron-icon>
-@@ -167,11 +169,13 @@
-                 <iron-icon icon="cr:file-download"></iron-icon>
+               hidden="[[!pageVisibility.autofill]]"
+               class="cr-nav-menu-item">
+@@ -180,12 +182,14 @@
                  $i18n{downloadsPageTitle}
+                 <paper-ripple></paper-ripple>
                </a>
 +<if expr="not _gooroom">
-               <a role="menuitem" href="/accessibility"
+               <a role="menuitem" href="/accessibility" class="cr-nav-menu-item"
                  disabled$="[[!advancedOpened]]">
                  <iron-icon icon="settings:accessibility"></iron-icon>
                  $i18n{a11yPageTitle}
+                 <paper-ripple></paper-ripple>
                </a>
 +</if>
      <if expr="not chromeos and not lacros">
-               <a role="menuitem" href="/system"
+               <a role="menuitem" href="/system" class="cr-nav-menu-item"
                    disabled$="[[!advancedOpened]]">
 -- 
-2.20.1
+2.30.2
 

@@ -1,17 +1,17 @@
-From 2c93ee057a09faa0f6ecba2d335f1fdd71d3d896 Mon Sep 17 00:00:00 2001
+From d19710618309d6516691302fd871e2428323b987 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 16:12:43 +0900
-Subject: [PATCH 14/84] pruning extensions pages(chrome://extensions)
+Subject: [PATCH 14/63] pruning extensions pages(chrome://extensions)
 
 ---
  chrome/browser/resources/extensions/sidebar.html | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/resources/extensions/sidebar.html b/chrome/browser/resources/extensions/sidebar.html
-index e0f78db25..a7ab21bb8 100644
+index 486e3c6994421..6b6041c8f6ff1 100644
 --- a/chrome/browser/resources/extensions/sidebar.html
 +++ b/chrome/browser/resources/extensions/sidebar.html
-@@ -71,10 +71,12 @@
+@@ -78,10 +78,12 @@
  </iron-selector>
  <div>
    <div class="separator"></div>
@@ -25,5 +25,5 @@ index e0f78db25..a7ab21bb8 100644
 +  </if>
  </div>
 -- 
-2.20.1
+2.30.2
 

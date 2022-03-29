@@ -1,48 +1,50 @@
-From da872c52a83fa6c4d897d9c8483977468bf945e1 Mon Sep 17 00:00:00 2001
+From 5393553479733f0d567bb57e9c9c0d700b74cc98 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 18:11:31 +0900
-Subject: [PATCH 26/84] enable/disable WebSocket according to policy, but, need
+Subject: [PATCH 26/63] enable/disable WebSocket according to policy, but, need
  a patch to fix an error when scrolling
 
 ---
  .../browser/chrome_content_browser_client.cc  |  4 ++
  chrome/browser/ui/prefs/prefs_tab_helper.cc   |  4 ++
+ chrome/common/pref_names.cc                   |  2 +
+ chrome/common/pref_names.h                    |  2 +
  gooroom/BUILD.gn                              |  4 ++
- gooroom/WebKit/gooroom_enabled_features.cc    |  8 ++++
- gooroom/WebKit/gooroom_enabled_features.h     | 25 +++++++++++
- gooroom/browser/gooroom_pref.cc               | 33 +++++++++++++-
- gooroom/browser/gooroom_pref.h                | 11 +++--
- gooroom/content/gooroom_safety_policy_part.cc | 34 +++++++++++++++
- gooroom/content/gooroom_safety_policy_part.h  | 24 +++++++++++
+ gooroom/WebKit/gooroom_enabled_features.cc    |  8 +++
+ gooroom/WebKit/gooroom_enabled_features.h     | 25 ++++++++
+ gooroom/browser/gooroom_pref.cc               | 63 ++++++++++++++++++-
+ gooroom/browser/gooroom_pref.h                | 11 ++--
+ gooroom/content/gooroom_safety_policy_part.cc | 34 ++++++++++
+ gooroom/content/gooroom_safety_policy_part.h  | 24 +++++++
  .../common/web_preferences/web_preferences.cc |  2 +
  .../web_preferences_mojom_traits.cc           |  2 +
  .../common/web_preferences/web_preferences.h  |  2 +
- .../web_preferences_mojom_traits.h            | 10 +++++
+ .../web_preferences_mojom_traits.h            | 10 +++
  .../webpreferences/web_preferences.mojom      |  2 +
- .../public/platform/web_runtime_features.h    |  5 +++
- .../renderer/core/exported/web_view_impl.cc   |  3 ++
- .../modules/websockets/dom_websocket.cc       | 43 +++++++++++++++++++
- third_party/blink/renderer/platform/BUILD.gn  |  6 +++
- .../platform/exported/web_runtime_features.cc | 14 ++++++
- 19 files changed, 228 insertions(+), 8 deletions(-)
+ .../public/platform/web_runtime_features.h    |  5 ++
+ .../renderer/core/exported/web_view_impl.cc   |  3 +
+ .../modules/websockets/dom_websocket.cc       | 43 +++++++++++++
+ third_party/blink/renderer/platform/BUILD.gn  |  6 ++
+ .../platform/exported/web_runtime_features.cc | 14 +++++
+ 21 files changed, 262 insertions(+), 8 deletions(-)
  create mode 100644 gooroom/WebKit/gooroom_enabled_features.cc
  create mode 100644 gooroom/WebKit/gooroom_enabled_features.h
  create mode 100644 gooroom/content/gooroom_safety_policy_part.cc
  create mode 100644 gooroom/content/gooroom_safety_policy_part.h
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index cd0c8e59b..6421c8be6 100644
+index f67947ebd5dda..561e6efe7b1e6 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -12,6 +12,7 @@
+@@ -13,6 +13,7 @@
  
- #if BUILDFLAG(ENABLE_GOOROOM)
+ #if defined(GOOROOM_BUILD)
  #include "gooroom/URLRewrite/gooroom_url_rewrite.h"
 +#include "gooroom/content/gooroom_safety_policy_part.h"
  #endif
  
  #include "base/base_switches.h"
-@@ -1250,6 +1251,7 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
+@@ -1274,6 +1275,7 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
  
  #if BUILDFLAG(ENABLE_GOOROOM)
    extra_parts_.push_back(new GooroomURLRewrite);
@@ -50,7 +52,7 @@ index cd0c8e59b..6421c8be6 100644
  #endif
  }
  
-@@ -3280,6 +3282,8 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
+@@ -3330,6 +3332,8 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
        prefs->GetInteger(prefs::kWebKitMinimumLogicalFontSize);
  #endif
  
@@ -60,22 +62,48 @@ index cd0c8e59b..6421c8be6 100644
  
    web_prefs->dom_paste_enabled =
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index 5b89ba63e..ca7a6ebbe 100644
+index a6a4316a96314..92ff66c61efc0 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-@@ -337,6 +337,10 @@ void PrefsTabHelper::RegisterProfilePrefs(
+@@ -333,6 +333,10 @@ void PrefsTabHelper::RegisterProfilePrefs(
      user_prefs::PrefRegistrySyncable* registry,
      const std::string& locale) {
    WebPreferences pref_defaults;
-+  registry->RegisterBooleanPref(prefs::kWebKitJavascriptEnabled,
++  registry->RegisterBooleanPref(prefs::kWebKitWebSocketEnabled,
 +                                pref_defaults.websocket_enabled);
-+  registry->RegisterBooleanPref(prefs::kWebKitJavascriptEnabled,
++  registry->RegisterBooleanPref(prefs::kWebKitWebWorkerEnabled,
 +                                pref_defaults.webworker_enabled);
    registry->RegisterBooleanPref(prefs::kWebKitJavascriptEnabled,
                                  pref_defaults.javascript_enabled);
    registry->RegisterBooleanPref(prefs::kWebKitWebSecurityEnabled,
+diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
+index 6f8f4bb8fcbf5..c1a38cc9a01ea 100644
+--- a/chrome/common/pref_names.cc
++++ b/chrome/common/pref_names.cc
+@@ -372,6 +372,8 @@ const char kWebKitMinimumFontSize[] = "webkit.webprefs.minimum_font_size";
+ const char kWebKitMinimumLogicalFontSize[] =
+     "webkit.webprefs.minimum_logical_font_size";
+ const char kWebKitJavascriptEnabled[] = "webkit.webprefs.javascript_enabled";
++const char kWebKitWebWorkerEnabled[] = "gooroom.pref.webworker_enabled";
++const char kWebKitWebSocketEnabled[] = "gooroom.pref.websocket_enabled";
+ const char kWebKitLoadsImagesAutomatically[] =
+     "webkit.webprefs.loads_images_automatically";
+ const char kWebKitPluginsEnabled[] = "webkit.webprefs.plugins_enabled";
+diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
+index f31031fdae7c2..cefcfb3923997 100644
+--- a/chrome/common/pref_names.h
++++ b/chrome/common/pref_names.h
+@@ -152,6 +152,8 @@ extern const char kWebKitDefaultFixedFontSize[];
+ extern const char kWebKitMinimumFontSize[];
+ extern const char kWebKitMinimumLogicalFontSize[];
+ extern const char kWebKitJavascriptEnabled[];
++extern const char kWebKitWebWorkerEnabled[];
++extern const char kWebKitWebSocketEnabled[];
+ extern const char kWebKitWebSecurityEnabled[];
+ extern const char kWebKitLoadsImagesAutomatically[];
+ extern const char kWebKitPluginsEnabled[];
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index d523b0b3d..0c60a00bf 100644
+index 83e007c59d721..240dc7b271478 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -240,6 +240,10 @@ if (!is_android && !is_mac) {
@@ -91,7 +119,7 @@ index d523b0b3d..0c60a00bf 100644
    }
 diff --git a/gooroom/WebKit/gooroom_enabled_features.cc b/gooroom/WebKit/gooroom_enabled_features.cc
 new file mode 100644
-index 000000000..1e665323d
+index 0000000000000..1e665323d2525
 --- /dev/null
 +++ b/gooroom/WebKit/gooroom_enabled_features.cc
 @@ -0,0 +1,8 @@
@@ -105,7 +133,7 @@ index 000000000..1e665323d
 +} // end of content namespace
 diff --git a/gooroom/WebKit/gooroom_enabled_features.h b/gooroom/WebKit/gooroom_enabled_features.h
 new file mode 100644
-index 000000000..70b4f9f59
+index 0000000000000..70b4f9f59f35f
 --- /dev/null
 +++ b/gooroom/WebKit/gooroom_enabled_features.h
 @@ -0,0 +1,25 @@
@@ -135,10 +163,10 @@ index 000000000..70b4f9f59
 +
 +#endif /* GOOROOM_ENABLED_FEATURES_H_ */
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
-index 8d5bd131d..3e33505a8 100644
+index baa58994ed62a..66a6917f3bb36 100644
 --- a/gooroom/browser/gooroom_pref.cc
 +++ b/gooroom/browser/gooroom_pref.cc
-@@ -42,8 +42,8 @@ void GooroomPref::setup() {
+@@ -44,8 +44,8 @@ void GooroomPref::setup() {
    base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
  
    PrefRegistrySimple* registry = new PrefRegistrySimple;
@@ -149,7 +177,7 @@ index 8d5bd131d..3e33505a8 100644
    registry->RegisterListPref(kPolicyGooroomWhiteList);
  
    PrefServiceFactory prefServiceFactory;
-@@ -140,4 +140,33 @@ void GooroomPref::setup() {
+@@ -139,4 +139,63 @@ void GooroomPref::setup() {
    // test args
  }
  
@@ -157,34 +185,64 @@ index 8d5bd131d..3e33505a8 100644
 +  if(base::GetGooroomBase()->isTrustMode()) {
 +    return true;
 +  }
++  
++  // read CORE policy file from ... ==================================
++  // TODO use constant value
++  base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
++
++  PrefRegistrySimple* registry = new PrefRegistrySimple;
++  registry->RegisterBooleanPref(kPolicyGooroomWebSocket, false);
++  registry->RegisterBooleanPref(kPolicyGooroomWebWorker, false);
++  registry->RegisterListPref(kPolicyGooroomWhiteList);
++
++  PrefServiceFactory prefServiceFactory;
++
++  prefServiceFactory.SetUserPrefsFile(
++      path, base::ThreadTaskRunnerHandle::Get().get());
++  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
 +
 +  const PrefService::Preference* p =
-+      pref()->FindPreference(gooroom::kPolicyGooroomWebSocket);
-+  bool val = true;
++      pref_->FindPreference(gooroom::kPolicyGooroomWebSocket);
++  absl::optional<bool> val = true;
 +  if (p != nullptr)
-+    p->GetValue()->GetAsBoolean(&val);
++    val = p->GetValue()->GetIfBool();
 +
-+  DLOG(INFO) << "GooroomPref::useWebSocket() : " << val;
-+  return val;
++  DLOG(INFO) << "GooroomPref::useWebSocket() : " << *val;
++  return *val;
 +}
 +
 +bool GooroomPref::useWebWorker() {
-+  if(base::GetGooroomBase()->isTrustMode())
++  if(base::GetGooroomBase()->isTrustMode()) {
 +    return true;
++  }
++  // read CORE policy file from ... ==================================
++  // TODO use constant value
++  base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
++
++  PrefRegistrySimple* registry = new PrefRegistrySimple;
++  registry->RegisterBooleanPref(kPolicyGooroomWebSocket, false);
++  registry->RegisterBooleanPref(kPolicyGooroomWebWorker, false);
++  registry->RegisterListPref(kPolicyGooroomWhiteList);
++
++  PrefServiceFactory prefServiceFactory;
++
++  prefServiceFactory.SetUserPrefsFile(
++      path, base::ThreadTaskRunnerHandle::Get().get());
++  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
 +
 +  const PrefService::Preference* p =
-+      pref()->FindPreference(gooroom::kPolicyGooroomWebWorker);
-+  bool val = true;
++      pref_->FindPreference(gooroom::kPolicyGooroomWebWorker);
++  absl::optional<bool> val = true;
 +  if (p != nullptr)
-+    p->GetValue()->GetAsBoolean(&val);
++    val = p->GetValue()->GetIfBool();
 +
-+  DLOG(INFO) << "GooroomPref::useWebWorker() : " << val;
-+  return val;
++  DLOG(INFO) << "GooroomPref::useWebWorker() : " << *val;
++  return *val;
 +}
 +
  }  // namespace gooroom
 diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
-index 3e94b7fb6..44d63d22b 100644
+index 6c888d3cfedda..48743247de091 100644
 --- a/gooroom/browser/gooroom_pref.h
 +++ b/gooroom/browser/gooroom_pref.h
 @@ -15,13 +15,9 @@ namespace gooroom {
@@ -204,18 +262,18 @@ index 3e94b7fb6..44d63d22b 100644
  class GooroomPref {
   public:
 @@ -31,6 +27,9 @@ class GooroomPref {
-   PrefService* pref();
+ //  PrefService* pref();
    void setup();
  
 +  bool useWebSocket();
 +  bool useWebWorker();
 +
-  private:
-   std::unique_ptr<PrefService> pref_;
+ // private:
+ //  PrefService* pref_;
  };
 diff --git a/gooroom/content/gooroom_safety_policy_part.cc b/gooroom/content/gooroom_safety_policy_part.cc
 new file mode 100644
-index 000000000..d57cfcdf4
+index 0000000000000..d57cfcdf4230e
 --- /dev/null
 +++ b/gooroom/content/gooroom_safety_policy_part.cc
 @@ -0,0 +1,34 @@
@@ -255,7 +313,7 @@ index 000000000..d57cfcdf4
 +}  // namespace content
 diff --git a/gooroom/content/gooroom_safety_policy_part.h b/gooroom/content/gooroom_safety_policy_part.h
 new file mode 100644
-index 000000000..e536dd3dc
+index 0000000000000..e536dd3dc9415
 --- /dev/null
 +++ b/gooroom/content/gooroom_safety_policy_part.h
 @@ -0,0 +1,24 @@
@@ -284,7 +342,7 @@ index 000000000..e536dd3dc
 +#endif  // GOOROOM_SAFETY_POLICY_PART_H_
 +
 diff --git a/third_party/blink/common/web_preferences/web_preferences.cc b/third_party/blink/common/web_preferences/web_preferences.cc
-index 758b0b161..7089cc562 100644
+index 9250d08f67edf..ae5aeffcca18d 100644
 --- a/third_party/blink/common/web_preferences/web_preferences.cc
 +++ b/third_party/blink/common/web_preferences/web_preferences.cc
 @@ -44,6 +44,8 @@ WebPreferences::WebPreferences()
@@ -297,10 +355,10 @@ index 758b0b161..7089cc562 100644
        web_security_enabled(true),
        loads_images_automatically(true),
 diff --git a/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc b/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
-index ba1ba323e..3b4761573 100644
+index b1f4625abf3ab..1391f022bbb84 100644
 --- a/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
 +++ b/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
-@@ -55,6 +55,8 @@ bool StructTraits<blink::mojom::WebPreferencesDataView,
+@@ -53,6 +53,8 @@ bool StructTraits<blink::mojom::WebPreferencesDataView,
    )
      return false;
  
@@ -310,10 +368,10 @@ index ba1ba323e..3b4761573 100644
    out->default_fixed_font_size = data.default_fixed_font_size();
    out->minimum_font_size = data.minimum_font_size();
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences.h b/third_party/blink/public/common/web_preferences/web_preferences.h
-index ab727750a..a83479610 100644
+index 0924c76de743a..b91c77e879cf5 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences.h
-@@ -56,6 +56,8 @@ struct BLINK_COMMON_EXPORT WebPreferences {
+@@ -54,6 +54,8 @@ struct BLINK_COMMON_EXPORT WebPreferences {
    int minimum_font_size;
    int minimum_logical_font_size;
    std::string default_encoding;
@@ -323,10 +381,10 @@ index ab727750a..a83479610 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
-index 68d33ca3b..1985caca3 100644
+index 871c4f64bfd09..7746c4e051487 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
-@@ -75,6 +75,16 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::WebPreferencesDataView,
+@@ -70,6 +70,16 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::WebPreferencesDataView,
      return r.default_encoding;
    }
  
@@ -344,7 +402,7 @@ index 68d33ca3b..1985caca3 100644
        const blink::web_pref::WebPreferences& r) {
      return r.context_menu_on_mouse_up;
 diff --git a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
-index 5428fa6e7..fd1dd6746 100644
+index 067bb3bf74874..dfb81cd9f6dc0 100644
 --- a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 +++ b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 @@ -110,6 +110,8 @@ struct WebPreferences {
@@ -357,7 +415,7 @@ index 5428fa6e7..fd1dd6746 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/public/platform/web_runtime_features.h b/third_party/blink/public/platform/web_runtime_features.h
-index 1f5771777..633727e48 100644
+index e0e5acf63ad31..90e7e8cdd6049 100644
 --- a/third_party/blink/public/platform/web_runtime_features.h
 +++ b/third_party/blink/public/platform/web_runtime_features.h
 @@ -41,6 +41,11 @@ namespace blink {
@@ -373,10 +431,10 @@ index 1f5771777..633727e48 100644
    // Source/platform/runtime_enabled_features.json5.
    BLINK_PLATFORM_EXPORT static void EnableExperimentalFeatures(bool);
 diff --git a/third_party/blink/renderer/core/exported/web_view_impl.cc b/third_party/blink/renderer/core/exported/web_view_impl.cc
-index a8e173039..2b699b407 100644
+index 87e3d73b791eb..4b5620cb7cf79 100644
 --- a/third_party/blink/renderer/core/exported/web_view_impl.cc
 +++ b/third_party/blink/renderer/core/exported/web_view_impl.cc
-@@ -1397,6 +1397,9 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
+@@ -1433,6 +1433,9 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
    settings->SetDefaultTextEncodingName(
        WebString::FromASCII(prefs.default_encoding));
    settings->SetJavaScriptEnabled(prefs.javascript_enabled);
@@ -387,7 +445,7 @@ index a8e173039..2b699b407 100644
    settings->SetLoadsImagesAutomatically(prefs.loads_images_automatically);
    settings->SetImagesEnabled(prefs.images_enabled);
 diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
-index 7d16ecdde..d72671917 100644
+index f52f8c516c851..d86324efb08c0 100644
 --- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 +++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 @@ -30,6 +30,19 @@
@@ -410,7 +468,7 @@ index 7d16ecdde..d72671917 100644
  #include <string>
  #include <utility>
  
-@@ -251,6 +264,36 @@ void DOMWebSocket::Connect(const String& url,
+@@ -253,6 +266,36 @@ void DOMWebSocket::Connect(const String& url,
    auto result = common_.Connect(GetExecutionContext(), url, protocols, channel_,
                                  exception_state);
  
@@ -448,10 +506,10 @@ index 7d16ecdde..d72671917 100644
      case WebSocketCommon::ConnectResult::kSuccess:
        DCHECK(!exception_state.HadException());
 diff --git a/third_party/blink/renderer/platform/BUILD.gn b/third_party/blink/renderer/platform/BUILD.gn
-index ca52366fe..2eb6296d0 100644
+index bdb4c9939d7af..328154f38db0b 100644
 --- a/third_party/blink/renderer/platform/BUILD.gn
 +++ b/third_party/blink/renderer/platform/BUILD.gn
-@@ -1542,6 +1542,12 @@ component("platform") {
+@@ -1548,6 +1548,12 @@ component("platform") {
      "windows_keyboard_codes.h",
    ]
  
@@ -465,12 +523,12 @@ index ca52366fe..2eb6296d0 100644
  
    # Add in the generated files.
 diff --git a/third_party/blink/renderer/platform/exported/web_runtime_features.cc b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-index 674b14492..1732bd36b 100644
+index 62f221664d6be..a65bc95c48c50 100644
 --- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 +++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-@@ -34,6 +34,10 @@
+@@ -33,6 +33,10 @@
+ #include "third_party/blink/renderer/platform/graphics/scrollbar_theme_settings.h"
  #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
- #include "third_party/blink/renderer/platform/wtf/assertions.h"
  
 +#if defined(GOOROOM_BUILD)
 +#include "gooroom/WebKit/gooroom_enabled_features.h"
@@ -479,7 +537,7 @@ index 674b14492..1732bd36b 100644
  namespace blink {
  
  void WebRuntimeFeatures::EnableBlockingFocusWithoutUserActivation(bool enable) {
-@@ -539,6 +543,16 @@ void WebRuntimeFeatures::EnableDisplayCutoutAPI(bool enable) {
+@@ -573,6 +577,16 @@ void WebRuntimeFeatures::EnableDisplayCutoutAPI(bool enable) {
    RuntimeEnabledFeatures::SetDisplayCutoutAPIEnabled(enable);
  }
  
@@ -497,5 +555,5 @@ index 674b14492..1732bd36b 100644
    RuntimeEnabledFeatures::SetDocumentPolicyEnabled(enable);
  }
 -- 
-2.20.1
+2.30.2
 

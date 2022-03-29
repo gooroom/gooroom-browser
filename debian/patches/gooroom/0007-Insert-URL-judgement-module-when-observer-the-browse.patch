@@ -1,17 +1,17 @@
-From e8091289f6b4d6200a2f63a4fb5e895017bff77a Mon Sep 17 00:00:00 2001
+From b429a4a1fab2e264a3e0fbeed6a84d2138d4e1b5 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:31:12 +0900
-Subject: [PATCH 07/84] Insert URL judgement module when observer the browser.
+Subject: [PATCH 07/63] Insert URL judgement module when observer the browser.
 
 ---
  .../browser/web_contents/web_contents_impl.cc | 101 ++++++++++++++++++
  1 file changed, 101 insertions(+)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 3c29748aa..2ef581730 100644
+index 6b742d4635454..aa5a87e5fc34e 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -12,6 +12,11 @@
+@@ -13,6 +13,11 @@
  #include <utility>
  #include <vector>
  
@@ -20,10 +20,10 @@ index 3c29748aa..2ef581730 100644
 +#include "gooroom/base/gooroom_base.h"
 +#endif
 +
+ #include "base/allocator/partition_alloc_features.h"
+ #include "base/allocator/partition_allocator/starscan/pcscan.h"
  #include "base/bind.h"
- #include "base/command_line.h"
- #include "base/containers/flat_set.h"
-@@ -5160,6 +5165,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
+@@ -5410,6 +5415,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
    }
  }
  
@@ -119,8 +119,8 @@ index 3c29748aa..2ef581730 100644
  void WebContentsImpl::DidRedirectNavigation(
      NavigationHandle* navigation_handle) {
    TRACE_EVENT1("navigation", "WebContentsImpl::DidRedirectNavigation",
-@@ -5303,6 +5397,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
-         GetMainFrame()->frame_tree_node()->GetFrameTreeSize();
+@@ -5556,6 +5650,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+     max_loaded_frame_count_ = GetFrameTreeSize(&primary_frame_tree_);
    }
  
 +#if BUILDFLAG(ENABLE_GOOROOM)
@@ -134,5 +134,5 @@ index 3c29748aa..2ef581730 100644
      // Update the WebPreferences for this WebContents that depends on changes
      // that might occur during navigation. This will only update the preferences
 -- 
-2.20.1
+2.30.2
 

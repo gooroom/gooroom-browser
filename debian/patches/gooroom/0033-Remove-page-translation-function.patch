@@ -1,18 +1,17 @@
-From 4d59bd7345bbcdb450e768ab8c28cd64b8291c1e Mon Sep 17 00:00:00 2001
+From 7cf63a7c6a361eb0cd4e6daa82abe48cb845a0f4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 13:43:23 +0900
-Subject: [PATCH 33/84] * Remove page-translation function.
+Subject: [PATCH 33/63] * Remove page-translation function.
 
 ---
- .../browser/renderer_context_menu/render_view_context_menu.cc | 3 +++
- chrome/browser/resources/ntp4/new_tab.html                    | 4 ++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ .../browser/renderer_context_menu/render_view_context_menu.cc  | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-index b88a6eabb..672bd3041 100644
+index a041fceb8e425..b33fdb7df926d 100644
 --- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
 +++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-@@ -1575,6 +1575,8 @@ void RenderViewContextMenu::AppendPageItems() {
+@@ -1723,6 +1723,8 @@ void RenderViewContextMenu::AppendPageItems() {
  
    ChromeTranslateClient* chrome_translate_client =
        ChromeTranslateClient::FromWebContents(embedder_web_contents_);
@@ -21,7 +20,7 @@ index b88a6eabb..672bd3041 100644
    const bool canTranslate =
        chrome_translate_client &&
        chrome_translate_client->GetTranslateManager()->CanManuallyTranslate(
-@@ -1594,6 +1596,7 @@ void RenderViewContextMenu::AppendPageItems() {
+@@ -1742,6 +1744,7 @@ void RenderViewContextMenu::AppendPageItems() {
          IDC_CONTENT_CONTEXT_TRANSLATE,
          l10n_util::GetStringFUTF16(IDS_CONTENT_CONTEXT_TRANSLATE, language));
    }
@@ -29,22 +28,6 @@ index b88a6eabb..672bd3041 100644
  }
  
  void RenderViewContextMenu::AppendExitFullscreenItem() {
-diff --git a/chrome/browser/resources/ntp4/new_tab.html b/chrome/browser/resources/ntp4/new_tab.html
-index eca1c674f..4bc6f7318 100644
---- a/chrome/browser/resources/ntp4/new_tab.html
-+++ b/chrome/browser/resources/ntp4/new_tab.html
-@@ -72,9 +72,9 @@ document.getElementById('themecss').href = 'chrome://theme/css/new_tab_theme.css
- 
-   <div id="login-container" hidden>
-     <div id="login-status-header-container" class="login-status-row">
--      <div id="login-status-header"></div>
-+      <div id="login-status-header" hidden></div>
-     </div>
--    <div id="login-status-sub-header"></div>
-+    <div id="login-status-sub-header" hidden></div>
-   </div>
- </body>
- 
 -- 
-2.20.1
+2.30.2
 

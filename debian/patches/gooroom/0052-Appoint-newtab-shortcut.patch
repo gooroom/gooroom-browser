@@ -1,0 +1,239 @@
+From d2220a6c7301449a9f1d5e1466146cf2c2514403 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 24 Feb 2021 18:11:50 +0900
+Subject: [PATCH 52/63] Appoint newtab shortcut
+
+---
+ chrome/browser/history/top_sites_factory.cc   | 46 +++++++++++
+ chrome/browser/history/top_sites_factory.h    |  5 ++
+ chrome/browser/ui/webui/favicon_source.cc     | 77 +++++++++++++++++--
+ .../history/core/browser/top_sites_impl.cc    |  5 ++
+ 4 files changed, 127 insertions(+), 6 deletions(-)
+
+diff --git a/chrome/browser/history/top_sites_factory.cc b/chrome/browser/history/top_sites_factory.cc
+index 9294c9d356eea..dfac62ba42583 100644
+--- a/chrome/browser/history/top_sites_factory.cc
++++ b/chrome/browser/history/top_sites_factory.cc
+@@ -8,6 +8,9 @@
+ 
+ #include <memory>
+ 
++#include "base/json/json_reader.h"
++#include "base/files/file_util.h"
++#include "base/strings/utf_string_conversions.h"
+ #include "base/bind.h"
+ #include "base/command_line.h"
+ #include "base/cxx17_backports.h"
+@@ -117,6 +120,8 @@ scoped_refptr<history::TopSites> TopSitesFactory::BuildTopSites(
+   return top_sites;
+ }
+ 
++bool TopSitesFactory::existDir = false;
++
+ TopSitesFactory::TopSitesFactory()
+     : RefcountedBrowserContextKeyedServiceFactory(
+           "TopSites",
+@@ -126,14 +131,55 @@ TopSitesFactory::TopSitesFactory()
+   // This dependency is only used when the experimental
+   // kTopSitesFromSiteEngagement feature is active.
+   DependsOn(site_engagement::SiteEngagementServiceFactory::GetInstance());
++#if defined(GOOROOM_BUILD)
++  base::FilePath path("/usr/share/gooroom/browser/policies/shortcut/shortcut.json");
++  TopSitesFactory::existDir = base::PathExists(path);
++#endif
+ }
+ 
+ TopSitesFactory::~TopSitesFactory() {
+ }
+ 
++#if defined(GOOROOM_BUILD)
++//static
++bool TopSitesFactory::IsGooroomShortCut() {
++  return existDir;
++}
++#endif
++
+ scoped_refptr<RefcountedKeyedService> TopSitesFactory::BuildServiceInstanceFor(
+     content::BrowserContext* context) const {
+   history::PrepopulatedPageList prepopulated_pages;
++
++#if defined(GOOROOM_BUILD)
++  base::FilePath path("/usr/share/gooroom/browser/policies/shortcut/shortcut.json");
++  std::string input;
++  ReadFileToString(path, &input);
++  absl::optional<base::Value> root = base::JSONReader::Read(input, base::JSON_PARSE_RFC);
++
++  base::Value* url=nullptr;
++  base::Value* name=nullptr;
++
++  if (root) {
++    url = root->FindListKey("URL");
++	name = root->FindListKey("NAME");
++  }
++  if (url && name) // exist URL KEY
++  {
++    for (int i=0; i < (int) url->GetList().size(); i++) {
++      printf("url : %s\n", GURL(url->GetList()[i].GetString()).spec().c_str());
++      std::string none = "";
++      prepopulated_pages.push_back(history::PrepopulatedPage(
++          GURL(url->GetList()[i].GetString()),
++          i < (int) name->GetList().size() ?
++          base::UTF8ToUTF16(name->GetList()[i].GetString()) : base::UTF8ToUTF16(none),
++          -1, 0));
++	}
++  }
++
++  if (base::PathExists(path))
++    return BuildTopSites(context, prepopulated_pages);
++#endif
+   InitializePrepopulatedPageList(Profile::FromBrowserContext(context),
+                                  &prepopulated_pages);
+   return BuildTopSites(context, prepopulated_pages);
+diff --git a/chrome/browser/history/top_sites_factory.h b/chrome/browser/history/top_sites_factory.h
+index a8e3ced327fde..c8d423f67cbf4 100644
+--- a/chrome/browser/history/top_sites_factory.h
++++ b/chrome/browser/history/top_sites_factory.h
+@@ -39,10 +39,15 @@ class TopSitesFactory : public RefcountedBrowserContextKeyedServiceFactory {
+       content::BrowserContext* context,
+       const std::vector<history::PrepopulatedPage>& prepopulated_page_list);
+ 
++#if defined(GOOROOM_BUILD)
++  static bool IsGooroomShortCut();
++#endif
++
+   TopSitesFactory(const TopSitesFactory&) = delete;
+   TopSitesFactory& operator=(const TopSitesFactory&) = delete;
+ 
+  private:
++  static bool existDir;
+   friend struct base::DefaultSingletonTraits<TopSitesFactory>;
+ 
+   TopSitesFactory();
+diff --git a/chrome/browser/ui/webui/favicon_source.cc b/chrome/browser/ui/webui/favicon_source.cc
+index d26878c10ac2d..5e068cea425a0 100644
+--- a/chrome/browser/ui/webui/favicon_source.cc
++++ b/chrome/browser/ui/webui/favicon_source.cc
+@@ -6,6 +6,12 @@
+ 
+ #include <cmath>
+ 
++#include "base/json/json_reader.h"
++#include "third_party/skia/include/core/SkBitmap.h"
++#include "third_party/skia/tools/Resources.h"
++#include "base/files/file_util.h"
++#include "ui/gfx/codec/png_codec.h"
++
+ #include "base/bind.h"
+ #include "base/callback_helpers.h"
+ #include "base/metrics/histogram_functions.h"
+@@ -81,6 +87,34 @@ std::string FaviconSource::GetSource() {
+   return "";
+ }
+ 
++bool ReadPNGFile(const base::FilePath& file_path, SkBitmap* bitmap) {
++  DCHECK(bitmap);
++  std::string png_data;
++  return base::ReadFileToString(file_path, &png_data) &&
++         gfx::PNGCodec::Decode(reinterpret_cast<unsigned char*>(&png_data[0]),
++                               png_data.length(),
++                               bitmap);
++}
++
++int GetFaviconOrder(GURL page_url, base::FilePath shortcut_dir) {
++  base::FilePath shortcut_json = shortcut_dir.AppendASCII("shortcut.json");
++  std::string input;
++  ReadFileToString(shortcut_json, &input);
++  absl::optional<base::Value> root = base::JSONReader::Read(input, base::JSON_PARSE_RFC);
++  base::Value* url=nullptr;
++
++  if (root) {
++    url = root->FindListKey("URL");
++  }
++  if (url) {
++    for (int i = 0; i < url->GetList().size(); i++) {
++      if(page_url.spec().find(url->GetList()[i].GetString()) != std::string::npos)
++        return i+1;
++    }
++  }
++  return 0;
++}
++
+ void FaviconSource::StartDataRequest(
+     const GURL& url,
+     const content::WebContents::Getter& wc_getter,
+@@ -142,12 +176,43 @@ void FaviconSource::StartDataRequest(
+     if (top_sites) {
+       for (const auto& prepopulated_page : top_sites->GetPrepopulatedPages()) {
+         if (page_url == prepopulated_page.most_visited.url) {
+-          ui::ResourceScaleFactor resource_scale_factor =
+-              ui::GetSupportedResourceScaleFactor(parsed.device_scale_factor);
+-          std::move(callback).Run(
+-              ui::ResourceBundle::GetSharedInstance()
+-                  .LoadDataResourceBytesForScale(prepopulated_page.favicon_id,
+-                                                 resource_scale_factor));
++          if (!TopSitesFactory::IsGooroomShortCut()) {
++            ui::ResourceScaleFactor resource_scale_factor =
++                ui::GetSupportedResourceScaleFactor(parsed.device_scale_factor);
++            std::move(callback).Run(
++                ui::ResourceBundle::GetSharedInstance()
++                    .LoadDataResourceBytesForScale(prepopulated_page.favicon_id,
++                                                   resource_scale_factor));
++            return;
++          }
++          base::FilePath shortcut_dir("/usr/share/gooroom/browser/policies/shortcut");
++          int page_num = GetFaviconOrder(page_url, shortcut_dir);
++          std::string name = std::to_string(page_num) + ".png";
++          printf("name : %s\n", name.c_str());
++          base::FilePath icon_path = shortcut_dir.AppendASCII(name);
++          if (!PathExists(icon_path))
++            page_num = 0;
++          SkBitmap bitmap;
++          if(!ReadPNGFile(icon_path,&bitmap))
++            page_num = 0;
++          int icon_size = std::ceil(parsed.size_in_dip * parsed.device_scale_factor);
++
++          if (page_num == 0) { //NOT Exist favicon
++            SkBitmap bitmap = favicon::GenerateMonogramFavicon(GURL(parsed.page_url),
++                                                     icon_size, icon_size);
++            std::vector<unsigned char> bitmap_data;
++            bool result = gfx::PNGCodec::EncodeBGRASkBitmap(bitmap, false, &bitmap_data);
++            DCHECK(result);
++            std::move(callback).Run(base::RefCountedBytes::TakeVector(&bitmap_data));
++         }
++          else {
++           std::vector<SkBitmap> bitmaps;
++            bitmaps.push_back(bitmap);
++            std::vector<unsigned char> bitmap_data;
++            bool result = gfx::PNGCodec::EncodeBGRASkBitmap(bitmap, false, &bitmap_data);
++            DCHECK(result);
++            std::move(callback).Run(base::RefCountedBytes::TakeVector(&bitmap_data));
++          }
+           return;
+         }
+       }
+diff --git a/components/history/core/browser/top_sites_impl.cc b/components/history/core/browser/top_sites_impl.cc
+index 6f5d994b66e11..c6daf06a8c06b 100644
+--- a/components/history/core/browser/top_sites_impl.cc
++++ b/components/history/core/browser/top_sites_impl.cc
+@@ -22,6 +22,7 @@
+ #include "base/threading/thread_task_runner_handle.h"
+ #include "base/values.h"
+ #include "build/build_config.h"
++#include "chrome/browser/history/top_sites_factory.h"
+ #include "components/history/core/browser/history_backend.h"
+ #include "components/history/core/browser/history_constants.h"
+ #include "components/history/core/browser/history_db_task.h"
+@@ -229,6 +230,10 @@ void TopSitesImpl::RegisterPrefs(PrefRegistrySimple* registry) {
+ TopSitesImpl::~TopSitesImpl() = default;
+ 
+ void TopSitesImpl::StartQueryForMostVisited() {
++#if defined(GOOROOM_BUILD)
++  if (TopSitesFactory::IsGooroomShortCut())
++    return;
++#endif
+   constexpr int kDaysOfHistory = 90;
+ 
+   DCHECK(loaded_);
+-- 
+2.30.2
+

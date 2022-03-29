@@ -6,6 +6,9 @@ export DH_VERBOSE=1
 # enable all build hardening flags
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
+# disable unsupported flag in clang 7
+export DEB_BUILD_MAINT_OPTIONS+=reproducible=-fixfilepath
+
 # indicate that binary targets do not require root
 export DEB_RULES_REQUIRES_ROOT=no
 
@@ -30,6 +33,9 @@ export CXXFLAGS+=-Wno-conversion \
                  -Wno-deprecated-declarations \
                  -Wno-unknown-pragmas \
 
+# do not optimize away null pointer safety checks
+export CXXFLAGS+=-fno-delete-null-pointer-checks
+
 # disable clang plugins
 defines=clang_use_chrome_plugins=false
 
@@ -40,23 +46,21 @@ defines+=custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
 # set the appropriate cpu architecture
 DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifeq (i386,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"x86\" symbol_level=0
+defines+=host_cpu=\"x86\" use_vaapi=true
 endif
 ifeq (amd64,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"x64\"
+defines+=host_cpu=\"x64\" use_vaapi=true
 endif
 ifeq (arm64,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"arm64\"
+defines+=host_cpu=\"arm64\" use_vaapi=true
 endif
 ifeq (armhf,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"arm\" arm_use_neon=false symbol_level=0
+defines+=host_cpu=\"arm\" use_vaapi=false arm_use_neon=false
 endif
 
 # disabled features
 defines+=is_debug=false \
          use_goma=false \
-         use_ozone=false \
-         use_vaapi=false \
          use_sysroot=false \
          use_allocator=\"none\" \
          use_libjpeg_turbo=true \
@@ -71,28 +75,33 @@ defines+=is_debug=false \
          enable_one_click_signin=false \
          enable_iterator_debugging=false \
          enable_hangout_services_extension=false \
-         optimize_webui=false \
+         angle_has_histograms=false \
+         build_angle_perftests=false \
          enable_js_type_check=false \
-         blink_symbol_level=0 \
          treat_warnings_as_errors=false \
+         is_cfi=false \
+         use_thin_lto=false \
+         chrome_pgo_phase=0 \
 
 # enabled features
 defines+=use_gio=true \
+         is_official_build=true \
+         symbol_level=0 \
          use_pulseaudio=true \
          link_pulseaudio=true \
+         rtc_use_pipewire=true \
          enable_widevine=true \
          v8_enable_backtrace=true \
          use_system_zlib=true \
          use_system_lcms2=true \
-         use_system_libpng=true \
          use_system_libjpeg=true \
+         use_system_libpng=true \
          use_system_freetype=true \
-         use_system_harfbuzz=true \
          use_system_libopenjpeg2=true \
          concurrent_links=1 \
          proprietary_codecs=true \
          ffmpeg_branding=\"Chrome\" \
-         fieldtrial_testing_like_official_build=true \
+         disable_fieldtrial_testing_config=true \
 
 # handle parallel build options
 njobs=1
@@ -103,18 +112,18 @@ endif
 %:
 	dh $@
 
-out/Release/gn:
-	./tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles -j$(njobs)
-
 override_dh_auto_configure:
+	# use system node w/out patching source; upstream hardcodes x64 in path
+	mkdir -p third_party/node/linux/node-linux-x64/bin
+	cp /usr/bin/node third_party/node/linux/node-linux-x64/bin
 	# output compiler information
 	$(CXX) --version
 	# prefer unbundled (system) libraries
 	./debian/scripts/unbundle
 
-override_dh_auto_build-arch: out/Release/gn
+override_dh_auto_build-arch:
 	git apply debian/patches/gooroom/0009-Put-gooroom-logo-into-the-browser.patch
-	./out/Release/gn gen out/Release --args="$(defines)"
+	gn gen out/Release --args="$(defines)"
 	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox
 	cp out/Release/chrome_sandbox out/Release/chrome-sandbox
 	cp out/Release/locales/en-US.pak out/Release/resources
@@ -122,13 +131,14 @@ override_dh_auto_build-arch: out/Release/gn
 	sed -e s/@@PACKAGE@@/gooroom-browser/g -e s/@@MENUNAME@@/gooroom-browser/g \
 	    < chrome/app/resources/manpage.1.in > out/Release/gooroom-browser.1
 
-override_dh_auto_build-indep: out/Release/gn
-	./out/Release/gn gen out/Release --args="$(defines)"
+override_dh_auto_build-indep:
+	gn gen out/Release --args="$(defines)"
 	ninja -j$(njobs) -C out/Release packed_resources
 	rm -f out/Release/locales/en-US.pak
 
 override_dh_auto_install-arch:
 	dh_auto_install
+	mkdir -p debian/gooroom-browser/usr/bin
 	# update launcher script with build information
 	sed 's|@BUILD_DIST@|$(shell cat /etc/debian_version)|' \
 	    < debian/scripts/gooroom-browser > debian/gooroom-browser/usr/bin/gooroom-browser
@@ -139,6 +149,7 @@ override_dh_fixperms:
 	dh_fixperms --exclude chrome-sandbox
 
 override_dh_auto_clean:
+	rm -rf third_party/node/linux/node-linux-x64
 	rm -rf out
 	find . -name \*.pyc -execdir rm -f {} \;
 	dh_auto_clean
@@ -151,26 +162,31 @@ extract=chromium-$(version)
 tarfile=$(extract)-lite.tar
 tarball=$(tarfile).xz
 debvers=../chromium_$(version)
+seconds=$(debvers).seconds
 origtxz=$(debvers).orig.tar.xz
 removed=$(debvers).files-removed
-seconds=$(debvers).seconds
+options=--sort=name --owner=0 --group=0 --numeric-owner --mtime="@$$(stat --format "%Y" ../$(tarball))" --clamp-mtime
 
 get-orig-source:
 	wget -nv --show-progress -c $(url)/$(tarball) -O ../$(tarball)
 	cp /usr/share/perl5/Devscripts/MkOrigtargz.pm debian/scripts/mk-origtargz
 	patch -p1 < debian/scripts/mk-origtargz.patch
-	date +%s > $(seconds)
+	@date +%s > $(seconds)
 	perl debian/scripts/mk-origtargz ../$(tarball) > $(removed)
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo
 	test ! -e $(extract) || rm -rf $(extract)
 	tar xf ../$(tarball)
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo
 	while read line; do rm -rf $$line; done < $(removed)
 	cd $(extract) && ../debian/scripts/check-upstream
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo
 	test ! -e $(origtxz) || rm -f $(origtxz)
-	tar cf - $(extract) | xz -6 -T $(njobs) - > $(origtxz)
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	tar $(options) -cf - $(extract) | xz -6 -T $(njobs) - > $(origtxz)
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	@echo
 	rm -rf $(extract)
-	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds | tee seconds
+	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds | tee seconds
 	@mv -f seconds $(seconds)

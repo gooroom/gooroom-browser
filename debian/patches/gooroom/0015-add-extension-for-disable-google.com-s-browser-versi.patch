@@ -1,7 +1,7 @@
-From ec4d048a700a5d97a3f2e471f7da595450af3af1 Mon Sep 17 00:00:00 2001
+From be85c039cefa1d43b87393184674b1c852a60fe3 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 16:40:08 +0900
-Subject: [PATCH 15/84] add extension for disable google.com's browser version
+Subject: [PATCH 15/63] add extension for disable google.com's browser version
  warning
 
 ---
@@ -22,10 +22,10 @@ Subject: [PATCH 15/84] add extension for disable google.com's browser version
  create mode 100644 gooroom/browser/dgw/disable_google_warning.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index 974c20f48..d9108b31b 100644
+index a000efb345933..a7c24fc796030 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -208,6 +208,9 @@
+@@ -119,6 +119,9 @@
        <include name="IDR_ORIGIN_MOJO_JS" file="${root_gen_dir}\url\mojom\origin.mojom-lite.js" use_base_dir="false" type="BINDATA"/>
        <if expr="enable_plugins">
          <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
@@ -36,10 +36,10 @@ index 974c20f48..d9108b31b 100644
        <if expr="is_win">
          <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_win.json" type="BINDATA" />
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index 2a3890ab1..149c6bbf1 100644
+index eb5684a21251b..b48de196b12e0 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
-@@ -74,6 +74,10 @@
+@@ -77,6 +77,10 @@
  #include "chrome/browser/defaults.h"
  #endif
  
@@ -50,7 +50,7 @@ index 2a3890ab1..149c6bbf1 100644
  using content::BrowserThread;
  
  namespace extensions {
-@@ -504,6 +508,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+@@ -479,6 +483,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
  #if BUILDFLAG(ENABLE_PDF)
    Add(pdf_extension_util::GetManifest(),
        base::FilePath(FILE_PATH_LITERAL("pdf")));
@@ -62,10 +62,10 @@ index 2a3890ab1..149c6bbf1 100644
  }
  
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index 349356fa1..cd5f62b49 100644
+index 66704823164ef..9622b08cfc94e 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
-@@ -97,6 +97,10 @@
+@@ -96,6 +96,10 @@
          <include name="IDR_ARC_SUPPORT_ICON_HEADER" file="chromeos/arc_support/images/header.png" type="BINDATA" />
          <include name="IDR_ARC_SUPPORT_RECOMMEND_APP_LIST_VIEW_JS" file="chromeos/arc_support/recommend_app_list_view.js" type="BINDATA" />
          <include name="IDR_ARC_SUPPORT_RECOMMEND_APP_LIST_VIEW_HTML" file="chromeos/arc_support/recommend_app_list_view.html" type="chrome_html" flattenhtml="true" />
@@ -78,7 +78,7 @@ index 349356fa1..cd5f62b49 100644
        <include name="IDR_CRYPTOTOKEN_B64_JS" file="cryptotoken/b64.js" type="BINDATA" />
 diff --git a/chrome/browser/resources/dgw/inject.css b/chrome/browser/resources/dgw/inject.css
 new file mode 100644
-index 000000000..10894976c
+index 0000000000000..10894976cc58f
 --- /dev/null
 +++ b/chrome/browser/resources/dgw/inject.css
 @@ -0,0 +1,6 @@
@@ -91,7 +91,7 @@ index 000000000..10894976c
 \ No newline at end of file
 diff --git a/chrome/browser/resources/dgw/manifest.json b/chrome/browser/resources/dgw/manifest.json
 new file mode 100644
-index 000000000..0f4b1e504
+index 0000000000000..0f4b1e5044963
 --- /dev/null
 +++ b/chrome/browser/resources/dgw/manifest.json
 @@ -0,0 +1,14 @@
@@ -110,10 +110,10 @@ index 000000000..0f4b1e504
 +}
 +
 diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
-index 21c399eaf..2ce2b9d12 100644
+index f6e8647fbdefe..d2e0c22e794b2 100644
 --- a/extensions/common/constants.cc
 +++ b/extensions/common/constants.cc
-@@ -110,6 +110,9 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
+@@ -131,6 +131,9 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
  #endif
  const char kFeedbackExtensionId[] = "gfdkimpbcpahaombhbimeihdjnejgicl";
  const char kPdfExtensionId[] = "mhjfbmdgcfjbbpaeojofohoefgiehjai";
@@ -124,12 +124,12 @@ index 21c399eaf..2ce2b9d12 100644
      "bpmcpldpdmajfigpchkicefoigmkfalc";
  const char kQuickOfficeInternalExtensionId[] =
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index 782a171ad..80e28d003 100644
+index dd158498a8ca7..b1b33ba3b13e4 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
-@@ -185,6 +185,11 @@ extern const char kFeedbackExtensionId[];
+@@ -243,6 +243,11 @@ EXTENSIONS_EXPORT extern const char kFeedbackExtensionId[];
  // The extension id of the PDF extension.
- extern const char kPdfExtensionId[];
+ EXTENSIONS_EXPORT extern const char kPdfExtensionId[];
  
 +#if defined(GOOROOM_BUILD)
 +// The extension id of the DGW extension.
@@ -137,10 +137,10 @@ index 782a171ad..80e28d003 100644
 +#endif
 +
  // The extension id of the Office Viewer component extension.
- extern const char kQuickOfficeComponentExtensionId[];
+ EXTENSIONS_EXPORT extern const char kQuickOfficeComponentExtensionId[];
  
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
-index 57f5f21af..920dfedf3 100644
+index 57f5f21afd23e..920dfedf3d21f 100644
 --- a/gooroom/browser/BUILD.gn
 +++ b/gooroom/browser/BUILD.gn
 @@ -17,6 +17,8 @@ static_library("gooroom_browser") {
@@ -154,7 +154,7 @@ index 57f5f21af..920dfedf3 100644
    deps = [
 diff --git a/gooroom/browser/dgw/disable_google_warning.cc b/gooroom/browser/dgw/disable_google_warning.cc
 new file mode 100644
-index 000000000..93b4b33dc
+index 0000000000000..8f2f87082ddb8
 --- /dev/null
 +++ b/gooroom/browser/dgw/disable_google_warning.cc
 @@ -0,0 +1,29 @@
@@ -178,19 +178,18 @@ index 000000000..93b4b33dc
 +}  // namespace
 +
 +std::string GetManifest() {
-+  std::string manifest_contents = ui::ResourceBundle::GetSharedInstance()
-+                                      .GetRawDataResource(IDR_DGW_MANIFEST)
-+                                      .as_string();
++  std::string manifest_contents(ui::ResourceBundle::GetSharedInstance()
++                                      .GetRawDataResource(IDR_DGW_MANIFEST));
++
 +  DCHECK(manifest_contents.find(kNameTag) != std::string::npos);
 +
 +  return manifest_contents;
 +}
 +
 +}  // namespace disable_google_warning
-\ No newline at end of file
 diff --git a/gooroom/browser/dgw/disable_google_warning.h b/gooroom/browser/dgw/disable_google_warning.h
 new file mode 100644
-index 000000000..b10a3fee1
+index 0000000000000..b10a3fee18bf8
 --- /dev/null
 +++ b/gooroom/browser/dgw/disable_google_warning.h
 @@ -0,0 +1,19 @@
@@ -215,5 +214,5 @@ index 000000000..b10a3fee1
 +#endif  // CHROME_BROWSER_DGW_DISABLE_GOOGLE_WARNING_H_
 \ No newline at end of file
 -- 
-2.20.1
+2.30.2
 

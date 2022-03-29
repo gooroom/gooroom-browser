@@ -1,16 +1,16 @@
-From 0f8c0b35a68878bce90344c7cad5819978bb2e5d Mon Sep 17 00:00:00 2001
+From fb952e69ffca172f680b88270f6bab23588f9f58 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:12:05 +0900
-Subject: [PATCH 03/84] enable GooroomBrowserExtraPartsSecurity by attaching it
+Subject: [PATCH 03/63] enable GooroomBrowserExtraPartsSecurity by attaching it
  to gooroom-browser. Add GooroomExtraPartsSecurity in gooroom/BUILD.gn
 
 ---
  gooroom/BUILD.gn                                  | 4 ++++
- gooroom/browser/gooroom_content_browser_client.cc | 4 ++++
- 2 files changed, 8 insertions(+)
+ gooroom/browser/gooroom_content_browser_client.cc | 3 +++
+ 2 files changed, 7 insertions(+)
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 6d8d5945c..19b4b9e1a 100644
+index 4de4fcf5e76e5..f8addb80dcad2 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -222,6 +222,10 @@ if (!is_android && !is_mac) {
@@ -25,7 +25,7 @@ index 6d8d5945c..19b4b9e1a 100644
      }
    }
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
-index 52776071c..ba6b64528 100644
+index 025c6be73c1aa..623d258f3365a 100644
 --- a/gooroom/browser/gooroom_content_browser_client.cc
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
 @@ -3,6 +3,7 @@
@@ -36,16 +36,15 @@ index 52776071c..ba6b64528 100644
  
  #include <iterator>
  #include <map>
-@@ -756,6 +757,9 @@ GooroomContentBrowserClient::CreateBrowserMainParts(
- 
-   chrome::AddMetricsExtraParts(main_parts.get());
+@@ -734,6 +735,8 @@ GooroomContentBrowserClient::CreateBrowserMainParts(
+   main_parts->AddParts(
+       std::make_unique<ChromeBrowserMainExtraPartsSegmentationPlatform>());
  
 +  main_parts->AddParts(
 +      std::make_unique<GooroomBrowserExtraPartsSecurity>());
-+
    return main_parts;
  }
  
 -- 
-2.20.1
+2.30.2
 

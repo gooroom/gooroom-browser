@@ -1,7 +1,7 @@
-From bb5146a96de061212c61e5d034338f7e4d6917c3 Mon Sep 17 00:00:00 2001
+From 1e2ef075448bdf5912ad74b23bc4e5d7f0f67d64 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 14:12:50 +0900
-Subject: [PATCH 45/84] BugTrackingSystem
+Subject: [PATCH 45/63] BugTrackingSystem
 
 507 : Disable 'Open as window' on making shortcut app popup
 ---
@@ -9,21 +9,21 @@ Subject: [PATCH 45/84] BugTrackingSystem
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
-index 46d52ac59..cd28d8450 100644
+index 5acc8ddac919c..452def0f041f4 100644
 --- a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
 +++ b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
-@@ -131,7 +131,9 @@ WebAppConfirmationView::WebAppConfirmationView(
-       open_as_window_radio_->SetChecked(true);
-     else
-       open_as_tabbed_window_radio_->SetChecked(true);
+@@ -158,7 +158,9 @@ WebAppConfirmationView::WebAppConfirmationView(
+                 IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_TABBED_WINDOW))
+             .SetGroup(kRadioGroupId)
+             .SetChecked(display_mode == web_app::DisplayMode::kTabbed));
 -  } else {
 +  }
 +#if !defined(GOOROOM_BUILD)
 +  else {
-     auto open_as_window_checkbox = std::make_unique<views::Checkbox>(
-         l10n_util::GetStringUTF16(IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_WINDOW));
-     open_as_window_checkbox->SetChecked(web_app_info_->open_as_window);
-@@ -147,6 +149,7 @@ WebAppConfirmationView::WebAppConfirmationView(
+     builder.AddChildren(
+         views::Builder<views::View>(),  // Column skip.
+         views::Builder<views::Checkbox>()
+@@ -176,6 +178,7 @@ WebAppConfirmationView::WebAppConfirmationView(
      else
        open_as_window_checkbox_->SetChecked(true);
    }
@@ -31,20 +31,22 @@ index 46d52ac59..cd28d8450 100644
  
    title_tf_->SelectAll(true);
    chrome::RecordDialogCreation(chrome::DialogIdentifier::WEB_APP_CONFIRMATION);
-@@ -178,9 +181,12 @@ bool WebAppConfirmationView::Accept() {
-       web_app_info_->open_as_window = open_as_window_radio_->GetChecked();
-       web_app_info_->enable_experimental_tabbed_window = false;
+@@ -207,11 +210,14 @@ bool WebAppConfirmationView::Accept() {
+                                              ? web_app::DisplayMode::kStandalone
+                                              : web_app::DisplayMode::kBrowser;
      }
 -  } else {
 +  }
 +#if !defined(GOOROOM_BUILD)
 +  else {
-     web_app_info_->open_as_window = open_as_window_checkbox_->GetChecked();
+     web_app_info_->user_display_mode = open_as_window_checkbox_->GetChecked()
+                                            ? web_app::DisplayMode::kStandalone
+                                            : web_app::DisplayMode::kBrowser;
    }
 +#endif
    std::move(callback_).Run(true, std::move(web_app_info_));
    return true;
  }
 -- 
-2.20.1
+2.30.2
 

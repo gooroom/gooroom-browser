@@ -1,7 +1,7 @@
-From b27f94c4559f37c917d0855172b6cbd190d6e3cd Mon Sep 17 00:00:00 2001
+From 4db13692488f3f16030435edf3beb5179c510899 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 13:45:46 +0900
-Subject: [PATCH 41/84] BugTrackingSystem
+Subject: [PATCH 41/63] BugTrackingSystem
 
 746 : Change string Chromium to Gooroom Browser on gooroom://flags page
 743 : Remove Translate option on settings language page
@@ -18,13 +18,13 @@ Subject: [PATCH 41/84] BugTrackingSystem
 205 : Remove google-cloud-login on print page
 ---
  chrome/app/resources/manpage.1.in                      | 10 +++++-----
- chrome/browser/resources/history/side_bar.html         |  5 -----
+ chrome/browser/resources/history/side_bar.html         |  7 -------
  .../ui/bookmarks/bookmark_context_menu_controller.cc   |  4 ++--
  content/browser/web_contents/web_contents_impl.cc      |  1 +
- 4 files changed, 8 insertions(+), 12 deletions(-)
+ 4 files changed, 8 insertions(+), 14 deletions(-)
 
 diff --git a/chrome/app/resources/manpage.1.in b/chrome/app/resources/manpage.1.in
-index b9c99a11f..48992ea1c 100644
+index 9828210828bd4..782167a8b1672 100644
 --- a/chrome/app/resources/manpage.1.in
 +++ b/chrome/app/resources/manpage.1.in
 @@ -3,16 +3,16 @@
@@ -47,7 +47,7 @@ index b9c99a11f..48992ea1c 100644
  .PP
  This manpage only describes invocation, environment, and arguments.
  
-@@ -168,11 +168,11 @@ Comma separated list of hosts or patterns to bypass proxying.
+@@ -144,11 +144,11 @@ Comma separated list of hosts or patterns to bypass proxying.
  
  .SH FILES
  .TP
@@ -62,26 +62,28 @@ index b9c99a11f..48992ea1c 100644
  <http://standards.freedesktop.org/basedir-spec/latest/> .)
  
 diff --git a/chrome/browser/resources/history/side_bar.html b/chrome/browser/resources/history/side_bar.html
-index dbd427138..c78ddfd03 100644
+index 2008f1be3b252..2f9920bc629d0 100644
 --- a/chrome/browser/resources/history/side_bar.html
 +++ b/chrome/browser/resources/history/side_bar.html
-@@ -104,11 +104,6 @@
+@@ -128,13 +128,6 @@
            $i18n{historyMenuItem}
            <paper-ripple></paper-ripple>
          </a>
--        <a role="menuitem" href="/syncedTabs" class="page-item"
+-        <a id="syncedTabs" role="menuitem" href="/syncedTabs"
+-            class="page-item cr-nav-menu-item"
 -            path="syncedTabs" on-click="onItemClick_">
+-          <iron-icon icon="cr:phonelink"></iron-icon>
 -          $i18n{openTabsMenuItem}
 -          <paper-ripple></paper-ripple>
 -        </a>
          <div class="separator"></div>
          <a role="menuitem" id="clear-browsing-data"
-             href="chrome://settings/clearBrowserData"
+             class="cr-nav-menu-item"
 diff --git a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
-index b863197bb..9722b30ed 100644
+index cf31ec96bd0c0..c9bb6cc0a5d55 100644
 --- a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
 +++ b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
-@@ -140,8 +140,8 @@ void BookmarkContextMenuController::BuildMenu() {
+@@ -145,8 +145,8 @@ void BookmarkContextMenuController::BuildMenu() {
              IDS_BOOKMARK_BAR_OPEN_IN_NEW_TAB);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_NEW_WINDOW,
              IDS_BOOKMARK_BAR_OPEN_IN_NEW_WINDOW);
@@ -93,17 +95,17 @@ index b863197bb..9722b30ed 100644
      int count = chrome::OpenCount(parent_window_, selection_);
      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index 2ef581730..822e235ac 100644
+index aa5a87e5fc34e..01a86cb24d3d5 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
-@@ -15,6 +15,7 @@
+@@ -16,6 +16,7 @@
  #if BUILDFLAG(ENABLE_GOOROOM)
  #include "base/path_service.h"
  #include "gooroom/base/gooroom_base.h"
 +#include "chrome/common/chrome_switches.h"
  #endif
  
- #include "base/bind.h"
+ #include "base/allocator/partition_alloc_features.h"
 -- 
-2.20.1
+2.30.2
 

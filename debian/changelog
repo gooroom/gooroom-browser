@@ -1,37 +1,614 @@
-gooroom-browser (2.10.0-1+grm2u4) stretch; urgency=medium
+gooroom-browser (3.2.0-1+grm3u1) stretch; urgency=medium
+ 
+  * Init gooroom-browser 3.2.0-1+grm3u1
 
-  * Security patch
-    - CVE-2021-30521.patch
-    - CVE-2021-30522.patch
-    - CVE-2021-30524.patch
-    - CVE-2021-30527.patch
-    - CVE-2021-30546.patch
-    - CVE-2021-30549.patch
-    - CVE-2021-30550.patch
-    - CVE-2021-30566.patch
-    - CVE-2021-30610.patch
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 29 Mar 2022 14:36:00 +0900
 
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 24 Sep 2021 11:03:00 +0900
+chromium (99.0.4844.74-1~deb11u1) bullseye-security; urgency=high
 
-gooroom-browser (2.10.0-1+grm2u3) stretch; urgency=medium
-  
-  * Bug Fix : 3514 3516 3521
+  * New upstream security release.
+    - CVE-2022-0971: Use after free in Blink Layout.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2022-0972: Use after free in Extensions.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2022-0973: Use after free in Safe Browsing.
+      Reported by avaue and Buff3tts at S.S.L.
+    - CVE-2022-0974 : Use after free in Splitscreen.
+      Reported by @ginggilBesel.
+    - CVE-2022-0975: Use after free in ANGLE.
+      Reported by SeongHwan Park (SeHwa).
+    - CVE-2022-0976: Heap buffer overflow in GPU. Reported by Omair.
+    - CVE-2022-0977: Use after free in Browser UI. Reported by Khalil Zhani.
+    - CVE-2022-0978: Use after free in ANGLE. Reported by Cassidy Kim of
+      Amber Security Lab, OPPO Mobile Telecommunications Corp. Ltd.
+    - CVE-2022-0979: Use after free in Safe Browsing. Reported by anonymous.
+    - CVE-2022-0980: Use after free in New Tab Page. Reported by Krace.
 
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 25 Aug 2021 17:31:00 +0900
+ -- Andres Salomon <dilinger@debian.org>  Wed, 16 Mar 2022 13:51:21 -0500
 
-gooroom-browser (2.10.0-1+grm2u2) stretch; urgency=medium
-  
-  * Bug Fix : 3831 3832 3833 3836 3837 3838
+chromium (99.0.4844.51-2) unstable; urgency=medium
 
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 25 Aug 2021 11:58:00 +0900
+  * Change dependency on xdg-desktop-portal-* packages to be
+    libgtk-3-0|xdg-desktop-portal-backend. Some folks don't want all
+    the dependencies of the xdg portal packages, and chromium really just
+    requires gtk unless runnning under KDE (closes: #1006267).
+  * Disable fieldtrial testing config to fix some sandboxing issues. We
+    used to do this, but the config flag was renamed (closes: #1003622).
+  * Adjust patches:
+    + system/zlib.patch: drop part of it that is unnecessary.
 
-gooroom-browser (2.10.0-1+grm2u1) stretch; urgency=medium
+ -- Andres Salomon <dilinger@debian.org>  Sun, 06 Mar 2022 12:46:55 -0500
 
-  * Init Gooroom Browser Version 2.10.0-1+grm2u1
+chromium (99.0.4844.51-1~deb11u1) bullseye-security; urgency=high
 
- -- Choi J.S. <junsungc91@gmail.com>  Thu, 12 Aug 2021 17:50:00 +0900
+  * Embed harfbuzz instead of using the system harfbuzz. Debian doesn't
+    yet package harfbuzz-subset (see #988781). Once it is packaged, we
+    can go back to using it.
+  * Build against Debian's rapidjson-dev package instead of ANGLE's
+    bundled rapidjson.
+  * Adjust patches:
+    + system/harfbuzz.patch - drop, we're using bundled harfbuzz now.
+    + upstream/quiche-include.patch - drop, merged upstream.
+    + upstream/restrict.patch - drop, merged upstream.
+    + upstream/sequence-point.patch - drop, merged upstream.
+    + disable/installer.patch - use new BUILDFLAG() macro.
+    + disable/unrar.patch - use new BUILDFLAG() macro.
+    + disable/welcome-page.patch - use new BUILDFLAG() macro.
+    + disable/widevine-cdm.cu.patch - use new BUILDFLAG() macro.
+    + disable/tests.patch - drop unnecessary parts of the patch (which ends
+      up being most of it).
+    + disable/angle-perftests.patch - drop config disabling ANGLE's rapidjson.
+    + disable/swiftshader.patch - drop removal of rapidjson dependency.
+    + system/rapidjson.patch - add to enable building w/ rapidjson-dev.
+  * New upstream stable release.
+    - CVE-2022-0789: Heap buffer overflow in ANGLE.
+      Reported by SeongHwan Park (SeHwa).
+    - CVE-2022-0790: Use after free in Cast UI. Reported by Anonymous.
+    - CVE-2022-0791: Use after free in Omnibox.
+      Reported by Zhihua Yao of KunLun Lab.
+    - CVE-2022-0792: Out of bounds read in ANGLE.
+      Reported by Jaehun Jeong(@n3sk) of Theori.
+    - CVE-2022-0793: Use after free in Views. Reported by Thomas Orlita.
+    - CVE-2022-0794: Use after free in WebShare. Reported by Khalil Zhani.
+    - CVE-2022-0795: Type Confusion in Blink Layout. Reported by 0x74960.
+    - CVE-2022-0796: Use after free in Media. Reported by Cassidy Kim
+      of Amber Security Lab, OPPO Mobile Telecommunications Corp. Ltd.
+    - CVE-2022-0797: Out of bounds memory access in Mojo.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2022-0798: Use after free in MediaStream.
+      Reported by Samet Bekmezci @sametbekmezci.
+    - CVE-2022-0799: Insufficient policy enforcement in Installer.
+      Reported by Abdelhamid Naceri (halov).
+    - CVE-2022-0800: Heap buffer overflow in Cast UI.
+      Reported by Khalil Zhani.
+    - CVE-2022-0801: Inappropriate implementation in HTML parser.
+      Reported by Michał Bentkowski of Securitum.
+    - CVE-2022-0802: Inappropriate implementation in Full screen mode.
+      Reported by Irvan Kurniawan (sourc7).
+    - CVE-2022-0803: Inappropriate implementation in Permissions.
+      Reported by Abdulla Aldoseri.
+    - CVE-2022-0804: Inappropriate implementation in Full screen mode.
+      Reported by Irvan Kurniawan (sourc7).
+    - CVE-2022-0805: Use after free in Browser Switcher.
+      Reported by raven at KunLun Lab.
+    - CVE-2022-0806: Data leak in Canvas. Reported by Paril.
+    - CVE-2022-0807: Inappropriate implementation in Autofill.
+      Reported by Alesandro Ortiz.
+    - CVE-2022-0808: Use after free in Chrome OS Shell.
+      Reported by @ginggilBesel.
+    - CVE-2022-0809: Out of bounds memory access in WebXR.
+      Reported by @uwu7586.
 
-chromium (90.0.4430.212-1~deb10u1) buster-security; urgency=medium
+ -- Andres Salomon <dilinger@debian.org>  Thu, 03 Mar 2022 00:14:50 -0500
+
+chromium (98.0.4758.102-1~deb11u1) bullseye-security; urgency=high
+
+  * Enable pipewire support in webrtc (closes: #954824).
+  * Enable optimize_webui. This UI speed improvement was originally
+    disabled due to nodejs deps, but recent upstream changes makes those
+    deps necessary either way (closes: #970571).
+  * Switch to using bundled node modules, to deal with (frequent) build
+    failures (closes: #1005466).
+  * Manually depend on xdg-desktop-portal-* packages. The file saving
+    dialog needs a UI toolkit (closes: #1005230).
+  * New upstream security release.
+    - CVE-2022-0603: Use after free in File Manager.
+      Reported by Chaoyuan Peng (@ret2happy).
+    - CVE-2022-0604: Heap buffer overflow in Tab Groups. Reported by Krace.
+    - CVE-2022-0605: Use after free in Webstore API.
+      Reported by Thomas Orlita.
+    - CVE-2022-0606: Use after free in ANGLE.
+    - CVE-2022-0606: Use after free in ANGLE. Reported by Cassidy Kim of
+      Amber Security Lab, OPPO Mobile Telecommunications Corp. Ltd.
+    - CVE-2022-0607: Use after free in GPU. Reported by 0x74960.
+    - CVE-2022-0608: Integer overflow in Mojo.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2022-0609: Use after free in Animation. Reported by
+      Adam Weidemann and Clément Lecigne of Google's Threat Analysis Group.
+    - CVE-2022-0610: Inappropriate implementation in Gamepad API.
+      Reported by Anonymous.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 15 Feb 2022 20:15:03 -0500
+
+chromium (98.0.4758.80-1~deb11u1) bullseye-security; urgency=high
+
+  * Update manpage for package rename and everyone moving to https.
+  * Drop libnpsr4-dev versioned dep.
+  * Drop a bunch of patches (changes shouldn't affect chromium users).
+    See https://salsa.debian.org/chromium-team/chromium/-/commits/master/
+    for the dropped patches.
+  * New upstream stable release.
+    - CVE-2022-0452: Use after free in Safe Browsing.
+      Reported by avaue at S.S.L.
+    - CVE-2022-0453: Use after free in Reader Mode.
+      Reported by Rong Jian of VRI.
+    - CVE-2022-0454: Heap buffer overflow in ANGLE.
+      Reported by Seong-Hwan Park (SeHwa).
+    - CVE-2022-0455: Inappropriate implementation in Full Screen Mode.
+      Reported by Irvan Kurniawan (sourc7).
+    - CVE-2022-0456: Use after free in Web Search.
+      Reported by Zhihua Yao of KunLun Lab.
+    - CVE-2022-0457: Type Confusion in V8. Reported by rax of the Group0x58.
+    - CVE-2022-0458: Use after free in Thumbnail Tab Strip.
+      Reported by Anonymous.
+    - CVE-2022-0459: Use after free in Screen Capture.
+      Reported by raven (@raid_akame).
+    - CVE-2022-0460: Use after free in Window Dialog. Reported by 0x74960.
+    - CVE-2022-0461: Policy bypass in COOP. Reported by NDevTK.
+    - CVE-2022-0462: Inappropriate implementation in Scroll.
+      Reported by Youssef Sammouda.
+    - CVE-2022-0463: Use after free in Accessibility.
+      Reported by Zhihua Yao of KunLun Lab.
+    - CVE-2022-0464: Use after free in Accessibility.
+      Reported by Zhihua Yao of KunLun Lab.
+    - CVE-2022-0465: Use after free in Extensions.
+      Reported by Samet Bekmezci @sametbekmezci.
+    - CVE-2022-0466: Inappropriate implementation in Extensions Platform.
+      Reported by David Erceg.
+    - CVE-2022-0467: Inappropriate implementation in Pointer Lock.
+      Reported by Alesandro Ortiz.
+    - CVE-2022-0468: Use after free in Payments. Reported by Krace.
+    - CVE-2022-0469: Use after free in Cast. Reported by Thomas Orlita.
+    - CVE-2022-0470: Out of bounds memory access in V8. Reported by Looben Yang.
+
+ -- Andres Salomon <dilinger@debian.org>  Sat, 05 Feb 2022 20:18:00 -0500
+
+chromium (97.0.4692.99-1~deb11u2) bullseye-security; urgency=high
+
+  * Revert the terser build-dep for bullseye.
+
+ -- Andres Salomon <dilinger@debian.org>  Sat, 22 Jan 2022 16:46:08 -0500
+
+chromium (97.0.4692.99-1~deb11u1) bullseye-security; urgency=high
+
+  * Add myself as an uploader.
+  * Build-dep on terser | uglifyjs.terser (closes: #1001036).
+  * Revert automatic wayland detection for now (closes: #1003689).
+    We'll try again in chromium v98 or v99.
+  * New upstream stable release.
+    - CVE-2022-0289: Use after free in Safe browsing.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2022-0290: Use after free in Site isolation. Reported by
+      Brendon Tiszka and Sergei Glazunov of Google Project Zero.
+    - CVE-2022-0291: Inappropriate implementation in Storage.
+      Reported by Anonymous.
+    - CVE-2022-0292: Inappropriate implementation in Fenced Frames.
+      Reported by Brendon Tiszka.
+    - CVE-2022-0293: Use after free in Web packaging. Reported by
+      Rong Jian and Guang Gong of 360 Alpha Lab.
+    - CVE-2022-0294: Inappropriate implementation in Push messaging.
+      Reported by Rong Jian and Guang Gong of 360 Alpha Lab.
+    - CVE-2022-0295: Use after free in Omnibox. Reported by Weipeng Jiang
+      (@Krace) and Guang Gong of 360 Vulnerability Research Institute.
+    - CVE-2022-0296: Use after free in Printing. Reported by koocola(@alo_cook)
+      and Guang Gong of 360 Vulnerability Research Institute.
+    - CVE-2022-0297: Use after free in Vulkan. Reported by Cassidy Kim of
+      Amber Security Lab, OPPO Mobile Telecommunications Corp. Ltd.
+    - CVE-2022-0298: Use after free in Scheduling.
+      Reported by Yangkang (@dnpushme) of 360 ATA.
+    - CVE-2022-0300: Use after free in Text Input Method Editor. Reported by
+      Rong Jian and Guang Gong of 360 Alpha Lab.
+    - CVE-2022-0301: Heap buffer overflow in DevTools. Reported by
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research.
+    - CVE-2022-0302: Use after free in Omnibox. Reported by Weipeng Jiang
+      (@Krace) and Guang Gong of 360 Vulnerability Research Institute.
+    - CVE-2022-0303: Race in GPU Watchdog.
+      Reported by Yiğit Can YILMAZ (@yilmazcanyigit).
+    - CVE-2022-0304: Use after free in Bookmarks. Reported by Rong Jian and
+      Guang Gong of 360 Alpha Lab.
+    - CVE-2022-0305: Inappropriate implementation in Service Worker API.
+      Reported by @uwu7586.
+    - CVE-2022-0306: Heap buffer overflow in PDFium.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2022-0307: Use after free in Optimization Guide.
+      Reported by Samet Bekmezci @sametbekmezci.
+    - CVE-2022-0308: Use after free in Data Transfer.
+      Reported by @ginggilBesel.
+    - CVE-2022-0309: Inappropriate implementation in Autofill.
+      Reported by Alesandro Ortiz.
+    - CVE-2022-0310: Heap buffer overflow in Task Manager.
+      Reported by Samet Bekmezci @sametbekmezci.
+    - CVE-2022-0311: Heap buffer overflow in Task Manager.
+      Reported by Samet Bekmezci @sametbekmezci.
+
+ -- Andres Salomon <dilinger@debian.org>  Thu, 20 Jan 2022 22:30:05 -0500
+
+chromium (97.0.4692.71-0.1~deb11u1) bullseye-security; urgency=high
+
+  * Non-maintainer upload.
+  * Stop building chromium's bunded gn and instead build-dep on generate-ninja.
+  * Drop numerous patches related to gcc building, since we just build w/ clang.
+  * Use python3 as default instead of relying on python2
+    (closes: #942962, #996375).
+  * Enable the ozone backend in the build (closes: #955540).
+  * Automatically detect & enable Wayland support when launching chromium
+    (closes: #861796).
+  * Rename crashpad_handler to chrome_crashpad_handler.
+  * No longer hardcode desktop GL implementation as default - it causes
+    the chromium compositor's draw buffer to fill up & crash on my system.
+  * Enable official builds.
+  * Switch to using bundled ffmpeg instead of debian's ffmpeg.
+  * New upstream stable release (closes: #995212).
+    - CVE-2022-0096: Use after free in Storage. Reported by Yangkang
+      (@dnpushme) of 360 ATA
+    - CVE-2022-0097: Inappropriate implementation in DevTools. Reported by
+      David Erceg
+    - CVE-2022-0098: Use after free in Screen Capture. Reported by
+      @ginggilBesel
+    - CVE-2022-0099: Use after free in Sign-in. Reported by Rox
+    - CVE-2022-0100: Heap buffer overflow in Media streams API. Reported by
+      Cassidy Kim of Amber Security Lab, OPPO Mobile Telecommunications
+      Corp. Ltd.
+    - CVE-2022-0101: Heap buffer overflow in Bookmarks. Reported by raven
+      (@raid_akame)
+    - CVE-2022-0102: Type Confusion in V8. Reported by Brendon Tiszka
+    - CVE-2022-0103: Use after free in SwiftShader. Reported by Abraruddin
+      Khan and Omair
+    - CVE-2022-0104: Heap buffer overflow in ANGLE. Reported by Abraruddin
+      Khan and Omair
+    - CVE-2022-0105: Use after free in PDF. Reported by Cassidy Kim of Amber
+      Security Lab, OPPO Mobile Telecommunications Corp. Ltd.
+    - CVE-2022-0106: Use after free in Autofill. Reported by Khalil Zhani
+    - CVE-2022-0107: Use after free in File Manager API. Reported by raven
+      (@raid_akame)
+    - CVE-2022-0108: Inappropriate implementation in Navigation. Reported by
+      Luan Herrera (@lbherrera_)
+    - CVE-2022-0109: Inappropriate implementation in Autofill. Reported by
+      Young Min Kim (@ylemkimon), CompSec Lab at Seoul National University
+    - CVE-2022-0110: Incorrect security UI in Autofill. Reported by
+      Alesandro Ortiz
+    - CVE-2022-0111: Inappropriate implementation in Navigation. Reported by
+      garygreen
+    - CVE-2022-0112: Incorrect security UI in Browser UI. Reported by Thomas
+      Orlita
+    - CVE-2022-0113: Inappropriate implementation in Blink. Reported by Luan
+      Herrera (@lbherrera_)
+    - CVE-2022-0114: Out of bounds memory access in Web Serial. Reported by
+      Looben Yang
+    - CVE-2022-0115: Uninitialized Use in File API. Reported by Mark Brand
+      of Google Project Zero
+    - CVE-2022-0116: Inappropriate implementation in Compositing. Reported
+      by Irvan Kurniawan (sourc7)
+    - CVE-2022-0117: Policy bypass in Service Workers. Reported by
+      Dongsung Kim (@kid1ng)
+    - CVE-2022-0118: Inappropriate implementation in WebShare. Reported by
+      Alesandro Ortiz
+    - CVE-2022-0120: Inappropriate implementation in Passwords. Reported by
+      CHAKRAVARTHI (Ruler96)
+    (96.0.4664.110)
+    - CVE-2021-4098: Insufficient data validation in Mojo. Reported by
+      Sergei Glazunov of Google Project Zero
+    - CVE-2021-4099: Use after free in Swiftshader. Reported by Aki Helin
+      of Solita
+    - CVE-2021-4100: Object lifecycle issue in ANGLE. Reported by Aki Helin
+      of Solita
+    - CVE-2021-4101: Heap buffer overflow in Swiftshader. Reported by
+      Abraruddin Khan and Omair
+    - CVE-2021-4102: Use after free in V8. Reported by Anonymous
+    (96.0.4664.93)
+    - CVE-2021-4052: Use after free in web apps. Reported by Wei Yuan of
+      MoyunSec VLab
+    - CVE-2021-4053: Use after free in UI. Reported by Rox
+    - CVE-2021-4079: Out of bounds write in WebRTC. Reported by Brendon
+      Tiszka
+    - CVE-2021-4054: Incorrect security UI in autofill. Reported by
+      Alesandro Ortiz
+    - CVE-2021-4078: Type confusion in V8. Reported by Nan
+      Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2021-4055: Heap buffer overflow in extensions. Reported by Chen
+      Rong
+    - CVE-2021-4056: Type Confusion in loader. Reported by @__R0ng of 360
+      Alpha Lab
+    - CVE-2021-4057: Use after free in file API. Reported by Sergei
+      Glazunov of Google Project Zero
+    - CVE-2021-4058: Heap buffer overflow in ANGLE. Reported by Abraruddin
+      Khan and Omair
+    - CVE-2021-4059: Insufficient data validation in loader. Reported by
+      Luan Herrera (@lbherrera_)
+    - CVE-2021-4061: Type Confusion in V8. Reported by Paolo Severini
+    - CVE-2021-4062: Heap buffer overflow in BFCache. Reported by Leecraso
+      and Guang Gong of 360 Alpha Lab
+    - CVE-2021-4063: Use after free in developer tools. Reported by
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2021-4064: Use after free in screen capture. Reported by
+      @ginggilBesel
+    - CVE-2021-4065: Use after free in autofill. Reported by 5n1p3r0010
+      from Topsec ChiXiao Lab
+    - CVE-2021-4066: Integer underflow in ANGLE. Reported by Jaehun
+      Jeong(@n3sk) of Theori
+    - CVE-2021-4067: Use after free in window manager. Reported by
+      @ginggilBesel
+    - CVE-2021-4068: Insufficient validation of untrusted input in new tab
+      page. Reported by NDevTK
+    (96.0.4664.45)
+    - CVE-2021-38008: Use after free in media. Reported by Marcin Towalski
+    - CVE-2021-38009: Inappropriate implementation in cache.
+      Reported by Luan Herrera (@lbherrera_)
+    - CVE-2021-38006: Use after free in storage foundation.
+      Reported by Sergei Glazunov of Google Project Zero
+    - CVE-2021-38007: Type Confusion in V8. Reported by Polaris Feng and
+      SGFvamll at Singular Security Lab
+    - CVE-2021-38005: Use after free in loader.
+      Reported by Sergei Glazunov of Google Project Zero
+    - CVE-2021-38010: Inappropriate implementation in service workers.
+      Reported by Sergei Glazunov of Google Project Zero
+    - CVE-2021-38011: Use after free in storage foundation.
+      Reported by Sergei Glazunov of Google Project Zero
+    - CVE-2021-38012: Type Confusion in V8. Reported by Yonghwi Jin (@jinmo123)
+    - CVE-2021-38013: Heap buffer overflow in fingerprint recognition.
+      Reported by raven (@raid_akame)
+    - CVE-2021-38014: Out of bounds write in Swiftshader.
+      Reported by Atte Kettunen of OUSPG
+    - CVE-2021-38015: Inappropriate implementation in input.
+      Reported by David Erceg
+    - CVE-2021-38016: Insufficient policy enforcement in background fetch.
+      Reported by Maurice Dauer
+    - CVE-2021-38017: Insufficient policy enforcement in iframe sandbox.
+      Reported by NDevTK
+    - CVE-2021-38018: Inappropriate implementation in navigation.
+      Reported by Alesandro Ortiz
+    - CVE-2021-38019: Insufficient policy enforcement in CORS.
+      Reported by Maurice Dauer
+    - CVE-2021-38020: Insufficient policy enforcement in contacts picker.
+      Reported by Luan Herrera (@lbherrera_)
+    - CVE-2021-38021: Inappropriate implementation in referrer.
+      Reported by Prakash (@1lastBr3ath)
+    - CVE-2021-38022: Inappropriate implementation in WebAuthentication.
+      Reported by Michal Kepkowski
+    (95.0.4638.69)
+    - CVE-2021-37997: Use after free in Sign-In. Reported by Wei Yuan of
+      MoyunSec VLab
+    - CVE-2021-37998: Use after free in Garbage Collection. Reported by
+      Cassidy Kim of Amber Security Lab, OPPO Mobile Telecommunications
+      Corp. Ltd.
+    - CVE-2021-37999: Insufficient data validation in New Tab Page.
+      Reported by Ashish Arun Dhone
+    - CVE-2021-38000: Insufficient validation of untrusted input in Intents.
+      Reported by Clement Lecigne, Neel Mehta, and Maddie Stone of Google
+      Threat Analysis Group
+    - CVE-2021-38001: Type Confusion in V8. Reported by @s0rrymybad of
+      Kunlun Lab via Tianfu Cup
+    - CVE-2021-38002: Use after free in Web Transport. Reported by @__R0ng
+      of 360 Alpha Lab, 漏洞研究院青训队 via Tianfu Cup
+    - CVE-2021-38003: Inappropriate implementation in V8. Reported by Clément
+      Lecigne from Google TAG and Samuel Groß from Google Project Zero
+    - CVE-2021-38004: Insufficient policy enforcement in Autofill. Reported
+      by Mark Amery
+    (95.0.4638.54)
+    - CVE-2021-37981: Heap buffer overflow in Skia. Reported by Yangkang
+      (@dnpushme) of 360 ATA
+    - CVE-2021-37982: Use after free in Incognito. Reported by Weipeng Jiang
+      (@Krace) from Codesafe Team of Legendsec at Qi'anxin Group
+    - CVE-2021-37983: Use after free in Dev Tools. Reported by Zhihua Yao
+      of KunLun Lab
+    - CVE-2021-37984: Heap buffer overflow in PDFium. Reported by Antti
+      Levomäki, Joonas Pihlaja and Christian Jalio from Forcepoint
+    - CVE-2021-37985: Use after free in V8. Reported by Yangkang (@dnpushme)
+      of 360 ATA
+    - CVE-2021-37986: Heap buffer overflow in Settings.
+      Reported by raven (@raid_akame)
+    - CVE-2021-37987: Use after free in Network APIs. Reported by
+      Yangkang (@dnpushme) of 360 ATA
+    - CVE-2021-37988: Use after free in Profiles. Reported by raven
+     (@raid_akame)
+    - CVE-2021-37989: Inappropriate implementation in Blink.
+      Reported by Matt Dyas, Ankur Sundara
+    - CVE-2021-37990: Inappropriate implementation in WebView. Reported by
+      Kareem Selim of CyShield
+    - CVE-2021-37991: Race in V8. Reported by Samuel Groß of Google Project
+      Zero
+    - CVE-2021-37992: Out of bounds read in WebAudio. Reported by
+      sunburst@Ant Security Light-Year Lab
+    - CVE-2021-37993: Use after free in PDF Accessibility. Reported by Cassidy
+      Kim of Amber Security Lab, OPPO Mobile Telecommunications Corp. Ltd.
+    - CVE-2021-37996: Insufficient validation of untrusted input in Downloads.
+      Reported by Anonymous
+    - CVE-2021-37994: Inappropriate implementation in iFrame Sandbox.
+      Reported by David Erceg
+    - CVE-2021-37995: Inappropriate implementation in WebApp Installer.
+      Reported by Terence Eden
+    (94.0.4606.81)
+    - CVE-2021-37977: Use after free in Garbage Collection. Reported by
+      Anonymous
+    - CVE-2021-37978: Heap buffer overflow in Blink. Reported by Yangkang
+      (@dnpushme) of 360 ATA
+    - CVE-2021-37979: Heap buffer overflow in WebRTC. Reported by Marcin
+      Towalski of Cisco Talos
+    - CVE-2021-37980: Inappropriate implementation in Sandbox. Reported by
+      Yonghwi Jin (@jinmo123) of Theori
+    (94.0.4606.71)
+    - CVE-2021-37974: Use after free in Safe Browsing. Reported by Weipeng
+      Jiang (@Krace) from Codesafe Team of Legendsec at Qi'anxin Group
+    - CVE-2021-37975: Use after free in V8. Reported by Anonymous
+    - CVE-2021-37976: Information leak in core. Reported by Clément Lecigne
+      from Google TAG, with technical assistance from Sergei Glazunov and
+      Mark Brand from Google Project Zero
+    (94.0.4606.61)
+    - CVE-2021-37973: Use after free in Portals. Reported by Clément Lecigne
+      from Google TAG, with technical assistance from Sergei Glazunov and
+      Mark Brand from Google Project Zero
+    (94.0.4606.54)
+    - CVE-2021-37956 Use after free in Offline use. Reported by Huyna at
+      Viettel Cyber Security
+    - CVE-2021-37957: Use after free in WebGPU. Reported by Looben Yang
+    - CVE-2021-37958: Inappropriate implementation in Navigation. Reported by
+      James Lee (@Windowsrcer)
+    - CVE-2021-37959: Use after free in Task Manager. Reported by raven
+      (@raid_akame)
+    - CVE-2021-37961: Use after free in Tab Strip. Reported by Khalil Zhani
+    - CVE-2021-37962: Use after free in Performance Manager. Reported by Sri
+    - CVE-2021-37963: Side-channel information leakage in DevTools. Reported
+      by Daniel Genkin and Ayush Agarwal, University of Michigan, Eyal Ronen
+      and Shaked Yehezkel, Tel Aviv University, Sioli O’Connell, University of
+      Adelaide, and Jason Kim, Georgia Institute of Technology
+    - CVE-2021-37964: Inappropriate implementation in ChromeOS Networking.
+      Reported by Hugo Hue and Sze Yiu Chau of the Chinese University of Hong
+      Kong
+    - CVE-2021-37965: Inappropriate implementation in Background Fetch API.
+      Reported by Maurice Dauer
+    - CVE-2021-37966: Inappropriate implementation in Compositing. Reported by
+      Mohit Raj (shadow2639)
+    - CVE-2021-37967: Inappropriate implementation in Background Fetch API.
+      Reported by SorryMybad (@S0rryMybad) of Kunlun Lab
+    - CVE-2021-37968: Inappropriate implementation in Background Fetch API.
+      Reported by Maurice Dauer
+    - CVE-2021-37969: Inappropriate implementation in Google Updater. Reported
+      by Abdelhamid Naceri (halov)
+    - CVE-2021-37970: Use after free in File System API. Reported by
+      SorryMybad (@S0rryMybad) of Kunlun Lab
+    - CVE-2021-37971: Incorrect security UI in Web Browser UI. Reported by
+      Rayyan Bijoora
+    - CVE-2021-37972: Out of bounds read in libjpeg-turbo. Reported by Xu
+      Hanyu and Lu Yutao from Panguite-Forensics-Lab of Qianxin
+
+ -- Andres Salomon <dilinger@debian.org>  Thu, 13 Jan 2022 18:30:21 -0500
+
+chromium (93.0.4577.82-1) unstable; urgency=medium
+
+  * New upstream stable release.
+    - CVE-2021-30625: Use after free in Selection API. Reported by Marcin
+      Towalski of Cisco Talos
+    - CVE-2021-30626: Out of bounds memory access in ANGLE. Reported by
+      Jeonghoon Shin of Theori
+    - CVE-2021-30627: Type Confusion in Blink layout. Reported by Aki Helin of
+      OUSPG
+    - CVE-2021-30628: Stack buffer overflow in ANGLE. Reported by Jaehun Jeong
+      @n3sk of Theori
+    - CVE-2021-30629: Use after free in Permissions. Reported by Weipeng Jiang
+      @Krace from Codesafe Team of Legendsec at Qi'anxin Group
+    - CVE-2021-30630: Inappropriate implementation in Blink . Reported by
+      SorryMybad @S0rryMybad of Kunlun Lab
+    - CVE-2021-30631: Type Confusion in Blink layout. Reported by Atte Kettunen
+      of OUSPG
+    - CVE-2021-30632: Out of bounds write in V8. Reported by Anonymous
+    - CVE-2021-30633: Use after free in Indexed DB API. Reported by Anonymous
+    - CVE-2021-30606: Use after free in Blink. Reported by Nan Wang
+      @eternalsakura13 and koocola @alo_cook of 360 Alpha Lab
+    - CVE-2021-30607: Use after free in Permissions. Reported by Weipeng Jiang
+      @Krace from Codesafe Team of Legendsec at Qi'anxin Group
+    - CVE-2021-30608: Use after free in Web Share. Reported by Huyna at Viettel
+      Cyber Security
+    - CVE-2021-30609: Use after free in Sign-In. Reported by raven @raid_akame
+    - CVE-2021-30610: Use after free in Extensions API. Reported by Igor
+      Bukanov from Vivaldi
+    - CVE-2021-30611: Use after free in WebRTC. Reported by Nan Wang
+      @eternalsakura13 and koocola @alo_cook of 360 Alpha Lab
+    - CVE-2021-30612: Use after free in WebRTC. Reported by Nan Wang
+      @eternalsakura13 and koocola @alo_cook of 360 Alpha Lab
+    - CVE-2021-30613: Use after free in Base internals. Reported by Yangkang
+      @dnpushme of 360 ATA
+    - CVE-2021-30614: Heap buffer overflow in TabStrip. Reported by Huinian
+      Yang @vmth6 of Amber Security Lab, OPPO Mobile Telecommunications Corp.
+      Ltd.
+    - CVE-2021-30615: Cross-origin data leak in Navigation. Reported by NDevTK
+    - CVE-2021-30616: Use after free in Media. Reported by Anonymous
+    - CVE-2021-30617: Policy bypass in Blink. Reported by NDevTK
+    - CVE-2021-30618: Inappropriate implementation in DevTools. Reported by
+      @DanAmodio and @mattaustin from Contrast Security
+    - CVE-2021-30619: UI Spoofing in Autofill. Reported by Alesandro Ortiz
+    - CVE-2021-30620: Insufficient policy enforcement in Blink. Reported by Jun
+      Kokatsu, Microsoft Browser Vulnerability Research
+    - CVE-2021-30621: UI Spoofing in Autofill. Reported by Abdulrahman
+      Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2021-30622: Use after free in WebApp Installs. Reported by Jun
+      Kokatsu, Microsoft Browser Vulnerability Research
+    - CVE-2021-30623: Use after free in Bookmarks. Reported by Leecraso and
+      Guang Gong of 360 Alpha Lab
+    - CVE-2021-30624: Use after free in Autofill. Reported by Wei Yuan of
+      MoyunSec VLab
+    - CVE-2021-30598: Type Confusion in V8. Reported by Manfred Paul
+    - CVE-2021-30599: Type Confusion in V8. Reported by Manfred Paul
+    - CVE-2021-30600: Use after free in Printing. Reported by Leecraso and
+      Guang Gong of 360 Alpha Lab
+    - CVE-2021-30601: Use after free in Extensions API. Reported by koocola
+      @alo_cook and Nan Wang @eternalsakura13 of 360 Alpha Lab
+    - CVE-2021-30602: Use after free in WebRTC. Reported by Marcin Towalski of
+      Cisco Talos
+    - CVE-2021-30603: Race in WebAudio. Reported by Sergei Glazunov of Google
+      Project Zero
+    - CVE-2021-30604: Use after free in ANGLE. Reported by Seong-Hwan Park
+      SeHwa of SecunologyLab
+    - CVE-2021-30554: Use after free in WebGL. Reported by anonymous
+    - CVE-2021-30555: Use after free in Sharing. Reported by David Erceg
+    - CVE-2021-30556: Use after free in WebAudio. Reported by Yangkang
+      @dnpushme of 360 ATA
+    - CVE-2021-30557: Use after free in TabGroups. Reported by David Erceg
+    - CVE-2021-30544: Use after free in BFCache. Reported by Rong Jian and
+      Guang Gong of 360 Alpha Lab
+    - CVE-2021-30545: Use after free in Extensions. Reported by kkwon with
+      everpall and kkomdal
+    - CVE-2021-30546: Use after free in Autofill. Reported by Abdulrahman
+      Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2021-30547: Out of bounds write in ANGLE. Reported by Seong-Hwan Park
+      SeHwa of SecunologyLab
+    - CVE-2021-30548: Use after free in Loader. Reported by Yangkang @dnpushme
+      & Wanglu of Qihoo360 Qex Team
+    - CVE-2021-30549: Use after free in Spell check. Reported by David Erceg
+    - CVE-2021-30550: Use after free in Accessibility. Reported by David Erceg
+    - CVE-2021-30551: Type Confusion in V8. Reported by Clement Lecigne of
+      Google's Threat Analysis Group and Sergei Glazunov of Google Project Zero
+    - CVE-2021-30552: Use after free in Extensions. Reported by David Erceg
+    - CVE-2021-30553: Use after free in Network service. Reported by Anonymous
+    - CVE-2021-30521: Heap buffer overflow in Autofill. Reported by ZhanJia
+      Song
+    - CVE-2021-30522: Use after free in WebAudio. Reported by Piotr Bania of
+      Cisco Talos
+    - CVE-2021-30523: Use after free in WebRTC. Reported by Tolyan Korniltsev
+    - CVE-2021-30524: Use after free in TabStrip. Reported by David Erceg
+    - CVE-2021-30525: Use after free in TabGroups. Reported by David Erceg
+    - CVE-2021-30526: Out of bounds write in TabStrip. Reported by David Erceg
+    - CVE-2021-30527: Use after free in WebUI. Reported by David Erceg
+    - CVE-2021-30528: Use after free in WebAuthentication. Reported by Man Yue
+      Mo of GitHub Security Lab
+    - CVE-2021-30529: Use after free in Bookmarks. Reported by koocola
+      @alo_cook and Nan Wang @eternalsakura13 of 360 Alpha Lab
+    - CVE-2021-30530: Out of bounds memory access in WebAudio. Reported by
+      kkwon
+    - CVE-2021-30531: Insufficient policy enforcement in Content Security
+      Policy. Reported by Philip Papurt
+    - CVE-2021-30532: Insufficient policy enforcement in Content Security
+      Policy. Reported by Philip Papurt
+    - CVE-2021-30533: Insufficient policy enforcement in PopupBlocker. Reported
+      by Eliya Stein
+    - CVE-2021-30534: Insufficient policy enforcement in iFrameSandbox.
+      Reported by Alesandro Ortiz
+    - CVE-2021-30535: Double free in ICU. Reported by nocma, leogan, cheneyxu
+      of WeChat Open Platform Security Team
+    - CVE-2021-21212: Insufficient data validation in networking. Reported by
+      Hugo Hue and Sze Yiu Chau of the Chinese University of Hong Kong
+    - CVE-2021-30536: Out of bounds read in V8. Reported by Chris Salls @salls
+    - CVE-2021-30537: Insufficient policy enforcement in cookies. Reported by
+      Jun Kokatsu @shhnjk
+    - CVE-2021-30538: Insufficient policy enforcement in content security
+      policy. Reported by Tianze Ding @D1iv3 of Tencent Security Xuanwu Lab
+    - CVE-2021-30539: Insufficient policy enforcement in content security
+      policy. Reported by unnamed researcher
+    - CVE-2021-30540: Incorrect security UI in payments. Reported by
+      @retsew0x01
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Thu, 16 Sep 2021 17:48:15 +0200
+
+chromium (90.0.4430.212-1) unstable; urgency=medium
 
   * New upstream security release.
     - CVE-2021-30506: Incorrect security UI in Web App Installs. Reported by
@@ -55,117 +632,166 @@ chromium (90.0.4430.212-1~deb10u1) buster-security; urgency=medium
     - CVE-2021-30519: Use after free in Payments. Reported by asnine
     - CVE-2021-30520: Use after free in Tab Strip. Reported by Khalil Zhani
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 15 May 2021 20:39:40 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 13 May 2021 02:50:43 +0000
 
-chromium (90.0.4430.93-1~deb10u1) buster-security; urgency=medium
+chromium (90.0.4430.93-1) unstable; urgency=medium
 
-  * New upstream security release.
+  * New upstream security release (closes: #987715).
     - CVE-2021-21227: Insufficient data validation in V8. Reported by Gengming
-      Liu
+      Liu of Singular Security Lab
+    - CVE-2021-21232: Use after free in Dev Tools. Reported by Abdulrahman
+      Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2021-21233: Heap buffer overflow in ANGLE. Reported by Omair
     - CVE-2021-21228: Insufficient policy enforcement in extensions. Reported
       by Rob Wu
     - CVE-2021-21229: Incorrect security UI in downloads. Reported by Mohit Raj
+      shadow2639
     - CVE-2021-21230: Type Confusion in V8. Reported by Manfred Paul
     - CVE-2021-21231: Insufficient data validation in V8. Reported by Sergei
-      Glazunov
-    - CVE-2021-21232: Use after free in Dev Tools. Reported by Abdulrahman
-      Alqabandi
-    - CVE-2021-21233: Heap buffer overflow in ANGLE. Reported by Omair
+      Glazunov of Google Project Zero
+  * Disable libaom on arm to potentially fix FTBFS on armhf
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 01 May 2021 09:35:19 +0000
+ -- Michel Le Bihan <michel@lebihan.pl>  Wed, 28 Apr 2021 12:15:32 +0200
 
-chromium (90.0.4430.85-1~deb10u1) buster-security; urgency=medium
+chromium (90.0.4430.85-1) unstable; urgency=medium
 
-  * New upstream stable release.
+  * New upstream security release (closes: #987358).
+    - CVE-2021-21222: Heap buffer overflow in V8. Reported by Guang Gong of
+      Alpha Lab, Qihoo 360
+    - CVE-2021-21223: Integer overflow in Mojo. Reported by Guang Gong of Alpha
+      Lab, Qihoo 360
+    - CVE-2021-21224: Type Confusion in V8. Reported by Jose Martinez tr0y4
+      from VerSprite Inc.
+    - CVE-2021-21225: Out of bounds memory access in V8. Reported by Brendon
+      Tiszka @btiszka supporting the EFF
+    - CVE-2021-21226: Use after free in navigation. Reported by Brendon Tiszka
+      @btiszka supporting the EFF
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Thu, 22 Apr 2021 13:01:41 +0200
+
+chromium (90.0.4430.72-1) unstable; urgency=medium
+
+  * New upstream security release (closes: #987053).
     - CVE-2021-21201: Use after free in permissions. Reported by Gengming Liu
-      and Jianyu Chen
+      and Jianyu Chen when working at Tencent KeenLab
     - CVE-2021-21202: Use after free in extensions. Reported by David Erceg
     - CVE-2021-21203: Use after free in Blink. Reported by asnine
     - CVE-2021-21204: Use after free in Blink. Reported by Chelse Tsai-Simek,
-      Jeanette Ulloa, and Emily Voigtlander
+      Jeanette Ulloa, and Emily Voigtlander of Seesaw
     - CVE-2021-21205: Insufficient policy enforcement in navigation. Reported
-      by Alison Huffman
+      by Alison Huffman, Microsoft Browser Vulnerability Research
     - CVE-2021-21221: Insufficient validation of untrusted input in Mojo.
-      Reported by Guang Gong
-    - CVE-2021-21207: Use after free in IndexedDB. Reported by koocola and
-      Nan Wang
+      Reported by Guang Gong of Alpha Lab, Qihoo 360
+    - CVE-2021-21207: Use after free in IndexedDB. Reported by koocola
+      @alo_cook and Nan Wang @eternalsakura13 of 360 Alpha Lab
     - CVE-2021-21208: Insufficient data validation in QR scanner. Reported by
-      Ahmed Elsobky
+      Ahmed Elsobky @0xsobky
     - CVE-2021-21209: Inappropriate implementation in storage. Reported by Tom
-      Van Goethem
+      Van Goethem @tomvangoethem
     - CVE-2021-21210: Inappropriate implementation in Network. Reported by
       @bananabr
     - CVE-2021-21211: Inappropriate implementation in Navigation. Reported by
-      Akash Labade
+      Akash Labade m0ns7er
     - CVE-2021-21212: Incorrect security UI in Network Config UI. Reported by
-      Hugo Hue and Sze Yiu Chau
+      Hugo Hue and Sze Yiu Chau of the Chinese University of Hong Kong
     - CVE-2021-21213: Use after free in WebMIDI. Reported by raven
+      @raid_akame
     - CVE-2021-21214: Use after free in Network API. Reported by Anonymous
     - CVE-2021-21215: Inappropriate implementation in Autofill. Reported by
-      Abdulrahman Alqabandi
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research
     - CVE-2021-21216: Inappropriate implementation in Autofill. Reported by
-      Abdulrahman Alqabandi
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research
     - CVE-2021-21217: Uninitialized Use in PDFium. Reported by Zhou Aiting
+      @zhouat1 of Qihoo 360 Vulcan Team
     - CVE-2021-21218: Uninitialized Use in PDFium. Reported by Zhou Aiting
+      @zhouat1 of Qihoo 360 Vulcan Team
     - CVE-2021-21219: Uninitialized Use in PDFium. Reported by Zhou Aiting
-    - CVE-2021-21222: Heap buffer overflow in V8. Reported by Guang Gong
-    - CVE-2021-21223: Integer overflow in Mojo. Reported by Guang Gong
-    - CVE-2021-21224: Type Confusion in V8. Reported by Jose Martinez
-    - CVE-2021-21225: Out of bounds memory access in V8. Reported by Brendon
-      Tiszka
-    - CVE-2021-21226: Use after free in navigation. Reported by Brendon Tiszka
+      @zhouat1 of Qihoo 360 Vulcan Team
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 24 Apr 2021 20:09:16 +0000
+ -- Michel Le Bihan <michel@lebihan.pl>  Mon, 19 Apr 2021 19:13:47 +0200
 
-chromium (89.0.4389.114-1~deb10u1) buster-security; urgency=medium
+chromium (89.0.4389.114-1) unstable; urgency=medium
 
-  * New upstream security release.
+  * New upstream security release (closes: #986335).
+    - CVE-2021-21194: Use after free in screen capture. Reported by Leecraso
+      and Guang Gong
+    - CVE-2021-21195: Use after free in V8. Reported by Liu and Liang
+    - CVE-2021-21196: Heap buffer overflow in TabStrip. Reported by Khalil
+      Zhani
+    - CVE-2021-21197: Heap buffer overflow in TabStrip. Reported by Abdulrahman
+      Alqabandi
+    - CVE-2021-21198: Out of bounds read in IPC. Reported by Mark Brand
+    - CVE-2021-21199: Use Use after free in Aura. Reported by Weipeng Jiang
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 04 Apr 2021 00:34:12 +0000
+
+chromium (89.0.4389.90-1) unstable; urgency=medium
+
+  * New upstream security release (closes: #985271).
+    - CVE-2021-21191: Use after free in WebRTC. Reported by raven @raid_akame
+    - CVE-2021-21192: Heap buffer overflow in tab groups. Reported by
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2021-21193: Use after free in Blink. Reported by Anonymous
+      (closes: #985142)
+  * Fix build with libvpx 1.7.0 and libicu63 (closes: #984926).
+  * Change debian/rules to not leave debian/scripts/mk-origtargz
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Mon, 15 Mar 2021 12:57:00 +0100
+
+chromium (89.0.4389.82-1) unstable; urgency=medium
+
+  * New upstream stable release (closes: #984532).
     - CVE-2021-21159: Heap buffer overflow in TabStrip. Reported by Khalil
       Zhani
     - CVE-2021-21160: Heap buffer overflow in WebAudio. Reported by Marcin
-      Noga
+      'Icewall' Noga of Cisco Talos
     - CVE-2021-21161: Heap buffer overflow in TabStrip. Reported by Khalil
       Zhani
     - CVE-2021-21162: Use after free in WebRTC. Reported by Anonymous
     - CVE-2021-21163: Insufficient data validation in Reader Mode. Reported by
-      Alison Huffman
+      Alison Huffman, Microsoft Browser Vulnerability Research
+    - CVE-2021-21164: Insufficient data validation in Chrome for iOS. Reported
+      by Muneaki Nishimura nishimunea
     - CVE-2021-21165: Object lifecycle issue in audio. Reported by Alison
-      Huffman
+      Huffman, Microsoft Browser Vulnerability Research
     - CVE-2021-21166: Object lifecycle issue in audio. Reported by Alison
-      Huffman
+      Huffman, Microsoft Browser Vulnerability Research
     - CVE-2021-21167: Use after free in bookmarks. Reported by Leecraso and
-      Guang Gong
+      Guang Gong of 360 Alpha Lab
     - CVE-2021-21168: Insufficient policy enforcement in appcache. Reported by
-      Luan Herrera
+      Luan Herrera @lbherrera_
     - CVE-2021-21169: Out of bounds memory access in V8. Reported by Bohan Liu
-      and Moon Liang
+      @P4nda20371774 and Moon Liang of Tencent Security Xuanwu Lab
     - CVE-2021-21170: Incorrect security UI in Loader. Reported by David Erceg
     - CVE-2021-21171: Incorrect security UI in TabStrip and Navigation.
-      Reported by Irvan Kurniawan
+      Reported by Irvan Kurniawan sourc7
     - CVE-2021-21172: Insufficient policy enforcement in File System API.
       Reported by Maciej Pulikowski
     - CVE-2021-21173: Side-channel information leakage in Network Internals.
-      Reported by Tom Van Goethem
+      Reported by Tom Van Goethem from imec-DistriNet, KU Leuven
     - CVE-2021-21174: Inappropriate implementation in Referrer. Reported by
       Ashish Gautam Kamble
     - CVE-2021-21175: Inappropriate implementation in Site isolation. Reported
-      by Jun Kokatsu
+      by Jun Kokatsu, Microsoft Browser Vulnerability Research
     - CVE-2021-21176: Inappropriate implementation in full screen mode.
-      Reported by Luan Herrera
+      Reported by Luan Herrera @lbherrera_
     - CVE-2021-21177: Insufficient policy enforcement in Autofill. Reported by
-      Abdulrahman Alqabandi
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research
     - CVE-2021-21178: Inappropriate implementation in Compositing. Reported by
       Japong
     - CVE-2021-21179: Use after free in Network Internals. Reported by
       Anonymous
     - CVE-2021-21180: Use after free in tab search. Reported by Abdulrahman
-      Alqabandi
+      Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2020-27844: Heap buffer overflow in OpenJPEG. Reported by Sean
+      Campbell at Tableau
     - CVE-2021-21181: Side-channel information leakage in autofill. Reported by
-      Xu Lin, Panagiotis Ilias, Jason Polakis
+      Xu Lin (University of Illinois at Chicago), Panagiotis Ilia University of
+      Illinois at Chicago, Jason Polakis University of Illinois at Chicago
     - CVE-2021-21182: Insufficient policy enforcement in navigations. Reported
-      by Luan Herrera
+      by Luan Herrera @lbherrera_
     - CVE-2021-21183: Inappropriate implementation in performance APIs.
-      Reported by Takashi Yoneuchi
+      Reported by Takashi Yoneuchi @y0n3uchy
     - CVE-2021-21184: Inappropriate implementation in performance APIs.
       Reported by James Hartig
     - CVE-2021-21185: Insufficient policy enforcement in extensions. Reported
@@ -175,29 +801,17 @@ chromium (89.0.4389.114-1~deb10u1) buster-security; urgency=medium
     - CVE-2021-21187: Insufficient data validation in URL formatting. Reported
       by Kirtikumar Anandrao Ramchandani
     - CVE-2021-21188: Use after free in Blink. Reported by Woojin Oh
+      @pwn_expoit of STEALIEN
     - CVE-2021-21189: Insufficient policy enforcement in payments. Reported by
       Khalil Zhani
     - CVE-2021-21190: Uninitialized Use in PDFium. Reported by Zhou Aiting
-    - CVE-2021-21191: Use after free in WebRTC. Reported by raven
-    - CVE-2021-21192: Heap buffer overflow in tab groups. Reported by
-      Abdulrahman Alqabandi
-    - CVE-2021-21193: Use after free in Blink. Reported by Anonymous
-    - CVE-2021-21194: Use after free in screen capture. Reported by Leecraso
-      and Guang Gong
-    - CVE-2021-21195: Use after free in V8. Reported by Liu and Liang
-    - CVE-2021-21196: Heap buffer overflow in TabStrip. Reported by Khalil
-      Zhani
-    - CVE-2021-21197: Heap buffer overflow in TabStrip. Reported by Abdulrahman
-      Alqabandi
-    - CVE-2021-21198: Out of bounds read in IPC. Reported by Mark Brand
-    - CVE-2021-21199: Use after free in Aura. Reported by Weipeng Jiang
+      @zhouat1 of Qihoo 360 Vulcan Team
 
- -- Michael Gilbert <mgilbert@debian.org>  Sun, 04 Apr 2021 13:39:43 +0000
+ -- Michel Le Bihan <michel@lebihan.pl>  Mon, 08 Mar 2021 09:48:03 +0100
 
-chromium (88.0.4324.182-1~deb10u1) buster-security; urgency=medium
+chromium (88.0.4324.182-1) unstable; urgency=medium
 
   * New upstream security release.
-    - CVE-2021-21148: Heap buffer overflow in V8. Reported by Mattias Buelens
     - CVE-2021-21149: Stack overflow in Data Transfer. Reported by Ryoya
       Tsukasaki
     - CVE-2021-21150: Use after free in Downloads. Reported by Woojin Oh
@@ -211,32 +825,75 @@ chromium (88.0.4324.182-1~deb10u1) buster-security; urgency=medium
     - CVE-2021-21156: Heap buffer overflow in V8. Reported by Sergei Glazunov
     - CVE-2021-21157: Use after free in Web Sockets. Reported by Anonymous
 
- -- Michael Gilbert <mgilbert@debian.org>  Thu, 18 Feb 2021 15:04:44 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 18 Feb 2021 00:56:55 +0000
 
-chromium (88.0.4324.146-1~deb10u1) buster-security; urgency=medium
+chromium (88.0.4324.150-1) unstable; urgency=medium
+
+  * New upstream security release (closes: #982205).
+    - CVE-2021-21148: Heap buffer overflow in V8. Reported by Mattias Buelens
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Tue, 09 Feb 2021 13:02:34 +0100
+
+chromium (88.0.4324.146-1) unstable; urgency=medium
 
   * New upstream stable release.
+    - CVE-2021-21142: Use after free in Payments. Reported by Khalil Zhani
+    - CVE-2021-21143: Heap buffer overflow in Extensions. Reported by Allen
+      Parker & Alex Morgan of MU
+    - CVE-2021-21144: Heap buffer overflow in Tab Groups. Reported by Leecraso
+      and Guang Gong of 360 Alpha Lab
+    - CVE-2021-21145: Use after free in Fonts. Reported by Anonymous
+    - CVE-2021-21146: Use after free in Navigation. Reported by Alison Huffman
+      and Choongwoo Han of Microsoft Browser Vulnerability Research
+    - CVE-2021-21147: Inappropriate implementation in Skia. Reported by Roman
+      Starkov
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Wed, 03 Feb 2021 11:11:02 +0100
+
+chromium (88.0.4324.96-2) unstable; urgency=medium
+
+  * Add Michel Le Bihan to uploaders.
+  * Add openjpeg include dirs to pdfium BUILD.gn (closes: #981270).
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Fri, 29 Jan 2021 12:37:49 +0100
+
+chromium (88.0.4324.96-1) unstable; urgency=medium
+
+  * Organize patches.
+  * Use system vpx again.
+  * Support icu 6.3 and clang 7 in buster again.
+  * Apply the non-maintainer uploads (closes: #972134).
+    - Thanks to Michel Le Bihan, Jan Luca Naumann, and Peter Michael Green.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 27 Jan 2021 01:40:59 +0000
+
+chromium (88.0.4324.96-0.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * New upstream stable release (closes: #980564).
     - CVE-2021-21117: Insufficient policy enforcement in Cryptohome. Reported
       by Rory McNamara
     - CVE-2021-21118: Insufficient data validation in V8. Reported by Tyler
-      Nighswander
+      Nighswander @tylerni7 of Theori
     - CVE-2021-21119: Use after free in Media. Reported by Anonymous
-    - CVE-2021-21120: Use after free in WebSQL. Reported by Nan Wang and Guang
-      Gong
+    - CVE-2021-21120: Use after free in WebSQL. Reported by Nan Wang
+      @eternalsakura13 and Guang Gong of 360 Alpha Lab
     - CVE-2021-21121: Use after free in Omnibox. Reported by Leecraso and Guang
-      Gong
+      Gong of 360 Alpha Lab
     - CVE-2021-21122: Use after free in Blink. Reported by Renata Hodovan
     - CVE-2021-21123: Insufficient data validation in File System API. Reported
       by Maciej Pulikowski
     - CVE-2021-21124: Potential user after free in Speech Recognizer. Reported
-      by Chaoyang Ding
+      by Chaoyang Ding(@V4kst1z) from Codesafe Team of Legendsec at Qi'anxin
+      Group
     - CVE-2021-21125: Insufficient policy enforcement in File System API.
       Reported by Ron Masas
-    - CVE-2020-16044: Use after free in WebRTC. Reported by Ned Williamson
+    - CVE-2020-16044: Use after free in WebRTC. Reported by Ned Williamson of
+      Project Zero
     - CVE-2021-21126: Insufficient policy enforcement in extensions. Reported
       by David Erceg
     - CVE-2021-21127: Insufficient policy enforcement in extensions. Reported
-      by Jasminder Pal Singh
+      by Jasminder Pal Singh, Web Services Point WSP, Kotkapura
     - CVE-2021-21128: Heap buffer overflow in Blink. Reported by Liang Dong
     - CVE-2021-21129: Insufficient policy enforcement in File System API.
       Reported by Maciej Pulikowski
@@ -257,28 +914,304 @@ chromium (88.0.4324.146-1~deb10u1) buster-security; urgency=medium
     - CVE-2021-21137: Inappropriate implementation in DevTools. Reported by
       bobblybear
     - CVE-2021-21138: Use after free in DevTools. Reported by Weipeng Jiang
+      @Krace from Codesafe Team of Legendsec at Qi'anxin Group
     - CVE-2021-21139: Inappropriate implementation in iframe sandbox. Reported
-      by Jun Kokatsu
+      by Jun Kokatsu, Microsoft Browser Vulnerability Research
     - CVE-2021-21140: Uninitialized Use in USB. Reported by David Manouchehri
     - CVE-2021-21141: Insufficient policy enforcement in File System API.
       Reported by Maciej Pulikowski
-    - CVE-2021-21142: Use after free in Payments. Reported by Khalil Zhani
-    - CVE-2021-21143: Heap buffer overflow in Extensions. Reported by Allen
-      Parker & Alex Morgan
-    - CVE-2021-21144: Heap buffer overflow in Tab Groups. Reported by Leecraso
-      and Guang Gong
-    - CVE-2021-21145: Use after free in Fonts. Reported by Anonymous
-    - CVE-2021-21146: Use after free in Navigation. Reported by Alison Huffman
-      and Choongwoo Han
-    - CVE-2021-21147: Inappropriate implementation in Skia. Reported by Roman
-      Starkov
 
- -- Michael Gilbert <mgilbert@debian.org>  Thu, 04 Feb 2021 02:00:58 +0000
+  [ Jan Luca Naumann ]
+  * Add watch file.
 
-chromium (87.0.4280.141-0.1~deb10u1) buster-security; urgency=high
+  [ Mattia Rizzolo ]
+  * Change get-orig-source to produce reproducible tarballs.
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Wed, 20 Jan 2021 23:23:08 +0100
+
+chromium (87.0.4280.141-0.1) unstable; urgency=medium
 
   * Non-maintainer upload.
   * New upstream security release (closes: #979520).
+    - CVE-2021-21106: Use after free in autofill. Reported by Weipeng Jiang
+      @Krace from Codesafe Team of Legendsec at Qi'anxin Group
+    - CVE-2021-21107: Use after free in drag and drop. Reported by Leecraso and
+      Guang Gong of 360 Alpha Lab
+    - CVE-2021-21108: Use after free in media. Reported by Leecraso and Guang
+      Gong of 360 Alpha Lab
+    - CVE-2021-21109: Use after free in payments. Reported by Rong Jian and
+      Guang Gong of 360 Alpha Lab
+    - CVE-2021-21110: Use after free in safe browsing. Reported by Anonymous
+    - CVE-2021-21111: Insufficient policy enforcement in WebUI. Reported by
+      Alesandro Ortiz
+    - CVE-2021-21112: Use after free in Blink. Reported by YoungJoo Lee
+      @ashuu_lee of Raon Whitehat
+    - CVE-2021-21113: Heap buffer overflow in Skia. Reported by tsubmunu
+    - CVE-2020-16043: Insufficient data validation in networking. Reported by
+      Samy Kamkar, Ben Seri at Armis, Gregory Vishnepolsky at Armis
+    - CVE-2021-21114: Use after free in audio. Reported by Man Yue Mo of GitHub
+      Security Lab
+    - CVE-2020-15995: Out of bounds write in V8. Reported by Bohan Liu
+      @P4nda20371774 of Tencent Security Xuanwu Lab
+    - CVE-2021-21115: Use after free in safe browsing. Reported by Leecraso and
+      Guang Gong of 360 Alpha Lab
+    - CVE-2021-21116: Heap buffer overflow in audio. Reported by Alison
+      Huffman, Microsoft Browser Vulnerability Research
+
+  [ Jan Luca Naumann ]
+  * Use desktop gl implementation as default. (closes: #979135)
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Sat, 09 Jan 2021 11:24:58 +0100
+
+chromium (87.0.4280.88-0.4) unstable; urgency=medium
+
+  * Non-maintainer upload.
+
+  [ Michel Le Bihan ]
+  * Install ANGLE EGL and GLESv2 libs (closes: #977870).
+  * Disable Widevine CDM component updater (closes: #960454).
+  * Disable usage of google-chrome in driver (closes: #930543).
+
+  [ Jan Luca Naumann ]
+  * Remove python3-xcbgen from Build-Deps
+  * Changes to allow building on buster
+  * Add patch for explicit python2 usage in scripts
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Tue, 29 Dec 2020 10:58:42 +0100
+
+chromium (87.0.4280.88-0.3) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix double-delete in content service worker (closes: #977901).
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Wed, 23 Dec 2020 11:55:48 +0100
+
+chromium (87.0.4280.88-0.2) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Exclude debian dir from unversioned python conversion script
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Sun, 20 Dec 2020 22:14:50 +0100
+
+chromium (87.0.4280.88-0.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * New upstream stable release (closes: #973848).
+    - CVE-2020-16037: Use after free in clipboard. Reported by Ryoya Tsukasaki
+    - CVE-2020-16038: Use after free in media. Reported by Khalil Zhani
+    - CVE-2020-16039: Use after free in extensions. Reported by Anonymous
+    - CVE-2020-16040: Insufficient data validation in V8. Reported by Lucas
+      Pinheiro, Microsoft Browser Vulnerability Research
+    - CVE-2020-16041: Out of bounds read in networking. Reported by Sergei
+      Glazunov and Mark Brand of Google Project Zero
+    - CVE-2020-16042: Uninitialized Use in V8. Reported by André Bargull
+    - CVE-2020-16018: Use after free in payments. Reported by Man Yue Mo of
+      GitHub Security Lab
+    - CVE-2020-16019: Inappropriate implementation in filesystem. Reported by
+      Rory McNamara
+    - CVE-2020-16020: Inappropriate implementation in cryptohome. Reported by
+      Rory McNamara
+    - CVE-2020-16021: Race in ImageBurner. Reported by Rory McNamara
+    - CVE-2020-16022: Insufficient policy enforcement in networking. Reported
+      by @SamyKamkar
+    - CVE-2020-16015: Insufficient data validation in WASM. Reported by Rong
+      Jian and Leecraso of 360 Alpha Lab
+    - CVE-2020-16014: Use after free in PPAPI. Reported by Rong Jian and
+      Leecraso of 360 Alpha Lab
+    - CVE-2020-16023: Use after free in WebCodecs. Reported by Brendon Tiszka
+      and David Manouchehri supporting the @eff
+    - CVE-2020-16024: Heap buffer overflow in UI. Reported by Sergei Glazunov
+      of Google Project Zero
+    - CVE-2020-16025: Heap buffer overflow in clipboard. Reported by Sergei
+      Glazunov of Google Project Zero
+    - CVE-2020-16026: Use after free in WebRTC. Reported by Jong-Gwon Kim
+    - CVE-2020-16027: Insufficient policy enforcement in developer tools.
+      Reported by David Erceg
+    - CVE-2020-16028: Heap buffer overflow in WebRTC. Reported by asnine
+    - CVE-2020-16029: Inappropriate implementation in PDFium. Reported by
+      Anonymous
+    - CVE-2020-16030: Insufficient data validation in Blink. Reported by Michał
+      Bentkowski of Securitum
+    - CVE-2019-8075: Insufficient data validation in Flash. Reported by
+      Nethanel Gelernter, Cyberpion
+    - CVE-2020-16031: Incorrect security UI in tab preview. Reported by
+      wester0x01
+    - CVE-2020-16032: Incorrect security UI in sharing. Reported by wester0x01
+    - CVE-2020-16033: Incorrect security UI in WebUSB. Reported by Khalil Zhani
+    - CVE-2020-16034: Inappropriate implementation in WebRTC. Reported by
+      Benjamin Petermaier
+    - CVE-2020-16035: Insufficient data validation in cros-disks. Reported by
+      Rory McNamara
+    - CVE-2020-16012: Side-channel information leakage in graphics. Reported by
+      Aleksejs Popovs
+    - CVE-2020-16036: Inappropriate implementation in cookies. Reported by Jun
+      Kokatsu @shhnjk
+    - CVE-2020-16013: Inappropriate implementation in V8. Reported by Anonymous
+    - CVE-2020-16017: Use after free in site isolation. Reported by Anonymous
+    - CVE-2020-16016: Inappropriate implementation in base. Reported by Rong
+      Jian and Leecraso of 360 Alpha Lab
+    - CVE-2020-16004: Use after free in user interface. Reported by Leecraso
+      and Guang Gong of 360 Alpha Lab working with 360 BugCloud
+    - CVE-2020-16005: Insufficient policy enforcement in ANGLE. Reported by
+      Jaehun Jeong @n3sk of Theori
+    - CVE-2020-16006: Inappropriate implementation in V8. Reported by Bill
+      Parks
+    - CVE-2020-16007: Insufficient data validation in installer. Reported by
+      Abdelhamid Naceri
+    - CVE-2020-16008: Stack buffer overflow in WebRTC. Reported by Tolya
+      Korniltsev
+    - CVE-2020-16009: Inappropriate implementation in V8. Reported by Clement
+      Lecigne of Google's Threat Analysis Group and Samuel Groß of Google
+      Project Zero
+    - CVE-2020-16011: Heap buffer overflow in UI on Windows. Reported by Sergei
+      Glazunov of Google Project Zero
+    - CVE-2020-16000: Inappropriate implementation in Blink. Reported by
+      amaebi_jp
+    - CVE-2020-16001: Use after free in media. Reported by Khalil Zhani
+    - CVE-2020-16002: Use after free in PDFium. Reported by Weipeng Jiang from
+      Codesafe Team of Legendsec at Qi'anxin Group
+    - CVE-2020-15999: Heap buffer overflow in Freetype. Reported by Sergei
+      Glazunov of Google Project Zero
+    - CVE-2020-16003: Use after free in printing. Reported by Khalil Zhani
+    - CVE-2020-15967: Use after free in payments. Reported by Man Yue Mo of
+      GitHub Security Lab
+    - CVE-2020-15968: Use after free in Blink. Reported by Anonymous
+    - CVE-2020-15969: Use after free in WebRTC. Reported by Anonymous
+    - CVE-2020-15970: Use after free in NFC. Reported by Man Yue Mo of GitHub
+      Security Lab
+    - CVE-2020-15971: Use after free in printing. Reported by Jun Kokatsu,
+      Microsoft Browser Vulnerability Research
+    - CVE-2020-15972: Use after free in audio. Reported by Anonymous
+    - CVE-2020-15990: Use after free in autofill. Reported by Rong Jian and
+      Guang Gong of Alpha Lab, Qihoo 360
+    - CVE-2020-15991: Use after free in password manager. Reported by Rong Jian
+      and Guang Gong of Alpha Lab, Qihoo 360
+    - CVE-2020-15973: Insufficient policy enforcement in extensions. Reported
+      by David Erceg
+    - CVE-2020-15974: Integer overflow in Blink. Reported by Juno Im of Theori
+    - CVE-2020-15975: Integer overflow in SwiftShader. Reported by Anonymous
+    - CVE-2020-15976: Use after free in WebXR. Reported by YoungJoo Lee
+      @ashuu_lee of Raon Whitehat
+    - CVE-2020-6557: Inappropriate implementation in networking. Reported by
+      Matthias Gierlings and Marcus Brinkmann
+    - CVE-2020-15977: Insufficient data validation in dialogs. Reported by
+      Narendra Bhati
+    - CVE-2020-15978: Insufficient data validation in navigation. Reported by
+      Luan Herrera @lbherrera_
+    - CVE-2020-15979: Inappropriate implementation in V8. Reported by Avihay
+      Cohen @ SeraphicAlgorithms
+    - CVE-2020-15980: Insufficient policy enforcement in Intents. Reported by
+      Yongke Wang @Rudykewang and Aryb1n @aryb1n of Tencent Security Xuanwu Lab
+    - CVE-2020-15981: Out of bounds read in audio. Reported by Christoph
+      Guttandin
+    - CVE-2020-15982: Side-channel information leakage in cache. Reported by
+      Luan Herrera @lbherrera_
+    - CVE-2020-15983: Insufficient data validation in webUI. Reported by Jun
+      Kokatsu, Microsoft Browser Vulnerability Research
+    - CVE-2020-15984: Insufficient policy enforcement in Omnibox. Reported by
+      Rayyan Bijoora
+    - CVE-2020-15985: Inappropriate implementation in Blink. Reported by
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2020-15986: Integer overflow in media. Reported by Mark Brand of
+      Google Project Zero
+    - CVE-2020-15987: Use after free in WebRTC. Reported by Philipp Hancke
+    - CVE-2020-15992: Insufficient policy enforcement in networking. Reported
+      by Alison Huffman, Microsoft Browser Vulnerability Research
+    - CVE-2020-15988: Insufficient policy enforcement in downloads. Reported by
+      Samuel Attard
+    - CVE-2020-15989: Uninitialized Use in PDFium. Reported by Gareth Evans
+    - CVE-2020-15960: Out of bounds read in storage. Reported by Anonymous
+    - CVE-2020-15961: Insufficient policy enforcement in extensions. Reported
+      by David Erceg
+    - CVE-2020-15962: Insufficient policy enforcement in serial. Reported by
+      Leecraso and Guang Gong of 360 Alpha Lab working with 360 BugCloud
+    - CVE-2020-15963: Insufficient policy enforcement in extensions. Reported
+      by David Erceg
+    - CVE-2020-15965: Out of bounds write in V8. Reported by Lucas Pinheiro,
+      Microsoft Browser Vulnerability Research
+    - CVE-2020-15966: Insufficient policy enforcement in extensions. Reported
+      by David Erceg
+    - CVE-2020-15964: Insufficient data validation in media. Reported by Woojin
+      Oh @pwn_expoit of STEALIEN
+    - CVE-2020-6573: Use after free in video. Reported by Leecraso and Guang
+      Gong of 360 Alpha Lab working with 360 BugCloud
+    - CVE-2020-6574: Insufficient policy enforcement in installer. Reported by
+      CodeColorist of Ant-Financial LightYear Labs
+    - CVE-2020-6575: Race in Mojo. Reported by Microsoft
+    - CVE-2020-6576: Use after free in offscreen canvas. Reported by Looben
+      Yang
+    - CVE-2020-15959: Insufficient policy enforcement in networking. Reported
+      by Eric Lawrence of Microsoft
+    - CVE-2020-6558: Insufficient policy enforcement in iOS. Reported by Alison
+      Huffman, Microsoft Browser Vulnerability Research
+    - CVE-2020-6559: Use after free in presentation API. Reported by Liu Wei
+      and Wu Zekai of Tencent Security Xuanwu Lab
+    - CVE-2020-6560: Insufficient policy enforcement in autofill. Reported by
+      Nadja Ungethuem from www.unnex.de
+    - CVE-2020-6561: Inappropriate implementation in Content Security Policy.
+      Reported by Rob Wu
+    - CVE-2020-6562: Insufficient policy enforcement in Blink. Reported by
+      Masato Kinugawa
+    - CVE-2020-6563: Insufficient policy enforcement in intent handling.
+      Reported by Pedro Oliveira
+    - CVE-2020-6564: Incorrect security UI in permissions. Reported by Khalil
+      Zhani
+    - CVE-2020-6565: Incorrect security UI in Omnibox. Reported by Khalil Zhani
+    - CVE-2020-6566: Insufficient policy enforcement in media. Reported by Jun
+      Kokatsu, Microsoft Browser Vulnerability Research
+    - CVE-2020-6567: Insufficient validation of untrusted input in command line
+      handling. Reported by Joshua Graham of TSS
+    - CVE-2020-6568: Insufficient policy enforcement in intent handling.
+      Reported by Yongke Wang @Rudykewang and Aryb1n @aryb1n of Tencent
+      Security Xuanwu Lab
+    - CVE-2020-6569: Integer overflow in WebUSB. Reported by guaixiaomei
+    - CVE-2020-6570: Side-channel information leakage in WebRTC. Reported by
+      Signal/Tenable
+    - CVE-2020-6571: Incorrect security UI in Omnibox. Reported by Rayyan
+      Bijoora
+    - CVE-2020-6556: Heap buffer overflow in SwiftShader. Reported by Alison
+      Huffman, Microsoft Browser Vulnerability Research
+    - CVE-2020-6542: Use after free in ANGLE. Reported by Piotr Bania of Cisco
+      Talos
+    - CVE-2020-6543: Use after free in task scheduling. Reported by Looben Yang
+    - CVE-2020-6544: Use after free in media. Reported by Tim Becker of Theori
+    - CVE-2020-6545: Use after free in audio. Reported by Anonymous
+    - CVE-2020-6546: Inappropriate implementation in installer. Reported by
+      Andrew Hess
+    - CVE-2020-6547: Incorrect security UI in media. Reported by David Albert
+    - CVE-2020-6548: Heap buffer overflow in Skia. Reported by Choongwoo Han,
+      Microsoft Browser Vulnerability Research
+    - CVE-2020-6549: Use after free in media. Reported by Sergei Glazunov of
+      Google Project Zero
+    - CVE-2020-6550: Use after free in IndexedDB. Reported by Sergei Glazunov
+      of Google Project Zero
+    - CVE-2020-6551: Use after free in WebXR. Reported by Sergei Glazunov of
+      Google Project Zero
+    - CVE-2020-6552: Use after free in Blink. Reported by Tim Becker of Theori
+    - CVE-2020-6553: Use after free in offline mode. Reported by Alison
+      Huffman, Microsoft Browser Vulnerability Research
+    - CVE-2020-6554: Use after free in extensions. Reported by Anonymous
+    - CVE-2020-6555: Out of bounds read in WebGL. Reported by Marcin Towalski
+      of Cisco Talos
+
+ -- Michel Le Bihan <michel@lebihan.pl>  Tue, 01 Dec 2020 00:00:00 +0000
+
+chromium (84.0.4147.105-1) experimental; urgency=medium
+
+  * New upstream security release.
+    - CVE-2020-6537: Type Confusion in V8. Reported by Rong Jian and Guang Gong
+    - CVE-2020-6532: Use after free in SCTP. Reported by Anonymous
+    - CVE-2020-6538: Inappropriate implementation in WebView. Reported by
+      Yongke Wang and Aryb1n
+    - CVE-2020-6539: Use after free in CSS. Reported by Oriol Brufau
+    - CVE-2020-6540: Heap buffer overflow in Skia. Reported by Zhen Zhou
+    - CVE-2020-6541: Use after free in WebUSB. Reported by Sergei Glazunov
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 01 Aug 2020 03:00:31 +0000
+
+chromium (84.0.4147.89-1) experimental; urgency=medium
+
+  * New upstream stable release.
     - CVE-2020-6510: Heap buffer overflow in background fetch. Reported by
       Leecraso and Guang Gong
     - CVE-2020-6511: Side-channel information leakage in content security
@@ -314,265 +1247,78 @@ chromium (87.0.4280.141-0.1~deb10u1) buster-security; urgency=high
       by myvyang
     - CVE-2020-6531: Side-channel information leakage in scroll to text.
       Reported by Jun Kokatsu
-    - CVE-2020-6532: Use after free in SCTP. Reported by Anonymous
     - CVE-2020-6533: Type Confusion in V8. Reported by Avihay Cohen
     - CVE-2020-6534: Heap buffer overflow in WebRTC. Reported by Anonymous
     - CVE-2020-6535: Insufficient data validation in WebUI. Reported by Jun
       Kokatsu
     - CVE-2020-6536: Incorrect security UI in PWAs. Reported by Zhiyang Zeng
-    - CVE-2020-6537: Type Confusion in V8. Reported by Rong Jian and Guang Gong
-    - CVE-2020-6538: Inappropriate implementation in WebView. Reported by
-      Yongke Wang and Aryb1n
-    - CVE-2020-6539: Use after free in CSS. Reported by Oriol Brufau
-    - CVE-2020-6540: Heap buffer overflow in Skia. Reported by Zhen Zhou
-    - CVE-2020-6541: Use after free in WebUSB. Reported by Sergei Glazunov
-    - CVE-2020-6542: Use after free in ANGLE. Reported by Piotr Bania
-    - CVE-2020-6543: Use after free in task scheduling. Reported by Looben Yang
-    - CVE-2020-6544: Use after free in media. Reported by Tim Becker
-    - CVE-2020-6545: Use after free in audio. Reported by Anonymous
-    - CVE-2020-6547: Incorrect security UI in media. Reported by David Albert
-    - CVE-2020-6548: Heap buffer overflow in Skia. Reported by Choongwoo Han
-    - CVE-2020-6549: Use after free in media. Reported by Sergei Glazunov
-    - CVE-2020-6550: Use after free in IndexedDB. Reported by Sergei Glazunov
-    - CVE-2020-6551: Use after free in WebXR. Reported by Sergei Glazunov
-    - CVE-2020-6552: Use after free in Blink. Reported by Tim Becker
-    - CVE-2020-6553: Use after free in offline mode. Reported by Alison
-      Huffman
-    - CVE-2020-6554: Use after free in extensions. Reported by Anonymous
-    - CVE-2020-6555: Out of bounds read in WebGL. Reported by Marcin Towalski
-    - CVE-2020-6556: Heap buffer overflow in SwiftShader. Reported by Alison
-      Huffman
-    - CVE-2020-6557: Inappropriate implementation in networking. Reported by
-      Matthias Gierlings and Marcus Brinkmann
-    - CVE-2020-6559: Use after free in presentation API. Reported by Liu Wei
-      and Wu Zekai
-    - CVE-2020-6560: Insufficient policy enforcement in autofill. Reported by
-      Nadja Ungethuem
-    - CVE-2020-6561: Inappropriate implementation in Content Security Policy.
-      Reported by Rob Wu
-    - CVE-2020-6562: Insufficient policy enforcement in Blink. Reported by
-      Masato Kinugawa
-    - CVE-2020-6563: Insufficient policy enforcement in intent handling.
-      Reported by Pedro Oliveira
-    - CVE-2020-6564: Incorrect security UI in permissions. Reported by Khalil
-      Zhani
-    - CVE-2020-6565: Incorrect security UI in Omnibox. Reported by Khalil Zhani
-    - CVE-2020-6566: Insufficient policy enforcement in media. Reported by Jun
-      Kokatsu
-    - CVE-2020-6567: Insufficient validation of untrusted input in command line
-      handling. Reported by Joshua Graham
-    - CVE-2020-6568: Insufficient policy enforcement in intent handling.
-      Reported by Yongke Wang and Aryb1n
-    - CVE-2020-6569: Integer overflow in WebUSB. Reported by guaixiaomei
-    - CVE-2020-6570: Side-channel information leakage in WebRTC. Reported by
-      Signal/Tenable
-    - CVE-2020-6571: Incorrect security UI in Omnibox. Reported by Rayyan
-      Bijoora
-    - CVE-2020-6573: Use after free in video. Reported by Leecraso and Guang
-      Gong
-    - CVE-2020-6575: Race in Mojo. Reported by Microsoft
-    - CVE-2020-6576: Use after free in offscreen canvas. Reported by Looben
-      Yang
-    - CVE-2020-15959: Insufficient policy enforcement in networking. Reported
-      by Eric Lawrence
-    - CVE-2020-15960: Out of bounds read in storage. Reported by Anonymous
-    - CVE-2020-15961: Insufficient policy enforcement in extensions. Reported
-      by David Erceg
-    - CVE-2020-15962: Insufficient policy enforcement in serial. Reported by
-      Leecraso and Guang Gong
-    - CVE-2020-15963: Insufficient policy enforcement in extensions. Reported
-      by David Erceg
-    - CVE-2020-15964: Insufficient data validation in media. Reported by Woojin
-      Oh @pwn_expoit
-    - CVE-2020-15965: Out of bounds write in V8. Reported by Lucas Pinheiro
-    - CVE-2020-15966: Insufficient policy enforcement in extensions. Reported
-      by David Erceg
-    - CVE-2020-15967: Use after free in payments. Reported by Man Yue Mo
-    - CVE-2020-15968: Use after free in Blink. Reported by Anonymous
-    - CVE-2020-15969: Use after free in WebRTC. Reported by Anonymous
-    - CVE-2020-15970: Use after free in NFC. Reported by Man Yue Mo
-    - CVE-2020-15971: Use after free in printing. Reported by Jun Kokatsu
-    - CVE-2020-15972: Use after free in audio. Reported by Anonymous
-    - CVE-2020-15973: Insufficient policy enforcement in extensions. Reported
-      by David Erceg
-    - CVE-2020-15974: Integer overflow in Blink. Reported by Juno Im
-    - CVE-2020-15975: Integer overflow in SwiftShader. Reported by Anonymous
-    - CVE-2020-15976: Use after free in WebXR. Reported by YoungJoo Lee
-    - CVE-2020-15977: Insufficient data validation in dialogs. Reported by
-      Narendra Bhati
-    - CVE-2020-15978: Insufficient data validation in navigation. Reported by
-      Luan Herrera
-    - CVE-2020-15979: Inappropriate implementation in V8. Reported by Avihay
-      Cohen
-    - CVE-2020-15980: Insufficient policy enforcement in Intents. Reported by
-      Yongke Wang and Aryb1n
-    - CVE-2020-15981: Out of bounds read in audio. Reported by Christoph
-      Guttandin
-    - CVE-2020-15982: Side-channel information leakage in cache. Reported by
-      Luan Herrera
-    - CVE-2020-15983: Insufficient data validation in webUI. Reported by Jun
-      Kokatsu
-    - CVE-2020-15984: Insufficient policy enforcement in Omnibox. Reported by
-      Rayyan Bijoora
-    - CVE-2020-15985: Inappropriate implementation in Blink. Reported by
-      Abdulrahman Alqabandi
-    - CVE-2020-15986: Integer overflow in media. Reported by Mark Brand
-    - CVE-2020-15987: Use after free in WebRTC. Reported by Philipp Hancke
-    - CVE-2020-15988: Insufficient policy enforcement in downloads. Reported by
-      Samuel Attard
-    - CVE-2020-15989: Uninitialized Use in PDFium. Reported by Gareth Evans
-    - CVE-2020-15990: Use after free in autofill. Reported by Rong Jian and
-      Guang Gong
-    - CVE-2020-15991: Use after free in password manager. Reported by Rong Jian
-      and Guang Gong
-    - CVE-2020-15992: Insufficient policy enforcement in networking. Reported
-      by Alison Huffman
-    - CVE-2020-15995: Out of bounds write in V8. Reported by Bohan Liu
-    - CVE-2020-15999: Heap buffer overflow in Freetype. Reported by Sergei
-    - CVE-2020-16000: Inappropriate implementation in Blink. Reported by
-      amaebi_jp
-    - CVE-2020-16001: Use after free in media. Reported by Khalil Zhani
-    - CVE-2020-16002: Use after free in PDFium. Reported by Weipeng Jiang
-    - CVE-2020-16003: Use after free in printing. Reported by Khalil Zhani
-    - CVE-2020-16004: Use after free in user interface. Reported by Leecraso
-      and Guang Gong
-    - CVE-2020-16005: Insufficient policy enforcement in ANGLE. Reported by
-      Jaehun Jeong
-    - CVE-2020-16006: Inappropriate implementation in V8. Reported by Bill
-      Parks
-    - CVE-2020-16008: Stack buffer overflow in WebRTC. Reported by Tolya
-      Korniltsev
-    - CVE-2020-16009: Inappropriate implementation in V8. Reported by Clement
-      Lecigne and Samuel Groß
-    - CVE-2020-16012: Side-channel information leakage in graphics. Reported by
-      Aleksejs Popovs
-    - CVE-2020-16013: Inappropriate implementation in V8. Reported by Anonymous
-    - CVE-2020-16014: Use after free in PPAPI. Reported by Rong Jian and
-      Leecraso
-    - CVE-2020-16015: Insufficient data validation in WASM. Reported by Rong
-      Jian and Leecraso
-    - CVE-2020-16016: Inappropriate implementation in base. Reported by Rong
-      Jian and Leecraso
-    - CVE-2020-16017: Use after free in site isolation. Reported by Anonymous
-    - CVE-2020-16018: Use after free in payments. Reported by Man Yue Mo
-    - CVE-2020-16019: Inappropriate implementation in filesystem. Reported by
-      Rory McNamara
-    - CVE-2020-16020: Inappropriate implementation in cryptohome. Reported by
-      Rory McNamara
-    - CVE-2020-16021: Race in ImageBurner. Reported by Rory McNamara
-    - CVE-2020-16022: Insufficient policy enforcement in networking. Reported
-      by @SamyKamkar
-    - CVE-2020-16023: Use after free in WebCodecs. Reported by Brendon Tiszka
-      and David Manouchehri
-    - CVE-2020-16024: Heap buffer overflow in UI. Reported by Sergei Glazunov
-    - CVE-2020-16025: Heap buffer overflow in clipboard. Reported by Sergei
-      Glazunov
-    - CVE-2020-16026: Use after free in WebRTC. Reported by Jong-Gwon Kim
-    - CVE-2020-16027: Insufficient policy enforcement in developer tools.
-      Reported by David Erceg
-    - CVE-2020-16028: Heap buffer overflow in WebRTC. Reported by asnine
-    - CVE-2020-16029: Inappropriate implementation in PDFium. Reported by
-      Anonymous
-    - CVE-2020-16030: Insufficient data validation in Blink. Reported by Michał
-      Bentkowski
-    - CVE-2020-16031: Incorrect security UI in tab preview. Reported by
-      wester0x01
-    - CVE-2020-16032: Incorrect security UI in sharing. Reported by wester0x01
-    - CVE-2020-16033: Incorrect security UI in WebUSB. Reported by Khalil Zhani
-    - CVE-2020-16034: Inappropriate implementation in WebRTC. Reported by
-      Benjamin Petermaier
-    - CVE-2020-16035: Insufficient data validation in cros-disks. Reported by
-      Rory McNamara
-    - CVE-2020-16036: Inappropriate implementation in cookies. Reported by Jun
-      Kokatsu @shhnjk
-    - CVE-2020-16037: Use after free in clipboard. Reported by Ryoya Tsukasaki
-    - CVE-2020-16038: Use after free in media. Reported by Khalil Zhani
-    - CVE-2020-16039: Use after free in extensions. Reported by Anonymous
-    - CVE-2020-16040: Insufficient data validation in V8. Reported by Lucas
-      Pinheiro
-    - CVE-2020-16041: Out of bounds read in networking. Reported by Sergei
-      Glazunov and Mark Brand
-    - CVE-2020-16042: Uninitialized Use in V8. Reported by André Bargull
-    - CVE-2021-21106: Use after free in autofill. Reported by Weipeng Jiang
-    - CVE-2021-21107: Use after free in drag and drop. Reported by Leecraso and
-      Guang Gong
-    - CVE-2021-21108: Use after free in media. Reported by Leecraso and Guang
-      Gong
-    - CVE-2021-21109: Use after free in payments. Reported by Rong Jian and
-      Guang Gong
-    - CVE-2021-21110: Use after free in safe browsing. Reported by Anonymous
-    - CVE-2021-21111: Insufficient policy enforcement in WebUI. Reported by
-      Alesandro Ortiz
-    - CVE-2021-21112: Use after free in Blink. Reported by YoungJoo Lee
-    - CVE-2021-21113: Heap buffer overflow in Skia. Reported by tsubmunu
-    - CVE-2020-16043: Insufficient data validation in networking. Reported by
-      Samy Kamkar, Ben Seri at Armis, Gregory Vishnepolsky
-    - CVE-2021-21114: Use after free in audio. Reported by Man Yue Mo
-    - CVE-2021-21115: Use after free in safe browsing. Reported by Leecraso and
-      Guang Gong
-    - CVE-2021-21116: Heap buffer overflow in audio. Reported by Alison
-      Huffman
-  * Use desktop gl implementation as default (closes: #979135).
+  * Update information in debian/copyright.
+  * Include more upstream metadata information.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 26 Jul 2020 15:21:41 +0000
+
+chromium (83.0.4103.116-3.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
   * Add 64-bit time syscalls to syscall whitelist and clock selection
-    parameter filtering code.
+    parameter filtering code
+  * Switch to explicitly versioned python2
+    + Update build-depends
+    + Replace references to /usr/bin/python and to env python
+      with /usr/bin/python2 and env python2
+    + make exec_script in gn use python2
+    + add code in debian/rules clean to set the shebang in
+      third_party/closure_compiler/compiler.py it seems someting in the upstream
+      build system sometimes resets it.
 
- -- Jan Luca Naumann <j.naumann@fu-berlin.de>  Mon, 11 Jan 2021 17:04:13 +0100
+ -- Peter Michael Green <plugwash@debian.org>  Tue, 15 Sep 2020 13:10:35 +0000
 
-chromium (83.0.4103.116-1~deb10u3) buster-security; urgency=medium
+chromium (83.0.4103.116-3) unstable; urgency=high
 
   * Fix crashes when a connection error occurs (closes: #963548).
+    - Thank you so much to Riku Voipio.
 
- -- Michael Gilbert <mgilbert@debian.org>  Sun, 12 Jul 2020 07:08:46 -0400
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 11 Jul 2020 14:56:34 +0000
 
-chromium (83.0.4103.116-1~deb10u2) buster-security; urgency=medium
+chromium (83.0.4103.116-2) unstable; urgency=medium
 
-  * Rebuild with optimization (closes: #964145).
+  * Fix crashes due to ffmpeg 4.3 (closes: #963035).
 
- -- Michael Gilbert <mgilbert@debian.org>  Fri, 03 Jul 2020 22:31:38 -0400
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 29 Jun 2020 10:28:15 +0000
 
-chromium (83.0.4103.116-1~deb10u1) buster-security; urgency=medium
+chromium (83.0.4103.116-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2020-6509: Use after free in extensions. Reported by Anonymous
+
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 22 Jun 2020 19:45:51 +0000
+
+chromium (83.0.4103.106-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2020-6493: Use after free in WebAuthentication. Reported by Anonymous
+    - CVE-2020-6494: Incorrect security UI in payments. Reported by Juho
+      Nurminen
+    - CVE-2020-6495: Insufficient policy enforcement in developer tools.
+      Reported by David Erceg
+    - CVE-2020-6496: Use after free in payments. Reported by Khalil Zhani
+    - CVE-2020-6497: Insufficient policy enforcement in Omnibox. Reported by
+      Rayyan Bijoora
+    - CVE-2020-6498: Incorrect security UI in progress display. Reported by
+      Rayyan Bijoora
+    - CVE-2020-6505: Use after free in speech. Reported by Khalil Zhani
+    - CVE-2020-6506: Insufficient policy enforcement in WebView. Reported by
+      Alesandro Ortiz
+    - CVE-2020-6507: Out of bounds write in V8. Reported by Sergei Glazunov
+  * Conflict with ffmpeg 4.3 (closes: #963080).
+  * Support building with icu 67 (closes: #960236).
+  * Support building with re2 20200501 (closes: #960361).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 19 Jun 2020 00:40:28 +0000
+
+chromium (83.0.4103.83-1) unstable; urgency=medium
 
   * New upstream stable release.
-    - CVE-2020-6423: Use after free in audio. Reported by Anonymous
-    - CVE-2020-6430: Type Confusion in V8. Reported by Avihay Cohen
-    - CVE-2020-6431: Insufficient policy enforcement in full screen. Reported
-      by Luan Herrera
-    - CVE-2020-6432: Insufficient policy enforcement in navigations. Reported
-      by David Erceg
-    - CVE-2020-6433: Insufficient policy enforcement in extensions. Reported by
-      David Erceg
-    - CVE-2020-6434: Use after free in devtools. Reported by HyungSeok Han
-    - CVE-2020-6435: Insufficient policy enforcement in extensions. Reported by
-      Sergei Glazunov
-    - CVE-2020-6436: Use after free in window management. Reported by Igor
-      Bukanov
-    - CVE-2020-6437: Inappropriate implementation in WebView. Reported by Jann
-      Horn
-    - CVE-2020-6438: Insufficient policy enforcement in extensions. Reported by
-      Ng Yik Phang
-    - CVE-2020-6439: Insufficient policy enforcement in navigations. Reported
-      by remkoboonstra
-    - CVE-2020-6440: Inappropriate implementation in extensions. Reported by
-      David Erceg
-    - CVE-2020-6441: Insufficient policy enforcement in omnibox. Reported by
-      David Erceg
-    - CVE-2020-6442: Inappropriate implementation in cache. Reported by B@rMey
-    - CVE-2020-6443: Insufficient data validation in developer tools. Reported
-      by @lovasoa
-    - CVE-2020-6444: Uninitialized use in WebRTC. Reported by mlfbrown
-    - CVE-2020-6445: Insufficient policy enforcement in trusted types. Reported
-      by Jun Kokatsu
-    - CVE-2020-6446: Insufficient policy enforcement in trusted types. Reported
-      by Jun Kokatsu
-    - CVE-2020-6447: Inappropriate implementation in developer tools. Reported
-      by David Erceg
-    - CVE-2020-6448: Use after free in V8. Reported by Guang Gong
-    - CVE-2020-6454: Use after free in extensions. Reported by leecraso and
-      Guang Gong
-    - CVE-2020-6455: Out of bounds read in WebSQL. Reported by Nan Wang and
-      Guang Gong
-    - CVE-2020-6456: Insufficient validation of untrusted input in clipboard.
-      Reported by Michał Bentkowski
     - CVE-2020-6457: Use after free in speech recognizer. Reported by Leecraso
       and Guang Gong
     - CVE-2020-6458: Out of bounds read and write in PDFium. Reported by
@@ -632,36 +1378,67 @@ chromium (83.0.4103.116-1~deb10u1) buster-security; urgency=medium
       Twitter
     - CVE-2020-6491: Incorrect security UI in site information. Reported by
       Sultan Haikal
-    - CVE-2020-6493: Use after free in WebAuthentication. Reported by Anonymous
-    - CVE-2020-6494: Incorrect security UI in payments. Reported by Juho
-      Nurminen
-    - CVE-2020-6495: Insufficient policy enforcement in developer tools.
-      Reported by David Erceg
-    - CVE-2020-6496: Use after free in payments. Reported by Khalil Zhani
-    - CVE-2020-6497: Insufficient policy enforcement in Omnibox. Reported by
-      Rayyan Bijoora
-    - CVE-2020-6498: Incorrect security UI in progress display. Reported by
-      Rayyan Bijoora
-    - CVE-2020-6505: Use after free in speech. Reported by Khalil Zhani
-    - CVE-2020-6506: Insufficient policy enforcement in WebView. Reported by
-      Alesandro Ortiz
-    - CVE-2020-6507: Out of bounds write in V8. Reported by Sergei Glazunov
-    - CVE-2020-6509: Use after free in extensions. Reported by Anonymous
     - CVE-2020-6831: Stack buffer overflow in SCTP. Reported by Natalie
       Silvanovich
 
- -- Michael Gilbert <mgilbert@debian.org>  Fri, 26 Jun 2020 23:52:43 -0400
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 18 Jun 2020 02:05:11 +0000
 
-chromium (80.0.3987.162-1~deb10u1) buster-security; urgency=medium
+chromium (81.0.4044.92-1) unstable; urgency=medium
+
+  * New upstream stable release.
+    - CVE-2020-6423: Use after free in audio. Reported by Anonymous
+    - CVE-2020-6430: Type Confusion in V8. Reported by Avihay Cohen
+    - CVE-2020-6431: Insufficient policy enforcement in full screen. Reported
+      by Luan Herrera
+    - CVE-2020-6432: Insufficient policy enforcement in navigations. Reported
+      by David Erceg
+    - CVE-2020-6433: Insufficient policy enforcement in extensions. Reported by
+      David Erceg
+    - CVE-2020-6434: Use after free in devtools. Reported by HyungSeok Han
+    - CVE-2020-6435: Insufficient policy enforcement in extensions. Reported by
+      Sergei Glazunov
+    - CVE-2020-6436: Use after free in window management. Reported by Igor
+      Bukanov
+    - CVE-2020-6437: Inappropriate implementation in WebView. Reported by Jann
+      Horn
+    - CVE-2020-6438: Insufficient policy enforcement in extensions. Reported by
+      Ng Yik Phang
+    - CVE-2020-6439: Insufficient policy enforcement in navigations. Reported
+      by remkoboonstra
+    - CVE-2020-6440: Inappropriate implementation in extensions. Reported by
+      David Erceg
+    - CVE-2020-6441: Insufficient policy enforcement in omnibox. Reported by
+      David Erceg
+    - CVE-2020-6442: Inappropriate implementation in cache. Reported by B@rMey
+    - CVE-2020-6443: Insufficient data validation in developer tools. Reported
+      by @lovasoa
+    - CVE-2020-6444: Uninitialized use in WebRTC. Reported by mlfbrown
+    - CVE-2020-6445: Insufficient policy enforcement in trusted types. Reported
+      by Jun Kokatsu
+    - CVE-2020-6446: Insufficient policy enforcement in trusted types. Reported
+      by Jun Kokatsu
+    - CVE-2020-6447: Inappropriate implementation in developer tools. Reported
+      by David Erceg
+    - CVE-2020-6448: Use after free in V8. Reported by Guang Gong
+    - CVE-2020-6454: Use after free in extensions. Reported by leecraso and
+      Guang Gong
+    - CVE-2020-6455: Out of bounds read in WebSQL. Reported by Nan Wang and
+      Guang Gong
+    - CVE-2020-6456: Insufficient validation of untrusted input in clipboard.
+      Reported by Michał Bentkowski
+
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 07 Apr 2020 23:05:20 +0000
+
+chromium (80.0.3987.162-1) unstable; urgency=medium
 
   * New upstream security release.
     - CVE-2020-6450: Use after free in WebAudio. Reported by Man Yue Mo
     - CVE-2020-6451: Use after free in WebAudio. Reported by Man Yue Mo
     - CVE-2020-6452: Heap buffer overflow in media. Reported by asnine
 
- -- Michael Gilbert <mgilbert@debian.org>  Thu, 02 Apr 2020 22:23:57 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 01 Apr 2020 04:30:14 +0000
 
-chromium (80.0.3987.149-1~deb10u1) buster-security; urgency=medium
+chromium (80.0.3987.149-1) unstable; urgency=medium
 
   * New upstream security release.
     - CVE-2019-20503: Out of bounds read in usersctplib. Reported by Natalie
@@ -677,11 +1454,43 @@ chromium (80.0.3987.149-1~deb10u1) buster-security; urgency=medium
     - CVE-2020-6429: Use after free in audio. Reported by Man Yue Mo
     - CVE-2020-6449: Use after free in audio. Reported by Man Yue Mo
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 21 Mar 2020 14:56:46 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 20 Mar 2020 00:18:06 +0000
 
-chromium (80.0.3987.132-1~deb10u1) buster-security; urgency=medium
+chromium (80.0.3987.132-1) unstable; urgency=medium
 
   * New upstream security release.
+    - CVE-2020-6420: Insufficient policy enforcement in media. Reported by
+      Taras Uzdenov
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 06 Mar 2020 16:40:19 +0000
+
+chromium (80.0.3987.122-2) unstable; urgency=medium
+
+  * Reduce debugging symbols to avoid memory exhaustion while linking.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 03 Mar 2020 04:15:34 +0000
+
+chromium (80.0.3987.122-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2020-6407: Out of bounds memory access in streams. Reported by
+      Sergei Glazunov
+    - CVE-2020-6418: Type confusion in V8. Reported by Clement Lecigne
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 01 Mar 2020 01:25:59 +0000
+
+chromium (80.0.3987.116-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2020-6383: Type confusion in V8. Reported by Sergei Glazunov
+    - CVE-2020-6384: Use after free in WebAudio. Reported by David Manouchehri
+    - CVE-2020-6386: Use after free in speech. Reported by Zhe Jin
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 22 Feb 2020 03:01:15 +0000
+
+chromium (80.0.3987.106-1) unstable; urgency=medium
+
+  * New upstream stable release.
     - CVE-2019-19923: Out of bounds memory access in SQLite. Reported by
       Richard Lorenz
     - CVE-2019-19925: Vulnerability in SQLite. Reported by Richard Lorenz
@@ -692,11 +1501,8 @@ chromium (80.0.3987.132-1~deb10u1) buster-security; urgency=medium
       National Cyber Security Centre
     - CVE-2020-6382: Type Confusion in JavaScript. Reported by Soyeon Park and
       Wen Xu
-    - CVE-2020-6383: Type confusion in V8. Reported by Sergei Glazunov
-    - CVE-2020-6384: Use after free in WebAudio. Reported by David Manouchehri
     - CVE-2020-6385: Insufficient policy enforcement in storage. Reported by
       Sergei Glazunov
-    - CVE-2020-6386: Use after free in speech. Reported by Zhe Jin
     - CVE-2020-6387: Out of bounds write in WebRTC. Reported by Natalie
       Silvanovich
     - CVE-2020-6388: Out of bounds memory access in WebAudio. Reported by
@@ -732,8 +1538,6 @@ chromium (80.0.3987.132-1~deb10u1) buster-security; urgency=medium
     - CVE-2020-6405: Out of bounds read in SQLite. Reported by Yongheng Chen
       and Rui Zhong
     - CVE-2020-6406: Use after free in audio. Reported by Sergei Glazunov
-    - CVE-2020-6407: Out of bounds memory access in streams. Reported by
-      Sergei Glazunov
     - CVE-2020-6408: Insufficient policy enforcement in CORS. Reported by Zhong
       Zhaochen
     - CVE-2020-6409: Inappropriate implementation in Omnibox. Reported by
@@ -752,13 +1556,21 @@ chromium (80.0.3987.132-1~deb10u1) buster-security; urgency=medium
       Avihay Cohen
     - CVE-2020-6416: Insufficient data validation in streams. Reported by
       Woojin Oh
-    - CVE-2020-6418: Type confusion in V8. Reported by Clement Lecigne
-    - CVE-2020-6420: Insufficient policy enforcement in media. Reported by
-      Taras Uzdenov
+    - CVE-2020-6417: Inappropriate implementation in installer. Reported by
+      Renato Moraes and Altieres Rohr
+  * Remove --ignore-gpu-blacklist from the default flags (closes: #947207).
+  * Update standards version to 4.5.0.
+  * Build with clang instead of gcc.
 
- -- Michael Gilbert <mgilbert@debian.org>  Sun, 08 Mar 2020 12:30:34 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 16 Feb 2020 23:33:50 +0000
 
-chromium (79.0.3945.130-1~deb10u1) buster-security; urgency=medium
+chromium (79.0.3945.130-2) unstable; urgency=medium
+
+  * Add libx11-xcb-dev as a build dependency.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 19 Jan 2020 08:42:14 +0000
+
+chromium (79.0.3945.130-1) unstable; urgency=medium
 
   * New upstream security release.
     - CVE-2020-6377: Use after free in audio. Reported by Zhe Jin
@@ -768,6 +1580,16 @@ chromium (79.0.3945.130-1~deb10u1) buster-security; urgency=medium
       Gong
     - CVE-2020-6380: Extension message verification error. Reported by Sergei
       Glazunov
+    - CVE-2019-13767: Use after free in media picker. Reported by Sergei
+      Glazunov
+  * Fix memory instrumentation singleton initialization errors caused by
+    tracing patch included in the previous upload (closes: #945920).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 18 Jan 2020 20:26:26 +0000
+
+chromium (79.0.3945.79-1) unstable; urgency=medium
+
+  * New upstream stable release.
     - CVE-2019-13725: Use after free in Bluetooth. Reported by Gengming Liu and
       Jianyu Chen
     - CVE-2019-13726: Heap buffer overflow in password manager. Reported by
@@ -830,20 +1652,36 @@ chromium (79.0.3945.130-1~deb10u1) buster-security; urgency=medium
       csanuragjain
     - CVE-2019-13763: Insufficient policy enforcement in payments. Reported by
       weiwangpp93
-    - CVE-2019-13767: Use after free in media picker. Reported by Sergei
-      Glazunov
 
- -- Michael Gilbert <mgilbert@debian.org>  Sun, 19 Jan 2020 15:22:38 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Thu, 12 Dec 2019 04:36:09 +0000
 
-chromium (78.0.3904.108-1~deb10u1) buster-security; urgency=medium
+chromium (79.0.3945.56-1) experimental; urgency=medium
+
+  * New upstream beta release.
+  * Update standards version to 4.4.1.
+  * Ignore the gpu blacklist by default again.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 27 Nov 2019 23:59:29 +0000
+
+chromium (78.0.3904.108-1) unstable; urgency=medium
 
   * New upstream security release.
     - CVE-2019-13723: Use-after-free in Bluetooth. Reported by Yuxiang Li
     - CVE-2019-13724: Out-of-bounds in Bluetooth. Reported by Yuxiang Li
+  * Disable vaapi on armhf (closes: #944627).
 
- -- Michael Gilbert <mgilbert@debian.org>  Fri, 22 Nov 2019 01:09:41 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 20 Nov 2019 23:46:06 +0000
 
-chromium (78.0.3904.97-1~deb10u1) buster-security; urgency=medium
+chromium (78.0.3904.97-1) unstable; urgency=medium
+
+  * New upstream security release.
+  * Enable vaapi (closes: #940074).
+  * Fix crash during profile manager shutdown.
+  * Drop libglewmx-dev build dependency (closes: #941050).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 09 Nov 2019 03:33:52 +0000
+
+chromium (78.0.3904.87-1) unstable; urgency=medium
 
   * New upstream stable release.
     - CVE-2019-5869: Use-after-free in Blink. Reported by Zhe Jin
@@ -908,6 +1746,8 @@ chromium (78.0.3904.97-1~deb10u1) buster-security; urgency=medium
     - CVE-2019-13699: Use-after-free in media. Reported by Man Yue Mo
     - CVE-2019-13700: Buffer overrun in Blink. Reported by Man Yue Mo
     - CVE-2019-13701: URL spoof in navigation. Reported by David Erceg
+    - CVE-2019-13702: Privilege elevation in Installer. Reported by Phillip
+      Langlois and Edward Torkington
     - CVE-2019-13703: URL bar spoofing. Reported by Khalil Zhani
     - CVE-2019-13704: CSP bypass. Reported by Jun Kokatsu
     - CVE-2019-13705: Extension permission bypass. Reported by Luan Herrera
@@ -929,67 +1769,31 @@ chromium (78.0.3904.97-1~deb10u1) buster-security; urgency=medium
     - CVE-2019-13720: Use-after-free in audio. Reported by Anton Ivanov and
       Alexey Kulaev
     - CVE-2019-13721: Use-after-free in PDFium. Reported by banananapenguin
+  * Drop support for building with gcc 6 and gtk 2.
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 09 Nov 2019 19:01:23 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 02 Nov 2019 22:30:42 +0000
 
-chromium (76.0.3809.100-1~deb10u1) buster-security; urgency=medium
+chromium (76.0.3809.100-1) unstable; urgency=medium
+
+  * New upstream security release.
+    - CVE-2019-5867: Out-of-bounds read in V8. Reported by Lucas Pinheiro
+    - CVE-2019-5868: Use-after-free in PDFium ExecuteFieldAction. Reported by
+      banananapenguin
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 09 Aug 2019 19:58:55 +0000
+
+chromium (76.0.3809.87-2) unstable; urgency=medium
+
+  * Fix inverted logic in enum comparison (closes: #933598).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sat, 03 Aug 2019 14:31:59 +0000
+
+chromium (76.0.3809.87-1) unstable; urgency=medium
 
   * New upstream stable release.
-    - CVE-2019-5805: Use after free in PDFium. Reported by Anonymous
-    - CVE-2019-5806: Integer overflow in Angle. Reported by Wen Xu
-    - CVE-2019-5807: Memory corruption in V8. Reported by TimGMichaud
-    - CVE-2019-5808: Use after free in Blink. Reported by cloudfuzzer
-    - CVE-2019-5809: Use after free in Blink. Reported by Mark Brand
-    - CVE-2019-5810: User information disclosure in Autofill. Reported by Mark
-      Amery
-    - CVE-2019-5811: CORS bypass in Blink. Reported by Jun Kokatsu
-    - CVE-2019-5813: Out of bounds read in V8. Reported by Aleksandar Nikolic
-    - CVE-2019-5814: CORS bypass in Blink. Reported by @AaylaSecura1138
-    - CVE-2019-5815: Heap buffer overflow in Blink. Reported by Nicolas
-      Grégoire
-    - CVE-2019-5818: Uninitialized value in media reader. Reported by Adrian
-      Tolbaru
-    - CVE-2019-5819: Incorrect escaping in developer tools. Reported by Svyat
-      Mitin
-    - CVE-2019-5820: Integer overflow in PDFium. Reported by pdknsk
-    - CVE-2019-5821: Integer overflow in PDFium. Reported by pdknsk
-    - CVE-2019-5822: CORS bypass in download manager. Reported by Jun Kokatsu
-    - CVE-2019-5823: Forced navigation from service worker. Reported by David
-      Erceg
-    - CVE-2019-5824: Parameter passing error in media player. Reported by
-      leecraso and Guang Gong
-    - CVE-2019-5825: Out-of-bounds write in V8. Reported by Gengming Liu,
-      Jianyu Chen, Zhen Feng, and Jessica Liu
-    - CVE-2019-5826: Use-after-free in IndexedDB. Reported by Gengming Liu,
-      Jianyu Chen, Zhen Feng, and Jessica Liu
-    - CVE-2019-5827: Out-of-bounds access issue in SQLite. Reported by
-      mlfbrown
-    - CVE-2019-5828: Use after free in ServiceWorker. Reported by leecraso and
-      Guang Gong
-    - CVE-2019-5829: Use after free in Download Manager. Reported by Lucas
-      Pinheiro
-    - CVE-2019-5830: Incorrectly credentialed requests in CORS. Reported by
-      Andrew Krasichkov
-    - CVE-2019-5831: Incorrect map processing in V8. Reported by yngwei
-    - CVE-2019-5832: Incorrect CORS handling in XHR. Reported by Sergey Shekyan
-    - CVE-2019-5833: Inconsistent security UI placement. Reported by Khalil
-      Zhani
-    - CVE-2019-5835: Out of bounds read in Swiftshader. Reported by Wenxiang
-      Qian
-    - CVE-2019-5836: Heap buffer overflow in Angle. Reported by Omair
-    - CVE-2019-5837: Cross-origin resources size disclosure in Appcache.
-      Reported by Adam Iwaniuk
-    - CVE-2019-5838: Overly permissive tab access in Extensions. Reported by
-      David Erceg
-    - CVE-2019-5839: Incorrect handling of certain code points in Blink.
-      Reported by Masato Kinugawa
-    - CVE-2019-5840: Popup blocker bypass. Reported by Eliya Stein and Jerome
-      Dangu
-    - CVE-2019-5842: Use-after-free in Blink. Reported by BUGFENSE
     - CVE-2019-5847: V8 sealed/frozen elements cause crash. Reported by m3plex
     - CVE-2019-5848: Font sizes may expose sensitive information. Reported by
       Mark Amery
-    - CVE-2019-5849: Out-of-bounds read in Skia. Reported by Zhen Zhou
     - CVE-2019-5850: Use-after-free in offline page fetcher. Reported by
       Brendon Tiszka
     - CVE-2019-5851: Use-after-poison in offline audio context. Reported by Zhe
@@ -1016,11 +1820,113 @@ chromium (76.0.3809.100-1~deb10u1) buster-security; urgency=medium
       Reported by Devin Grindle
     - CVE-2019-5865: Site isolation bypass from compromised renderer. Reported
       by Ivan Fratric
-    - CVE-2019-5867: Out-of-bounds read in V8. Reported by Lucas Pinheiro
-    - CVE-2019-5868: Use-after-free in PDFium ExecuteFieldAction. Reported by
-      banananapenguin
+  * Use legacy call to avoid error in icu 6.3 (closes: #932049).
 
- -- Michael Gilbert <mgilbert@debian.org>  Sat, 10 Aug 2019 01:11:21 +0000
+ -- Michael Gilbert <mgilbert@debian.org>  Mon, 29 Jul 2019 23:22:44 +0000
+
+chromium (76.0.3809.71-1) unstable; urgency=medium
+
+  * New upstream beta release.
+  * Recommend system-config-printer (closes: #929106).
+  * Add -fno-delete-null-pointer-checks back into the build flags.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 24 Jul 2019 22:51:41 +0000
+
+chromium (76.0.3809.62-1) unstable; urgency=medium
+
+  * New upstream beta release.
+    - Fixes error restoring multiple profiles on startup (closes: #930469).
+  * Update standards version to 4.4.0.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 10 Jul 2019 23:52:45 +0000
+
+chromium (75.0.3770.90-1) unstable; urgency=medium
+
+  [ Riku Voipio ]
+  * Fix build on armhf (closes: #930348).
+
+  [ Michael Gilbert ]
+  * New upstream security release.
+    - CVE-2019-5842: Use-after-free in Blink. Reported by BUGFENSE
+  * Disable hardware accelerated video (closes: #926032).
+  * Fix signedness error when built with gcc (closes: #914886).
+    - Thanks to Maciej S. Szmigiero.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 14 Jun 2019 00:10:43 +0000
+
+chromium (75.0.3770.80-1) unstable; urgency=medium
+
+  * New upstream stable release.
+    - CVE-2019-5824: Parameter passing error in media player. Reported by
+      leecraso and Guang Gong
+    - CVE-2019-5825: Out-of-bounds write in V8. Reported by Gengming Liu,
+      Jianyu Chen, Zhen Feng, and Jessica Liu
+    - CVE-2019-5826: Use-after-free in IndexedDB. Reported by Gengming Liu,
+      Jianyu Chen, Zhen Feng, and Jessica Liu
+    - CVE-2019-5827: Out-of-bounds access issue in SQLite. Reported by
+      mlfbrown
+    - CVE-2019-5828: Use after free in ServiceWorker. Reported by leecraso and
+      Guang Gong
+    - CVE-2019-5829: Use after free in Download Manager. Reported by Lucas
+      Pinheiro
+    - CVE-2019-5830: Incorrectly credentialed requests in CORS. Reported by
+      Andrew Krasichkov
+    - CVE-2019-5831: Incorrect map processing in V8. Reported by yngwei
+    - CVE-2019-5832: Incorrect CORS handling in XHR. Reported by Sergey Shekyan
+    - CVE-2019-5833: Inconsistent security UI placement. Reported by Khalil
+      Zhani
+    - CVE-2019-5834: URL spoof in Omnibox on iOS. Reported by Khalil Zhani
+    - CVE-2019-5836: Heap buffer overflow in Angle. Reported by Omair
+    - CVE-2019-5837: Cross-origin resources size disclosure in Appcache.
+      Reported by Adam Iwaniuk
+    - CVE-2019-5838: Overly permissive tab access in Extensions. Reported by
+      David Erceg
+    - CVE-2019-5839: Incorrect handling of certain code points in Blink.
+      Reported by Masato Kinugawa
+    - CVE-2019-5840: Popup blocker bypass. Reported by Eliya Stein and Jerome
+      Dangu
+    - CVE-2019-5849: Out-of-bounds read in Skia. Reported by Zhen Zhou
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 09 Jun 2019 18:59:50 +0000
+
+chromium (75.0.3770.10-1) experimental; urgency=medium
+
+  * New upstream development release.
+    - Fixes crash when launching chromium a second time (closes: #927913).
+  * Document how to use widevine in README.debian (closes: #929026).
+  * Apply vaapi update from the Fedora chromium 73 package (closes: #926032).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 09 Jun 2019 18:35:36 +0000
+
+chromium (74.0.3729.108-1) unstable; urgency=medium
+
+  * New upstream stable release.
+    - Eliminates flood of vsync error messages (closes: #901831).
+    - Correctly shuts down when SIGTERM is recieved (closes: #924901).
+    - Fixes regression in hardware accelerated video (closes: #926032).
+    - CVE-2019-5805: Use after free in PDFium. Reported by Anonymous
+    - CVE-2019-5806: Integer overflow in Angle. Reported by Wen Xu
+    - CVE-2019-5807: Memory corruption in V8. Reported by TimGMichaud
+    - CVE-2019-5808: Use after free in Blink. Reported by cloudfuzzer
+    - CVE-2019-5809: Use after free in Blink. Reported by Mark Brand
+    - CVE-2019-5810: User information disclosure in Autofill. Reported by Mark
+      Amery
+    - CVE-2019-5811: CORS bypass in Blink. Reported by Jun Kokatsu
+    - CVE-2019-5813: Out of bounds read in V8. Reported by Aleksandar Nikolic
+    - CVE-2019-5814: CORS bypass in Blink. Reported by @AaylaSecura1138
+    - CVE-2019-5815: Heap buffer overflow in Blink. Reported by Nicolas
+      Grégoire
+    - CVE-2019-5818: Uninitialized value in media reader. Reported by Adrian
+      Tolbaru
+    - CVE-2019-5819: Incorrect escaping in developer tools. Reported by Svyat
+      Mitin
+    - CVE-2019-5820: Integer overflow in PDFium. Reported by pdknsk
+    - CVE-2019-5821: Integer overflow in PDFium. Reported by pdknsk
+    - CVE-2019-5822: CORS bypass in download manager. Reported by Jun Kokatsu
+    - CVE-2019-5823: Forced navigation from service worker. Reported by David
+      Erceg
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 24 Apr 2019 00:08:54 +0000
 
 chromium (73.0.3683.75-1) unstable; urgency=medium
 
@@ -2493,6 +3399,7 @@ chromium-browser (52.0.2743.82-1) unstable; urgency=medium
     - CVE-2016-1705: Various fixes from internal audits, fuzzing and other
       initiatives.
     - CVE-2016-1706: Sandbox escape in PPAPI. Credit to Pinkie Pie
+    - CVE-2016-1707: URL spoofing on iOS. Credit to xisigr.
     - CVE-2016-1708: Use-after-free in Extensions. Credit to Adam Varsan
     - CVE-2016-1709: Heap-buffer-overflow in sfntly. Credit to ChenQin.
     - CVE-2016-1710: Same-origin bypass in Blink. Credit to Mariusz Mlynski
@@ -3183,6 +4090,8 @@ chromium-browser (38.0.2125.101-1) unstable; urgency=medium
     - CVE-2014-3193: Type confusion in Session Management.  Credit to miaubiz.
     - CVE-2014-3194: Use-after-free in Web Workers. Credit to Collin Payne.
     - CVE-2014-3195: Information Leak in V8. Credit to Jüri Aedla.
+    - CVE-2014-3196: Permissions bypass in Windows Sandbox.  Credit to James
+      Forshaw.
     - CVE-2014-3197: Information Leak in XSS Auditor. Credit to Takeshi
       Terada.
     - CVE-2014-3198: Out-of-bounds read in PDFium. Credit to Atte Kettunen.
@@ -3470,6 +4379,7 @@ chromium-browser (33.0.1750.152-1) unstable; urgency=high
   * [43cea90] Refreshed patches
   * New stable release:
     - High CVE-2014-1713: Use-after-free in Blink bindings
+    - High CVE-2014-1714: Windows clipboard vulnerability
     - High CVE-2014-1705: Memory corruption in V8
     - High CVE-2014-1715: Directory traversal issue
     - High CVE-2014-1700: Use-after-free in speech. Credit to Chamal de Silva.

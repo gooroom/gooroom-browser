@@ -1,0 +1,25 @@
+From 9477be923ef66c0b29e3cc8849e16f6f1d428c16 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 15:41:14 +0900
+Subject: [PATCH 48/63] Hide part of setting incognito mode
+
+---
+ chrome/browser/resources/extensions/detail_view.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/extensions/detail_view.html b/chrome/browser/resources/extensions/detail_view.html
+index a5820184353cb..2e73965c28b54 100644
+--- a/chrome/browser/resources/extensions/detail_view.html
++++ b/chrome/browser/resources/extensions/detail_view.html
+@@ -366,7 +366,7 @@
+               checked="[[data.incognitoAccess.isActive]]"
+               class="hr"
+               on-change="onAllowIncognitoChange_">
+-            <div>
++            <div hidden>
+               <div>$i18n{itemAllowIncognito}</div>
+               <div class="section-content">$i18n{incognitoInfoWarning}</div>
+             </div>
+-- 
+2.30.2
+

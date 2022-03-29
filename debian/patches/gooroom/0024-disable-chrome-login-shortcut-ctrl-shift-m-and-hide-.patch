@@ -1,7 +1,7 @@
-From cb4d0297d8f89344606a50df7a0d39ab2984f3da Mon Sep 17 00:00:00 2001
+From 93c1a5c07464160cd0a6dc0f74533d444e319123 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:23:10 +0900
-Subject: [PATCH 24/84] disable chrome login shortcut(ctrl+shift+m) and hide
+Subject: [PATCH 24/63] disable chrome login shortcut(ctrl+shift+m) and hide
  login icon
 
 ---
@@ -10,12 +10,12 @@ Subject: [PATCH 24/84] disable chrome login shortcut(ctrl+shift+m) and hide
  2 files changed, 7 insertions(+)
 
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index 8faaa9afc..e8e7c11fa 100644
+index 92f10fac6b017..e34ae7cbb51dc 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
-@@ -779,8 +779,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+@@ -806,8 +806,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
        break;
- #if !BUILDFLAG(IS_CHROMEOS_ASH)
+ #if BUILDFLAG(ENABLE_DICE_SUPPORT)
      case IDC_SHOW_SIGNIN:
 +#if !defined(GOOROOM_BUILD)
 +//Disable chrome login shortcut (ctrl + shift + m) on gooroom-browser
@@ -26,13 +26,13 @@ index 8faaa9afc..e8e7c11fa 100644
  #endif
      case IDC_DISTILL_PAGE:
 diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-index 54ba20477..0c66fd6f9 100644
+index b5098154b2f7e..563a4ce794a00 100644
 --- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
 +++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-@@ -250,6 +250,10 @@ void ToolbarView::Init() {
-     show_avatar_toolbar_button = browser_->profile()->IsOffTheRecord() ||
-                                  browser_->profile()->IsGuestSession();
-   }
+@@ -287,6 +287,10 @@ void ToolbarView::Init() {
+                                browser_->profile()->IsGuestSession();
+ #elif BUILDFLAG(IS_CHROMEOS_LACROS)
+   show_avatar_toolbar_button = !profiles::IsPublicSession();
 +#endif
 +#if defined(GOOROOM_BUILD)
 +//Hide show_avatar_toolbar_button
@@ -41,5 +41,5 @@ index 54ba20477..0c66fd6f9 100644
    if (base::FeatureList::IsEnabled(
            autofill::features::kAutofillEnableToolbarStatusChip)) {
 -- 
-2.20.1
+2.30.2
 

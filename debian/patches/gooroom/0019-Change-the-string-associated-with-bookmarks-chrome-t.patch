@@ -1,7 +1,7 @@
-From 53b553bbb0ac2f12772b0f8d824f51583bdb79e1 Mon Sep 17 00:00:00 2001
+From b889ebf78e9a265dfb73ce183bf90df84fe82434 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:11:36 +0900
-Subject: [PATCH 19/84] Change the string associated with bookmarks (chrome://
+Subject: [PATCH 19/63] Change the string associated with bookmarks (chrome://
  to gooroom://)
 
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH 19/84] Change the string associated with bookmarks (chrome://
  2 files changed, 25 insertions(+)
 
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
-index 371bcf5d3..df60e97b7 100644
+index 57fe55c22157b..d4ebae965aa54 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
-@@ -250,6 +250,14 @@ class BookmarkButton : public BookmarkButtonBase {
+@@ -245,6 +245,14 @@ class BookmarkButton : public BookmarkButtonBase {
        tooltip_text_ = BookmarkBarView::CreateToolTipForURLAndTitle(
            max_tooltip_width_, tooltip_manager->GetFontList(), url_, GetText());
      }
@@ -29,30 +29,30 @@ index 371bcf5d3..df60e97b7 100644
    }
  
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
-index d05e30738..6b0dcf973 100644
+index 39f502a122662..30dc932531a9e 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
-@@ -331,7 +331,17 @@ void BookmarkEditorView::Init() {
- 
-   if (details_.GetNodeType() != BookmarkNode::FOLDER) {
-     auto url_tf = std::make_unique<views::Textfield>();
+@@ -301,7 +301,17 @@ void BookmarkEditorView::Init() {
+     labels->AddChildView(std::make_unique<views::Label>(
+         l10n_util::GetStringUTF16(IDS_BOOKMARK_EDITOR_URL_LABEL)));
+     url_tf_ = labels->AddChildView(std::make_unique<views::Textfield>());
 +//Change bookmark on 'more..' popup page strings (chrome:// to gooroom://)
 +#if defined(GOOROOM_BUILD)
 +    if (url.scheme() == "chrome") {
 +      std::string gooroom_scheme = "gooroom://" + url.GetContent();
-+      url_tf->SetText(base::UTF8ToUTF16(gooroom_scheme));
++      url_tf_->SetText(base::UTF8ToUTF16(gooroom_scheme));
 +    } else {
-+      url_tf->SetText(chrome::FormatBookmarkURLForDisplay(url));
++      url_tf_->SetText(chrome::FormatBookmarkURLForDisplay(url));
 +    }
 +#else
-     url_tf->SetText(chrome::FormatBookmarkURLForDisplay(url));
+     url_tf_->SetText(chrome::FormatBookmarkURLForDisplay(url));
 +#endif
-     url_tf->set_controller(this);
-     url_tf->SetAccessibleName(
+     url_tf_->set_controller(this);
+     url_tf_->SetAccessibleName(
          l10n_util::GetStringUTF16(IDS_BOOKMARK_AX_EDITOR_URL_LABEL));
-@@ -503,6 +513,13 @@ void BookmarkEditorView::ApplyEdits(EditorNode* parent) {
+@@ -464,6 +474,13 @@ void BookmarkEditorView::ApplyEdits(EditorNode* parent) {
    GURL new_url(GetInputURL());
-   base::string16 new_title(title_tf_->GetText());
+   std::u16string new_title(title_tf_->GetText());
  
 +//When the bookmark is applied, change the string (gooroom:// to chrome://)
 +#if defined(GOOROOM_BUILD)
@@ -65,5 +65,5 @@ index d05e30738..6b0dcf973 100644
      BookmarkEditor::ApplyEditsWithNoFolderChange(
          bb_model_, parent_, details_, new_title, new_url);
 -- 
-2.20.1
+2.30.2
 

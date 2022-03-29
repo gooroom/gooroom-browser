@@ -1,25 +1,25 @@
-From 527f1b6f75c3b87baf42c074a91f72cfec125567 Mon Sep 17 00:00:00 2001
+From 9416afc70eaa738ab3d2d571978829781f328eed Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 11:52:13 +0900
-Subject: [PATCH 36/84] Update chrome://settings/ page
+Subject: [PATCH 36/63] Update chrome://settings/ page
 
 ---
  chrome/browser/resources/settings/basic_page/basic_page.html | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index 646e4c4f4..4c063f94f 100644
+index b221df079ddf7..1876530a29077 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
-@@ -92,6 +92,7 @@
+@@ -53,6 +53,7 @@
              <settings-autofill-page prefs="{{prefs}}"></settings-autofill-page>
            </settings-section>
          </template>
 +</if>
-         <template is="dom-if" if="[[showPage_(pageVisibility.safetyCheck)]]"
-             restamp>
-           <settings-section page-title="$i18n{safetyCheckSectionTitle}"
-@@ -110,7 +111,6 @@
+         <settings-section id="privacyReviewPromoSection" page-title=""
+             hidden$="[[!showPrivacyReviewPromo_]]" nest-under-section="privacy"
+             no-search>
+@@ -78,7 +79,6 @@
              </settings-privacy-page>
            </settings-section>
          </template>
@@ -28,5 +28,5 @@ index 646e4c4f4..4c063f94f 100644
              restamp>
            <settings-section page-title="$i18n{appearancePageTitle}"
 -- 
-2.20.1
+2.30.2
 

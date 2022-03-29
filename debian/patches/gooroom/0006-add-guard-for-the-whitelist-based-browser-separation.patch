@@ -1,7 +1,7 @@
-From 5ab212580c178e08c08b88a832338ef471540b3a Mon Sep 17 00:00:00 2001
+From ed88b5c1ce23add616b1c349badb4434fe8fb679 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:14:47 +0900
-Subject: [PATCH 06/84] add guard for the whitelist based browser separation
+Subject: [PATCH 06/63] add guard for the whitelist based browser separation
 
 ---
  build/config/chrome_build.gni   | 1 +
@@ -10,7 +10,7 @@ Subject: [PATCH 06/84] add guard for the whitelist based browser separation
  3 files changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/build/config/chrome_build.gni b/build/config/chrome_build.gni
-index 5c51d7f2c..e9c6531b8 100644
+index 5c51d7f2cc3db..e9c6531b8b905 100644
 --- a/build/config/chrome_build.gni
 +++ b/build/config/chrome_build.gni
 @@ -7,6 +7,7 @@ declare_args() {
@@ -22,7 +22,7 @@ index 5c51d7f2c..e9c6531b8 100644
  
  declare_args() {
 diff --git a/ppapi/buildflags/BUILD.gn b/ppapi/buildflags/BUILD.gn
-index 4dfdc7a5b..2b50baf98 100644
+index 4dfdc7a5b335c..2b50baf98d4dc 100644
 --- a/ppapi/buildflags/BUILD.gn
 +++ b/ppapi/buildflags/BUILD.gn
 @@ -11,5 +11,8 @@ import("//ppapi/buildflags/buildflags.gni")
@@ -36,7 +36,7 @@ index 4dfdc7a5b..2b50baf98 100644
 +  ]
  }
 diff --git a/ppapi/buildflags/buildflags.gni b/ppapi/buildflags/buildflags.gni
-index 560d1ecae..cdfbc36d2 100644
+index 560d1ecaecbdf..cdfbc36d2a061 100644
 --- a/ppapi/buildflags/buildflags.gni
 +++ b/ppapi/buildflags/buildflags.gni
 @@ -8,4 +8,5 @@ import("//build/config/features.gni")
@@ -46,5 +46,5 @@ index 560d1ecae..cdfbc36d2 100644
 +  enable_gooroom = is_gooroom
  }
 -- 
-2.20.1
+2.30.2
 

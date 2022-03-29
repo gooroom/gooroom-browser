@@ -1,0 +1,34 @@
+From de4e68e6f4449bf1c1fa48840f25ca5d095d7913 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 15:41:46 +0900
+Subject: [PATCH 49/63] Set maximum length of the extension display name
+
+---
+ extensions/common/extension.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/extensions/common/extension.cc b/extensions/common/extension.cc
+index 731da16dccb47..0d028f2e0ef6b 100644
+--- a/extensions/common/extension.cc
++++ b/extensions/common/extension.cc
+@@ -664,6 +664,7 @@ bool Extension::LoadRequiredFeatures(std::u16string* error) {
+ bool Extension::LoadName(std::u16string* error) {
+   const std::string* non_localized_name_ptr =
+       manifest_->FindStringPath(keys::kName);
++  size_t display_max_len_ = 512;
+   if (non_localized_name_ptr == nullptr) {
+     *error = errors::kInvalidName16;
+     return false;
+@@ -674,6 +675,9 @@ bool Extension::LoadName(std::u16string* error) {
+       base::CollapseWhitespace(base::UTF8ToUTF16(non_localized_name_), true);
+   base::i18n::SanitizeUserSuppliedString(&sanitized_name);
+   display_name_ = base::UTF16ToUTF8(sanitized_name);
++  if (display_name_.length() > display_max_len_)
++    display_name_.resize(display_max_len_);
++
+   return true;
+ }
+ 
+-- 
+2.30.2
+

@@ -1,7 +1,7 @@
-From f7ddb0163826a9b13a08887b338e8e8ce2dff8c6 Mon Sep 17 00:00:00 2001
+From 8451bd84bd45cc5b1ba3ea38f9de3ccd07f9a7f8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:07:50 +0900
-Subject: [PATCH 02/84] add GooroomExtraPartsSecurity that will initialize
+Subject: [PATCH 02/63] add GooroomExtraPartsSecurity that will initialize
  GooroomBase via GooroomPrefs
 
 ---
@@ -13,7 +13,7 @@ Subject: [PATCH 02/84] add GooroomExtraPartsSecurity that will initialize
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.h
 
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
-index 4a87b0352..309bd48c7 100644
+index 4a87b03520b47..309bd48c7d9b8 100644
 --- a/gooroom/browser/BUILD.gn
 +++ b/gooroom/browser/BUILD.gn
 @@ -7,11 +7,12 @@ import("//build/util/branding.gni")
@@ -32,7 +32,7 @@ index 4a87b0352..309bd48c7 100644
    deps = [
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.cc b/gooroom/browser/gooroom_browser_extra_parts_security.cc
 new file mode 100644
-index 000000000..c1ca04e9a
+index 0000000000000..20795eb6356af
 --- /dev/null
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.cc
 @@ -0,0 +1,37 @@
@@ -58,13 +58,13 @@ index 000000000..c1ca04e9a
 +#include "components/prefs/json_pref_store.h"
 +#include "components/prefs/pref_service_factory.h"
 +
-+void GooroomBrowserExtraPartsSecurity::PostMainMessageLoopStart() {
-+  DLOG(INFO) << "PostMainMessageLoopStart()";
-+}
++//void GooroomBrowserExtraPartsSecurity::PostMainMessageLoopStart() {
++//  DLOG(INFO) << "PostMainMessageLoopStart()";
++//}
 +
-+void GooroomBrowserExtraPartsSecurity::PreMainMessageLoopStart() {
-+  DLOG(INFO) << "PreMainMessageLoopStart()";
-+}
++//void GooroomBrowserExtraPartsSecurity::PreMainMessageLoopStart() {
++//  DLOG(INFO) << "PreMainMessageLoopStart()";
++//}
 +
 +void GooroomBrowserExtraPartsSecurity::PostProfileInit() {
 +  DLOG(INFO) << "PostProfileInit()";
@@ -73,10 +73,9 @@ index 000000000..c1ca04e9a
 +void GooroomBrowserExtraPartsSecurity::PostBrowserStart() {
 +	DLOG(INFO) << "PostBrowserStart()";
 +}
-\ No newline at end of file
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.h b/gooroom/browser/gooroom_browser_extra_parts_security.h
 new file mode 100644
-index 000000000..944f4a170
+index 0000000000000..b1330cbf06de4
 --- /dev/null
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.h
 @@ -0,0 +1,27 @@
@@ -94,10 +93,10 @@ index 000000000..944f4a170
 +{
 + public:
 +
-+  void PostMainMessageLoopStart() override;
++//  void PostMainMessageLoopStart() override;
 +
 +  // Overridden from ChromeBrowserMainExtraParts:
-+  void PreMainMessageLoopStart() override;
++//  void PreMainMessageLoopStart() override;
 +  void PostProfileInit() override;
 +  void PostBrowserStart() override;
 +
@@ -108,5 +107,5 @@ index 000000000..944f4a170
 +
 +#endif  // GOOROOM_BROWSER_EXTRA_PARTS_SECURITY_H_
 -- 
-2.20.1
+2.30.2
 

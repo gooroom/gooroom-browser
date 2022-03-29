@@ -1,7 +1,7 @@
-From bc3622a62414ec1184bee149a2394efd8124d59c Mon Sep 17 00:00:00 2001
+From 3522957e7ab09e97c435804cd0bba43d0e253070 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:16:15 +0900
-Subject: [PATCH 21/84] change toolbar's background color whether the browser's
+Subject: [PATCH 21/63] change toolbar's background color whether the browser's
  type is trust or untrust
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 21/84] change toolbar's background color whether the browser's
  1 file changed, 26 insertions(+)
 
 diff --git a/chrome/browser/themes/theme_properties.cc b/chrome/browser/themes/theme_properties.cc
-index 2d4ac8bac..a3839862a 100644
+index 1a38bdb9ada0b..d07bee9be58e1 100644
 --- a/chrome/browser/themes/theme_properties.cc
 +++ b/chrome/browser/themes/theme_properties.cc
-@@ -19,6 +19,10 @@
+@@ -18,6 +18,10 @@
  #include <windows.h>
  #endif
  
@@ -23,7 +23,7 @@ index 2d4ac8bac..a3839862a 100644
  namespace {
  
  // Strings used in alignment properties.
-@@ -34,6 +38,14 @@ constexpr char kTilingRepeatX[] = "repeat-x";
+@@ -33,6 +37,14 @@ constexpr char kTilingRepeatX[] = "repeat-x";
  constexpr char kTilingRepeatY[] = "repeat-y";
  constexpr char kTilingRepeat[] = "repeat";
  
@@ -36,9 +36,9 @@ index 2d4ac8bac..a3839862a 100644
 +#endif
 +
  SkColor GetLightModeColor(int id) {
- #if defined(OS_WIN)
+ #if BUILDFLAG(IS_WIN)
    const SkColor kDefaultColorNTPBackground =
-@@ -56,10 +68,24 @@ SkColor GetLightModeColor(int id) {
+@@ -55,10 +67,24 @@ SkColor GetLightModeColor(int id) {
      case ThemeProperties::COLOR_TAB_BACKGROUND_INACTIVE_FRAME_ACTIVE:
      case ThemeProperties::COLOR_WINDOW_CONTROL_BUTTON_BACKGROUND_ACTIVE:
      case ThemeProperties::COLOR_STATUS_BUBBLE:
@@ -64,5 +64,5 @@ index 2d4ac8bac..a3839862a 100644
            GetLightModeColor(ThemeProperties::COLOR_FRAME_ACTIVE),
            ThemeProperties::GetDefaultTint(ThemeProperties::TINT_FRAME_INACTIVE,
 -- 
-2.20.1
+2.30.2
 
