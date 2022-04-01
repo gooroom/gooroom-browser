@@ -1,0 +1,32 @@
+description: clang-11 doesn't support -ffile-compilation-dir, -fuse-ctor-homing, or -Wno-unused-but-set-variable
+author: Andres Salomon <dilinger@debian.org>
+
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -1249,7 +1249,8 @@ config("compiler_deterministic") {
+     } else {
+       # -ffile-compilation-dir is an alias for both -fdebug-compilation-dir=
+       # and -fcoverage-compilation-dir=.
+-      cflags += [ "-ffile-compilation-dir=." ]
++      #cflags += [ "-ffile-compilation-dir=." ]
++      cflags += [ "-fdebug-compilation-dir=." ]
+     }
+     if (!is_win) {
+       # We don't use clang -cc1as on Windows (yet? https://crbug.com/762167)
+@@ -1678,8 +1679,6 @@ config("no_chromium_code") {
+     ]
+     if (!is_nacl) {
+       cflags += [
+-        # Disabled for similar reasons as -Wunused-variable.
+-        "-Wno-unused-but-set-variable",
+ 
+         # TODO(https://crbug.com/1202159): Clean up and enable.
+         "-Wno-misleading-indentation",
+@@ -2359,7 +2358,6 @@ config("symbols") {
+       # by emitting class type info only when constructors are emitted.
+       cflags += [
+         "-Xclang",
+-        "-fuse-ctor-homing",
+       ]
+     }
+   }
