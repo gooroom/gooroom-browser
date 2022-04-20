@@ -1,3 +1,14 @@
+gooroom-browser (3.2.0-1+grm3u2) stretch; urgency=medium
+
+  * Bug Fix
+    - 5199 print preview watermark (change chrome:// to gooroom://)
+    - 5202 Add Korean translation
+    - 5203 Change strings on websocket pop-ups
+    - 5204 Change strings on webworker pop-ups
+
+ -- Choi J.S. <junsungc91@gmail.com>  Wed, 20 Apr 2022 11:51:00 +0900
+
+chromium (99.0.4844.74-1~deb11u1) bullseye-security; urgency=high
 gooroom-browser (3.2.0-1+grm3u1) stretch; urgency=medium
  
   * Init gooroom-browser 3.2.0-1+grm3u1
