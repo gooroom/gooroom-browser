@@ -1,4 +1,4 @@
-From 8d0d9519852567e8630d0b5b019956b7c41446e3 Mon Sep 17 00:00:00 2001
+From 392f6c0aa9001c332e34eb8c94c99785478b1fc8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 20 Apr 2022 11:39:49 +0900
 Subject: [PATCH] BugFix - 5204, 5203, 5202, 5199
@@ -11,7 +11,7 @@ Subject: [PATCH] BugFix - 5204, 5203, 5202, 5199
  4 files changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/chrome/app/resources/generated_resources_ko.xtb b/chrome/app/resources/generated_resources_ko.xtb
-index bf3c84e1930d1..f92d0e3f1b916 100644
+index 9f712be57..25ce9d11e 100644
 --- a/chrome/app/resources/generated_resources_ko.xtb
 +++ b/chrome/app/resources/generated_resources_ko.xtb
 @@ -1,6 +1,8 @@
@@ -21,17 +21,17 @@ index bf3c84e1930d1..f92d0e3f1b916 100644
 +<translation id="2273707414284427980">웹 소켓 사용 설정</translation>
 +<translation id="4851515493665413363">웹 워커 사용 설정</translation>
  <translation id="1001033507375626788">나와 공유된 네트워크입니다.</translation>
- <translation id="1001307489511021749">앱, 설정 및 기타 맞춤설정이 내 Google 계정으로 로그인된 모든 gooroom-browser OS 기기에서 동기화됩니다.</translation>
+ <translation id="1001307489511021749">앱, 설정 및 기타 맞춤설정이 내 Google 계정으로 로그인된 모든 Gooroom Browser OS 기기에서 동기화됩니다.</translation>
  <translation id="1003088604756913841">새 <ph name="APP" /> 창에서 링크 열기</translation>
 @@ -8082,4 +8084,4 @@
  <translation id="996250603853062861">안전한 연결 설정 중...</translation>
- <translation id="99731366405731005">Wi-Fi 동기화를 사용하려면 <ph name="LINK1_BEGIN" />gooroom-browser 동기화<ph name="LINK1_END" />를 사용 설정하세요. <ph name="LINK2_BEGIN" />자세히 알아보기<ph name="LINK2_END" /></translation>
+ <translation id="99731366405731005">Wi-Fi 동기화를 사용하려면 <ph name="LINK1_BEGIN" />Gooroom Browser 동기화<ph name="LINK1_END" />를 사용 설정하세요. <ph name="LINK2_BEGIN" />자세히 알아보기<ph name="LINK2_END" /></translation>
  <translation id="998747458861718449">검사(&amp;N)</translation>
 -</translationbundle>
 \ No newline at end of file
 +</translationbundle>
 diff --git a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
-index 029a4ee1370b6..06d0e27175178 100644
+index 029a4ee13..06d0e2717 100644
 --- a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
 +++ b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
 @@ -12,6 +12,7 @@
@@ -56,7 +56,7 @@ index 029a4ee1370b6..06d0e27175178 100644
  
    VLOG(1) << "Print preview request start";
 diff --git a/third_party/blink/renderer/core/workers/dedicated_worker.cc b/third_party/blink/renderer/core/workers/dedicated_worker.cc
-index f141b4dab6719..1cdd9ce4f6bdc 100644
+index f141b4dab..1cdd9ce4f 100644
 --- a/third_party/blink/renderer/core/workers/dedicated_worker.cc
 +++ b/third_party/blink/renderer/core/workers/dedicated_worker.cc
 @@ -88,7 +88,7 @@ DedicatedWorker* DedicatedWorker::Create(ExecutionContext* context,
@@ -69,7 +69,7 @@ index f141b4dab6719..1cdd9ce4f6bdc 100644
      return nullptr;
    }
 diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
-index 51c42bb14e105..de9f2733fd698 100644
+index 51c42bb14..de9f2733f 100644
 --- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 +++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 @@ -286,7 +286,7 @@ void DOMWebSocket::Connect(const String& url,
