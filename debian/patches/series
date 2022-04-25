@@ -116,3 +116,4 @@ gooroom/0062-Change-chromium-String.patch
 gooroom/0063-Revive-settings-pages-that-are-appearance-page-autof.patch
 gooroom/0064-to-jenkins-build.patch
 gooroom/0065-BugFix-5204-5203-5202-5199.patch
+gooroom/CVE-2022-1096.patch
