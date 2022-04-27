@@ -1,0 +1,77 @@
+From 03a4343c251fa194aa2a0962c5d1b60c7511bb51 Mon Sep 17 00:00:00 2001
+From: Jan Krcal <jkrcal@chromium.org>
+Date: Fri, 10 Sep 2021 12:42:19 +0000
+Subject: [PATCH 19/28] Make enterprise checks more robust
+
+This CL passes a WeakPtr instead a raw pointer to one async callback in
+the process of enabling sync.
+
+Compared to the original CL, this CL includes two trivial conflict
+resolution (not affecting the code at all):
+ - The functions in M92 pass around |email| instead of encapsulating
+   struct |account_info| in M94+.
+ - M94+ has a new piece of code behind a feature toggle that the original
+   CL is also touching; this change is obviously omitted for M92.
+
+(cherry picked from commit d710b5cdbb18ac8e880afd3c9340106006a9f744)
+
+(cherry picked from commit b9aac92988ade33b262ab46bbf7727cc2f7207da)
+
+Bug: 1239595
+Change-Id: I5f79456a153a1be52dcac692b59b4322af35893c
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3097837
+Auto-Submit: Jan Krcal <jkrcal@chromium.org>
+Commit-Queue: Yann Dago <ydago@chromium.org>
+Reviewed-by: Yann Dago <ydago@chromium.org>
+Cr-Original-Original-Commit-Position: refs/heads/master@{#912287}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3122986
+Reviewed-by: Marc Treib <treib@chromium.org>
+Commit-Queue: Marc Treib <treib@chromium.org>
+Cr-Original-Commit-Position: refs/branch-heads/4515@{#2088}
+Cr-Original-Branched-From: 488fc70865ddaa05324ac00a54a6eb783b4bc41c-refs/heads/master@{#885287}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3147750
+Reviewed-by: Jana Grill <janagrill@google.com>
+Reviewed-by: Jan Krcal <jkrcal@chromium.org>
+Owners-Override: Jana Grill <janagrill@google.com>
+Commit-Queue: Artem Sumaneev <asumaneev@google.com>
+Cr-Commit-Position: refs/branch-heads/4430@{#1593}
+Cr-Branched-From: e5ce7dc4f7518237b3d9bb93cccca35d25216cbe-refs/heads/master@{#857950}
+---
+ .../signin/dice_turn_sync_on_helper_delegate_impl.cc  | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/browser/ui/webui/signin/dice_turn_sync_on_helper_delegate_impl.cc b/chrome/browser/ui/webui/signin/dice_turn_sync_on_helper_delegate_impl.cc
+index b318d092d..f853edad0 100644
+--- a/chrome/browser/ui/webui/signin/dice_turn_sync_on_helper_delegate_impl.cc
++++ b/chrome/browser/ui/webui/signin/dice_turn_sync_on_helper_delegate_impl.cc
+@@ -63,11 +63,16 @@ void OnEmailConfirmation(DiceTurnSyncOnHelper::SigninChoiceCallback callback,
+ 
+ void OnProfileCheckComplete(const std::string& email,
+                             DiceTurnSyncOnHelper::SigninChoiceCallback callback,
+-                            Browser* browser,
++                            base::WeakPtr<Browser> browser,
+                             bool prompt_for_new_profile) {
++  if (!browser) {
++    std::move(callback).Run(DiceTurnSyncOnHelper::SIGNIN_CHOICE_CANCEL);
++    return;
++  }
++
+   DiceTurnSyncOnHelper::Delegate::ShowEnterpriseAccountConfirmationForBrowser(
+       email, /*prompt_for_new_profile=*/prompt_for_new_profile,
+-      std::move(callback), browser);
++      std::move(callback), browser.get());
+ }
+ 
+ }  // namespace
+@@ -99,7 +104,7 @@ void DiceTurnSyncOnHelperDelegateImpl::ShowEnterpriseAccountConfirmation(
+   // asynchronous.
+   ui::CheckShouldPromptForNewProfile(
+       profile_, base::BindOnce(&OnProfileCheckComplete, email,
+-                               std::move(callback), browser_));
++                               std::move(callback), browser_->AsWeakPtr()));
+ }
+ 
+ void DiceTurnSyncOnHelperDelegateImpl::ShowSyncConfirmation(
+-- 
+2.20.1
+

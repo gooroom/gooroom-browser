@@ -1,0 +1,97 @@
+From dfa460704be80af6184fd0570849b0bb41c0cdb1 Mon Sep 17 00:00:00 2001
+From: Jaroslav Sevcik <jarin@chromium.org>
+Date: Tue, 26 Oct 2021 13:46:25 +0000
+Subject: [PATCH 26/28] Run DevTools file system change handler on UI thread
+
+There is no synchronization in the DevTools FileSystem
+change handler, but it can be invoked on the IO thread.
+
+This CL passes the change message to the UI thread
+for the actual processing.
+
+(cherry picked from commit 6bda8ff54af25de4feeae563ea8a040886bdb769)
+
+Bug: chromium:1249810
+Change-Id: I49556da0c57a9ccd936179d12c04511ddea29e03
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3172618
+Commit-Queue: Jaroslav Sevcik <jarin@chromium.org>
+Cr-Original-Commit-Position: refs/heads/main@{#928550}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3234542
+Reviewed-by: Michael Ershov <miersh@google.com>
+Owners-Override: Michael Ershov <miersh@google.com>
+Commit-Queue: Roger Felipe Zanoni da Silva <rzanoni@google.com>
+Cr-Commit-Position: refs/branch-heads/4430@{#1646}
+Cr-Branched-From: e5ce7dc4f7518237b3d9bb93cccca35d25216cbe-refs/heads/master@{#857950}
+---
+ .../browser/devtools/devtools_file_helper.cc   | 18 +++++++++++++++---
+ chrome/browser/devtools/devtools_file_helper.h |  2 +-
+ 2 files changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/chrome/browser/devtools/devtools_file_helper.cc b/chrome/browser/devtools/devtools_file_helper.cc
+index bde2af7c0..8d826c941 100644
+--- a/chrome/browser/devtools/devtools_file_helper.cc
++++ b/chrome/browser/devtools/devtools_file_helper.cc
+@@ -28,6 +28,7 @@
+ #include "components/prefs/pref_service.h"
+ #include "components/prefs/scoped_user_pref_update.h"
+ #include "content/public/browser/browser_context.h"
++#include "content/public/browser/browser_task_traits.h"
+ #include "content/public/browser/browser_thread.h"
+ #include "content/public/browser/child_process_security_policy.h"
+ #include "content/public/browser/download_manager.h"
+@@ -377,6 +378,14 @@ void DevToolsFileHelper::FailedToAddFileSystem(const std::string& error) {
+   delegate_->FileSystemAdded(error, nullptr);
+ }
+ 
++namespace {
++
++void RunOnUIThread(base::OnceClosure callback) {
++  content::GetUIThreadTaskRunner({})->PostTask(FROM_HERE, std::move(callback));
++}
++
++}  // namespace
++
+ std::vector<DevToolsFileHelper::FileSystem>
+ DevToolsFileHelper::GetFileSystems() {
+   file_system_paths_ = GetAddedFileSystemPaths(profile_);
+@@ -386,10 +395,12 @@ DevToolsFileHelper::GetFileSystems() {
+         base::BindRepeating(&DevToolsFileHelper::FilePathsChanged,
+                             weak_factory_.GetWeakPtr()),
+         base::SequencedTaskRunnerHandle::Get()));
++    auto change_handler_on_ui = base::BindRepeating(
++        &DevToolsFileHelper::FileSystemPathsSettingChangedOnUI,
++        weak_factory_.GetWeakPtr());
+     pref_change_registrar_.Add(
+         prefs::kDevToolsFileSystemPaths,
+-        base::BindRepeating(&DevToolsFileHelper::FileSystemPathsSettingChanged,
+-                            base::Unretained(this)));
++        base::BindRepeating(RunOnUIThread, change_handler_on_ui));
+   }
+   for (auto file_system_path : file_system_paths_) {
+     base::FilePath path =
+@@ -443,7 +454,8 @@ void DevToolsFileHelper::ShowItemInFolder(const std::string& file_system_path) {
+                      weak_factory_.GetWeakPtr(), path));
+ }
+ 
+-void DevToolsFileHelper::FileSystemPathsSettingChanged() {
++void DevToolsFileHelper::FileSystemPathsSettingChangedOnUI() {
++  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+   PathToType remaining;
+   remaining.swap(file_system_paths_);
+   DCHECK(file_watcher_.get());
+diff --git a/chrome/browser/devtools/devtools_file_helper.h b/chrome/browser/devtools/devtools_file_helper.h
+index df74930e3..abd5c4ebf 100644
+--- a/chrome/browser/devtools/devtools_file_helper.h
++++ b/chrome/browser/devtools/devtools_file_helper.h
+@@ -137,7 +137,7 @@ class DevToolsFileHelper {
+                                   const base::FilePath& path,
+                                   bool allowed);
+   void FailedToAddFileSystem(const std::string& error);
+-  void FileSystemPathsSettingChanged();
++  void FileSystemPathsSettingChangedOnUI();
+   void FilePathsChanged(const std::vector<std::string>& changed_paths,
+                         const std::vector<std::string>& added_paths,
+                         const std::vector<std::string>& removed_paths);
+-- 
+2.20.1
+

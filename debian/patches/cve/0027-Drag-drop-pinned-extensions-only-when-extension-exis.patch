@@ -1,0 +1,69 @@
+From b10f096be8857de6e437a2640e8f72a28fa863d8 Mon Sep 17 00:00:00 2001
+From: Emilia Paz <emiliapaz@chromium.org>
+Date: Wed, 1 Dec 2021 23:50:18 +0000
+Subject: [PATCH 27/28] Drag/drop pinned extensions only when extension exists
+
+An extension can be deleted while dragging. Now, dropping will only
+happen if there is an action for the extension dragged (either if the
+drag was inside or outside the container).
+
+Screencast:
+https://screencast.googleplex.com/cast/NTI4ODA4NjgxMzU0MDM1MnwzNzU0MjBjNS0zMQ
+
+Bug: 1266510
+
+(cherry picked from commit 92cf863b4197ec51ed3d0be9aa9abd33a78165c7)
+
+Change-Id: Ib7ed338ac792d455143008d81cbb0552092cec51
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3263281
+Reviewed-by: Caroline Rising <corising@chromium.org>
+Commit-Queue: Emilia Paz <emiliapaz@chromium.org>
+Cr-Original-Commit-Position: refs/heads/main@{#939447}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3307077
+Reviewed-by: Devlin Cronin <rdevlin.cronin@chromium.org>
+Cr-Commit-Position: refs/branch-heads/4664@{#1201}
+Cr-Branched-From: 24dc4ee75e01a29d390d43c9c264372a169273a7-refs/heads/main@{#929512}
+---
+ .../views/extensions/extensions_toolbar_container.cc | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/chrome/browser/ui/views/extensions/extensions_toolbar_container.cc b/chrome/browser/ui/views/extensions/extensions_toolbar_container.cc
+index 5d0a5c63f..b17be5c2e 100644
+--- a/chrome/browser/ui/views/extensions/extensions_toolbar_container.cc
++++ b/chrome/browser/ui/views/extensions/extensions_toolbar_container.cc
+@@ -607,6 +607,12 @@ int ExtensionsToolbarContainer::OnDragUpdated(
+   BrowserActionDragData data;
+   if (!data.Read(event.data()))
+     return ui::DragDropTypes::DRAG_NONE;
++
++  // Check if there is an extension for the dragged icon (e.g. an extension can
++  // be de deleted while dragging its icon).
++  if (!GetActionForId(data.id()))
++    return ui::DragDropTypes::DRAG_NONE;
++
+   size_t before_icon = 0;
+   // Figure out where to display the icon during dragging transition.
+ 
+@@ -637,6 +643,9 @@ int ExtensionsToolbarContainer::OnDragUpdated(
+ }
+ 
+ void ExtensionsToolbarContainer::OnDragExited() {
++  if (!drop_info_)
++    return;
++
+   const ToolbarActionsModel::ActionId dragged_extension_id =
+       drop_info_->action_id;
+   drop_info_.reset();
+@@ -698,6 +707,9 @@ void ExtensionsToolbarContainer::SetExtensionIconVisibility(
+                            return GetViewForId(action_id) == GetViewForId(id);
+                          });
+   ToolbarActionView* extension_view = GetViewForId(*it);
++  if (!extension_view)
++    return;
++
+   extension_view->SetImageModel(
+       views::Button::STATE_NORMAL,
+       visible ? ui::ImageModel::FromImageSkia(GetExtensionIcon(extension_view))
+-- 
+2.20.1
+

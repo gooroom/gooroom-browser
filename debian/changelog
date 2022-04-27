@@ -1,3 +1,41 @@
+gooroom-browser (2.10.0-1+grm2u5) stretch; urgency=medium
+
+  * Security patch
+    - CVE-2021-30521: Heap buffer overflow in Autofill.
+    - CVE-2021-30522: Use after free in WebAudio.
+    - CVE-2021-30524: Use after free in TabStrip. 
+    - CVE-2021-30526: Out of bounds write in TabStrip.
+    - CVE-2021-30527: Use after free in WebUI. 
+    - CVE-2021-30546: Use after free in Autofill.
+    - CVE-2021-30549: Use after free in Spell check.
+    - CVE-2021-30550: Use after free in Accessibility.
+    - CVE-2021-30555: Use after free in Sharing.
+    - CVE-2021-30556: Use after free in WebAudio.
+    - CVE-2021-30557: Use after free in TabGroups.
+    - CVE-2021-30565: Out of bounds write in Tab Groups.
+    - CVE-2021-30566: Stack buffer overflow in Printing.
+    - CVE-2021-30568: Heap buffer overflow in WebGL.
+    - CVE-2021-30572: Use after free in Autofill.
+    - CVE-2021-30573: Use after free in GPU. 
+    - CVE-2021-30598: Type Confusion in V8. 
+    - CVE-2021-30599: Type Confusion in V8.
+    - CVE-2021-30600: Use after free in Printing. 
+    - CVE-2021-30601: Use after free in Extensions API.
+    - CVE-2021-30603: Race in WebAudio.
+    - CVE-2021-30606: Use after free in Blink. 
+    - CVE-2021-30609: Use after free in Sign-In. 
+    - CVE-2021-30610: Use after free in Extensions API.
+    - CVE-2021-37956: Use after free in Offline use.
+    - CVE-2021-37957: Use after free in WebGPU. 
+    - CVE-2021-37959: Use after free in Task Manager.
+    - CVE-2021-37974: Use after free in Safe Browsing. 
+    - CVE-2021-37981: Heap buffer overflow in Skia.
+    - CVE-2021-37983: Use after free in Dev Tools. 
+    - CVE-2021-4055: Heap buffer overflow in extensions.
+    - CVE-2021-4063: Use after free in developer tools.
+
+ -- Choi J.S. <junsungc91@gmail.com>  Wed, 27 Apr 2022 11:03:00 +0900
+
 gooroom-browser (2.10.0-1+grm2u4) stretch; urgency=medium
 
   * Security patch

@@ -1,0 +1,151 @@
+From 465dfa540ac98e2dd8f7c9008ba119fef8113daa Mon Sep 17 00:00:00 2001
+From: Dominique Fauteux-Chapleau <domfc@chromium.org>
+Date: Wed, 8 Sep 2021 17:32:58 +0000
+Subject: [PATCH 18/28] Refactor HandleOnPerformDrop to account for destroyed
+ web contents
+
+M90 merge conflicts:
+* base/optional.h is not in original commit so automerge failed. No actual
+  conflicts.
+
+(cherry picked from commit e5d028192c1491fd190e5b8366bccbcfd967ade2)
+
+(cherry picked from commit e35d2fb18347daba5191e3f98c3aeb087f4f2c3c)
+
+Bug: 1233975
+Change-Id: Ief294ae69d5acc1225be949c222a6651d3198dfc
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3056782
+Reviewed-by: Roger Tawa <rogerta@chromium.org>
+Reviewed-by: Avi Drissman <avi@chromium.org>
+Commit-Queue: Dominique Fauteux-Chapleau <domfc@chromium.org>
+Cr-Original-Original-Commit-Position: refs/heads/master@{#906438}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3064223
+Commit-Queue: Avi Drissman <avi@chromium.org>
+Auto-Submit: Dominique Fauteux-Chapleau <domfc@chromium.org>
+Cr-Original-Commit-Position: refs/branch-heads/4577@{#352}
+Cr-Original-Branched-From: 761ddde228655e313424edec06497d0c56b0f3c4-refs/heads/master@{#902210}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3148051
+Reviewed-by: Jana Grill <janagrill@google.com>
+Reviewed-by: Artem Sumaneev <asumaneev@google.com>
+Owners-Override: Jana Grill <janagrill@google.com>
+Commit-Queue: Artem Sumaneev <asumaneev@google.com>
+Cr-Commit-Position: refs/branch-heads/4430@{#1583}
+Cr-Branched-From: e5ce7dc4f7518237b3d9bb93cccca35d25216cbe-refs/heads/master@{#857950}
+---
+ .../chrome_web_contents_view_handle_drop.cc   | 59 ++++++++++++++-----
+ 1 file changed, 44 insertions(+), 15 deletions(-)
+
+diff --git a/chrome/browser/ui/tab_contents/chrome_web_contents_view_handle_drop.cc b/chrome/browser/ui/tab_contents/chrome_web_contents_view_handle_drop.cc
+index 27a192e2e..baf1ce13a 100644
+--- a/chrome/browser/ui/tab_contents/chrome_web_contents_view_handle_drop.cc
++++ b/chrome/browser/ui/tab_contents/chrome_web_contents_view_handle_drop.cc
+@@ -7,6 +7,7 @@
+ #include "base/files/file_enumerator.h"
+ #include "base/files/file_util.h"
+ #include "base/optional.h"
++#include "base/memory/weak_ptr.h"
+ #include "base/strings/utf_string_conversions.h"
+ #include "base/task/post_task.h"
+ #include "base/task/thread_pool.h"
+@@ -15,6 +16,7 @@
+ #include "chrome/browser/profiles/profile.h"
+ #include "chrome/browser/safe_browsing/cloud_content_scanning/deep_scanning_utils.h"
+ #include "content/public/browser/web_contents.h"
++#include "content/public/browser/web_contents_observer.h"
+ #include "content/public/browser/web_contents_view_delegate.h"
+ #include "content/public/common/drop_data.h"
+ 
+@@ -38,7 +40,6 @@ void CompletionCallback(
+ }
+ 
+ enterprise_connectors::ContentAnalysisDelegate::Data GetPathsToScan(
+-    content::WebContents* web_contents,
+     const content::DropData& drop_data,
+     enterprise_connectors::ContentAnalysisDelegate::Data data) {
+   for (const auto& file : drop_data.filenames) {
+@@ -48,7 +49,7 @@ enterprise_connectors::ContentAnalysisDelegate::Data GetPathsToScan(
+     if (!base::GetFileInfo(file.path, &info) || info.is_symbolic_link)
+       continue;
+ 
+-    // If the file is a directory, recursively add the files it holds to |data|.
++    // If the file is a directory, recursively add the files it holds to `data`.
+     if (info.is_directory) {
+       base::FileEnumerator file_enumerator(file.path, /*recursive=*/true,
+                                            base::FileEnumerator::FILES);
+@@ -60,18 +61,44 @@ enterprise_connectors::ContentAnalysisDelegate::Data GetPathsToScan(
+       data.paths.push_back(file.path);
+     }
+   }
+-
+   return data;
+ }
+ 
+-void ScanData(content::WebContents* web_contents,
+-              content::WebContentsViewDelegate::DropCompletionCallback callback,
+-              enterprise_connectors::ContentAnalysisDelegate::Data data) {
+-  enterprise_connectors::ContentAnalysisDelegate::CreateForWebContents(
+-      web_contents, std::move(data),
+-      base::BindOnce(&CompletionCallback, std::move(callback)),
+-      safe_browsing::DeepScanAccessPoint::DRAG_AND_DROP);
+-}
++// Helper class to handle WebContents being destroyed while files are opened in
++// the threadpool. This class deletes itself either when it's no longer needed
++// when ScanData is called, or when its corresponding web contents is destroyed
++// so its weak ptrs are invalidated.
++class HandleDropScanData : public content::WebContentsObserver {
++ public:
++  HandleDropScanData(
++      content::WebContents* web_contents,
++      content::WebContentsViewDelegate::DropCompletionCallback callback)
++      : content::WebContentsObserver(web_contents),
++        callback_(std::move(callback)) {}
++
++  void ScanData(
++      enterprise_connectors::ContentAnalysisDelegate::Data analysis_data) {
++    DCHECK(web_contents());
++
++    enterprise_connectors::ContentAnalysisDelegate::CreateForWebContents(
++        web_contents(), std::move(analysis_data),
++        base::BindOnce(&CompletionCallback, std::move(callback_)),
++        safe_browsing::DeepScanAccessPoint::DRAG_AND_DROP);
++
++    delete this;
++  }
++
++  void WebContentsDestroyed() override { delete this; }
++
++  base::WeakPtr<HandleDropScanData> GetWeakPtr() {
++    return weakptr_factory_.GetWeakPtr();
++  }
++
++ private:
++  content::WebContentsViewDelegate::DropCompletionCallback callback_;
++
++  base::WeakPtrFactory<HandleDropScanData> weakptr_factory_{this};
++};
+ 
+ }  // namespace
+ 
+@@ -103,13 +130,15 @@ void HandleOnPerformDrop(
+   if (!drop_data.file_contents.empty())
+     data.text.push_back(base::UTF8ToUTF16(drop_data.file_contents));
+ 
++  auto* handle_drop_scan_data =
++      new HandleDropScanData(web_contents, std::move(callback));
+   if (drop_data.filenames.empty()) {
+-    ScanData(web_contents, std::move(callback), std::move(data));
++    handle_drop_scan_data->ScanData(std::move(data));
+   } else {
+     base::ThreadPool::PostTaskAndReplyWithResult(
+         FROM_HERE, {base::TaskPriority::USER_VISIBLE, base::MayBlock()},
+-        base::BindOnce(&GetPathsToScan, web_contents, std::move(drop_data),
+-                       std::move(data)),
+-        base::BindOnce(&ScanData, web_contents, std::move(callback)));
++        base::BindOnce(&GetPathsToScan, drop_data, std::move(data)),
++        base::BindOnce(&HandleDropScanData::ScanData,
++                       handle_drop_scan_data->GetWeakPtr()));
+   }
+ }
+-- 
+2.20.1
+

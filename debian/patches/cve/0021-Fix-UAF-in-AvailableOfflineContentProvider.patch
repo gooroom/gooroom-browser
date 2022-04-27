@@ -1,0 +1,336 @@
+From 5de85fac0077540c6ce0a46a3d970fe67c69e54e Mon Sep 17 00:00:00 2001
+From: Max Curran <curranmax@chromium.org>
+Date: Tue, 7 Sep 2021 21:25:59 +0000
+Subject: [PATCH 21/28] Fix UAF in AvailableOfflineContentProvider.
+
+AvailableOfflineContentProvider previously held a raw pointer to a
+Profile with the assumption that the profile will outlive the Mojo pipe.
+This assumption does not hold in Incognito mode, and can result in use
+after free. This CL changes the raw pointer to a Profile to the ID of
+the associated RenderProcessHost instead.
+
+(cherry picked from commit 3b3c8c1619e1f6d0323bd613128bfe7e003c3044)
+
+Bug: 1243117
+Change-Id: I0933c296d9010376857104785f355b1ef7b2c0d3
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3134520
+Reviewed-by: Dominick Ng <dominickn@chromium.org>
+Reviewed-by: Shakti Sahu <shaktisahu@chromium.org>
+Commit-Queue: Max Curran <curranmax@chromium.org>
+Cr-Original-Commit-Position: refs/heads/main@{#917832}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3144241
+Auto-Submit: Max Curran <curranmax@chromium.org>
+Reviewed-by: Robert Ogden <robertogden@chromium.org>
+Reviewed-by: Krishna Govind <govind@chromium.org>
+Commit-Queue: Krishna Govind <govind@chromium.org>
+Owners-Override: Krishna Govind <govind@chromium.org>
+Cr-Commit-Position: refs/branch-heads/4606@{#841}
+Cr-Branched-From: 35b0d5a9dc8362adfd44e2614f0d5b7402ef63d0-refs/heads/master@{#911515}
+---
+ ...ontent_browser_client_receiver_bindings.cc |  4 +-
+ .../available_offline_content_provider.cc     | 48 +++++++++-----
+ .../available_offline_content_provider.h      |  8 ++-
+ ...lable_offline_content_provider_unittest.cc | 62 ++++++++++++-------
+ 4 files changed, 77 insertions(+), 45 deletions(-)
+
+diff --git a/chrome/browser/chrome_content_browser_client_receiver_bindings.cc b/chrome/browser/chrome_content_browser_client_receiver_bindings.cc
+index a406da288..6bb2f255e 100644
+--- a/chrome/browser/chrome_content_browser_client_receiver_bindings.cc
++++ b/chrome/browser/chrome_content_browser_client_receiver_bindings.cc
+@@ -197,11 +197,9 @@ void ChromeContentBrowserClient::ExposeInterfacesToRenderer(
+       ui_task_runner);
+ #endif
+ #if defined(OS_ANDROID)
+-  Profile* profile =
+-      Profile::FromBrowserContext(render_process_host->GetBrowserContext());
+   registry->AddInterface(
+       base::BindRepeating(&android::AvailableOfflineContentProvider::Create,
+-                          profile),
++                          render_process_host->GetID()),
+       content::GetUIThreadTaskRunner({}));
+ #endif
+ 
+diff --git a/chrome/browser/download/android/available_offline_content_provider.cc b/chrome/browser/download/android/available_offline_content_provider.cc
+index 355efc81c..de5af76e2 100644
+--- a/chrome/browser/download/android/available_offline_content_provider.cc
++++ b/chrome/browser/download/android/available_offline_content_provider.cc
+@@ -25,6 +25,7 @@
+ #include "components/offline_items_collection/core/offline_item_state.h"
+ #include "components/offline_pages/core/offline_page_feature.h"
+ #include "components/prefs/pref_service.h"
++#include "content/public/browser/render_process_host.h"
+ #include "mojo/public/cpp/bindings/self_owned_receiver.h"
+ #include "ui/base/l10n/time_format.h"
+ 
+@@ -217,31 +218,35 @@ chrome::mojom::AvailableOfflineContentPtr CreateAvailableOfflineContent(
+ }  // namespace
+ 
+ AvailableOfflineContentProvider::AvailableOfflineContentProvider(
+-    Profile* profile)
+-    : profile_(profile) {}
++    int render_process_host_id)
++    : render_process_host_id_(render_process_host_id) {}
+ 
+ AvailableOfflineContentProvider::~AvailableOfflineContentProvider() = default;
+ 
+ void AvailableOfflineContentProvider::List(ListCallback callback) {
++  Profile* profile = GetProfile();
++  if (!profile)
++    return;
+   offline_items_collection::OfflineContentAggregator* aggregator =
+-      OfflineContentAggregatorFactory::GetForKey(profile_->GetProfileKey());
++      OfflineContentAggregatorFactory::GetForKey(profile->GetProfileKey());
+   aggregator->GetAllItems(
+       base::BindOnce(&AvailableOfflineContentProvider::ListFinalize,
+                      weak_ptr_factory_.GetWeakPtr(), std::move(callback),
+-                     // aggregator is a keyed service, and is alive as long as
+-                     // profile_, which outlives this.
+                      base::Unretained(aggregator)));
+ }
+ 
+ void AvailableOfflineContentProvider::LaunchItem(
+     const std::string& item_id,
+     const std::string& name_space) {
++  Profile* profile = GetProfile();
++  if (!profile)
++    return;
+   offline_items_collection::OfflineContentAggregator* aggregator =
+-      OfflineContentAggregatorFactory::GetForKey(profile_->GetProfileKey());
++      OfflineContentAggregatorFactory::GetForKey(profile->GetProfileKey());
+ 
+   offline_items_collection::OpenParams open_params(
+       offline_items_collection::LaunchLocation::NET_ERROR_SUGGESTION);
+-  open_params.open_in_incognito = profile_->IsOffTheRecord();
++  open_params.open_in_incognito = profile->IsOffTheRecord();
+   aggregator->OpenItem(
+       open_params, offline_items_collection::ContentId(name_space, item_id));
+ }
+@@ -254,20 +259,21 @@ void AvailableOfflineContentProvider::LaunchDownloadsPage(
+ }
+ 
+ void AvailableOfflineContentProvider::ListVisibilityChanged(bool is_visible) {
+-  profile_->GetPrefs()->SetBoolean(feed::prefs::kArticlesListVisible,
+-                                   is_visible);
++  Profile* profile = GetProfile();
++  if (!profile)
++    return;
++  profile->GetPrefs()->SetBoolean(feed::prefs::kArticlesListVisible,
++                                  is_visible);
+ }
+ 
+ // static
+ void AvailableOfflineContentProvider::Create(
+-    Profile* profile,
++    int render_process_host_id,
+     mojo::PendingReceiver<chrome::mojom::AvailableOfflineContentProvider>
+         receiver) {
+-  // Self owned receiveres remain as long as the pipe is error free. The
+-  // renderer is on the other side of the pipe, and the profile outlives the
+-  // RenderProcessHost, so the profile will outlive the Mojo pipe.
++  // Self owned receiveres remain as long as the pipe is error free.
+   mojo::MakeSelfOwnedReceiver(
+-      std::make_unique<AvailableOfflineContentProvider>(profile),
++      std::make_unique<AvailableOfflineContentProvider>(render_process_host_id),
+       std::move(receiver));
+ }
+ 
+@@ -276,6 +282,10 @@ void AvailableOfflineContentProvider::ListFinalize(
+     AvailableOfflineContentProvider::ListCallback callback,
+     offline_items_collection::OfflineContentAggregator* aggregator,
+     const std::vector<OfflineItem>& all_items) {
++  Profile* profile = GetProfile();
++  if (!profile)
++    return;
++
+   std::vector<OfflineItem> selected(kMinInterestingItemCount);
+   const auto end = std::partial_sort_copy(all_items.begin(), all_items.end(),
+                                           selected.begin(), selected.end(),
+@@ -296,7 +306,7 @@ void AvailableOfflineContentProvider::ListFinalize(
+     selected_ids.push_back(item.id);
+ 
+   bool list_visible_by_prefs =
+-      profile_->GetPrefs()->GetBoolean(feed::prefs::kArticlesListVisible);
++      profile->GetPrefs()->GetBoolean(feed::prefs::kArticlesListVisible);
+ 
+   auto complete =
+       [](AvailableOfflineContentProvider::ListCallback callback,
+@@ -318,4 +328,12 @@ void AvailableOfflineContentProvider::ListFinalize(
+                      list_visible_by_prefs));
+ }
+ 
++Profile* AvailableOfflineContentProvider::GetProfile() {
++  content::RenderProcessHost* render_process_host =
++      content::RenderProcessHost::FromID(render_process_host_id_);
++  if (!render_process_host)
++    return nullptr;
++  return Profile::FromBrowserContext(render_process_host->GetBrowserContext());
++}
++
+ }  // namespace android
+diff --git a/chrome/browser/download/android/available_offline_content_provider.h b/chrome/browser/download/android/available_offline_content_provider.h
+index c4024a463..0888c0c48 100644
+--- a/chrome/browser/download/android/available_offline_content_provider.h
++++ b/chrome/browser/download/android/available_offline_content_provider.h
+@@ -27,7 +27,7 @@ class AvailableOfflineContentProvider
+     : public chrome::mojom::AvailableOfflineContentProvider {
+  public:
+   // Public for testing.
+-  explicit AvailableOfflineContentProvider(Profile* profile);
++  explicit AvailableOfflineContentProvider(int render_process_host_id);
+   ~AvailableOfflineContentProvider() override;
+ 
+   // chrome::mojom::AvailableOfflineContentProvider methods.
+@@ -38,7 +38,7 @@ class AvailableOfflineContentProvider
+   void ListVisibilityChanged(bool is_visible) override;
+ 
+   static void Create(
+-      Profile* profile,
++      int render_process_host_id,
+       mojo::PendingReceiver<chrome::mojom::AvailableOfflineContentProvider>
+           receiver);
+ 
+@@ -48,7 +48,9 @@ class AvailableOfflineContentProvider
+       offline_items_collection::OfflineContentAggregator* aggregator,
+       const std::vector<offline_items_collection::OfflineItem>& all_items);
+ 
+-  Profile* profile_;
++  Profile* GetProfile();
++
++  const int render_process_host_id_;
+ 
+   base::WeakPtrFactory<AvailableOfflineContentProvider> weak_ptr_factory_{this};
+ 
+diff --git a/chrome/browser/download/android/available_offline_content_provider_unittest.cc b/chrome/browser/download/android/available_offline_content_provider_unittest.cc
+index 234760aff..bce18ff21 100644
+--- a/chrome/browser/download/android/available_offline_content_provider_unittest.cc
++++ b/chrome/browser/download/android/available_offline_content_provider_unittest.cc
+@@ -15,6 +15,7 @@
+ #include "chrome/browser/offline_items_collection/offline_content_aggregator_factory.h"
+ #include "chrome/browser/profiles/profile_key.h"
+ #include "chrome/common/available_offline_content.mojom-test-utils.h"
++#include "chrome/test/base/chrome_render_view_host_test_harness.h"
+ #include "chrome/test/base/testing_profile.h"
+ #include "components/feed/core/shared_prefs/pref_names.h"
+ #include "components/offline_items_collection/core/offline_content_aggregator.h"
+@@ -124,13 +125,27 @@ OfflineItemVisuals TestThumbnail() {
+   return visuals;
+ }
+ 
+-class AvailableOfflineContentTest : public testing::Test {
++class AvailableOfflineContentTest : public ChromeRenderViewHostTestHarness {
+  protected:
+   void SetUp() override {
++    ChromeRenderViewHostTestHarness::SetUp();
++
++    content_provider_ = std::make_unique<
++        offline_items_collection::MockOfflineContentProvider>();
++    provider_ = std::make_unique<AvailableOfflineContentProvider>(
++        main_rfh()->GetProcess()->GetID());
++
+     aggregator_ =
+-        OfflineContentAggregatorFactory::GetForKey(profile_.GetProfileKey());
+-    aggregator_->RegisterProvider(kProviderNamespace, &content_provider_);
+-    content_provider_.SetVisuals({});
++        OfflineContentAggregatorFactory::GetForKey(profile()->GetProfileKey());
++    aggregator_->RegisterProvider(kProviderNamespace, content_provider_.get());
++    content_provider_->SetVisuals({});
++  }
++
++  void TearDown() override {
++    provider_.release();
++    content_provider_.release();
++
++    ChromeRenderViewHostTestHarness::TearDown();
+   }
+ 
+   std::tuple<bool, std::vector<chrome::mojom::AvailableOfflineContentPtr>>
+@@ -138,18 +153,17 @@ class AvailableOfflineContentTest : public testing::Test {
+     bool list_visible_by_prefs;
+     std::vector<chrome::mojom::AvailableOfflineContentPtr> suggestions;
+     chrome::mojom::AvailableOfflineContentProviderAsyncWaiter waiter(
+-        &provider_);
++        provider_.get());
+     waiter.List(&list_visible_by_prefs, &suggestions);
+     return std::make_tuple(list_visible_by_prefs, std::move(suggestions));
+   }
+ 
+-  content::BrowserTaskEnvironment task_environment_;
+-  TestingProfile profile_;
+   std::unique_ptr<base::test::ScopedFeatureList> scoped_feature_list_ =
+       std::make_unique<base::test::ScopedFeatureList>();
+   OfflineContentAggregator* aggregator_;
+-  offline_items_collection::MockOfflineContentProvider content_provider_;
+-  AvailableOfflineContentProvider provider_{&profile_};
++  std::unique_ptr<offline_items_collection::MockOfflineContentProvider>
++      content_provider_;
++  std::unique_ptr<AvailableOfflineContentProvider> provider_;
+ };
+ 
+ TEST_F(AvailableOfflineContentTest, NoContent) {
+@@ -164,10 +178,10 @@ TEST_F(AvailableOfflineContentTest, NoContent) {
+ TEST_F(AvailableOfflineContentTest, TooFewInterestingItems) {
+   // Adds items so that we're one-ff of reaching the minimum required count so
+   // that any extra item considered interesting would effect the results.
+-  content_provider_.SetItems({UninterestingImageItem(), OfflinePageItem(),
+-                              SuggestedOfflinePageItem(), VideoItem(),
+-                              TransientItem(), OffTheRecordItem(),
+-                              IncompleteItem(), DangerousItem()});
++  content_provider_->SetItems({UninterestingImageItem(), OfflinePageItem(),
++                               SuggestedOfflinePageItem(), VideoItem(),
++                               TransientItem(), OffTheRecordItem(),
++                               IncompleteItem(), DangerousItem()});
+ 
+   // Call List().
+   bool list_visible_by_prefs;
+@@ -182,11 +196,11 @@ TEST_F(AvailableOfflineContentTest, TooFewInterestingItems) {
+ 
+ TEST_F(AvailableOfflineContentTest, FourInterestingItems) {
+   // We need at least 4 interesting items for anything to show up at all.
+-  content_provider_.SetItems({UninterestingImageItem(), VideoItem(),
+-                              SuggestedOfflinePageItem(), AudioItem(),
+-                              OfflinePageItem()});
++  content_provider_->SetItems({UninterestingImageItem(), VideoItem(),
++                               SuggestedOfflinePageItem(), AudioItem(),
++                               OfflinePageItem()});
+ 
+-  content_provider_.SetVisuals(
++  content_provider_->SetVisuals(
+       {{SuggestedOfflinePageItem().id, TestThumbnail()}});
+ 
+   // Call List().
+@@ -226,14 +240,14 @@ TEST_F(AvailableOfflineContentTest, FourInterestingItems) {
+ 
+ TEST_F(AvailableOfflineContentTest, ListVisibilityChanges) {
+   // We need at least 4 interesting items for anything to show up at all.
+-  content_provider_.SetItems({UninterestingImageItem(), VideoItem(),
+-                              SuggestedOfflinePageItem(), AudioItem(),
+-                              OfflinePageItem()});
++  content_provider_->SetItems({UninterestingImageItem(), VideoItem(),
++                               SuggestedOfflinePageItem(), AudioItem(),
++                               OfflinePageItem()});
+ 
+-  content_provider_.SetVisuals(
++  content_provider_->SetVisuals(
+       {{SuggestedOfflinePageItem().id, TestThumbnail()}});
+   // Set pref to hide the list.
+-  profile_.GetPrefs()->SetBoolean(feed::prefs::kArticlesListVisible, false);
++  profile()->GetPrefs()->SetBoolean(feed::prefs::kArticlesListVisible, false);
+ 
+   // Call List().
+   bool list_visible_by_prefs;
+@@ -245,10 +259,10 @@ TEST_F(AvailableOfflineContentTest, ListVisibilityChanges) {
+   EXPECT_FALSE(list_visible_by_prefs);
+ 
+   // Simulate visibility changed by the user to "shown".
+-  provider_.ListVisibilityChanged(true);
++  provider_->ListVisibilityChanged(true);
+ 
+   EXPECT_TRUE(
+-      profile_.GetPrefs()->GetBoolean(feed::prefs::kArticlesListVisible));
++      profile()->GetPrefs()->GetBoolean(feed::prefs::kArticlesListVisible));
+ 
+   // Call List() again and check list is not visible.
+   std::tie(list_visible_by_prefs, suggestions) = ListAndWait();
+-- 
+2.20.1
+

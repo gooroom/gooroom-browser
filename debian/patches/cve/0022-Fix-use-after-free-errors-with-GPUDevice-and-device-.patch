@@ -1,0 +1,471 @@
+From b66bc2f75407596710d059ce8182d8526e2ada79 Mon Sep 17 00:00:00 2001
+From: Austin Eng <enga@chromium.org>
+Date: Thu, 7 Oct 2021 16:33:12 +0000
+Subject: [PATCH 22/28] Fix use-after-free errors with ~GPUDevice and device
+ lost handling
+
+Depending on the ordering of ExecutionContext ContextDestroyed
+and GC of GPUDevice during page finalization, there can be
+use-after-free errors where GPUDevice::lost_callback_ is called after
+it has been deleted, or where lost_callback_ is freed twice.
+
+These issues are fixed by setting the C callbacks to null on
+~GPUDevice to prevent them from being called after finalization,
+and by changing the ownership of lost_callback_ to be a repeating
+callback. Repeating callbacks do not self-delete after they are called,
+so the only owner of this callback is the GPUDevice.
+
+Further, this CL changes creation of these callbacks so that they can
+be used strictly as either repeating callbacks or once callbacks,
+making it harder to use them incorrectly.
+
+Lastly, the CL adds a gpu_context_lost regression test which is a stress
+test to reproduce the problem discovered in the bug.
+
+M90 merge issues:
+  Some members not present on m90:
+  - GPUDevice::logging_callback_, GPUDevice::limits_
+  - GPUQueue::OnWorkDoneCallback
+  - GPUShaderModule::OnCompilationInfoCallback
+  - GPUShaderModule::compilationInfo
+  BindDawnCallback renamed to BindDawnOnceCallback, additional change
+  needed on gpu_fence.cc
+  _WaitForTabAndCheckCompletion called with unexpected argument (timeout=120000)
+
+(cherry picked from commit 412b407353a9801468abd04ff43be6e3783a9e0d)
+
+Bug: 1242269
+Change-Id: Idbad5ba638d221bf1a4b86151e827846cabf4e9f
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3123966
+Commit-Queue: Austin Eng <enga@chromium.org>
+Cr-Original-Commit-Position: refs/heads/main@{#916135}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3172883
+Reviewed-by: Achuith Bhandarkar <achuith@chromium.org>
+Commit-Queue: Achuith Bhandarkar <achuith@chromium.org>
+Owners-Override: Achuith Bhandarkar <achuith@chromium.org>
+Cr-Commit-Position: refs/branch-heads/4430@{#1640}
+Cr-Branched-From: e5ce7dc4f7518237b3d9bb93cccca35d25216cbe-refs/heads/master@{#857950}
+---
+ ...stress-request-device-and-remove-loop.html |  58 +++++++++
+ .../context_lost_integration_test.py          |  10 ++
+ .../renderer/modules/webgpu/dawn_callback.h   | 112 ++++++++++++------
+ .../renderer/modules/webgpu/gpu_buffer.cc     |   4 +-
+ .../renderer/modules/webgpu/gpu_device.cc     |  39 +++---
+ .../renderer/modules/webgpu/gpu_device.h      |   7 +-
+ .../renderer/modules/webgpu/gpu_fence.cc      |   4 +-
+ 7 files changed, 173 insertions(+), 61 deletions(-)
+ create mode 100644 content/test/data/gpu/webgpu-stress-request-device-and-remove-loop.html
+
+diff --git a/content/test/data/gpu/webgpu-stress-request-device-and-remove-loop.html b/content/test/data/gpu/webgpu-stress-request-device-and-remove-loop.html
+new file mode 100644
+index 000000000..715688a63
+--- /dev/null
++++ b/content/test/data/gpu/webgpu-stress-request-device-and-remove-loop.html
+@@ -0,0 +1,58 @@
++<!--
++  This is a stress test for crbug.com/1242269.
++  In the bug, a flaky use-after-free could happen depending on the ordering of
++  the Javascript ExecutionContext ContextDestroyed notification and GC finalization
++  of the GPUDevice in the page. Repeatingly creating an iframe, initializing a GPUDevice,
++  and then destroying the iframe can sometimes hit this and crash. This test does this
++  repeatedly with many iframes at once for 90 seconds.
++-->
++<head>
++  <script>
++    const iframes = [];
++    function removeOneIframe() {
++      setTimeout(function () {
++        document.body.removeChild(iframes.shift());
++      }, Math.random() * 500);
++    }
++
++    async function run() {
++      if (window.domAutomationController) {
++        window.domAutomationController.send('LOADED');
++        setTimeout(() => {
++          // Succeed if don't crash within 90 seconds.
++          window.domAutomationController.send('SUCCESS');
++        }, 90 * 1000);
++      }
++
++      while (true) {
++        const iframe = document.createElement("iframe");
++        iframe.setAttribute("id", "iframe");
++        document.body.appendChild(iframe);
++
++        iframes.push(iframe);
++
++        const head = iframe.contentWindow.document.getElementsByTagName('head')[0];
++        const script = iframe.contentWindow.document.createElement('script');
++        script.type = 'text/javascript';
++        script.innerText = `
++          navigator.gpu.requestAdapter().then((adapter) => {
++            adapter.requestDevice().then((val) => {
++              parent.removeOneIframe();
++            });
++          });
++        `;
++        head.appendChild(script);
++
++        // Wait a bit to yield to the event loop.
++        await new Promise(resolve => setTimeout(resolve, 0));
++
++        // Avoid having too many iframes in flight.
++        while (iframes.length > 100) {
++          await new Promise(resolve => setTimeout(resolve, 100));
++        }
++      }
++    }
++  </script>
++</head>
++
++<body onload="run()"></body>
+diff --git a/content/test/gpu/gpu_tests/context_lost_integration_test.py b/content/test/gpu/gpu_tests/context_lost_integration_test.py
+index 6a3d4717c..86c363bfb 100644
+--- a/content/test/gpu/gpu_tests/context_lost_integration_test.py
++++ b/content/test/gpu/gpu_tests/context_lost_integration_test.py
+@@ -148,6 +148,8 @@ class ContextLostIntegrationTest(gpu_integration_test.GpuIntegrationTest):
+               'gpu_process_crash.html'),
+              ('ContextLost_WebGPUContextLostFromGPUProcessExit',
+               'webgpu-context-lost.html?query=kill_after_notification'),
++             ('ContextLost_WebGPUStressRequestDeviceAndRemoveLoop',
++              'webgpu-stress-request-device-and-remove-loop.html'),
+              ('ContextLost_WebGLContextLostFromGPUProcessExit',
+               'webgl.html?query=kill_after_notification'),
+              ('ContextLost_WebGLContextLostFromLoseContextExtension',
+@@ -339,6 +341,14 @@ class ContextLostIntegrationTest(gpu_integration_test.GpuIntegrationTest):
+     self._KillGPUProcess(1, False, timeout=180)
+     self._RestartBrowser('must restart after tests that kill the GPU process')
+ 
++  def _ContextLost_WebGPUStressRequestDeviceAndRemoveLoop(self, test_path):
++    self.RestartBrowserIfNecessaryWithArgs([
++        '--enable-unsafe-webgpu',
++    ])
++    self._NavigateAndWaitForLoad(test_path)
++
++    self._WaitForTabAndCheckCompletion()
++
+   def _ContextLost_WebGLContextLostFromLoseContextExtension(self, test_path):
+     self.RestartBrowserIfNecessaryWithArgs(
+         [cba.DISABLE_DOMAIN_BLOCKING_FOR_3D_APIS])
+diff --git a/third_party/blink/renderer/modules/webgpu/dawn_callback.h b/third_party/blink/renderer/modules/webgpu/dawn_callback.h
+index 812ac5b49..33f4aedcf 100644
+--- a/third_party/blink/renderer/modules/webgpu/dawn_callback.h
++++ b/third_party/blink/renderer/modules/webgpu/dawn_callback.h
+@@ -17,8 +17,8 @@ namespace blink {
+ // void* and passed to Dawn C callbacks.
+ //
+ // Example:
+-//   DawnCallback<F>* callback =
+-//     CreateDawnCallback(WTF::Bind(func, arg1));
++//   DawnOnceCallback<F>* callback =
++//     BindDawnOnceCallback(func, arg1);
+ //
+ //   // |someDawnFunction| expects callback function with arguments:
+ //   //    Args... args, void* userdata.
+@@ -26,81 +26,119 @@ namespace blink {
+ //   GetProcs().someDawnFunction(
+ //     callback->UnboundCallback(), callback->AsUserdata());
+ template <typename Callback>
+-class DawnCallback;
++class DawnCallbackBase;
++
++template <typename Callback>
++class DawnOnceCallback;
++
++template <typename Callback>
++class DawnRepeatingCallback;
+ 
+ template <template <typename> class BaseCallbackTemplate,
+           typename R,
+           typename... Args>
+-class DawnCallback<BaseCallbackTemplate<R(Args...)>> {
++class DawnCallbackBase<BaseCallbackTemplate<R(Args...)>> {
+   using BaseCallback = BaseCallbackTemplate<R(Args...)>;
+-  using UnboundCallbackFunction = R (*)(Args..., void*);
+ 
++  static constexpr bool is_once_callback =
++      std::is_same<BaseCallback, base::OnceCallback<R(Args...)>>::value;
++  static constexpr bool is_repeating_callback =
++      std::is_same<BaseCallback, base::RepeatingCallback<R(Args...)>>::value;
+   static_assert(
+-      std::is_same<BaseCallback, base::OnceCallback<R(Args...)>>::value ||
+-          std::is_same<BaseCallback,
+-                       base::RepeatingCallback<R(Args...)>>::value,
++      is_once_callback || is_repeating_callback,
+       "Callback must be base::OnceCallback or base::RepeatingCallback");
+ 
+  public:
+-  explicit DawnCallback(BaseCallback callback)
++  explicit DawnCallbackBase(BaseCallback callback)
+       : callback_(std::move(callback)) {}
+ 
++  void* AsUserdata() { return static_cast<void*>(this); }
++
++ protected:
++  using UnboundCallbackFunction = R (*)(Args..., void*);
++
++  static DawnCallbackBase* FromUserdata(void* userdata) {
++    return static_cast<DawnCallbackBase*>(userdata);
++  }
++
+   R Run(Args... args) && {
++    static_assert(
++        is_once_callback,
++        "Run on a moved receiver must only be called on a once callback.");
+     return std::move(callback_).Run(std::forward<Args>(args)...);
+   }
+ 
+   R Run(Args... args) const& {
++    static_assert(is_repeating_callback,
++                  "Run on a unmoved receiver must only be called on a "
++                  "repeating callback.");
+     return callback_.Run(std::forward<Args>(args)...);
+   }
+ 
+-  void Reset() { callback_.Reset(); }
++ private:
++  BaseCallback callback_;
++};
++
++template <typename R, typename... Args>
++class DawnOnceCallback<R(Args...)>
++    : public DawnCallbackBase<base::OnceCallback<R(Args...)>> {
++  using BaseCallback = base::OnceCallback<R(Args...)>;
++
++ public:
++  using DawnCallbackBase<BaseCallback>::DawnCallbackBase;
+ 
+-  static R CallUnboundCallback(Args... args, void* handle) {
++  typename DawnCallbackBase<BaseCallback>::UnboundCallbackFunction
++  UnboundCallback() {
++    return CallUnboundOnceCallback;
++  }
++
++ private:
++  static R CallUnboundOnceCallback(Args... args, void* handle) {
+     // After this non-repeating callback is run, it should delete itself.
+     auto callback =
+-        std::unique_ptr<DawnCallback>(DawnCallback::FromUserdata(handle));
++        std::unique_ptr<DawnOnceCallback>(static_cast<DawnOnceCallback*>(
++            DawnCallbackBase<BaseCallback>::FromUserdata(handle)));
+     return std::move(*callback).Run(std::forward<Args>(args)...);
+   }
++};
+ 
+-  static R CallUnboundRepeatingCallback(Args... args, void* handle) {
+-    return DawnCallback::FromUserdata(handle)->Run(std::forward<Args>(args)...);
+-  }
++template <typename R, typename... Args>
++class DawnRepeatingCallback<R(Args...)>
++    : public DawnCallbackBase<base::RepeatingCallback<R(Args...)>> {
++  using BaseCallback = base::RepeatingCallback<R(Args...)>;
+ 
+-  UnboundCallbackFunction UnboundCallback() { return CallUnboundCallback; }
++ public:
++  using DawnCallbackBase<BaseCallback>::DawnCallbackBase;
+ 
+-  UnboundCallbackFunction UnboundRepeatingCallback() {
++  typename DawnCallbackBase<BaseCallback>::UnboundCallbackFunction
++  UnboundCallback() {
+     return CallUnboundRepeatingCallback;
+   }
+ 
+-  void* AsUserdata() { return static_cast<void*>(this); }
+-
+-  static DawnCallback* FromUserdata(void* userdata) {
+-    return static_cast<DawnCallback*>(userdata);
+-  }
+-
+  private:
+-  BaseCallback callback_;
++  static R CallUnboundRepeatingCallback(Args... args, void* handle) {
++    return static_cast<DawnRepeatingCallback*>(
++               DawnCallbackBase<BaseCallback>::FromUserdata(handle))
++        ->Run(std::forward<Args>(args)...);
++  }
+ };
+ 
+-template <typename CallbackType>
+-DawnCallback<CallbackType>* CreateDawnCallback(CallbackType cb) {
+-  return new DawnCallback<CallbackType>(std::move(cb));
+-}
+-
+ template <typename FunctionType, typename... BoundParameters>
+-auto BindDawnCallback(FunctionType&& function,
+-                      BoundParameters&&... bound_parameters) {
+-  return CreateDawnCallback(
+-      WTF::Bind(std::forward<FunctionType>(function),
+-                std::forward<BoundParameters>(bound_parameters)...));
++auto BindDawnOnceCallback(FunctionType&& function,
++                          BoundParameters&&... bound_parameters) {
++  auto cb = WTF::Bind(std::forward<FunctionType>(function),
++                      std::forward<BoundParameters>(bound_parameters)...);
++  return new DawnOnceCallback<typename decltype(cb)::RunType>(std::move(cb));
+ }
+ 
+ template <typename FunctionType, typename... BoundParameters>
+-auto BindRepeatingDawnCallback(FunctionType&& function,
++auto BindDawnRepeatingCallback(FunctionType&& function,
+                                BoundParameters&&... bound_parameters) {
+-  return CreateDawnCallback(
++  auto cb =
+       WTF::BindRepeating(std::forward<FunctionType>(function),
+-                         std::forward<BoundParameters>(bound_parameters)...));
++                         std::forward<BoundParameters>(bound_parameters)...);
++  return std::make_unique<
++      DawnRepeatingCallback<typename decltype(cb)::RunType>>(std::move(cb));
+ }
+ 
+ }  // namespace blink
+diff --git a/third_party/blink/renderer/modules/webgpu/gpu_buffer.cc b/third_party/blink/renderer/modules/webgpu/gpu_buffer.cc
+index c73982b6e..f79c81b8c 100644
+--- a/third_party/blink/renderer/modules/webgpu/gpu_buffer.cc
++++ b/third_party/blink/renderer/modules/webgpu/gpu_buffer.cc
+@@ -152,8 +152,8 @@ ScriptPromise GPUBuffer::MapAsyncImpl(ScriptState* script_state,
+ 
+   // And send the command, leaving remaining validation to Dawn.
+   auto* callback =
+-      BindDawnCallback(&GPUBuffer::OnMapAsyncCallback, WrapPersistent(this),
+-                       WrapPersistent(resolver));
++      BindDawnOnceCallback(&GPUBuffer::OnMapAsyncCallback, WrapPersistent(this),
++                           WrapPersistent(resolver));
+ 
+   GetProcs().bufferMapAsync(GetHandle(), mode, map_offset, map_size,
+                             callback->UnboundCallback(),
+diff --git a/third_party/blink/renderer/modules/webgpu/gpu_device.cc b/third_party/blink/renderer/modules/webgpu/gpu_device.cc
+index 315b0a90d..148e884ad 100644
+--- a/third_party/blink/renderer/modules/webgpu/gpu_device.cc
++++ b/third_party/blink/renderer/modules/webgpu/gpu_device.cc
+@@ -70,13 +70,19 @@ GPUDevice::GPUDevice(ExecutionContext* execution_context,
+           this,
+           GetProcs().deviceGetDefaultQueue(GetHandle()))),
+       lost_property_(MakeGarbageCollected<LostProperty>(execution_context)),
+-      error_callback_(BindRepeatingDawnCallback(&GPUDevice::OnUncapturedError,
++      error_callback_(BindDawnRepeatingCallback(&GPUDevice::OnUncapturedError,
+                                                 WrapWeakPersistent(this))),
+-      lost_callback_(BindDawnCallback(&GPUDevice::OnDeviceLostError,
+-                                      WrapWeakPersistent(this))) {
++      // Note: This is a *repeating* callback even though we expect it to only
++      // be called once. This is because it may be called *zero* times.
++      // Because it might never be called, the GPUDevice needs to own the
++      // allocation so it can be appropriately freed on destruction. Thus, the
++      // callback should not be a OnceCallback which self-deletes after it is
++      // called.
++      lost_callback_(BindDawnRepeatingCallback(&GPUDevice::OnDeviceLostError,
++                                               WrapWeakPersistent(this))) {
+   DCHECK(dawn_device);
+   GetProcs().deviceSetUncapturedErrorCallback(
+-      GetHandle(), error_callback_->UnboundRepeatingCallback(),
++      GetHandle(), error_callback_->UnboundCallback(),
+       error_callback_->AsUserdata());
+   GetProcs().deviceSetDeviceLostCallback(GetHandle(),
+                                          lost_callback_->UnboundCallback(),
+@@ -85,6 +91,13 @@ GPUDevice::GPUDevice(ExecutionContext* execution_context,
+   setLabel(descriptor->label());
+ }
+ 
++GPUDevice::~GPUDevice() {
++  // Clear the callbacks since we can't handle callbacks after finalization.
++  // error_callback_, logging_callback_, and lost_callback_ will be deleted.
++  GetProcs().deviceSetUncapturedErrorCallback(GetHandle(), nullptr, nullptr);
++  GetProcs().deviceSetDeviceLostCallback(GetHandle(), nullptr, nullptr);
++}
++
+ void GPUDevice::InjectError(WGPUErrorType type, const char* message) {
+   GetProcs().deviceInjectError(GetHandle(), type, message);
+ }
+@@ -134,12 +147,6 @@ void GPUDevice::OnUncapturedError(WGPUErrorType errorType,
+ }
+ 
+ void GPUDevice::OnDeviceLostError(const char* message) {
+-  // This function is called by a callback created by BindDawnCallback.
+-  // Release the unique_ptr holding it since BindDawnCallback is self-deleting.
+-  // This is stored as a unique_ptr because the lost callback may never be
+-  // called.
+-  lost_callback_.release();
+-
+   AddConsoleWarning(message);
+ 
+   if (lost_property_->GetState() == LostProperty::kPending) {
+@@ -304,8 +311,8 @@ ScriptPromise GPUDevice::createRenderPipelineAsync(
+         "Error in parsing GPURenderPipelineDescriptor"));
+   } else {
+     auto* callback =
+-        BindDawnCallback(&GPUDevice::OnCreateRenderPipelineAsyncCallback,
+-                         WrapPersistent(this), WrapPersistent(resolver));
++        BindDawnOnceCallback(&GPUDevice::OnCreateRenderPipelineAsyncCallback,
++                             WrapPersistent(this), WrapPersistent(resolver));
+     GetProcs().deviceCreateRenderPipelineAsync(
+         GetHandle(), &dawn_desc_info.dawn_desc, callback->UnboundCallback(),
+         callback->AsUserdata());
+@@ -329,8 +336,8 @@ ScriptPromise GPUDevice::createComputePipelineAsync(
+       AsDawnType(descriptor, &label, &computeStageDescriptor);
+ 
+   auto* callback =
+-      BindDawnCallback(&GPUDevice::OnCreateComputePipelineAsyncCallback,
+-                       WrapPersistent(this), WrapPersistent(resolver));
++      BindDawnOnceCallback(&GPUDevice::OnCreateComputePipelineAsyncCallback,
++                           WrapPersistent(this), WrapPersistent(resolver));
+   GetProcs().deviceCreateComputePipelineAsync(GetHandle(), &dawn_desc,
+                                               callback->UnboundCallback(),
+                                               callback->AsUserdata());
+@@ -384,8 +391,8 @@ ScriptPromise GPUDevice::popErrorScope(ScriptState* script_state) {
+   ScriptPromise promise = resolver->Promise();
+ 
+   auto* callback =
+-      BindDawnCallback(&GPUDevice::OnPopErrorScopeCallback,
+-                       WrapPersistent(this), WrapPersistent(resolver));
++      BindDawnOnceCallback(&GPUDevice::OnPopErrorScopeCallback,
++                           WrapPersistent(this), WrapPersistent(resolver));
+ 
+   if (!GetProcs().devicePopErrorScope(GetHandle(), callback->UnboundCallback(),
+                                       callback->AsUserdata())) {
+diff --git a/third_party/blink/renderer/modules/webgpu/gpu_device.h b/third_party/blink/renderer/modules/webgpu/gpu_device.h
+index 0dd29ab33..6c947b521 100644
+--- a/third_party/blink/renderer/modules/webgpu/gpu_device.h
++++ b/third_party/blink/renderer/modules/webgpu/gpu_device.h
+@@ -61,6 +61,7 @@ class GPUDevice final : public EventTargetWithInlineData,
+                      GPUAdapter* adapter,
+                      WGPUDevice dawn_device,
+                      const GPUDeviceDescriptor* descriptor);
++  ~GPUDevice() override;
+ 
+   void Trace(Visitor* visitor) const override;
+ 
+@@ -154,15 +155,13 @@ class GPUDevice final : public EventTargetWithInlineData,
+   Vector<String> feature_name_list_;
+   Member<GPUQueue> queue_;
+   Member<LostProperty> lost_property_;
+-  std::unique_ptr<
+-      DawnCallback<base::RepeatingCallback<void(WGPUErrorType, const char*)>>>
++  std::unique_ptr<DawnRepeatingCallback<void(WGPUErrorType, const char*)>>
+       error_callback_;
+   // lost_callback_ is stored as a unique_ptr since it may never be called.
+   // We need to be sure to free it on deletion of the device.
+   // Inside OnDeviceLostError we'll release the unique_ptr to avoid a double
+   // free.
+-  std::unique_ptr<DawnCallback<base::OnceCallback<void(const char*)>>>
+-      lost_callback_;
++  std::unique_ptr<DawnRepeatingCallback<void(const char*)>> lost_callback_;
+ 
+   static constexpr int kMaxAllowedConsoleWarnings = 500;
+   int allowed_console_warnings_remaining_ = kMaxAllowedConsoleWarnings;
+diff --git a/third_party/blink/renderer/modules/webgpu/gpu_fence.cc b/third_party/blink/renderer/modules/webgpu/gpu_fence.cc
+index c384d4788..837e8d705 100644
+--- a/third_party/blink/renderer/modules/webgpu/gpu_fence.cc
++++ b/third_party/blink/renderer/modules/webgpu/gpu_fence.cc
+@@ -44,8 +44,8 @@ ScriptPromise GPUFence::onCompletion(ScriptState* script_state,
+   ScriptPromise promise = resolver->Promise();
+ 
+   auto* callback =
+-      BindDawnCallback(&GPUFence::OnCompletionCallback, WrapPersistent(this),
+-                       WrapPersistent(resolver));
++      BindDawnOnceCallback(&GPUFence::OnCompletionCallback,
++                           WrapPersistent(this), WrapPersistent(resolver));
+ 
+   GetProcs().fenceOnCompletion(GetHandle(), value, callback->UnboundCallback(),
+                                callback->AsUserdata());
+-- 
+2.20.1
+

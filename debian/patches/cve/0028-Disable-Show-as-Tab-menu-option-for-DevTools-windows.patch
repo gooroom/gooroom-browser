@@ -1,0 +1,48 @@
+From e4ad23cd9da9cc973dd21b31ed0319528cf2097d Mon Sep 17 00:00:00 2001
+From: Wolfgang Beyer <wolfi@chromium.org>
+Date: Tue, 30 Nov 2021 09:34:39 +0000
+Subject: [PATCH 28/28] Disable 'Show as Tab' menu option for DevTools windows
+
+When DevTools is opened as a separate Window, there is a 'Show as Tab'
+menu option in Windows and MacOS. Since DevTools should only be shown
+as either a separate window (undocked) or as part of the windows being
+inspected (docked), showing DevTools as a regular browser tab does not
+make any sense. This CL disables the corresponding menu option for
+DevTools windows.
+
+(cherry picked from commit 82d52ba11ef24778fee951b8e3c78cb1b3cf35f2)
+
+Bug: 1273140, 1273176
+Change-Id: I83e3ddbb6764bde53ef95de61e3b7f26e7e618b7
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3298125
+Reviewed-by: Vasilii Sukhanov <vasilii@chromium.org>
+Commit-Queue: Wolfgang Beyer <wolfi@chromium.org>
+Cr-Original-Commit-Position: refs/heads/main@{#945318}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3306427
+Auto-Submit: Wolfgang Beyer <wolfi@chromium.org>
+Bot-Commit: Rubber Stamper <rubber-stamper@appspot.gserviceaccount.com>
+Commit-Queue: Marc Treib <treib@chromium.org>
+Reviewed-by: Marc Treib <treib@chromium.org>
+Cr-Commit-Position: refs/branch-heads/4664@{#1185}
+Cr-Branched-From: 24dc4ee75e01a29d390d43c9c264372a169273a7-refs/heads/main@{#929512}
+---
+ chrome/browser/ui/browser_command_controller.cc | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
+index 8faaa9afc..98646a46d 100644
+--- a/chrome/browser/ui/browser_command_controller.cc
++++ b/chrome/browser/ui/browser_command_controller.cc
+@@ -1373,7 +1373,8 @@ void BrowserCommandController::UpdateCommandsForFullscreenMode() {
+ 
+   // Window management commands
+   command_updater_.UpdateCommandEnabled(
+-      IDC_SHOW_AS_TAB, !browser_->is_type_normal() && !is_fullscreen);
++      IDC_SHOW_AS_TAB, !browser_->is_type_normal() && !is_fullscreen &&
++                           !browser_->is_type_devtools());
+ 
+   // Focus various bits of UI
+   command_updater_.UpdateCommandEnabled(IDC_FOCUS_TOOLBAR, show_main_ui);
+-- 
+2.20.1
+

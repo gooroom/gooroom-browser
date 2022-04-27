@@ -1,0 +1,135 @@
+From 891c0774ea450f422f6f392b1cf0cbade55208b0 Mon Sep 17 00:00:00 2001
+From: Victor Hugo Vianna Silva <victorvianna@google.com>
+Date: Tue, 22 Jun 2021 13:48:53 +0000
+Subject: [PATCH 06/28] Fix use-after-free in SendTabToSelfSubMenuModel
+
+Observe the WebContents destruction and prevent ExecuteCommand() from
+using the destroyed object.
+
+(cherry picked from commit 4b16a8bea2017486654aca28a361bbb5a0b5ae60)
+
+(cherry picked from commit eb6ddec9b4b448ef79c393860fdabfcf59386c57)
+
+Fixed: 1215029
+Change-Id: I5b3ce1657610f68b08af7747e1875e53e0a4e16b
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/2940547
+Commit-Queue: Victor Vianna <victorvianna@google.com>
+Commit-Queue: Travis Skare <skare@chromium.org>
+Auto-Submit: Victor Vianna <victorvianna@google.com>
+Reviewed-by: Travis Skare <skare@chromium.org>
+Cr-Original-Original-Commit-Position: refs/heads/master@{#889276}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/2944871
+Cr-Original-Commit-Position: refs/branch-heads/4472@{#1469}
+Cr-Original-Branched-From: 3d60439cfb36485e76a1c5bb7f513d3721b20da1-refs/heads/master@{#870763}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/2975449
+Reviewed-by: Victor-Gabriel Savu <vsavu@google.com>
+Reviewed-by: Jana Grill <janagrill@google.com>
+Commit-Queue: Artem Sumaneev <asumaneev@google.com>
+Owners-Override: Artem Sumaneev <asumaneev@google.com>
+Cr-Commit-Position: refs/branch-heads/4240@{#1676}
+Cr-Branched-From: f297677702651916bbf65e59c0d4bbd4ce57d1ee-refs/heads/master@{#800218}
+---
+ .../send_tab_to_self_sub_menu_model.cc        | 19 +++++++++++++++----
+ .../send_tab_to_self_sub_menu_model.h         | 13 ++++++++++---
+ 2 files changed, 25 insertions(+), 7 deletions(-)
+
+diff --git a/chrome/browser/ui/send_tab_to_self/send_tab_to_self_sub_menu_model.cc b/chrome/browser/ui/send_tab_to_self/send_tab_to_self_sub_menu_model.cc
+index d886ed7b5..58eb3bb1b 100644
+--- a/chrome/browser/ui/send_tab_to_self/send_tab_to_self_sub_menu_model.cc
++++ b/chrome/browser/ui/send_tab_to_self/send_tab_to_self_sub_menu_model.cc
+@@ -96,14 +96,16 @@ SendTabToSelfSubMenuModel::SendTabToSelfSubMenuModel(
+     SendTabToSelfMenuType menu_type,
+     const GURL& link_url)
+     : ui::SimpleMenuModel(this),
++      content::WebContentsObserver(tab),
+       tab_(tab),
+       menu_type_(menu_type),
+       link_url_(link_url) {
++  DCHECK(tab_);
+   Profile* profile = Profile::FromBrowserContext(tab->GetBrowserContext());
+   Build(profile);
+ }
+ 
+-SendTabToSelfSubMenuModel::~SendTabToSelfSubMenuModel() {}
++SendTabToSelfSubMenuModel::~SendTabToSelfSubMenuModel() = default;
+ 
+ bool SendTabToSelfSubMenuModel::IsCommandIdEnabled(int command_id) const {
+   // Only valid device names are shown, so all items are enabled.
+@@ -116,6 +118,15 @@ void SendTabToSelfSubMenuModel::ExecuteCommand(int command_id,
+   if (vector_index == -1) {
+     return;
+   }
++
++  RecordSendTabToSelfClickResult(MenuTypeToString(menu_type_),
++                                 SendTabToSelfClickResult::kClickItem);
++
++  if (!tab_) {
++    // The WebContents has already been destroyed, just close the menu.
++    return;
++  }
++
+   const ValidDeviceItem& item = valid_device_items_[vector_index];
+   if (menu_type_ == SendTabToSelfMenuType::kLink) {
+     // Is sharing a link from link menu.
+@@ -124,10 +135,10 @@ void SendTabToSelfSubMenuModel::ExecuteCommand(int command_id,
+     // Is sharing a tab from tab menu, content menu or omnibox menu.
+     CreateNewEntry(tab_, item.device_name, item.cache_guid);
+   }
++}
+ 
+-  RecordSendTabToSelfClickResult(MenuTypeToString(menu_type_),
+-                                 SendTabToSelfClickResult::kClickItem);
+-  return;
++void SendTabToSelfSubMenuModel::WebContentsDestroyed() {
++  tab_ = nullptr;
+ }
+ 
+ void SendTabToSelfSubMenuModel::Build(Profile* profile) {
+diff --git a/chrome/browser/ui/send_tab_to_self/send_tab_to_self_sub_menu_model.h b/chrome/browser/ui/send_tab_to_self/send_tab_to_self_sub_menu_model.h
+index 6895859d4..a92c770f2 100644
+--- a/chrome/browser/ui/send_tab_to_self/send_tab_to_self_sub_menu_model.h
++++ b/chrome/browser/ui/send_tab_to_self/send_tab_to_self_sub_menu_model.h
+@@ -13,6 +13,7 @@
+ 
+ #include "base/macros.h"
+ #include "chrome/browser/send_tab_to_self/send_tab_to_self_desktop_util.h"
++#include "content/public/browser/web_contents_observer.h"
+ #include "ui/base/models/simple_menu_model.h"
+ #include "url/gurl.h"
+ 
+@@ -25,7 +26,8 @@ class WebContents;
+ namespace send_tab_to_self {
+ 
+ class SendTabToSelfSubMenuModel : public ui::SimpleMenuModel,
+-                                  public ui::SimpleMenuModel::Delegate {
++                                  public ui::SimpleMenuModel::Delegate,
++                                  public content::WebContentsObserver {
+  public:
+   static const int kMinCommandId = 2000;
+   static const int kMaxCommandId = 2020;
+@@ -43,15 +45,20 @@ class SendTabToSelfSubMenuModel : public ui::SimpleMenuModel,
+   bool IsCommandIdEnabled(int command_id) const override;
+   void ExecuteCommand(int command_id, int event_flags) override;
+ 
++  // Overridden from content::WebContentsObserver:
++  void WebContentsDestroyed() override;
++
+  private:
+   void Build(Profile* profile);
+   void BuildDeviceItem(const std::string& device_name,
+                        const std::string& guid,
+                        int index);
+ 
++  // Injected on construction and set to null if the WebContents is being
++  // destroyed.
+   content::WebContents* tab_;
+-  SendTabToSelfMenuType menu_type_;
+-  GURL link_url_;
++  const SendTabToSelfMenuType menu_type_;
++  const GURL link_url_;
+   std::vector<ValidDeviceItem> valid_device_items_;
+ 
+   DISALLOW_COPY_AND_ASSIGN(SendTabToSelfSubMenuModel);
+-- 
+2.20.1
+

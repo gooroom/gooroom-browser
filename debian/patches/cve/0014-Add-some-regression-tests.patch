@@ -1,0 +1,140 @@
+From e8c31b93a5b935b8c29011b3c8f4f15cd8d511c1 Mon Sep 17 00:00:00 2001
+From: Georg Neis <neis@chromium.org>
+Date: Tue, 21 Sep 2021 10:43:44 +0200
+Subject: [PATCH 14/28] Add some regression tests
+
+Bug: chromium:1228407, chromium:1234764, chromium:1234770, chromium:1247763
+Change-Id: I1e8ffaa04eeda22b71ece2f59038e5c92861fde0
+Reviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/3172751
+Commit-Queue: Georg Neis <neis@chromium.org>
+Commit-Queue: Maya Lekova <mslekova@chromium.org>
+Auto-Submit: Georg Neis <neis@chromium.org>
+Reviewed-by: Maya Lekova <mslekova@chromium.org>
+Cr-Commit-Position: refs/heads/main@{#76955}
+---
+ .../mjsunit/compiler/regress-crbug-1228407.js | 24 +++++++++++++++
+ .../mjsunit/compiler/regress-crbug-1234764.js | 21 +++++++++++++
+ .../mjsunit/compiler/regress-crbug-1234770.js | 14 +++++++++
+ .../mjsunit/compiler/regress-crbug-1247763.js | 30 +++++++++++++++++++
+ 4 files changed, 89 insertions(+)
+ create mode 100644 test/mjsunit/compiler/regress-crbug-1228407.js
+ create mode 100644 test/mjsunit/compiler/regress-crbug-1234764.js
+ create mode 100644 test/mjsunit/compiler/regress-crbug-1234770.js
+ create mode 100644 test/mjsunit/compiler/regress-crbug-1247763.js
+
+diff --git a/test/mjsunit/compiler/regress-crbug-1228407.js b/test/mjsunit/compiler/regress-crbug-1228407.js
+new file mode 100644
+index 000000000..f01eafb80
+--- /dev/null
++++ b/test/mjsunit/compiler/regress-crbug-1228407.js
+@@ -0,0 +1,24 @@
++// Copyright 2021 the V8 project authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++// Flags: --interrupt-budget=100
++
++function foo() {
++  return function bar() {
++    a.p = 42;
++    for (let i = 0; i < 100; i++) this.p();
++    this.p = a;
++  };
++}
++
++var a = foo();
++var b = foo();
++
++a.prototype = { p() {} };
++b.prototype = { p() {
++  this.q = new a();
++  for (let i = 0; i < 200; i++) ;
++}};
++
++new b();
+diff --git a/test/mjsunit/compiler/regress-crbug-1234764.js b/test/mjsunit/compiler/regress-crbug-1234764.js
+new file mode 100644
+index 000000000..eca9346d1
+--- /dev/null
++++ b/test/mjsunit/compiler/regress-crbug-1234764.js
+@@ -0,0 +1,21 @@
++// Copyright 2021 the V8 project authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++// Flags: --allow-natives-syntax
++
++function foo(arg_true) {
++  let o = {c0: 0};
++  let c0a = arg_true ? 0 : "x";
++  let c0 = Math.max(c0a, 0) + c0a;
++  let v01 = 2**32 + (o.c0 & 1);
++  let ra = ((2**32 - 1) >>> c0) - v01;
++  let rb = (-1) << (32 - c0);
++  return (ra^rb) >> 31;
++}
++
++%PrepareFunctionForOptimization(foo);
++assertEquals(0, foo(true));
++assertEquals(0, foo(true));
++%OptimizeFunctionOnNextCall(foo);
++assertEquals(0, foo(true));
+diff --git a/test/mjsunit/compiler/regress-crbug-1234770.js b/test/mjsunit/compiler/regress-crbug-1234770.js
+new file mode 100644
+index 000000000..22f68db90
+--- /dev/null
++++ b/test/mjsunit/compiler/regress-crbug-1234770.js
+@@ -0,0 +1,14 @@
++// Copyright 2021 the V8 project authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++// Flags: --allow-natives-syntax
++
++function foo(a) {
++  return ((a & 1) == 1) & ((a & 2) == 1);
++}
++
++%PrepareFunctionForOptimization(foo);
++assertEquals(0, foo(1));
++%OptimizeFunctionOnNextCall(foo);
++assertEquals(0, foo(1));
+diff --git a/test/mjsunit/compiler/regress-crbug-1247763.js b/test/mjsunit/compiler/regress-crbug-1247763.js
+new file mode 100644
+index 000000000..760fb92d0
+--- /dev/null
++++ b/test/mjsunit/compiler/regress-crbug-1247763.js
+@@ -0,0 +1,30 @@
++// Copyright 2021 the V8 project authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++// Flags: --allow-natives-syntax
++
++class C extends Array {};
++%NeverOptimizeFunction(C);
++
++for (let i = 0; i < 3; i++) {
++
++  function store_global() { global = new C(); };
++  store_global();
++  %PrepareFunctionForOptimization(store_global);
++  store_global();
++  %OptimizeFunctionOnNextCall(store_global);
++  store_global();
++
++  new C(42);
++
++  function load_global() { global.p1 = {}; global.p2 = {}; }
++  if (i) {
++    load_global();
++    %PrepareFunctionForOptimization(load_global);
++    load_global();
++    %OptimizeFunctionOnNextCall(load_global);
++    load_global();
++  }
++
++}
+-- 
+2.20.1
+

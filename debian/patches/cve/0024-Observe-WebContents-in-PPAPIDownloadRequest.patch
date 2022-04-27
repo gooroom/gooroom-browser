@@ -1,0 +1,104 @@
+From 333f43161567e986f95f0ec5794c24b3fcfd2579 Mon Sep 17 00:00:00 2001
+From: Daniel Rubery <drubery@chromium.org>
+Date: Wed, 6 Oct 2021 15:25:10 +0000
+Subject: [PATCH 24/28] Observe WebContents in PPAPIDownloadRequest
+
+If the WebContents is destroyed while the PPAPIDownloadRequest is
+checking the allowlist, we end up with a UaF. The fix for this is to
+observe the WebContents and cancel the request.
+
+M90 merge notes:
+  Conflicting lines for checking HasUserGesture().
+  Decided to keep the web_contents nullity check since
+  the comments say it can be null in tests.
+
+(cherry picked from commit e7d560979f89705ea2844f9f64b5c7a598a03f2b)
+
+Bug: 1245578
+Change-Id: Idbe5c1cb966fe21ab1a49a7345a5b197afa0b807
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3150060
+Commit-Queue: Daniel Rubery <drubery@chromium.org>
+Cr-Original-Commit-Position: refs/heads/main@{#919488}
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/3198083
+Reviewed-by: Jana Grill <janagrill@google.com>
+Owners-Override: Jana Grill <janagrill@google.com>
+Commit-Queue: Roger Felipe Zanoni da Silva <rzanoni@google.com>
+Cr-Commit-Position: refs/branch-heads/4430@{#1638}
+Cr-Branched-From: e5ce7dc4f7518237b3d9bb93cccca35d25216cbe-refs/heads/master@{#857950}
+---
+ .../download_protection/ppapi_download_request.cc     | 11 +++++++++++
+ .../download_protection/ppapi_download_request.h      |  8 ++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/chrome/browser/safe_browsing/download_protection/ppapi_download_request.cc b/chrome/browser/safe_browsing/download_protection/ppapi_download_request.cc
+index 73a86ad3c..1322c3956 100644
+--- a/chrome/browser/safe_browsing/download_protection/ppapi_download_request.cc
++++ b/chrome/browser/safe_browsing/download_protection/ppapi_download_request.cc
+@@ -64,6 +64,13 @@ PPAPIDownloadRequest::PPAPIDownloadRequest(
+   is_extended_reporting_ = IsExtendedReportingEnabled(*profile->GetPrefs());
+   is_enhanced_protection_ = IsEnhancedProtectionEnabled(*profile->GetPrefs());
+ 
++  // web_contents can be null in tests.
++  if (!web_contents) {
++    return;
++  }
++
++  Observe(web_contents);
++
+   if (service->navigation_observer_manager()) {
+     has_user_gesture_ =
+         service->navigation_observer_manager()->HasUserGesture(web_contents);
+@@ -131,6 +138,10 @@ GURL PPAPIDownloadRequest::GetDownloadRequestUrl() {
+   return url;
+ }
+ 
++void PPAPIDownloadRequest::WebContentsDestroyed() {
++  Finish(RequestOutcome::REQUEST_DESTROYED, DownloadCheckResult::UNKNOWN);
++}
++
+ // Allowlist checking needs to the done on the IO thread.
+ void PPAPIDownloadRequest::CheckAllowlistsOnIOThread(
+     const GURL& requestor_url,
+diff --git a/chrome/browser/safe_browsing/download_protection/ppapi_download_request.h b/chrome/browser/safe_browsing/download_protection/ppapi_download_request.h
+index 43b21119a..8fff829cb 100644
+--- a/chrome/browser/safe_browsing/download_protection/ppapi_download_request.h
++++ b/chrome/browser/safe_browsing/download_protection/ppapi_download_request.h
+@@ -12,6 +12,7 @@
+ #include "base/memory/weak_ptr.h"
+ #include "chrome/browser/safe_browsing/download_protection/download_protection_util.h"
+ #include "components/sessions/core/session_id.h"
++#include "content/public/browser/web_contents_observer.h"
+ #include "url/gurl.h"
+ 
+ namespace content {
+@@ -43,7 +44,7 @@ class PPAPIDownloadRequest;
+ //
+ // PPAPIDownloadRequest objects are owned by the DownloadProtectionService
+ // indicated by |service|.
+-class PPAPIDownloadRequest {
++class PPAPIDownloadRequest : public content::WebContentsObserver {
+  public:
+   // The outcome of the request. These values are used for UMA. New values
+   // should only be added at the end.
+@@ -70,7 +71,7 @@ class PPAPIDownloadRequest {
+       DownloadProtectionService* service,
+       scoped_refptr<SafeBrowsingDatabaseManager> database_manager);
+ 
+-  ~PPAPIDownloadRequest();
++  ~PPAPIDownloadRequest() override;
+ 
+   // Start the process of checking the download request. The callback passed as
+   // the |callback| parameter to the constructor will be invoked with the result
+@@ -89,6 +90,9 @@ class PPAPIDownloadRequest {
+   // Returns the URL that will be used for download requests.
+   static GURL GetDownloadRequestUrl();
+ 
++  // WebContentsObserver implementation
++  void WebContentsDestroyed() override;
++
+  private:
+   static const char kDownloadRequestUrl[];
+ 
+-- 
+2.20.1
+
