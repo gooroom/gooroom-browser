@@ -1,7 +1,7 @@
-From 891c0774ea450f422f6f392b1cf0cbade55208b0 Mon Sep 17 00:00:00 2001
+From 27c34b4913cd30abf8dd493ba5fccce167249be4 Mon Sep 17 00:00:00 2001
 From: Victor Hugo Vianna Silva <victorvianna@google.com>
 Date: Tue, 22 Jun 2021 13:48:53 +0000
-Subject: [PATCH 06/28] Fix use-after-free in SendTabToSelfSubMenuModel
+Subject: [PATCH 01/21] Fix use-after-free in SendTabToSelfSubMenuModel
 
 Observe the WebContents destruction and prevent ExecuteCommand() from
 using the destroyed object.

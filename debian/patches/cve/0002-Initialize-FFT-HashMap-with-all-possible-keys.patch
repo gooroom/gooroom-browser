@@ -1,7 +1,7 @@
-From 3d7f614ecdc027bfbd14f4d27a2309d57f8d149e Mon Sep 17 00:00:00 2001
+From 5028b12d82355172b9f06f6a10adb14ea1e18b17 Mon Sep 17 00:00:00 2001
 From: Artem Sumaneev <asumaneev@google.com>
 Date: Tue, 22 Jun 2021 12:52:03 +0000
-Subject: [PATCH 07/28] Initialize FFT HashMap with all possible keys
+Subject: [PATCH 02/21] Initialize FFT HashMap with all possible keys
 
 The HashMap that maps the FFT size to the setup data is initialized
 with all of the valid FFT sizes with a nullptr for the setup data.

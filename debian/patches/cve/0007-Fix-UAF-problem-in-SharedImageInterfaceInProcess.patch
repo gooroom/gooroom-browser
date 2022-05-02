@@ -1,7 +1,7 @@
-From e41ba98ea0fa2c575bd48998ca1d2cd588a25f58 Mon Sep 17 00:00:00 2001
+From 0413d8123d870fed71da9762b528f382740c42b0 Mon Sep 17 00:00:00 2001
 From: Peng Huang <penghuang@chromium.org>
 Date: Tue, 17 Aug 2021 15:59:40 +0000
-Subject: [PATCH 13/28] Fix UAF problem in SharedImageInterfaceInProcess
+Subject: [PATCH 07/21] Fix UAF problem in SharedImageInterfaceInProcess
 
 (cherry picked from commit 38b4905f8d877b27bc2d4ccd4cfc0f82b636deea)
 

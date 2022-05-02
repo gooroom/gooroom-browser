@@ -1,7 +1,7 @@
-From 53cccaa9bff8edc7551ff6130082e556a6f9aca1 Mon Sep 17 00:00:00 2001
+From cfb7a2301c0c48dc277beac4821904149aab8137 Mon Sep 17 00:00:00 2001
 From: Collin Baker <collinbaker@chromium.org>
 Date: Tue, 22 Jun 2021 13:47:45 +0000
-Subject: [PATCH 08/28] Reland "Regenerate group IDs when restoring closed
+Subject: [PATCH 03/21] Reland "Regenerate group IDs when restoring closed
  window"
 
 This is a reland of b21775d121bda1fb5084487547a63dccb5429b74

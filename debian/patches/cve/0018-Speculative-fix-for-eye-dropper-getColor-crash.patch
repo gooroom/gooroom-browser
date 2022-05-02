@@ -1,7 +1,7 @@
-From 28e97de7ad401f8da212068562fd6a51831cdc86 Mon Sep 17 00:00:00 2001
+From f2da3b3b423f04aebb8d5b036c0bf0e024435100 Mon Sep 17 00:00:00 2001
 From: Ionel Popescu <iopopesc@microsoft.com>
 Date: Wed, 27 Oct 2021 08:18:46 +0000
-Subject: [PATCH 25/28] Speculative fix for eye dropper getColor crash.
+Subject: [PATCH 18/21] Speculative fix for eye dropper getColor crash.
 
 There seems to be a situation where the captured frame coordinates
 are different than the ones accessible by moving the mouse.

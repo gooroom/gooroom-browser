@@ -1,7 +1,7 @@
-From b10f096be8857de6e437a2640e8f72a28fa863d8 Mon Sep 17 00:00:00 2001
+From 06ed1845423c5663ecbe4a89d2d62337a9599278 Mon Sep 17 00:00:00 2001
 From: Emilia Paz <emiliapaz@chromium.org>
 Date: Wed, 1 Dec 2021 23:50:18 +0000
-Subject: [PATCH 27/28] Drag/drop pinned extensions only when extension exists
+Subject: [PATCH 20/21] Drag/drop pinned extensions only when extension exists
 
 An extension can be deleted while dragging. Now, dropping will only
 happen if there is an action for the extension dragged (either if the

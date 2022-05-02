@@ -1,7 +1,7 @@
-From e4ad23cd9da9cc973dd21b31ed0319528cf2097d Mon Sep 17 00:00:00 2001
+From b8982f8a981bac7edea8d309ee5d0171417f17bd Mon Sep 17 00:00:00 2001
 From: Wolfgang Beyer <wolfi@chromium.org>
 Date: Tue, 30 Nov 2021 09:34:39 +0000
-Subject: [PATCH 28/28] Disable 'Show as Tab' menu option for DevTools windows
+Subject: [PATCH 21/21] Disable 'Show as Tab' menu option for DevTools windows
 
 When DevTools is opened as a separate Window, there is a 'Show as Tab'
 menu option in Windows and MacOS. Since DevTools should only be shown
@@ -30,10 +30,10 @@ Cr-Branched-From: 24dc4ee75e01a29d390d43c9c264372a169273a7-refs/heads/main@{#929
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index 8faaa9afc..98646a46d 100644
+index 0e34c8b2c..34fe0985a 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
-@@ -1373,7 +1373,8 @@ void BrowserCommandController::UpdateCommandsForFullscreenMode() {
+@@ -1378,7 +1378,8 @@ void BrowserCommandController::UpdateCommandsForFullscreenMode() {
  
    // Window management commands
    command_updater_.UpdateCommandEnabled(

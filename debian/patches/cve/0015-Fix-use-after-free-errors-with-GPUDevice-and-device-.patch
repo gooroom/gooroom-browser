@@ -1,7 +1,7 @@
-From b66bc2f75407596710d059ce8182d8526e2ada79 Mon Sep 17 00:00:00 2001
+From 93cbbd86fbf547bd0d656c7a9de04a738ea965a7 Mon Sep 17 00:00:00 2001
 From: Austin Eng <enga@chromium.org>
 Date: Thu, 7 Oct 2021 16:33:12 +0000
-Subject: [PATCH 22/28] Fix use-after-free errors with ~GPUDevice and device
+Subject: [PATCH 15/21] Fix use-after-free errors with ~GPUDevice and device
  lost handling
 
 Depending on the ordering of ExecutionContext ContextDestroyed

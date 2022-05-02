@@ -1,7 +1,7 @@
-From 333f43161567e986f95f0ec5794c24b3fcfd2579 Mon Sep 17 00:00:00 2001
+From 319ba2ccdb09b06651b6b533cb78932939ebc063 Mon Sep 17 00:00:00 2001
 From: Daniel Rubery <drubery@chromium.org>
 Date: Wed, 6 Oct 2021 15:25:10 +0000
-Subject: [PATCH 24/28] Observe WebContents in PPAPIDownloadRequest
+Subject: [PATCH 17/21] Observe WebContents in PPAPIDownloadRequest
 
 If the WebContents is destroyed while the PPAPIDownloadRequest is
 checking the allowlist, we end up with a UaF. The fix for this is to

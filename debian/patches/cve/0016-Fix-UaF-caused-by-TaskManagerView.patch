@@ -1,7 +1,7 @@
-From 607bf1cfa7260e944b8dfa5dedc5b67b8b3d1f7c Mon Sep 17 00:00:00 2001
+From b9cd23bd91d529c7abc32d4f70df98f05f073d24 Mon Sep 17 00:00:00 2001
 From: Nicolas Ouellet-Payeur <nicolaso@chromium.org>
 Date: Wed, 6 Oct 2021 14:38:13 +0000
-Subject: [PATCH 23/28] Fix UaF caused by TaskManagerView
+Subject: [PATCH 16/21] Fix UaF caused by TaskManagerView
 
 TaskManagerView could stay visible even after the Profile* was
 destroyed, and creating a ContextMenu tried to use its

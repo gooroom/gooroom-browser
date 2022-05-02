@@ -1,7 +1,7 @@
-From 7121eb8900e9bb2772d62aeab639187ee0d82a8a Mon Sep 17 00:00:00 2001
+From 157c9f8f2eb43514446068c6ac3fe27e6f9fc908 Mon Sep 17 00:00:00 2001
 From: Lei Zhang <thestig@chromium.org>
 Date: Wed, 22 Sep 2021 22:41:35 +0000
-Subject: [PATCH 15/28] M92: Do more class validity checks in
+Subject: [PATCH 09/21] M92: Do more class validity checks in
  PrintViewManagerBase.
 
 PrintViewManagerBase runs a nested loop. In some situations,
@@ -160,10 +160,10 @@ index 7eeb3467f..6d7f95e24 100644
  
    // In the case of Scripted Printing, where the renderer is controlling the
 diff --git a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
-index 5beb6ac1f..7eac06044 100644
+index dc8c85e76..69ee75261 100644
 --- a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
 +++ b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
-@@ -750,9 +750,12 @@ void PrintPreviewHandler::HandleShowSystemDialog(
+@@ -759,9 +759,12 @@ void PrintPreviewHandler::HandleShowSystemDialog(
    if (!initiator)
      return;
  

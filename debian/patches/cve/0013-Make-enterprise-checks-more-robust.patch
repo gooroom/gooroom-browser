@@ -1,7 +1,7 @@
-From 03a4343c251fa194aa2a0962c5d1b60c7511bb51 Mon Sep 17 00:00:00 2001
+From cf80e44126ea74997dc4dd3e882af8f0feee191f Mon Sep 17 00:00:00 2001
 From: Jan Krcal <jkrcal@chromium.org>
 Date: Fri, 10 Sep 2021 12:42:19 +0000
-Subject: [PATCH 19/28] Make enterprise checks more robust
+Subject: [PATCH 13/21] Make enterprise checks more robust
 
 This CL passes a WeakPtr instead a raw pointer to one async callback in
 the process of enabling sync.

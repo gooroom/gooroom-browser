@@ -1,7 +1,7 @@
-From 5de85fac0077540c6ce0a46a3d970fe67c69e54e Mon Sep 17 00:00:00 2001
+From aa52dbc12f2e0212db7265c8f3c24a0fac4500d3 Mon Sep 17 00:00:00 2001
 From: Max Curran <curranmax@chromium.org>
 Date: Tue, 7 Sep 2021 21:25:59 +0000
-Subject: [PATCH 21/28] Fix UAF in AvailableOfflineContentProvider.
+Subject: [PATCH 14/21] Fix UAF in AvailableOfflineContentProvider.
 
 AvailableOfflineContentProvider previously held a raw pointer to a
 Profile with the assumption that the profile will outlive the Mojo pipe.

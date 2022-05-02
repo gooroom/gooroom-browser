@@ -1,7 +1,7 @@
-From 258a8f3c8591974ef364cc1b7ef935b975f0f591 Mon Sep 17 00:00:00 2001
+From a4b9762003751ac05bb641ba192ae353cf06ec44 Mon Sep 17 00:00:00 2001
 From: Hongchan Choi <hongchan@chromium.org>
 Date: Tue, 21 Sep 2021 14:22:12 +0000
-Subject: [PATCH 17/28] Protect HRTF database loader thread from access by
+Subject: [PATCH 11/21] Protect HRTF database loader thread from access by
  different threads
 
 This patch add a new mutex locker around the HRTF database loader

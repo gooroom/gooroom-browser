@@ -1,7 +1,7 @@
-From 16ceeff642495fd16d62a890eec7e0a43f8ab8ba Mon Sep 17 00:00:00 2001
+From 08479dfd3f6382f99125dbac6ea005fc2d4d22f0 Mon Sep 17 00:00:00 2001
 From: Charlene Yan <cyan@chromium.org>
 Date: Tue, 17 Aug 2021 15:53:41 +0000
-Subject: [PATCH 09/28] Cap boundaries so tabs can't be moved across
+Subject: [PATCH 04/21] Cap boundaries so tabs can't be moved across
  {un}/pinned.
 
 (cherry picked from commit 05198700faf344500e765218ca96b161b010fc45)
