@@ -1,0 +1,124 @@
+From 10510bf2ea53a107ae122276d944761adc90a428 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 8 Jun 2022 14:59:24 +0900
+Subject: [PATCH] Fix dynamic PageSourceViewEnabled value
+
+---
+ chrome/browser/profiles/profile_impl.cc               |  1 +
+ chrome/browser/ui/browser_command_controller.cc       | 11 +++++++++++
+ chrome/browser/ui/browser_command_controller.h        |  1 +
+ chrome/browser/ui/browser_commands.cc                 |  4 ++++
+ chrome/browser/ui/browser_commands.h                  |  1 +
+ .../core/browser/configuration_policy_handler.cc      |  2 ++
+ 6 files changed, 20 insertions(+)
+
+diff --git a/chrome/browser/profiles/profile_impl.cc b/chrome/browser/profiles/profile_impl.cc
+index 1c79ba2998e34..50ee2ee8bc65c 100644
+--- a/chrome/browser/profiles/profile_impl.cc
++++ b/chrome/browser/profiles/profile_impl.cc
+@@ -397,6 +397,7 @@ void ProfileImpl::RegisterProfilePrefs(
+                                home_page_flags);
+   registry->RegisterStringPref(prefs::kNewTabPageLocationOverride,
+                                std::string());
++  registry->RegisterBooleanPref(prefs::kPageSourceViewEnabled, true);
+ 
+ #if BUILDFLAG(ENABLE_PRINTING)
+   registry->RegisterBooleanPref(prefs::kPrintingEnabled, true);
+diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
+index c765e84de38fd..1be7937950cf7 100644
+--- a/chrome/browser/ui/browser_command_controller.cc
++++ b/chrome/browser/ui/browser_command_controller.cc
+@@ -190,6 +190,10 @@ BrowserCommandController::BrowserCommandController(Browser* browser)
+       prefs::kPrintingEnabled,
+       base::BindRepeating(&BrowserCommandController::UpdatePrintingState,
+                           base::Unretained(this)));
++  profile_pref_registrar_.Add(
++      prefs::kPageSourceViewEnabled,
++      base::BindRepeating(&BrowserCommandController::UpdatePageSourceViewState,
++                          base::Unretained(this)));
+   profile_pref_registrar_.Add(
+       prefs::kDownloadRestrictions,
+       base::BindRepeating(&BrowserCommandController::UpdateSaveAsState,
+@@ -957,6 +961,7 @@ void BrowserCommandController::TabBlockedStateChanged(
+     content::WebContents* contents,
+     int index) {
+   PrintingStateChanged();
++  UpdatePageSourceViewState();
+   FullscreenStateChanged();
+   UpdateCommandsForFind();
+   UpdateCommandsForMediaRouter();
+@@ -1322,6 +1327,7 @@ void BrowserCommandController::UpdateCommandsForContentRestrictionState() {
+       IDC_PASTE, !(restrictions & CONTENT_RESTRICTION_PASTE));
+   UpdateSaveAsState();
+   UpdatePrintingState();
++  UpdatePageSourceViewState();
+ }
+ 
+ void BrowserCommandController::UpdateCommandsForDevTools() {
+@@ -1535,6 +1541,11 @@ void BrowserCommandController::UpdatePrintingState() {
+ #endif
+ }
+ 
++void BrowserCommandController::UpdatePageSourceViewState() {
++  bool view_enabled = CanPageSourceView(browser_);
++  command_updater_.UpdateCommandEnabled(IDC_VIEW_SOURCE, view_enabled);
++}
++
+ void BrowserCommandController::UpdateSaveAsState() {
+   if (is_locked_fullscreen_)
+     return;
+diff --git a/chrome/browser/ui/browser_command_controller.h b/chrome/browser/ui/browser_command_controller.h
+index 0f7d8b1ed1593..e4b93c509c407 100644
+--- a/chrome/browser/ui/browser_command_controller.h
++++ b/chrome/browser/ui/browser_command_controller.h
+@@ -166,6 +166,7 @@ class BrowserCommandController : public CommandUpdater,
+   // Updates the printing command state.
+   void UpdatePrintingState();
+ 
++  void UpdatePageSourceViewState();
+   // Updates the SHOW_SYNC_SETUP menu entry.
+   void OnSigninAllowedPrefChange();
+ 
+diff --git a/chrome/browser/ui/browser_commands.cc b/chrome/browser/ui/browser_commands.cc
+index 03a8db0070adc..aa5161aee779c 100644
+--- a/chrome/browser/ui/browser_commands.cc
++++ b/chrome/browser/ui/browser_commands.cc
+@@ -1365,6 +1365,10 @@ void Print(Browser* browser) {
+ #endif
+ }
+ 
++bool CanPageSourceView(Browser* browser) {
++  return browser->profile()->GetPrefs()->GetBoolean(prefs::kPageSourceViewEnabled);
++}
++
+ bool CanPrint(Browser* browser) {
+ #if BUILDFLAG(ENABLE_PRINTING)
+   // Do not print when printing is disabled via pref or policy.
+diff --git a/chrome/browser/ui/browser_commands.h b/chrome/browser/ui/browser_commands.h
+index 93caf13cfc582..539dfcf38ac7d 100644
+--- a/chrome/browser/ui/browser_commands.h
++++ b/chrome/browser/ui/browser_commands.h
+@@ -173,6 +173,7 @@ void SavePage(Browser* browser);
+ bool CanSavePage(const Browser* browser);
+ void Print(Browser* browser);
+ bool CanPrint(Browser* browser);
++bool CanPageSourceView(Browser* browser);
+ #if BUILDFLAG(ENABLE_PRINTING)
+ void BasicPrint(Browser* browser);
+ bool CanBasicPrint(Browser* browser);
+diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
+index eca5add477261..4143f3c958438 100644
+--- a/components/policy/core/browser/configuration_policy_handler.cc
++++ b/components/policy/core/browser/configuration_policy_handler.cc
+@@ -386,6 +386,8 @@ void PageSourceViewPolicyHandler::ProcessPolicy(const policy::PolicyMap& policie
+   if(policies.GetValue(policy::key::kPageSourceViewEnabled))
+     if(!policies.GetValue(policy::key::kPageSourceViewEnabled)->GetBool())
+       PageSourceViewPolicyHandler::enabled = false;
++    else
++      PageSourceViewPolicyHandler::enabled = true;
+   return;
+ }
+ 
+-- 
+2.30.2
+

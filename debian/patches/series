@@ -117,3 +117,7 @@ gooroom/0063-Revive-settings-pages-that-are-appearance-page-autof.patch
 gooroom/0064-to-jenkins-build.patch
 gooroom/0065-BugFix-5204-5203-5202-5199.patch
 gooroom/CVE-2022-1096.patch
+gooroom/0066-Disable-Open-as-window-on-making-shortcut-app-popup.patch
+gooroom/0067-Fix-dynamic-PageSourceViewEnabled-value.patch
+gooroom/0068-Fix-trust-untrust-changing-bug.patch
+gooroom/0069-Revert-pruning-extensions-pages-chrome-extensions.patch
