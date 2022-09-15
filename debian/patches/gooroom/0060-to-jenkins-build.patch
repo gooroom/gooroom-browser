@@ -1,0 +1,24 @@
+From 26a97cfbcfc5d5904ffa7e07074900bccd1a9bea Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 29 Mar 2022 14:21:45 +0900
+Subject: [PATCH 60/66] to jenkins build
+
+---
+ content/browser/BUILD.gn | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
+index d237d48c5c86e..e7351dc832362 100644
+--- a/content/browser/BUILD.gn
++++ b/content/browser/BUILD.gn
+@@ -287,7 +287,6 @@ source_set("browser") {
+   }
+ 
+   public_deps = [
+-    "//components/policy/core/browser:internal",
+     "//base",
+     "//components/memory_pressure",
+     "//ipc",
+-- 
+2.30.2
+

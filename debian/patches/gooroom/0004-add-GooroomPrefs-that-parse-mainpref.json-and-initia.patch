@@ -1,25 +1,23 @@
-From 769d9bcfeffa2a7ad200a145d31e0914ec7bf0fa Mon Sep 17 00:00:00 2001
+From 0bdd73dc7e74fc721ec9b8c5bb6618529027a7d6 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:13:47 +0900
-Subject: [PATCH 04/63] add GooroomPrefs that parse mainpref.json and
+Subject: [PATCH 04/66] add GooroomPrefs that parse mainpref.json and
  initializes GooroomBase and GooroomUrlFilter based on the result
 
 ---
- gooroom/BUILD.gn                              |  10 ++
- gooroom/app/gooroom_main_delegate.cc          |   1 +
- gooroom/app/gooroom_main_delegate.h           |   6 +-
- gooroom/base/gooroom_base.cc                  |  33 +++++
- gooroom/base/gooroom_base.h                   |  37 +++++
- gooroom/base/gooroom_url_filter.cc            |  10 ++
- gooroom/base/gooroom_url_filter.h             |  30 ++++
- gooroom/browser/BUILD.gn                      |   4 +
- .../gooroom_browser_extra_parts_security.cc   |   8 +-
- .../gooroom_browser_extra_parts_security.h    |   2 +-
- gooroom/browser/gooroom_pref.cc               | 136 ++++++++++++++++++
- gooroom/browser/gooroom_pref.h                |  42 ++++++
- gooroom/browser/gooroom_url_filter_impl.cc    |  58 ++++++++
- gooroom/browser/gooroom_url_filter_impl.h     |  30 ++++
- 14 files changed, 401 insertions(+), 6 deletions(-)
+ gooroom/BUILD.gn                           |  10 ++
+ gooroom/app/gooroom_main_delegate.cc       |   1 +
+ gooroom/app/gooroom_main_delegate.h        |   6 +-
+ gooroom/base/gooroom_base.cc               |  33 +++++
+ gooroom/base/gooroom_base.h                |  37 ++++++
+ gooroom/base/gooroom_url_filter.cc         |  10 ++
+ gooroom/base/gooroom_url_filter.h          |  30 +++++
+ gooroom/browser/BUILD.gn                   |   4 +
+ gooroom/browser/gooroom_pref.cc            | 136 +++++++++++++++++++++
+ gooroom/browser/gooroom_pref.h             |  42 +++++++
+ gooroom/browser/gooroom_url_filter_impl.cc |  57 +++++++++
+ gooroom/browser/gooroom_url_filter_impl.h  |  30 +++++
+ 12 files changed, 395 insertions(+), 1 deletion(-)
  create mode 100644 gooroom/base/gooroom_base.cc
  create mode 100644 gooroom/base/gooroom_base.h
  create mode 100644 gooroom/base/gooroom_url_filter.cc
@@ -30,10 +28,10 @@ Subject: [PATCH 04/63] add GooroomPrefs that parse mainpref.json and
  create mode 100644 gooroom/browser/gooroom_url_filter_impl.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index f8addb80dcad2..892c14ab050fb 100644
+index 89bf2a517ceb7..da62dab711d54 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -226,6 +226,16 @@ if (!is_android && !is_mac) {
+@@ -225,6 +225,16 @@ if (!is_android && !is_mac) {
           # for commit #3
          "browser/gooroom_browser_extra_parts_security.cc",
          "browser/gooroom_browser_extra_parts_security.h",
@@ -51,7 +49,7 @@ index f8addb80dcad2..892c14ab050fb 100644
      }
    }
 diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
-index 5a7b9a36a3cdc..e86300bc779da 100644
+index 20273b5738078..cb9a85eefbaf1 100644
 --- a/gooroom/app/gooroom_main_delegate.cc
 +++ b/gooroom/app/gooroom_main_delegate.cc
 @@ -3,6 +3,7 @@
@@ -63,7 +61,7 @@ index 5a7b9a36a3cdc..e86300bc779da 100644
  #include "base/logging.h"
  #include "gooroom/browser/gooroom_content_browser_client.h"
 diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
-index 77961662fd126..254bcc8de459e 100644
+index 019e7df5a85b3..ab8ca00354b38 100644
 --- a/gooroom/app/gooroom_main_delegate.h
 +++ b/gooroom/app/gooroom_main_delegate.h
 @@ -5,6 +5,9 @@
@@ -84,7 +82,7 @@ index 77961662fd126..254bcc8de459e 100644
  
  namespace base {
  class CommandLine;
-@@ -38,6 +40,8 @@ class GooroomMainDelegate : public ChromeMainDelegate {
+@@ -39,6 +41,8 @@ class GooroomMainDelegate : public ChromeMainDelegate {
  
    GooroomContentClient gooroom_content_client_;
  
@@ -243,41 +241,9 @@ index 309bd48c7d9b8..57f5f21afd23e 100644
    ]
  
    deps = [
-diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.cc b/gooroom/browser/gooroom_browser_extra_parts_security.cc
-index 20795eb6356af..059b78f3d66ef 100644
---- a/gooroom/browser/gooroom_browser_extra_parts_security.cc
-+++ b/gooroom/browser/gooroom_browser_extra_parts_security.cc
-@@ -28,10 +28,10 @@
- //  DLOG(INFO) << "PreMainMessageLoopStart()";
- //}
- 
--void GooroomBrowserExtraPartsSecurity::PostProfileInit() {
--  DLOG(INFO) << "PostProfileInit()";
--}
-+//void GooroomBrowserExtraPartsSecurity::PostProfileInit() {
-+//  DLOG(INFO) << "PostProfileInit()";
-+//}
- 
- void GooroomBrowserExtraPartsSecurity::PostBrowserStart() {
--	DLOG(INFO) << "PostBrowserStart()";
-+	//DLOG(INFO) << "PostBrowserStart()";
- }
-diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.h b/gooroom/browser/gooroom_browser_extra_parts_security.h
-index b1330cbf06de4..979497e2c0e0f 100644
---- a/gooroom/browser/gooroom_browser_extra_parts_security.h
-+++ b/gooroom/browser/gooroom_browser_extra_parts_security.h
-@@ -16,7 +16,7 @@ class GooroomBrowserExtraPartsSecurity : public ChromeBrowserMainExtraParts
- 
-   // Overridden from ChromeBrowserMainExtraParts:
- //  void PreMainMessageLoopStart() override;
--  void PostProfileInit() override;
-+//  void PostProfileInit() override;
-   void PostBrowserStart() override;
- 
-   // PrefObserver ===========================================
 diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
 new file mode 100644
-index 0000000000000..0343c09c7257f
+index 0000000000000..49a826bda40a6
 --- /dev/null
 +++ b/gooroom/browser/gooroom_pref.cc
 @@ -0,0 +1,136 @@
@@ -331,7 +297,7 @@ index 0000000000000..0343c09c7257f
 +
 +  PrefServiceFactory prefServiceFactory;
 +  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
-+      base::CreateSequencedTaskRunner({base::MayBlock()});
++      base::ThreadPool::CreateSequencedTaskRunner({base::MayBlock()});
 +//  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
 +//      base::CreateSequencedTaskRunner({base::ThreadPool()});
 +
@@ -467,10 +433,10 @@ index 0000000000000..3e94b7fb6b223
 +#endif /* GOOROOM_BROWSER_GOOROOM_PREF_H_ */
 diff --git a/gooroom/browser/gooroom_url_filter_impl.cc b/gooroom/browser/gooroom_url_filter_impl.cc
 new file mode 100644
-index 0000000000000..c0fb6a7391d7b
+index 0000000000000..e558f49f88a1f
 --- /dev/null
 +++ b/gooroom/browser/gooroom_url_filter_impl.cc
-@@ -0,0 +1,58 @@
+@@ -0,0 +1,57 @@
 +#include "gooroom_url_filter_impl.h"
 +#include "gooroom/base/gooroom_base.h"
 +
@@ -485,7 +451,7 @@ index 0000000000000..c0fb6a7391d7b
 +GooroomUrlFilterImpl::~GooroomUrlFilterImpl() {}
 +
 +bool GooroomUrlFilterImpl::isTrustUrl(std::string url) {
-+  std::set<url_matcher::URLMatcherConditionSet::ID> matching_ids =
++  std::set<base::MatcherStringPattern::ID> matching_ids =
 +      url_matcher_.MatchURL(GURL(url));
 +  bool trusted = !matching_ids.empty();
 +  GURL url_(url);
@@ -495,11 +461,10 @@ index 0000000000000..c0fb6a7391d7b
 +}
 +
 +void GooroomUrlFilterImpl::setWhiteList(const base::Value* vv) {
-+  const base::ListValue* wlist = nullptr;
-+  vv->GetAsList(&wlist);
++  const base::Value::List* wlist = vv->GetIfList();
 +
 +  url_matcher::URLMatcherConditionSet::Vector all_conditions_;
-+  url_matcher::URLMatcherConditionSet::ID matcher_id_ = 0;
++  base::MatcherStringPattern::ID matcher_id_ = 0;
 +  std::string scheme;
 +  std::string host;
 +  uint16_t port = 0;
@@ -510,7 +475,7 @@ index 0000000000000..c0fb6a7391d7b
 +  std::map<std::string, bool> hosts;
 +  std::map<GURL, bool> urls;
 +
-+  for (base::ListValue::const_iterator it = wlist->GetList().begin(); it != wlist->GetList().end();
++  for (base::ListValue::const_iterator it = wlist->begin(); it != wlist->end();
 +       ++it) {
 +    std::string pattern = it->GetString();
 +    DLOG(INFO) << "pattern = " << pattern;

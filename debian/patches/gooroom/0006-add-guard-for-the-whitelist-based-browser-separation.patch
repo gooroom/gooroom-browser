@@ -1,13 +1,13 @@
-From ed88b5c1ce23add616b1c349badb4434fe8fb679 Mon Sep 17 00:00:00 2001
+From 916734722651bc7e3202abe12345d3797d694ad1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:14:47 +0900
-Subject: [PATCH 06/63] add guard for the whitelist based browser separation
+Subject: [PATCH 06/66] add guard for the whitelist based browser separation
 
 ---
  build/config/chrome_build.gni   | 1 +
- ppapi/buildflags/BUILD.gn       | 5 ++++-
+ ppapi/buildflags/BUILD.gn       | 1 +
  ppapi/buildflags/buildflags.gni | 1 +
- 3 files changed, 6 insertions(+), 1 deletion(-)
+ 3 files changed, 3 insertions(+)
 
 diff --git a/build/config/chrome_build.gni b/build/config/chrome_build.gni
 index 5c51d7f2cc3db..e9c6531b8b905 100644
@@ -22,29 +22,28 @@ index 5c51d7f2cc3db..e9c6531b8b905 100644
  
  declare_args() {
 diff --git a/ppapi/buildflags/BUILD.gn b/ppapi/buildflags/BUILD.gn
-index 4dfdc7a5b335c..2b50baf98d4dc 100644
+index 85f906a9209a1..3d0ffb3365f8d 100644
 --- a/ppapi/buildflags/BUILD.gn
 +++ b/ppapi/buildflags/BUILD.gn
-@@ -11,5 +11,8 @@ import("//ppapi/buildflags/buildflags.gni")
- 
- buildflag_header("buildflags") {
-   header = "buildflags.h"
--  flags = [ "ENABLE_PLUGINS=$enable_plugins" ]
-+  flags = [
-+    "ENABLE_PLUGINS=$enable_plugins",
+@@ -14,5 +14,6 @@ buildflag_header("buildflags") {
+   flags = [
+     "ENABLE_PLUGINS=$enable_plugins",
+     "ENABLE_PPAPI=$enable_ppapi",
 +    "ENABLE_GOOROOM=$enable_gooroom"
-+  ]
+   ]
  }
 diff --git a/ppapi/buildflags/buildflags.gni b/ppapi/buildflags/buildflags.gni
-index 560d1ecaecbdf..cdfbc36d2a061 100644
+index f86bf04b9781b..3211dac77ed17 100644
 --- a/ppapi/buildflags/buildflags.gni
 +++ b/ppapi/buildflags/buildflags.gni
-@@ -8,4 +8,5 @@ import("//build/config/features.gni")
- 
- declare_args() {
-   enable_plugins = !is_android && !is_ios && !is_chromecast && !is_fuchsia
+@@ -11,6 +11,7 @@ declare_args() {
+   # looking up plugins, but does not include support for loading plugins using a
+   # specific technology like Pepper.
+   enable_plugins = !is_android && !is_ios && !is_castos && !is_fuchsia
 +  enable_gooroom = is_gooroom
  }
+ 
+ declare_args() {
 -- 
 2.30.2
 

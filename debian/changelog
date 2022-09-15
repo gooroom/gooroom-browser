@@ -1,36 +1,603 @@
-gooroom-browser (3.3.0-1+grm3u2) stretch; urgency=medium
+gooroom-browser (3.4.0-1+grm3u1) stretch; urgency=medium
 
-  * Init 3.3.0-1+grm3u2
-    - Disable 'Open as window' on making shortcut app popup
-    - Fix dynamic PageSourceViewEnabled value
-    - Fix trust/untrust changing bug
-    - Revert "pruning extensions pages(chrome://extensions)"
+  * Init gooroom-browser 3.4.0-1+grm3u1
 
- -- Choi J.S. <junsungc91@gmail.com>  Thu, 16 Jun 2022 17:37:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 15 Sep 2022 10:49:00 +0900
 
-gooroom-browser (3.3.0-1+grm3u1) stretch; urgency=medium
+chromium (105.0.5195.102-1~deb11u1) bullseye-security; urgency=high
 
-  * Init 3.3.0-1+grm3u1
-    - CVE-2022-1096 : Type Confusion in V8
+  * New upstream security release.
+    - CVE-2022-3075: Insufficient data validation in Mojo.
+  * Update the cpu check to allow pni instead of sse3 (closes: #1018937).
+  * debian/patches:
+    - upstream/armhf-ftbfs.patch: fix FTBFS introduced with v105 on armhf.
 
- -- Choi J.S. <junsungc91@gmail.com>  Mon, 25 Apr 2022 17:22:00 +0900
+ -- Andres Salomon <dilinger@debian.org>  Mon, 05 Sep 2022 15:57:26 -0400
 
-gooroom-browser (3.2.0-1+grm3u2) stretch; urgency=medium
+chromium (105.0.5195.52-1~deb11u1) bullseye-security; urgency=high
 
-  * Bug Fix
-    - 5199 print preview watermark (change chrome:// to gooroom://)
-    - 5202 Add Korean translation
-    - 5203 Change strings on websocket pop-ups
-    - 5204 Change strings on webworker pop-ups
+  * New upstream stable release.
+    - CVE-2022-3038: Use after free in Network Service.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2022-3039: Use after free in WebSQL. Reported by
+      Nan Wang(@eternalsakura13) and Guang Gong of 360 Vulnerability
+      Research Institute.
+    - CVE-2022-3040: Use after free in Layout. Reported by Anonymous.
+    - CVE-2022-3041: Use after free in WebSQL. Reported by Ziling Chen and
+      Nan Wang(@eternalsakura13) of 360 Vulnerability Research Institute.
+    - CVE-2022-3042: Use after free in PhoneHub. Reported by koocola
+      (@alo_cook) and Guang Gong of 360 Vulnerability Research Institute.
+    - CVE-2022-3043: Heap buffer overflow in Screen Capture.
+      Reported by @ginggilBesel.
+    - CVE-2022-3044: Inappropriate implementation in Site Isolation.
+      Reported by Lucas Pinheiro, Microsoft Browser Vulnerability Research
+    - CVE-2022-3045: Insufficient validation of untrusted input in V8.
+      Reported by Ben Noordhuis <info@bnoordhuis.nl>.
+    - CVE-2022-3046: Use after free in Browser Tag.
+      Reported by Rong Jian of VRI.
+    - CVE-2022-3071: Use after free in Tab Strip.
+      Reported by @ginggilBesel.
+    - CVE-2022-3047: Insufficient policy enforcement in Extensions API.
+      Reported by Maurice Dauer.
+    - CVE-2022-3048: Inappropriate implementation in Chrome OS lockscreen.
+      Reported by Andr.Ess.
+    - CVE-2022-3049: Use after free in SplitScreen.
+      Reported by @ginggilBesel.
+    - CVE-2022-3050: Heap buffer overflow in WebUI.
+      Reported by Zhihua Yao of KunLun Lab.
+    - CVE-2022-3051: Heap buffer overflow in Exosphere.
+      Reported by @ginggilBesel.
+    - CVE-2022-3052: Heap buffer overflow in Window Manager.
+      Reported by Khalil Zhani.
+    - CVE-2022-3053: Inappropriate implementation in Pointer Lock.
+      Reported by Jesper van den Ende (Pelican Party Studios).
+    - CVE-2022-3054: Insufficient policy enforcement in DevTools.
+      Reported by Kuilin Li.
+    - CVE-2022-3055: Use after free in Passwords. Reported by Weipeng
+      Jiang (@Krace) and Guang Gong of 360 Vulnerability Research
+      Institute.
+    - CVE-2022-3056: Insufficient policy enforcement in Content
+      Security Policy. Reported by Anonymous.
+    - CVE-2022-3057: Inappropriate implementation in iframe Sandbox.
+      Reported by Gareth Heyes.
+    - CVE-2022-3058: Use after free in Sign-In Flow.
+      Reported by raven at KunLun lab.
+  * Drop workaround for lack of older clang's -ffile-prefix-map. This
+    should make reproducible builds happy.
+  * debian/copyright:
+    - Update for new libevent location (moved out of base/).
+    - libopenjpeg20 -> libopenjpeg
+  * debian/patches:
+    - debianization/support-i386.patch: refresh.
+    - disable/catapult.patch: refresh.
+    - disable/libaom-arm.patch: refresh.
+    - system/event.patch: update for new libevent location.
+    - system/openjpeg.patch: refresh.
+    - bullseye/clang13.patch: drop part of patch dropped upstream.
+    - upstream/disk-cache.patch: build fix pulled from upstream.
+    - upstream/browser-finder.patch: build fix pulled from upstream.
+    - upstream/masklayer-geom.patch: build fix pulled from upstream.
+    - system/jsoncpp.patch: drop, merged upstream.
+    - fixes/angle-wayland: build fix due to mismatched wayland headers
+      on sid. Only needed until angle updates its copy of wayland.
+    - disable/welcome-page.patch: drop. Upstream fixed the original
+      issue some time ago, and this new version finally cleaned up
+      the workaround.
+    - fixes/connection-message.patch: drop it. I looked at sending this
+      upstream, but the original extension doesn't exist any more,
+      and chromium properly prints an error if a proxy is unreachable.
+      If you can still reproduce the issue (described in
+      http://bugs.debian.org/864539), let me know so I can get it fixed
+      upstream.
+  * debian/scripts/unbundle: upstream tripled the number of (previously
+    vendored) libraries that we can use system versions of. However,
+    the majority of them are either not in bullseye or are too old, so
+    we'll have to wait to use the debian versions for the ones not newly
+    added as build-deps.
+  * Disable optimize_webui, due to a build failure using nodejs from
+    bullseye. I'll reenable this when it either gets fixed or we're done
+    with bullseye security support.
+  * Remove sse3-support dependency and just refuse to run if SSE3 is
+    not present. Breaking via preinst script isn't appropriate for
+    packages that might be installed by default (eg, by Debian Edu).
+  * debian/control: add build-deps for brotli, libdouble-conversion-dev,
+    libwoff-dev, and libxnvctrl-dev (closes: #987292).
+  * Rework default search engine stuff. People did not like the "Your
+    browser is managed" and "Your administrator can change your browser
+    setup remotely" messages, which are admittedly alarming.
+    Instead of using /etc/chromium/policies/recommended/duckduckgo.json,
+    delete that and use /etc/chromium/master_preferences instead.
 
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 20 Apr 2022 11:51:00 +0900
+ -- Andres Salomon <dilinger@debian.org>  Wed, 31 Aug 2022 20:48:11 -0400
 
-chromium (99.0.4844.74-1~deb11u1) bullseye-security; urgency=high
-gooroom-browser (3.2.0-1+grm3u1) stretch; urgency=medium
- 
-  * Init gooroom-browser 3.2.0-1+grm3u1
+chromium (104.0.5112.101-1~deb11u1) bullseye-security; urgency=high
 
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 29 Mar 2022 14:36:00 +0900
+  * New upstream security release.
+    - CVE-2022-2852: Use after free in FedCM.
+      Reported by Sergei Glazunov of Google Project Zero
+    - CVE-2022-2854: Use after free in SwiftShader. Reported by Cassidy
+      Kim of Amber Security Lab, OPPO Mobile Telecommunications Corp. Ltd.
+    - CVE-2022-2855: Use after free in ANGLE. Reported by Cassidy Kim
+      of Amber Security Lab, OPPO Mobile Telecommunications Corp. Ltd.
+    - CVE-2022-2857: Use after free in Blink. Reported by Anonymous
+    - CVE-2022-2858: Use after free in Sign-In Flow.
+      Reported by raven at KunLun lab
+    - CVE-2022-2853: Heap buffer overflow in Downloads.
+      Reported by Sergei Glazunov of Google Project Zero
+    - CVE-2022-2856: Insufficient validation of untrusted input in Intents
+      Reported by Ashley Shen and Christian Resell of Google Threat
+      Analysis Group
+    - CVE-2022-2859: Use after free in Chrome OS Shell. Reported by
+      Nan Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2022-2860: Insufficient policy enforcement in Cookies.
+      Reported by Axel Chong
+    - CVE-2022-2861: Inappropriate implementation in Extensions API.
+      Reported by Rong Jian of VRI
+  * Change default search engine to DuckDuckGo for privacy reasons.
+    Set a different search engine under Settings -> Search Engine
+    (closes: #956012).
+  * Drop a bunch of versioned build-deps that have been satisfied
+    since at least oldoldstable.
+  * debian/NEWS.Debian:
+    - Document upstream dropping support for older TLSv1 and TLSv1.1
+      protocols (closes: #1005808).
+    - Document upstream dropping support for older x86 CPUs without
+      SSE3 instruction support (closes: #1010407).
+    - Document the Google to DuckDuckGo change.
+    - Document upstream's config renaming of AuthServerWhitelist to
+      AuthServerAllowlist (closes: #1013268).
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 16 Aug 2022 17:29:29 -0400
+
+chromium (104.0.5112.79-1~deb11u1) bullseye-security; urgency=high
+
+  * Build with Clang 13 instead of the bullseye default of Clang 11.
+  * New upstream stable release.
+    - CVE-2022-2603: Use after free in Omnibox. Reported by Anonymous
+    - CVE-2022-2604: Use after free in Safe Browsing. Reported by
+      Nan Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2022-2605: Out of bounds read in Dawn. Reported by Looben Yang
+    - CVE-2022-2606: Use after free in Managed devices API. Reported by
+      Nan Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2022-2607: Use after free in Tab Strip. Reported by @ginggilBesel
+    - CVE-2022-2608: Use after free in Overview Mode.
+      Reported by Khalil Zhani
+    - CVE-2022-2609: Use after free in Nearby Share. Reported by koocola
+      (@alo_cook) and Guang Gong of 360 Vulnerability Research Institute
+    - CVE-2022-2610: Insufficient policy enforcement in Background Fetch.
+      Reported by Maurice Dauer
+    - CVE-2022-2611: Inappropriate implementation in Fullscreen API.
+      Reported by Irvan Kurniawan (sourc7)
+    - CVE-2022-2612: Side-channel information leakage in Keyboard input.
+      Reported by Erik Kraft (erik.kraft5@gmx.at),
+      Martin Schwarzl (martin.schwarzl@iaik.tugraz.at)
+    - CVE-2022-2613: Use after free in Input.
+      Reported by Piotr Tworek (Vewd)
+    - CVE-2022-2614: Use after free in Sign-In Flow.
+      Reported by raven at KunLun lab
+    - CVE-2022-2615: Insufficient policy enforcement in Cookies.
+      Reported by Maurice Dauer
+    - CVE-2022-2616: Inappropriate implementation in Extensions API.
+      Reported by Alesandro Ortiz
+    - CVE-2022-2617: Use after free in Extensions API.
+      Reported by @ginggilBesel
+    - CVE-2022-2618: Insufficient validation of untrusted input in
+      Internals. Reported by asnine
+    - CVE-2022-2619: Insufficient validation of untrusted input in Settings.
+      Reported by Oliver Dunk
+    - CVE-2022-2620: Use after free in WebUI. Reported by
+      Nan Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2022-2621: Use after free in Extensions.
+      Reported by Huyna at Viettel Cyber Security
+    - CVE-2022-2622: Insufficient validation of untrusted input in
+      Safe Browsing. Reported by Imre Rad (@ImreRad) and @j00sean
+    - CVE-2022-2623: Use after free in Offline. Reported by
+      raven at KunLun lab
+    - CVE-2022-2624: Heap buffer overflow in PDF. Reported by YU-CHANG
+      CHEN and CHIH-YEN CHANG, working with DEVCORE Internship Program
+  * debian/patches:
+    - bullseye/nomerge.patch: drop, was only needed for clang-11.
+    - bullseye/clang11.patch: drop clang-11 bits, rename to clang13.patch.
+    - bullseye/blink-constexpr.patch: drop, only needed for clang-11.
+    - bullseye/byteswap-constexpr2.patch: drop, only needed for clang-11.
+    - disable/angle-perftests.patch: refresh
+    - disable/catapult.patch: refresh & drop some no longer needed bits.
+    - fixes/tflite.patch: fix a build error.
+  * debian/copyright:
+    - upstream dropped perfetto/ui/src/gen/.
+
+ -- Andres Salomon <dilinger@debian.org>  Thu, 04 Aug 2022 21:39:17 -0400
+
+chromium (103.0.5060.134-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2022-2477 : Use after free in Guest View. Reported by anonymous
+    - CVE-2022-2478 : Use after free in PDF. Reported by triplepwns
+    - CVE-2022-2479 : Insufficient validation of untrusted input in File.
+      Reported by anonymous
+    - CVE-2022-2480 : Use after free in Service Worker API.
+      Reported by Sergei Glazunov of Google Project Zero
+    - CVE-2022-2481: Use after free in Views. Reported by
+      YoungJoo Lee(@ashuu_lee) of CompSecLab at Seoul National University
+    - CVE-2022-2163: Use after free in Cast UI and Toolbar.
+      Reported by Chaoyuan Peng (@ret2happy)
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 20 Jul 2022 00:51:39 -0400
+
+chromium (103.0.5060.114-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2022-2294: Heap buffer overflow in WebRTC. Reported by
+      Jan Vojtesek from the Avast Threat Intelligence team
+    - CVE-2022-2295: Type Confusion in V8.
+      Reported by avaue and Buff3tts at S.S.L.
+    - CVE-2022-2296: Use after free in Chrome OS Shell.
+      Reported by Khalil Zhani
+
+ -- Andres Salomon <dilinger@debian.org>  Sun, 10 Jul 2022 12:44:03 -0400
+
+chromium (103.0.5060.53-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream stable release.
+    - CVE-2022-2156: Use after free in Base.
+      Reported by Mark Brand of Google Project Zero
+    - CVE-2022-2157: Use after free in Interest groups. Reported by
+      Nan Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2022-2158: Type Confusion in V8. Reported by
+      Bohan Liu (@P4nda20371774) of Tencent Security Xuanwu Lab
+    - CVE-2022-2160: Insufficient policy enforcement in DevTools.
+      Reported by David Erceg
+    - CVE-2022-2161: Use after free in WebApp Provider.
+      Reported by Zhihua Yao of KunLun Lab
+    - CVE-2022-2162: Insufficient policy enforcement in File System API.
+      Reported by Abdelhamid Naceri (halov)
+    - CVE-2022-2163: Use after free in Cast UI and Toolbar.
+      Reported by Chaoyuan Peng (@ret2happy)
+    - CVE-2022-2164: Inappropriate implementation in Extensions API.
+      Reported by José Miguel Moreno Computer Security Lab (COSEC) at UC3M
+    - CVE-2022-2165: Insufficient data validation in URL formatting.
+      Reported by Rayyan Bijoora
+  * debian/patches:
+    - upstream/dawn-version-fix.patch: drop merged upstream.
+    - upstream/blink-ftbfs.patch: drop, merged upstream.
+    - upstream/libxml.patch: drop, merged upstream.
+    - upstream/nested-nested-nested-nested-nested-nested-regex-patterns.patch:
+      drop, merged upstream.
+    - upstream/byteswap-constexpr.patch: drop, merged upstream.
+    - bullseye/byteswap-constexpr2.patch: sys_byteswap.h moved directories.
+    - disable/angle-perftests.patch: simple refresh.
+    - disable/catapult.patch: simple refresh.
+    - bullseye/clang11.patch: minor update for some code dropped upstream.
+    - system/openjpeg.patch: update for libopenjp2-7-dev's 2.4 -> 2.5 path
+      change.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 21 Jun 2022 21:40:12 -0400
+
+chromium (102.0.5005.115-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2022-2007: Use after free in WebGPU. Reported by David Manouchehri
+    - CVE-2022-2008: Out of bounds memory access in WebGL.
+      Reported by khangkito - Tran Van Khang (VinCSS)
+    - CVE-2022-2010: Out of bounds read in compositing.
+      Reported by Mark Brand of Google Project Zero
+    - CVE-2022-2011: Use after free in ANGLE.
+      Reported by SeongHwan Park (SeHwa)
+  * debian/patches:
+    - bullseye/byteswap-constexpr2.patch - additional fix for bullseye
+      builds on 32-bit platforms (closes: #1011096).
+    - debianization/support-i386.patch - re-enable support for i386 builds.
+      Upstream no longer officially supports i386 builds on linux, so we
+      are on our own here.
+
+ -- Andres Salomon <dilinger@debian.org>  Fri, 10 Jun 2022 20:56:01 -0400
+
+chromium (102.0.5005.61-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream stable release.
+    - CVE-2022-1853: Use after free in Indexed DB. Reported by Anonymous
+    - CVE-2022-1854: Use after free in ANGLE.
+      Reported by SeongHwan Park (SeHwa)
+    - CVE-2022-1855: Use after free in Messaging. Reported by Anonymous
+    - CVE-2022-1856: Use after free in User Education. Reported by
+      Nan Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2022-1857: Insufficient policy enforcement in File System API.
+      Reported by Daniel Rhea
+    - CVE-2022-1858: Out of bounds read in DevTools. Reported by EllisVlad
+    - CVE-2022-1859: Use after free in Performance Manager. Reported by
+      Guannan Wang (@Keenan7310) of Tencent Security Xuanwu Lab
+    - CVE-2022-1860: Use after free in UI Foundations.
+      Reported by @ginggilBesel
+    - CVE-2022-1861: Use after free in Sharing. Reported by Khalil Zhani
+    - CVE-2022-1862: Inappropriate implementation in Extensions.
+      Reported by Alesandro Ortiz
+    - CVE-2022-1863: Use after free in Tab Groups. Reported by David Erceg
+    - CVE-2022-1864: Use after free in WebApp Installs.
+      Reported by Yuntao You (@GraVity0) of Bytedance Wuheng Lab
+    - CVE-2022-1865: Use after free in Bookmarks.
+      Reported by Rong Jian of VRI
+    - CVE-2022-1866: Use after free in Tablet Mode.
+      Reported by @ginggilBesel
+    - CVE-2022-1867: Insufficient validation of untrusted input in
+      Data Transfer. Reported by Michał Bentkowski of Securitum
+    - CVE-2022-1868: Inappropriate implementation in Extensions API.
+      Reported by Alesandro Ortiz
+    - CVE-2022-1869: Type Confusion in V8.
+      Reported by Man Yue Mo of GitHub Security Lab
+    - CVE-2022-1870: Use after free in App Service. Reported by
+      Nan Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2022-1871: Insufficient policy enforcement in File System API.
+      Reported by Thomas Orlita
+    - CVE-2022-1872: Insufficient policy enforcement in Extensions API.
+      Reported by ChaobinZhang
+    - CVE-2022-1873: Insufficient policy enforcement in COOP.
+      Reported by NDevTK
+    - CVE-2022-1874: Insufficient policy enforcement in Safe Browsing.
+      Reported by hjy79425575
+    - CVE-2022-1875: Inappropriate implementation in PDF. Reported by NDevTK
+    - CVE-2022-1876: Heap buffer overflow in DevTools.
+      Reported by @ginggilBesel
+  * debian/patches:
+    - system/jpeg.patch - straight refresh.
+    - disable/swiftshader.patch - straight refresh.
+    - disable/swiftshader-2.patch - refresh for upstream dropping of legacy
+      swiftshader GL stuff; they now use ANGLE.
+    - disable/angle-perftests.patch - refresh.
+    - system/jsoncpp.patch - refresh for jsoncpp_no_deprecated_declarations
+      argument change.
+    - bullseye/clang11.patch - merge cast-call.patch into it, as well as
+      dropping additional unsupported clang arguments.
+    - bullseye/cast-call.patch - drop.
+    - upstream/dawn-version-fix.patch - add patch to deal w/ FTBFS.
+    - upstream/blink-ftbfs.patch - another FTBFS patch.
+    - upstream/nested-nested-nested-nested-nested-nested-regex-patterns.patch -
+      fix a build failure that only happens with clang + GNU's libstdc++.
+    - upstream/byteswap-constexpr.patch - add this to fix bullsye builds on
+      32-bit platforms (closes: #1011096).
+  * Don't build unneccessary dawn build tests.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 25 May 2022 02:24:52 -0400
+
+chromium (101.0.4951.64-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2022-1633: Use after free in Sharesheet. Reported by Khalil Zhani
+    - CVE-2022-1634: Use after free in Browser UI. Reported by Khalil Zhani
+    - CVE-2022-1635: Use after free in Permission Prompts.
+      Reported by Anonymous
+    - CVE-2022-1636: Use after free in Performance APIs.
+      Reported by Seth Brenith, Microsoft
+    - CVE-2022-1637: Inappropriate implementation in Web Contents.
+      Reported by Alesandro Ortiz
+    - CVE-2022-1638: Heap buffer overflow in V8 Internationalization.
+      Reported by DoHyun Lee (@l33d0hyun) of DNSLab, Korea University
+    - CVE-2022-1639: Use after free in ANGLE.
+      Reported by SeongHwan Park (SeHwa)
+    - CVE-2022-1640: Use after free in Sharing. Reported by Weipeng
+      Jiang (@Krace) and Guang Gong of 360 Vulnerability Research Institute
+    - CVE-2022-1641: Use after free in Web UI Diagnostics.
+      Reported by Rong Jian of VRI
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 11 May 2022 11:08:36 -0400
+
+chromium (101.0.4951.54-1) unstable; urgency=low
+
+  * Depend on sse3-support to ensure that chromium is only installed on
+    machines that support the SSE3 instruction set. Otherwise we crash,
+    as described in #1010407. We can also remove the manual sse2 check now.
+    Upstream describes the SSE3 requirement @ http://crbug.com/1123353
+  * New upstream stable release.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 03 May 2022 12:16:07 -0400
+
+chromium (101.0.4951.41-1~deb11u1) bullseye-security; urgency=high
+
+  * debian/copyright:
+    - Delete a bunch of file exclusion lines that no longer exist. That
+      png file workaround also goes away.
+    - Add a line to delete a prebuilt apache server & related modules that
+      upstream now includes for some reason?
+  * debian/patches:
+    - upstream/rvo-workaround.patch - drop, merged upstream.
+    - disable/android.patch - drop part of it that upstream fixed.
+    - disable/swiftshader.patch - refresh.
+    - upstream/libxml.patch - add fix for upstream bug related to
+      building against the system libxml.
+    - bullseye/cast-call.patch - add a patch to silence unsupported
+      flag warnings in clang <= 13.
+  * New upstream stable release.
+    - CVE-2022-1477: Use after free in Vulkan.
+      Reported by SeongHwan Park (SeHwa)
+    - CVE-2022-1478: Use after free in SwiftShader.
+      Reported by SeongHwan Park (SeHwa)
+    - CVE-2022-1479: Use after free in ANGLE.
+      Reported by Jeonghoon Shin of Theori
+    - CVE-2022-1480: Use after free in Device API. Reported by @uwu7586
+    - CVE-2022-1481: Use after free in Sharing. Reported by Weipeng Jiang
+      (@Krace) and Guang Gong of 360 Vulnerability Research Institute
+    - CVE-2022-1482: Inappropriate implementation in WebGL.
+      Reported by Christoph Diehl, Microsoft
+    - CVE-2022-1483: Heap buffer overflow in WebGPU.
+      Reported by Mark Brand of Google Project Zero
+    - CVE-2022-1484: Heap buffer overflow in Web UI Settings.
+      Reported by Chaoyuan Peng (@ret2happy)
+    - CVE-2022-1485: Use after free in File System API.
+    - CVE-2022-1486: Type Confusion in V8. Reported by Brendon Tiszka
+    - CVE-2022-1487: Use after free in Ozone. Reported by Sri
+    - CVE-2022-1488: Inappropriate implementation in Extensions API.
+      Reported by Thomas Beverley from Wavebox.io
+    - CVE-2022-1489: Out of bounds memory access in UI Shelf.
+      Reported by Khalil Zhani
+    - CVE-2022-1490: Use after free in Browser Switcher.
+      Reported by raven at KunLun lab
+    - CVE-2022-1491: Use after free in Bookmarks.
+      Reported by raven at KunLun lab
+    - CVE-2022-1492: Insufficient data validation in Blink Editing.
+      Reported by Michał Bentkowski of Securitum
+    - CVE-2022-1493: Use after free in Dev Tools.
+      Reported by Zhihua Yao of KunLun Lab
+    - CVE-2022-1494: Insufficient data validation in Trusted Types.
+      Reported by Masato Kinugawa
+    - CVE-2022-1495: Incorrect security UI in Downloads.
+      Reported by Umar Farooq
+    - CVE-2022-1496: Use after free in File Manager. Reported by Zhiyi
+      Zhang and Zhunki from Codesafe Team of Legendsec at Qi'anxin Group
+    - CVE-2022-1497: Inappropriate implementation in Input. Reported by
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2022-1498: Inappropriate implementation in HTML Parser.
+      Reported by SeungJu Oh (@real_as3617)
+    - CVE-2022-1499: Inappropriate implementation in WebAuthentication.
+      Reported by Jun Kokatsu, Microsoft Browser Vulnerability Research
+    - CVE-2022-1500: Insufficient data validation in Dev Tools.
+      Reported by Hoang Nguyen
+    - CVE-2022-1501: Inappropriate implementation in iframe.
+      Reported by Oriol Brufau
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 26 Apr 2022 18:25:05 -0400
+
+chromium (100.0.4896.127-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2022-1364: Type Confusion in V8.
+      Reported by Clément Lecigne of Google's Threat Analysis Group
+
+ -- Andres Salomon <dilinger@debian.org>  Fri, 15 Apr 2022 13:12:11 -0400
+
+chromium (100.0.4896.88-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2022-1305: Use after free in storage. Reported by Anonymous
+    - CVE-2022-1306: Inappropriate implementation in compositing.
+      Reported by Sven Dysthe
+    - CVE-2022-1307: Inappropriate implementation in full screen.
+      Reported by Irvan Kurniawan (sourc7)
+    - CVE-2022-1308: Use after free in BFCache.
+      Reported by Samet Bekmezci @sametbekmezci
+    - CVE-2022-1309: Insufficient policy enforcement in developer tools.
+      Reported by David Erceg
+    - CVE-2022-1310: Use after free in regular expressions.
+      Reported by Brendon Tiszka
+    - CVE-2022-1311: Use after free in Chrome OS shell.
+      Reported by Nan Wang(@eternalsakura13) and Guang Gong of 360 Alpha Lab
+    - CVE-2022-1312: Use after free in storage. Reported by
+      Leecraso and Guang Gong of 360 Vulnerability Research Institute
+    - CVE-2022-1313: Use after free in tab groups. Reported by Thomas Orlita
+    - CVE-2022-1314: Type Confusion in V8.
+      Reported by Bohan Liu (@P4nda20371774) of Tencent Security Xuanwu Lab
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 12 Apr 2022 04:03:19 -0400
+
+chromium (100.0.4896.75-1~deb11u1) bullseye-security; urgency=high
+
+  * debian/copyright:
+    - Stop dropping third_party/zlib/contrib/, which is just source code
+      with acceptable licenses.
+    - Replace the rule that dropped third_party/depot_tools with a more
+      specific rule that drops just the ninja binaries. Also delete some
+      unused png files to work around a bug in our scripts.
+    - Replace a rule that dropped third_party/devtools-frontend/src/test
+      with just dropping all wasm files ('*.wasm'), as well as
+      third_party/devtools-frontend/src/test/screenshots/image_diff/.
+  * debian/patches:
+    - disable/swiftshader-2.patch - drop most of it that's wrapped in a
+      check for windows.
+    - disable/fuzzers.patch - drop it; with the last release modifying
+      fuzzer inclusion, we can now configure the build without this.
+    - disable/owners.patch - drop it; no longer needed with depot_tools
+      remaining in the source tree.
+    - disable/devtools-unittests.patch - drop it; no longer needed if
+      we keep third_party/devtools-frontend/src/test in the source tree.
+    - disable/tests.patch - drop half of it; the media/gpu changes aren't
+      needed, while keeping stuff in third_party/devtools-frontend/src/test
+      from building is still necessary.
+  * Drop enable_nacl_nonsfi=false from debian/rules, as upstream got rid
+    of the variable.
+  * New upstream security release.
+    - CVE-2022-1232: Type Confusion in V8.
+      Reported by Sergei Glazunov of Google Project Zero.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 06 Apr 2022 04:35:21 -0400
+
+chromium (100.0.4896.60-1~deb11u1) bullseye-security; urgency=high
+
+  * Fix debian/watch to find the correct upstream version.
+  * Ensure xz uses all available cpu cores when preparing orig.tar.gz
+  * Switch to bundled ICU, since Debian's ICU is 2 years old at this point
+    and upstream depends on a bunch of new API in ICU 69.1.
+  * debian/copyright:
+    - ensure all *.dlls are dropped from source.
+    - Stop dropping '*fuzz' directories. It was too aggressive, resulting
+      in build errors for perfectly fine BSD-3-clause and similar code.
+    - Instead, drop '*corpus' and '*corpora' directories. Some of it is
+      fine (lots generated by oss-fuzz with .dict files provided), but
+      not all of it is and it's easier to just drop it.
+    - Drop an esbuild binary.
+    - The full upstream tarball includes additional stuff we don't want,
+      so drop *.jar, tools/win, and some other stuff in third_party/.
+  * debian/rules:
+    - Disabling & deleting swiftshader now also needs to add
+      dawn_use_swiftshader=false.
+    - Switch from -lite upstream tarball to the full tarball in order to
+      include ICU sources.
+  * debian/patches:
+    - upstream/libdrm.patch - drop, merged upstream.
+    - debianization/manpage.patch - drop a small chunk merged upstream.
+    - system/icu.patch - drop now that we're bundling ICU.
+    - bullseye/icu-types.patch - drop now that we're bundling ICU.
+    - system/convertutf.patch - update build for bundled ICU path.
+    - fixes/closure.patch - drop now that we're no longer using lite tarball.
+    - disable/driver-chrome-path.patch - refresh for BUILDFLAG() macro.
+    - system/jsoncpp.patch - refresh for unrelated ios change.
+    - disable/catapult.patch - refresh due to moving around of .pak files.
+    - upstream/rvo-workaround.patch - added to fix FTBFS w/ clang-11. Pulled
+      from upstream git.
+  * New upstream stable release.
+    - CVE-2022-1125: Use after free in Portals. Reported by Khalil Zhani
+    - CVE-2022-1127: Use after free in QR Code Generator.
+      Reported by anonymous
+    - CVE-2022-1128: Inappropriate implementation in Web Share API.
+      Reported by Abdel Adim (@smaury92) Oisfi of Shielder
+    - CVE-2022-1129: Inappropriate implementation in Full Screen Mode.
+      Reported by Irvan Kurniawan (sourc7)
+    - CVE-2022-1130: Insufficient validation of untrusted input in WebOTP.
+      Reported by Sergey Toshin of Oversecurity Inc.
+    - CVE-2022-1131: Use after free in Cast UI. Reported by
+      Abdulrahman Alqabandi, Microsoft Browser Vulnerability Research
+    - CVE-2022-1132: Inappropriate implementation in Virtual Keyboard.
+      Reported by Andr.Ess
+    - CVE-2022-1133: Use after free in WebRTC. Reported by Anonymous
+    - CVE-2022-1134: Type Confusion in V8.
+      Reported by Man Yue Mo of GitHub Security Lab
+    - CVE-2022-1135: Use after free in Shopping Cart.
+      Reported by Wei Yuan of MoyunSec VLab
+    - CVE-2022-1136: Use after free in Tab Strip . Reported by Krace
+    - CVE-2022-1137: Inappropriate implementation in Extensions.
+      Reported by Thomas Orlita
+    - CVE-2022-1138: Inappropriate implementation in Web Cursor.
+      Reported by Alesandro Ortiz
+    - CVE-2022-1139: Inappropriate implementation in Background Fetch API.
+      Reported by Maurice Dauer
+    - CVE-2022-1141: Use after free in File Manager.
+      Reported by raven at KunLun lab
+    - CVE-2022-1142: Heap buffer overflow in WebUI.
+      Reported by Leecraso and Guang Gong of 360 Alpha Lab
+    - CVE-2022-1143: Heap buffer overflow in WebUI.
+      Reported by Leecraso and Guang Gong of 360 Alpha Lab
+    - CVE-2022-1144: Use after free in WebUI.
+      Reported by Leecraso and Guang Gong of 360 Alpha Lab
+    - CVE-2022-1145: Use after free in Extensions.
+      Reported by Yakun Zhang of Baidu Security
+    - CVE-2022-1146: Inappropriate implementation in Resource Timing.
+      Reported by Sohom Datta
+
+ -- Andres Salomon <dilinger@debian.org>  Fri, 01 Apr 2022 23:22:56 -0400
+
+chromium (99.0.4844.84-1~deb11u1) bullseye-security; urgency=high
+
+  * New upstream security ("just *ONE* security hole, that's it?!") release.
+    - CVE-2022-1096: Type Confusion in V8. Reported by anonymous.
+
+ -- Andres Salomon <dilinger@debian.org>  Sat, 26 Mar 2022 13:24:59 -0500
 
 chromium (99.0.4844.74-1~deb11u1) bullseye-security; urgency=high
 

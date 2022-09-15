@@ -1,22 +1,22 @@
-From 8451bd84bd45cc5b1ba3ea38f9de3ccd07f9a7f8 Mon Sep 17 00:00:00 2001
+From 958e41d6206a321a2627e11d8c5db44d46180eeb Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:07:50 +0900
-Subject: [PATCH 02/63] add GooroomExtraPartsSecurity that will initialize
+Subject: [PATCH 02/66] add GooroomExtraPartsSecurity that will initialize
  GooroomBase via GooroomPrefs
 
 ---
- gooroom/browser/BUILD.gn                      |  3 +-
- .../gooroom_browser_extra_parts_security.cc   | 37 +++++++++++++++++++
+ gooroom/browser/BUILD.gn                      |  2 ++
+ .../gooroom_browser_extra_parts_security.cc   | 36 +++++++++++++++++++
  .../gooroom_browser_extra_parts_security.h    | 27 ++++++++++++++
- 3 files changed, 66 insertions(+), 1 deletion(-)
+ 3 files changed, 65 insertions(+)
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.cc
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.h
 
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
-index 4a87b03520b47..309bd48c7d9b8 100644
+index 811fdd7c1d891..309bd48c7d9b8 100644
 --- a/gooroom/browser/BUILD.gn
 +++ b/gooroom/browser/BUILD.gn
-@@ -7,11 +7,12 @@ import("//build/util/branding.gni")
+@@ -7,6 +7,8 @@ import("//build/util/branding.gni")
  
  static_library("gooroom_browser") {
    sources = [
@@ -25,17 +25,12 @@ index 4a87b03520b47..309bd48c7d9b8 100644
      "gooroom_content_browser_client.h",
      "gooroom_content_browser_client.cc",
      "gooroom_content_client.cc",
-     "gooroom_content_client.h",
--
-   ]
- 
-   deps = [
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.cc b/gooroom/browser/gooroom_browser_extra_parts_security.cc
 new file mode 100644
-index 0000000000000..20795eb6356af
+index 0000000000000..843978e9f8fb5
 --- /dev/null
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.cc
-@@ -0,0 +1,37 @@
+@@ -0,0 +1,36 @@
 +// Copyright (c) 2013 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -66,16 +61,15 @@ index 0000000000000..20795eb6356af
 +//  DLOG(INFO) << "PreMainMessageLoopStart()";
 +//}
 +
-+void GooroomBrowserExtraPartsSecurity::PostProfileInit() {
-+  DLOG(INFO) << "PostProfileInit()";
++void GooroomBrowserExtraPartsSecurity::PostProfileInit(Profile* profile,
++                                                     bool is_initial_profile) {
 +}
 +
 +void GooroomBrowserExtraPartsSecurity::PostBrowserStart() {
-+	DLOG(INFO) << "PostBrowserStart()";
 +}
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.h b/gooroom/browser/gooroom_browser_extra_parts_security.h
 new file mode 100644
-index 0000000000000..b1330cbf06de4
+index 0000000000000..b53088fd8c7c7
 --- /dev/null
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.h
 @@ -0,0 +1,27 @@
@@ -97,7 +91,7 @@ index 0000000000000..b1330cbf06de4
 +
 +  // Overridden from ChromeBrowserMainExtraParts:
 +//  void PreMainMessageLoopStart() override;
-+  void PostProfileInit() override;
++  void PostProfileInit(Profile* profile, bool is_initial_profile) override;
 +  void PostBrowserStart() override;
 +
 +  // PrefObserver ===========================================

@@ -1,45 +1,44 @@
-From be85c039cefa1d43b87393184674b1c852a60fe3 Mon Sep 17 00:00:00 2001
+From 9b6a7b1bd775871cc16b032067bc60220fd48996 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 16:40:08 +0900
-Subject: [PATCH 15/63] add extension for disable google.com's browser version
+Subject: [PATCH 15/66] add extension for disable google.com's browser version
  warning
 
 ---
- chrome/browser/browser_resources.grd          |  3 ++
+ chrome/browser/browser_resources.grd          |  1 +
  chrome/browser/extensions/component_loader.cc |  8 +++++
- .../component_extension_resources.grd         |  4 +++
+ .../component_extension_resources.grd         |  1 +
  chrome/browser/resources/dgw/inject.css       |  6 ++++
  chrome/browser/resources/dgw/manifest.json    | 14 +++++++++
+ .../browser/resources/extensions/sidebar.html |  8 -----
  extensions/common/constants.cc                |  3 ++
  extensions/common/constants.h                 |  5 ++++
  gooroom/browser/BUILD.gn                      |  2 ++
  gooroom/browser/dgw/disable_google_warning.cc | 29 +++++++++++++++++++
  gooroom/browser/dgw/disable_google_warning.h  | 19 ++++++++++++
- 10 files changed, 93 insertions(+)
+ 11 files changed, 88 insertions(+), 8 deletions(-)
  create mode 100644 chrome/browser/resources/dgw/inject.css
  create mode 100644 chrome/browser/resources/dgw/manifest.json
  create mode 100644 gooroom/browser/dgw/disable_google_warning.cc
  create mode 100644 gooroom/browser/dgw/disable_google_warning.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index a000efb345933..a7c24fc796030 100644
+index 6c5aed8f966cb..bffe9e035b125 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -119,6 +119,9 @@
-       <include name="IDR_ORIGIN_MOJO_JS" file="${root_gen_dir}\url\mojom\origin.mojom-lite.js" use_base_dir="false" type="BINDATA"/>
-       <if expr="enable_plugins">
+@@ -114,6 +114,7 @@
+     </if>
+       <if expr="enable_pdf">
          <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
-+        <if expr="_gooroom">
-+          <include name="IDR_DGW_MANIFEST" file="resources\dgw\manifest.json" type="BINDATA" />
-+        </if>
++		<include name="IDR_DGW_MANIFEST" file="resources\dgw\manifest.json" type="BINDATA" />
        </if>
        <if expr="is_win">
          <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_win.json" type="BINDATA" />
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index eb5684a21251b..b48de196b12e0 100644
+index 6939f1056138c..3ebf4d9c0c745 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
-@@ -77,6 +77,10 @@
+@@ -82,6 +82,10 @@
  #include "chrome/browser/defaults.h"
  #endif
  
@@ -50,7 +49,7 @@ index eb5684a21251b..b48de196b12e0 100644
  using content::BrowserThread;
  
  namespace extensions {
-@@ -479,6 +483,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+@@ -486,6 +490,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
  #if BUILDFLAG(ENABLE_PDF)
    Add(pdf_extension_util::GetManifest(),
        base::FilePath(FILE_PATH_LITERAL("pdf")));
@@ -62,20 +61,17 @@ index eb5684a21251b..b48de196b12e0 100644
  }
  
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index 66704823164ef..9622b08cfc94e 100644
+index 38912a3eda366..1f47731113511 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
-@@ -96,6 +96,10 @@
-         <include name="IDR_ARC_SUPPORT_ICON_HEADER" file="chromeos/arc_support/images/header.png" type="BINDATA" />
+@@ -66,6 +66,7 @@
          <include name="IDR_ARC_SUPPORT_RECOMMEND_APP_LIST_VIEW_JS" file="chromeos/arc_support/recommend_app_list_view.js" type="BINDATA" />
+         <!-- TODO(crbug.com/1261902): Remove. -->
          <include name="IDR_ARC_SUPPORT_RECOMMEND_APP_LIST_VIEW_HTML" file="chromeos/arc_support/recommend_app_list_view.html" type="chrome_html" flattenhtml="true" />
-+        <if expr="_gooroom">
-+          <include name="IDR_DGW_INJECT_CSS" file="dgw/inject.css" allowexternalscript="true" type="BINDATA" />
-+        </if>
-+
++        <include name="IDR_DGW_INJECT_CSS" file="dgw/inject.css" allowexternalscript="true" type="BINDATA" />
+         <include name="IDS_ARC_INPUT_OVERLAY_ONBOARDING_ILLUSTRATION" file="chromeos/arc_input_overlay/onboarding_illustration.png" type="BINDATA" />
+         <include name="IDS_ARC_INPUT_OVERLAY_ONBOARDING_ILLUSTRATION_DARK" file="chromeos/arc_input_overlay/onboarding_illustration_dark.png" type="BINDATA" />
        </if>
-       <include name="IDR_CRYPTOTOKEN_UTIL_JS" file="cryptotoken/util.js" type="BINDATA" />
-       <include name="IDR_CRYPTOTOKEN_B64_JS" file="cryptotoken/b64.js" type="BINDATA" />
 diff --git a/chrome/browser/resources/dgw/inject.css b/chrome/browser/resources/dgw/inject.css
 new file mode 100644
 index 0000000000000..10894976cc58f
@@ -109,13 +105,30 @@ index 0000000000000..0f4b1e5044963
 +  ]
 +}
 +
+diff --git a/chrome/browser/resources/extensions/sidebar.html b/chrome/browser/resources/extensions/sidebar.html
+index 4240da7734dcd..741ceac3554a1 100644
+--- a/chrome/browser/resources/extensions/sidebar.html
++++ b/chrome/browser/resources/extensions/sidebar.html
+@@ -78,12 +78,4 @@
+ </iron-selector>
+ <div>
+   <div class="separator"></div>
+-  <if expr="not _gooroom">
+-  <a class="section-item" id="more-extensions" target="_blank"
+-      href="$i18n{getMoreExtensionsUrl}" on-click="onMoreExtensionsTap_">
+-    <span>$i18n{openChromeWebStore}</span>
+-    <div class="cr-icon icon-external"></div>
+-    <paper-ripple></paper-ripple>
+-  </a>
+-  </if>
+ </div>
 diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
-index f6e8647fbdefe..d2e0c22e794b2 100644
+index 6b5ad91c4d024..31207c5ee31f1 100644
 --- a/extensions/common/constants.cc
 +++ b/extensions/common/constants.cc
-@@ -131,6 +131,9 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
+@@ -132,6 +132,9 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
  #endif
- const char kFeedbackExtensionId[] = "gfdkimpbcpahaombhbimeihdjnejgicl";
+ 
  const char kPdfExtensionId[] = "mhjfbmdgcfjbbpaeojofohoefgiehjai";
 +#if defined(GOOROOM_BUILD)
 +const char kDgwExtensionId[] = "ppjhjgbbllkfebjommlcojifooeihdoh";
@@ -124,10 +137,10 @@ index f6e8647fbdefe..d2e0c22e794b2 100644
      "bpmcpldpdmajfigpchkicefoigmkfalc";
  const char kQuickOfficeInternalExtensionId[] =
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index dd158498a8ca7..b1b33ba3b13e4 100644
+index 947997d6dc152..c2ff2ba1043e8 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
-@@ -243,6 +243,11 @@ EXTENSIONS_EXPORT extern const char kFeedbackExtensionId[];
+@@ -242,6 +242,11 @@ EXTENSIONS_EXPORT extern const char kChromeVoxExtensionId[];
  // The extension id of the PDF extension.
  EXTENSIONS_EXPORT extern const char kPdfExtensionId[];
  

@@ -1,7 +1,7 @@
-From b889ebf78e9a265dfb73ce183bf90df84fe82434 Mon Sep 17 00:00:00 2001
+From 93b12cf7d83242bffad2aa2878ed4d2d7c17fbdb Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:11:36 +0900
-Subject: [PATCH 19/63] Change the string associated with bookmarks (chrome://
+Subject: [PATCH 19/66] Change the string associated with bookmarks (chrome://
  to gooroom://)
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 19/63] Change the string associated with bookmarks (chrome://
  2 files changed, 25 insertions(+)
 
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
-index 57fe55c22157b..d4ebae965aa54 100644
+index 48cc9305c1129..c57b1111d2cb5 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_bar_view.cc
 @@ -245,6 +245,14 @@ class BookmarkButton : public BookmarkButtonBase {
@@ -29,10 +29,10 @@ index 57fe55c22157b..d4ebae965aa54 100644
    }
  
 diff --git a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
-index 39f502a122662..30dc932531a9e 100644
+index 1adadfc3423f1..2964155b5fca0 100644
 --- a/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
 +++ b/chrome/browser/ui/views/bookmarks/bookmark_editor_view.cc
-@@ -301,7 +301,17 @@ void BookmarkEditorView::Init() {
+@@ -302,7 +302,17 @@ void BookmarkEditorView::Init() {
      labels->AddChildView(std::make_unique<views::Label>(
          l10n_util::GetStringUTF16(IDS_BOOKMARK_EDITOR_URL_LABEL)));
      url_tf_ = labels->AddChildView(std::make_unique<views::Textfield>());
@@ -50,7 +50,7 @@ index 39f502a122662..30dc932531a9e 100644
      url_tf_->set_controller(this);
      url_tf_->SetAccessibleName(
          l10n_util::GetStringUTF16(IDS_BOOKMARK_AX_EDITOR_URL_LABEL));
-@@ -464,6 +474,13 @@ void BookmarkEditorView::ApplyEdits(EditorNode* parent) {
+@@ -468,6 +478,13 @@ void BookmarkEditorView::ApplyEdits(EditorNode* parent) {
    GURL new_url(GetInputURL());
    std::u16string new_title(title_tf_->GetText());
  

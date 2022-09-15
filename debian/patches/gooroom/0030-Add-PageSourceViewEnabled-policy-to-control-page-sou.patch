@@ -1,7 +1,7 @@
-From 0eb9a1fa3f7065fa1c2516f55b10c6a65fadd3e8 Mon Sep 17 00:00:00 2001
+From 427a517446cc8a5d76faa92bf80fa28368d42cfc Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 11:44:17 +0900
-Subject: [PATCH 30/63] Add PageSourceViewEnabled policy to control
+Subject: [PATCH 30/66] Add PageSourceViewEnabled policy to control
  page-source-view
 
 ---
@@ -19,7 +19,7 @@ Subject: [PATCH 30/63] Add PageSourceViewEnabled policy to control
  11 files changed, 126 insertions(+), 1 deletion(-)
 
 diff --git a/chrome/browser/policy/configuration_policy_handler_list_factory.cc b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
-index ebd28b7e8f5f7..218f1f89bab2f 100644
+index 486d98b50c1cf..3b2d7249c1c6b 100644
 --- a/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 +++ b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 @@ -11,6 +11,10 @@
@@ -32,21 +32,21 @@ index ebd28b7e8f5f7..218f1f89bab2f 100644
 +
  #include "base/bind.h"
  #include "base/command_line.h"
- #include "base/cxx17_backports.h"
-@@ -190,6 +194,11 @@ using ::ash::MagnifierType;
- // that directly map to a single preference.
+ #include "base/memory/ptr_util.h"
+@@ -205,6 +209,11 @@ using ::ash::MagnifierType;
  // clang-format off
  const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
+ // Policies for all platforms - Start
 +#if defined(GOOROOM_BUILD)
 +  { key::kPageSourceViewEnabled,
 +    prefs::kPageSourceViewEnabled,
 +    base::Value::Type::BOOLEAN },
 +#endif
-   { key::kHomepageIsNewTabPage,
-     prefs::kHomePageIsNewTabPage,
+   { key::kComponentUpdatesEnabled,
+     prefs::kComponentUpdatesEnabled,
      base::Value::Type::BOOLEAN },
-@@ -2244,6 +2253,10 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
-           policy::key::kSpellcheckLanguageBlocklist));
+@@ -2358,6 +2367,10 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
+ #endif  // BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_WIN)
  #endif  // BUILDFLAG(ENABLE_SPELLCHECK)
  
 +#if defined(GOOROOM_BUILD)
@@ -54,13 +54,13 @@ index ebd28b7e8f5f7..218f1f89bab2f 100644
 +#endif
 +
  #if BUILDFLAG(IS_LINUX)
-   handlers->AddHandler(std::make_unique<SimpleDeprecatingPolicyHandler>(
-       std::make_unique<SimplePolicyHandler>(key::kAllowNativeNotifications,
+   handlers->AddHandler(std::make_unique<SimplePolicyHandler>(
+       key::kAllowSystemNotifications, prefs::kAllowSystemNotifications,
 diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index 1b8be2853eb99..b67b4ac520d03 100644
+index 310b7a25470c5..ab03968be7147 100644
 --- a/chrome/common/pref_names.cc
 +++ b/chrome/common/pref_names.cc
-@@ -23,6 +23,10 @@ namespace prefs {
+@@ -24,6 +24,10 @@ namespace prefs {
  // successfully checked via ChildAccountService.
  const char kChildAccountStatusKnown[] = "child_account_status_known";
  
@@ -72,7 +72,7 @@ index 1b8be2853eb99..b67b4ac520d03 100644
  // in this profile.  Use the value "install" to enable defaults apps, or
  // "noinstall" to disable them.  This property is usually set in the
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index 5f32259445758..1189ec664b46c 100644
+index 722206683d66a..2f0f6055af934 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
 @@ -22,6 +22,10 @@
@@ -87,7 +87,7 @@ index 5f32259445758..1189ec664b46c 100644
  extern const char kChildAccountStatusKnown[];
  extern const char kPreinstalledApps[];
 diff --git a/components/policy/core/browser/BUILD.gn b/components/policy/core/browser/BUILD.gn
-index db298f4819c6d..11628900dd4c4 100644
+index 73e1c4d265a2a..4bf29125525b0 100644
 --- a/components/policy/core/browser/BUILD.gn
 +++ b/components/policy/core/browser/BUILD.gn
 @@ -14,7 +14,10 @@ group("browser") {
@@ -103,10 +103,10 @@ index db298f4819c6d..11628900dd4c4 100644
      "browser_policy_connector.cc",
      "browser_policy_connector.h",
 diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
-index 4430fb7fb94f7..eca5add477261 100644
+index cf35260ffcd06..362c8dfc99aaf 100644
 --- a/components/policy/core/browser/configuration_policy_handler.cc
 +++ b/components/policy/core/browser/configuration_policy_handler.cc
-@@ -353,6 +353,51 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
+@@ -352,6 +352,51 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
      prefs->SetValue(pref_path_, value->Clone());
  }
  
@@ -115,12 +115,12 @@ index 4430fb7fb94f7..eca5add477261 100644
 +// Retrieves a list typed policy or nullptr if not present or not a list.
 +const base::ListValue* GetListPolicy(const policy::PolicyMap& policies,
 +                                     const std::string& policy) {
-+  const base::Value* value = policies.GetValue(policy);
++  const base::Value* value = policies.GetValueUnsafe(policy);
 +  if (!value)
 +    return nullptr;
 +
 +  const base::ListValue* policy_value = nullptr;
-+  value->GetAsList(&policy_value);
++//  value->GetList(&policy_value);
 +  return policy_value;
 +}
 +
@@ -140,8 +140,8 @@ index 4430fb7fb94f7..eca5add477261 100644
 +                                        const std::string& policy,
 +                                        bool disable_pdf_plugin,
 +                                        ContentSetting flash_content_setting) {
-+  if(policies.GetValue(policy::key::kPageSourceViewEnabled))
-+    if(!policies.GetValue(policy::key::kPageSourceViewEnabled)->GetBool())
++  if(policies.GetValueUnsafe(policy::key::kPageSourceViewEnabled))
++    if(!policies.GetValueUnsafe(policy::key::kPageSourceViewEnabled)->GetBool())
 +      PageSourceViewPolicyHandler::enabled = false;
 +  return;
 +}
@@ -149,9 +149,9 @@ index 4430fb7fb94f7..eca5add477261 100644
 +void PageSourceViewPolicyHandler::ApplyPolicySettings(const policy::PolicyMap& policies,
 +                                              PrefValueMap* prefs) {
 +  // This order makes enabled plugins take precedence as is now.
-+  ProcessPolicy(policies, prefs, policy::key::kDisabledPlugins, true,
++  ProcessPolicy(policies, prefs, "", true,
 +                CONTENT_SETTING_BLOCK);
-+  ProcessPolicy(policies, prefs, policy::key::kEnabledPlugins, false,
++  ProcessPolicy(policies, prefs, "", false,
 +                CONTENT_SETTING_ALLOW);
 +}
 +
@@ -159,7 +159,7 @@ index 4430fb7fb94f7..eca5add477261 100644
  
  SchemaValidatingPolicyHandler::SchemaValidatingPolicyHandler(
 diff --git a/components/policy/core/browser/configuration_policy_handler.h b/components/policy/core/browser/configuration_policy_handler.h
-index ddcae76f37c65..9f4f4f68d386c 100644
+index 4b2326be68ca5..ad5e5d060666b 100644
 --- a/components/policy/core/browser/configuration_policy_handler.h
 +++ b/components/policy/core/browser/configuration_policy_handler.h
 @@ -14,6 +14,7 @@
@@ -170,7 +170,7 @@ index ddcae76f37c65..9f4f4f68d386c 100644
  
  class PrefValueMap;
  
-@@ -320,6 +321,29 @@ class POLICY_EXPORT IntPercentageToDoublePolicyHandler
+@@ -323,6 +324,29 @@ class POLICY_EXPORT IntPercentageToDoublePolicyHandler
    const char* pref_path_;
  };
  
@@ -201,22 +201,22 @@ index ddcae76f37c65..9f4f4f68d386c 100644
  // single type. |schema| is the schema used for this policy, and |strategy| is
  // the strategy used for schema validation errors.
 diff --git a/components/policy/core/common/policy_loader_common.cc b/components/policy/core/common/policy_loader_common.cc
-index 98b9efb5bc680..765a9b08d37ca 100644
+index db37bbab09882..2673bb880a68d 100644
 --- a/components/policy/core/common/policy_loader_common.cc
 +++ b/components/policy/core/common/policy_loader_common.cc
-@@ -46,6 +46,7 @@ const char* kSensitivePolicies[] = {
-     key::kChromeCleanupReportingEnabled,
+@@ -44,6 +44,7 @@ const char* kSensitivePolicies[] = {
+     key::kAutoOpenFileTypes,
      key::kCommandLineFlagSecurityWarningsEnabled,
      key::kDefaultSearchProviderEnabled,
-+    key::kPageSourceViewEnabled,
++	key::kPageSourceViewEnabled,
+     key::kFirstPartySetsOverrides,
      key::kHomepageIsNewTabPage,
      key::kHomepageLocation,
-     key::kMetricsReportingEnabled,
 diff --git a/components/policy/resources/policy_templates.json b/components/policy/resources/policy_templates.json
-index 2035dfc34deae..adc3756d7a9d8 100644
+index 379848e842c51..7329074fda057 100644
 --- a/components/policy/resources/policy_templates.json
 +++ b/components/policy/resources/policy_templates.json
-@@ -1436,6 +1436,26 @@
+@@ -1468,6 +1468,26 @@
        Note: For <ph name="MS_WIN_NAME">Microsoft®Windows®</ph> administrators, turning this setting on only works for machines running Windows 7. For later versions, you must deploy a "default application associations" file that makes <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> the handler for the <ph name="HTTPS_PROTOCOL">https</ph> and <ph name="HTTP_PROTOCOL">http</ph> protocols (and, optionally, the <ph name="FTP_PROTOCOL">ftp</ph> protocol and other file formats). See Chrome Help ( https://support.google.com/chrome?p=make_chrome_default_win ).''',
        'label': '''Set <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> as Default Browser''',
      },
@@ -244,10 +244,10 @@ index 2035dfc34deae..adc3756d7a9d8 100644
        'name': 'ApplicationLocaleValue',
        'owners': ['file://components/policy/resources/OWNERS', 'hendrich@chromium.org'],
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index 030c08e9b3401..865425c4179da 100644
+index e7351dc832362..d237d48c5c86e 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
-@@ -276,6 +276,7 @@ source_set("browser") {
+@@ -287,6 +287,7 @@ source_set("browser") {
    }
  
    public_deps = [
@@ -256,10 +256,10 @@ index 030c08e9b3401..865425c4179da 100644
      "//components/memory_pressure",
      "//ipc",
 diff --git a/content/browser/renderer_host/navigation_controller_impl.cc b/content/browser/renderer_host/navigation_controller_impl.cc
-index fe4e7a8d1c9da..7a1dde81e8f58 100644
+index 40b1947b593d1..6977c07df2c5f 100644
 --- a/content/browser/renderer_host/navigation_controller_impl.cc
 +++ b/content/browser/renderer_host/navigation_controller_impl.cc
-@@ -110,6 +110,10 @@
+@@ -112,6 +112,10 @@
  #include "third_party/blink/public/mojom/navigation/prefetched_signed_exchange_info.mojom.h"
  #include "url/url_constants.h"
  
@@ -270,7 +270,7 @@ index fe4e7a8d1c9da..7a1dde81e8f58 100644
  namespace content {
  namespace {
  
-@@ -900,6 +904,11 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
+@@ -922,6 +926,11 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
  }
  
  bool NavigationControllerImpl::CanViewSource() {
@@ -283,17 +283,17 @@ index fe4e7a8d1c9da..7a1dde81e8f58 100644
        frame_tree_.root()->current_frame_host()->GetPage().contents_mime_type();
    bool is_viewable_mime_type = blink::IsSupportedNonImageMimeType(mime_type) &&
 diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
-index cda3853960b25..3e2839131311c 100644
+index b883bdd5a5191..d54fcb6f772f9 100644
 --- a/tools/metrics/histograms/enums.xml
 +++ b/tools/metrics/histograms/enums.xml
-@@ -28395,6 +28395,7 @@ Called by update_document_policy_enum.py.-->
-   <int value="941" label="NTPMiddleSlotAnnouncementVisible"/>
-   <int value="942" label="CloudProfileReportingEnabled"/>
-   <int value="949" label="UserAgentForceMajorVersionToMinorPosition"/>
+@@ -32075,6 +32075,7 @@ Called by update_document_policy_enum.py.-->
+   <int value="995" label="NewWindowsInKioskAllowed"/>
+   <int value="996" label="EncryptedClientHelloEnabled"/>
+   <int value="997" label="DeviceAutofillSAMLUsername"/>
 +  <int value="999" label="PageSourceViewEnabled"/>
  </enum>
  
- <enum name="EnterprisePolicyDeviceIdValidity">
+ <enum name="EnterprisePoliciesSources">
 -- 
 2.30.2
 

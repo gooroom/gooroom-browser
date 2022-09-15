@@ -1,0 +1,41 @@
+From de065f2c513ac638cdd4688bce8549ce247a43d4 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 7 Jun 2022 14:35:43 +0900
+Subject: [PATCH 62/66] Disable 'Open as window' on making shortcut app popup
+
+---
+ .../ui/views/web_apps/web_app_confirmation_view.cc    | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
+index 8ed644cc5936d..0a198e457a01a 100644
+--- a/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
++++ b/chrome/browser/ui/views/web_apps/web_app_confirmation_view.cc
+@@ -162,11 +162,7 @@ WebAppConfirmationView::WebAppConfirmationView(
+   } else {
+     builder.AddChildren(
+         views::Builder<views::View>(),  // Column skip.
+-        views::Builder<views::Checkbox>()
+-            .CopyAddressTo(&open_as_window_checkbox_)
+-            .SetText(l10n_util::GetStringUTF16(
+-                IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_WINDOW))
+-            .SetChecked(display_mode != web_app::UserDisplayMode::kBrowser));
++		views::Builder<views::View>());
+   }
+ 
+   std::move(builder).BuildChildren();
+@@ -209,10 +205,7 @@ bool WebAppConfirmationView::Accept() {
+               : web_app::UserDisplayMode::kBrowser;
+     }
+   } else {
+-    web_app_info_->user_display_mode =
+-        open_as_window_checkbox_->GetChecked()
+-            ? web_app::UserDisplayMode::kStandalone
+-            : web_app::UserDisplayMode::kBrowser;
++	  web_app_info_->user_display_mode = web_app::UserDisplayMode::kBrowser;
+   }
+   std::move(callback_).Run(true, std::move(web_app_info_));
+   return true;
+-- 
+2.30.2
+

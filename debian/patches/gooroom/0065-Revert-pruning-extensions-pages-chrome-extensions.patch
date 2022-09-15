@@ -1,0 +1,28 @@
+From 8cd8232696f1481a78ad4b95186134896f7d8dad Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 8 Jun 2022 16:08:37 +0900
+Subject: [PATCH 65/66] Revert "pruning extensions pages(chrome://extensions)"
+
+This reverts commit d19710618309d6516691302fd871e2428323b987.
+---
+ chrome/browser/resources/extensions/sidebar.html | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/chrome/browser/resources/extensions/sidebar.html b/chrome/browser/resources/extensions/sidebar.html
+index 741ceac3554a1..5a938d254303f 100644
+--- a/chrome/browser/resources/extensions/sidebar.html
++++ b/chrome/browser/resources/extensions/sidebar.html
+@@ -78,4 +78,10 @@
+ </iron-selector>
+ <div>
+   <div class="separator"></div>
++   <a class="section-item" id="more-extensions" target="_blank"
++      href="$i18n{getMoreExtensionsUrl}" on-click="onMoreExtensionsTap_">
++    <span>$i18n{openChromeWebStore}</span>
++    <div class="cr-icon icon-external"></div>
++    <paper-ripple></paper-ripple>
++  </a>
+ </div>
+-- 
+2.30.2
+

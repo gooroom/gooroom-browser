@@ -1,0 +1,85 @@
+From 926c469dfa17b3a82343cd9edc158f65b4df1bf4 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 20 Apr 2022 11:39:49 +0900
+Subject: [PATCH 61/66] BugFix - 5204, 5203, 5202, 5199
+
+---
+ chrome/app/resources/generated_resources_ko.xtb               | 4 +++-
+ .../browser/ui/webui/print_preview/print_preview_handler.cc   | 4 +++-
+ third_party/blink/renderer/core/workers/dedicated_worker.cc   | 2 +-
+ .../blink/renderer/modules/websockets/dom_websocket.cc        | 2 +-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/chrome/app/resources/generated_resources_ko.xtb b/chrome/app/resources/generated_resources_ko.xtb
+index 735923a8b8b58..00ab40b4f0bd4 100644
+--- a/chrome/app/resources/generated_resources_ko.xtb
++++ b/chrome/app/resources/generated_resources_ko.xtb
+@@ -1,6 +1,8 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE translationbundle>
+ <translationbundle lang="ko">
++<translation id="2273707414284427980">웹 소켓 사용 설정</translation>
++<translation id="4851515493665413363">웹 워커 사용 설정</translation>
+ <translation id="1001033507375626788">나와 공유된 네트워크입니다.</translation>
+ <translation id="1003088604756913841">새 <ph name="APP" /> 창에서 링크 열기</translation>
+ <translation id="100323615638474026">USB 기기(<ph name="VENDOR_ID" />:<ph name="PRODUCT_ID" />)</translation>
+@@ -8589,4 +8591,4 @@ https://support.google.com/chromebook/?p=sm</translation>
+ <translation id="996803490569799917">좋아하는 인물과 남긴 추억 보기</translation>
+ <translation id="99731366405731005">Wi-Fi 동기화를 사용하려면 <ph name="LINK1_BEGIN" />Chrome 동기화<ph name="LINK1_END" />를 사용 설정하세요. <ph name="LINK2_BEGIN" />자세히 알아보기<ph name="LINK2_END" /></translation>
+ <translation id="998747458861718449">검사(&amp;N)</translation>
+-</translationbundle>
+\ No newline at end of file
++</translationbundle>
+diff --git a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
+index 69c0bdde41d39..de505fb507c18 100644
+--- a/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
++++ b/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
+@@ -12,6 +12,7 @@
+ #include <utility>
+ #include <vector>
+ 
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
+ #include "base/bind.h"
+ #include "base/callback_helpers.h"
+ #include "base/check.h"
+@@ -699,9 +700,10 @@ void PrintPreviewHandler::HandleGetPreview(const base::Value::List& args) {
+     url_sanitizer.ClearUsername();
+     url_sanitizer.ClearPassword();
+     const GURL& initiator_url = initiator->GetLastCommittedURL();
++	GURL changed_url = GooroomURLRewrite::ChangeGooroomScheme(initiator_url);
+     settings.Set(kSettingHeaderFooterURL,
+                  url_formatter::FormatUrl(
+-                     initiator_url.ReplaceComponents(url_sanitizer)));
++					 changed_url.ReplaceComponents(url_sanitizer)));
+   }
+ 
+   VLOG(1) << "Print preview request start";
+diff --git a/third_party/blink/renderer/core/workers/dedicated_worker.cc b/third_party/blink/renderer/core/workers/dedicated_worker.cc
+index d58bdedf8ab37..90f3a9388c769 100644
+--- a/third_party/blink/renderer/core/workers/dedicated_worker.cc
++++ b/third_party/blink/renderer/core/workers/dedicated_worker.cc
+@@ -90,7 +90,7 @@ DedicatedWorker* DedicatedWorker::Create(ExecutionContext* context,
+ 
+     Page* page = frm->GetPage();
+     // FIXME : care character encoding
+-    page->GetChromeClient().OpenJavaScriptConfirm(frm, WTF::String::FromUTF8("梨 몃 곌껐 媛 李⑤⑤듬 뱀而ㅼ 명댁＜몄."));
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, WTF::String::FromUTF8("정책에 의해 외부 연결 시도가 차단되었습니다. 웹워커 설정을 확인해주세요."));
+ 
+     return nullptr;
+   }
+diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+index 51c42bb14e105..de9f2733fd698 100644
+--- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
++++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+@@ -286,7 +286,7 @@ void DOMWebSocket::Connect(const String& url,
+     LocalFrame* frm = DynamicTo<LocalDOMWindow>(GetExecutionContext())->GetFrame();
+     Page* page = frm->GetPage();
+     // FIXME : care character encoding
+-    page->GetChromeClient().OpenJavaScriptConfirm(frm, WTF::String::FromUTF8("梨 몃 곌껐 媛 李⑤⑤듬 뱀耳 ㅼ 명댁＜몄."));
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, WTF::String::FromUTF8("정책에 의해 외부 연결 시도가 차단되었습니다. 웹소켓 설정을 확인해주세요."));
+ 
+     //page->GetChromeClient().OpenJavaScriptAlert(
+     //    frm, "External connection attempts were blocked by policy.");
+-- 
+2.30.2
+

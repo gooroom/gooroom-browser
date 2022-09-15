@@ -1,17 +1,17 @@
-From 601611ac43186a5d6dc2488f45e28bb2be216285 Mon Sep 17 00:00:00 2001
+From 61f37c50435e434032c8fca0d7d63fcf726c3bb6 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:21:40 +0900
-Subject: [PATCH 22/63] set gooroom-browser using DefaultTheme
+Subject: [PATCH 22/66] set gooroom-browser using DefaultTheme
 
 ---
  chrome/browser/themes/theme_service_aura_linux.cc | 4 ++++
  1 file changed, 4 insertions(+)
 
 diff --git a/chrome/browser/themes/theme_service_aura_linux.cc b/chrome/browser/themes/theme_service_aura_linux.cc
-index a19ba3c6c9caf..8805553756486 100644
+index f9843c68733a0..c0525b8b129ce 100644
 --- a/chrome/browser/themes/theme_service_aura_linux.cc
 +++ b/chrome/browser/themes/theme_service_aura_linux.cc
-@@ -105,6 +105,10 @@ bool ThemeServiceAuraLinux::UsingSystemTheme() const {
+@@ -113,6 +113,10 @@ bool ThemeServiceAuraLinux::UsingSystemTheme() const {
  void ThemeServiceAuraLinux::FixInconsistentPreferencesIfNeeded() {
    PrefService* prefs = profile()->GetPrefs();
  

@@ -1,17 +1,17 @@
-From 7cf63a7c6a361eb0cd4e6daa82abe48cb845a0f4 Mon Sep 17 00:00:00 2001
+From 6fff2f1683512a4c7301fcea6098acd893909c2c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 13:43:23 +0900
-Subject: [PATCH 33/63] * Remove page-translation function.
+Subject: [PATCH 33/66] * Remove page-translation function.
 
 ---
  .../browser/renderer_context_menu/render_view_context_menu.cc  | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-index a041fceb8e425..b33fdb7df926d 100644
+index 7db1991010ce7..e9b40bc96528a 100644
 --- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
 +++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-@@ -1723,6 +1723,8 @@ void RenderViewContextMenu::AppendPageItems() {
+@@ -1797,6 +1797,8 @@ void RenderViewContextMenu::AppendPageItems() {
  
    ChromeTranslateClient* chrome_translate_client =
        ChromeTranslateClient::FromWebContents(embedder_web_contents_);
@@ -20,9 +20,9 @@ index a041fceb8e425..b33fdb7df926d 100644
    const bool canTranslate =
        chrome_translate_client &&
        chrome_translate_client->GetTranslateManager()->CanManuallyTranslate(
-@@ -1742,6 +1744,7 @@ void RenderViewContextMenu::AppendPageItems() {
-         IDC_CONTENT_CONTEXT_TRANSLATE,
-         l10n_util::GetStringFUTF16(IDS_CONTENT_CONTEXT_TRANSLATE, language));
+@@ -1807,6 +1809,7 @@ void RenderViewContextMenu::AppendPageItems() {
+         l10n_util::GetStringFUTF16(IDS_CONTENT_CONTEXT_TRANSLATE,
+                                    GetTargetLanguageDisplayName()));
    }
 +#endif
  }

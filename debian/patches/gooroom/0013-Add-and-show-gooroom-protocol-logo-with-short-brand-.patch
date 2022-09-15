@@ -1,7 +1,7 @@
-From aaf5132d5b1a0eee7947225db302b1a9ca17c8a5 Mon Sep 17 00:00:00 2001
+From 699d529dfbb715ea66bc1503f7fbec8cbf6ac277 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:08:02 +0900
-Subject: [PATCH 13/63] Add and show gooroom protocol logo with short brand
+Subject: [PATCH 13/66] Add and show gooroom protocol logo with short brand
  text and fake scheme gooroom:// instead of chrome:// in omnibox.
 
 ---
@@ -16,10 +16,10 @@ Subject: [PATCH 13/63] Add and show gooroom protocol logo with short brand
  create mode 100644 components/omnibox/browser/vector_icons/gooroom_product_1x.icon
 
 diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-index 1e0df485d482d..1f2974b1253de 100644
+index 65349967ce09d..d4e1d1c20e2dd 100644
 --- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 +++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-@@ -208,6 +208,12 @@ const gfx::VectorIcon* ChromeLocationBarModelDelegate::GetVectorIconOverride()
+@@ -201,6 +201,12 @@ const gfx::VectorIcon* ChromeLocationBarModelDelegate::GetVectorIconOverride()
      return &omnibox::kExtensionAppIcon;
  #endif
  
@@ -33,10 +33,10 @@ index 1e0df485d482d..1f2974b1253de 100644
  }
  
 diff --git a/chrome/browser/ui/views/location_bar/location_icon_view.cc b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-index 7da2388681765..06ff07965c111 100644
+index 98ed6177519a2..54730ba2c4c5f 100644
 --- a/chrome/browser/ui/views/location_bar/location_icon_view.cc
 +++ b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-@@ -150,6 +150,10 @@ bool LocationIconView::GetShowText() const {
+@@ -141,6 +141,10 @@ bool LocationIconView::GetShowText() const {
    const GURL& url = location_bar_model->GetURL();
    if (url.SchemeIs(content::kChromeUIScheme) ||
        url.SchemeIs(extensions::kExtensionScheme) ||
@@ -47,7 +47,7 @@ index 7da2388681765..06ff07965c111 100644
        url.SchemeIs(url::kFileScheme) ||
        url.SchemeIs(dom_distiller::kDomDistillerScheme)) {
      return true;
-@@ -166,9 +170,16 @@ std::u16string LocationIconView::GetText() const {
+@@ -157,9 +161,16 @@ std::u16string LocationIconView::GetText() const {
    if (delegate_->IsEditingOrEmpty())
      return std::u16string();
  
@@ -65,10 +65,10 @@ index 7da2388681765..06ff07965c111 100644
    if (delegate_->GetLocationBarModel()->GetURL().SchemeIs(url::kFileScheme))
      return l10n_util::GetStringUTF16(IDS_OMNIBOX_FILE);
 diff --git a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-index ce1470107d4ec..d859baaf6ca60 100644
+index 196069eca4dd7..eb1eda2c6b30d 100644
 --- a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
 +++ b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-@@ -81,7 +81,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
+@@ -82,7 +82,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
      } else {
        text = IDS_PAGE_INFO_READER_MODE_PAGE;
      }
@@ -81,7 +81,7 @@ index ce1470107d4ec..d859baaf6ca60 100644
      NOTREACHED();
    }
  
-@@ -185,6 +189,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
+@@ -186,6 +190,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
    gfx::NativeView parent_view = platform_util::GetViewForWindow(parent_window);
  
    if (PageInfo::IsFileOrInternalPage(url) ||
@@ -92,7 +92,7 @@ index ce1470107d4ec..d859baaf6ca60 100644
        url.SchemeIs(dom_distiller::kDomDistillerScheme)) {
      return new InternalPageInfoBubbleView(anchor_view, anchor_rect, parent_view,
 diff --git a/components/omnibox/browser/BUILD.gn b/components/omnibox/browser/BUILD.gn
-index d1b5721c51a33..9a25e68256c36 100644
+index 53214103aa465..f781bdc4b51c4 100644
 --- a/components/omnibox/browser/BUILD.gn
 +++ b/components/omnibox/browser/BUILD.gn
 @@ -65,6 +65,9 @@ aggregate_vector_icons("omnibox_vector_icons") {

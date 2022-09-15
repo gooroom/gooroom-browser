@@ -6,17 +6,14 @@ export DH_VERBOSE=1
 # enable all build hardening flags
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
-# disable unsupported flag in clang 7
-export DEB_BUILD_MAINT_OPTIONS+=reproducible=-fixfilepath
-
 # indicate that binary targets do not require root
 export DEB_RULES_REQUIRES_ROOT=no
 
 # compile with clang (gcc is currently not supported)
 export AR=ar
 export NM=nm
-export CC=clang
-export CXX=clang++
+export CC=clang-13
+export CXX=clang++-13
 
 # more verbose linker output
 export LDFLAGS+=-Wl,--stats
@@ -66,13 +63,14 @@ defines+=is_debug=false \
          use_libjpeg_turbo=true \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
+         optimize_webui=false \
          use_unofficial_version_number=false \
          enable_vr=false \
          enable_nacl=false \
-         enable_nacl_nonsfi=false \
          enable_swiftshader=false \
+         dawn_use_swiftshader=false \
+         build_dawn_tests=false \
          enable_reading_list=false \
-         enable_one_click_signin=false \
          enable_iterator_debugging=false \
          enable_hangout_services_extension=false \
          angle_has_histograms=false \
@@ -90,6 +88,7 @@ defines+=use_gio=true \
          use_pulseaudio=true \
          link_pulseaudio=true \
          rtc_use_pipewire=true \
+         icu_use_data_file=true \
          enable_widevine=true \
          v8_enable_backtrace=true \
          use_system_zlib=true \
@@ -159,7 +158,7 @@ override_dh_auto_clean:
 url=https://gsdview.appspot.com/chromium-browser-official
 version=$(shell dpkg-parsechangelog -S Version | sed s/-.*//)
 extract=chromium-$(version)
-tarfile=$(extract)-lite.tar
+tarfile=$(extract).tar
 tarball=$(tarfile).xz
 debvers=../chromium_$(version)
 seconds=$(debvers).seconds
@@ -184,7 +183,7 @@ get-orig-source:
 	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
 	@echo
 	test ! -e $(origtxz) || rm -f $(origtxz)
-	tar $(options) -cf - $(extract) | xz -6 -T $(njobs) - > $(origtxz)
+	tar $(options) -cf - $(extract) | xz -6 -T0 - > $(origtxz)
 	@echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
 	@echo
 	rm -rf $(extract)

@@ -1,7 +1,7 @@
-From 93c1a5c07464160cd0a6dc0f74533d444e319123 Mon Sep 17 00:00:00 2001
+From c61d8360f1b62577cfa3c36c273465c9f63020be Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:23:10 +0900
-Subject: [PATCH 24/63] disable chrome login shortcut(ctrl+shift+m) and hide
+Subject: [PATCH 24/66] disable chrome login shortcut(ctrl+shift+m) and hide
  login icon
 
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH 24/63] disable chrome login shortcut(ctrl+shift+m) and hide
  2 files changed, 7 insertions(+)
 
 diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
-index 92f10fac6b017..e34ae7cbb51dc 100644
+index dffc146633fd5..589235cc9502d 100644
 --- a/chrome/browser/ui/browser_command_controller.cc
 +++ b/chrome/browser/ui/browser_command_controller.cc
-@@ -806,8 +806,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+@@ -859,8 +859,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
        break;
  #if BUILDFLAG(ENABLE_DICE_SUPPORT)
      case IDC_SHOW_SIGNIN:
@@ -26,10 +26,10 @@ index 92f10fac6b017..e34ae7cbb51dc 100644
  #endif
      case IDC_DISTILL_PAGE:
 diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-index b5098154b2f7e..563a4ce794a00 100644
+index ef34f041219b5..b5c37cef74e02 100644
 --- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
 +++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
-@@ -287,6 +287,10 @@ void ToolbarView::Init() {
+@@ -289,6 +289,10 @@ void ToolbarView::Init() {
                                 browser_->profile()->IsGuestSession();
  #elif BUILDFLAG(IS_CHROMEOS_LACROS)
    show_avatar_toolbar_button = !profiles::IsPublicSession();

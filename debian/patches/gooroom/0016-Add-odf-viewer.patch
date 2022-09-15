@@ -1,13 +1,13 @@
-From c14038ca3498d697f616eca97a0b80f87b632241 Mon Sep 17 00:00:00 2001
+From a0b9b239d8460689a387cc8740230cbb3e3403de Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:05:46 +0900
-Subject: [PATCH 16/63] Add odf viewer
+Subject: [PATCH 16/66] Add odf viewer
 
 ---
  chrome/browser/browser_resources.grd          |   1 +
  .../allowlist.cc                              |   1 +
  chrome/browser/extensions/component_loader.cc |   7 +
- .../component_extension_resources.grd         |  11 +-
+ .../component_extension_resources.grd         |   4 +
  chrome/browser/resources/odf/browser_api.js   | 204 ++++
  chrome/browser/resources/odf/index.html       |  14 +
  chrome/browser/resources/odf/main.js          |  54 +
@@ -21,7 +21,7 @@ Subject: [PATCH 16/63] Add odf viewer
  gooroom/browser/odf/odf_extension_util.cc     |  37 +
  gooroom/browser/odf/odf_extension_util.h      |  22 +
  net/base/mime_util.cc                         |   3 +
- 17 files changed, 1302 insertions(+), 7 deletions(-)
+ 17 files changed, 1299 insertions(+), 3 deletions(-)
  create mode 100644 chrome/browser/resources/odf/browser_api.js
  create mode 100644 chrome/browser/resources/odf/index.html
  create mode 100644 chrome/browser/resources/odf/main.js
@@ -31,22 +31,22 @@ Subject: [PATCH 16/63] Add odf viewer
  create mode 100644 gooroom/browser/odf/odf_extension_util.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index a7c24fc796030..f485ba7bef6bd 100644
+index bffe9e035b125..1599c98c5701c 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -120,6 +120,7 @@
-       <if expr="enable_plugins">
+@@ -115,6 +115,7 @@
+       <if expr="enable_pdf">
          <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
-         <if expr="_gooroom">
-+          <include name="IDR_ODF_MANIFEST" file="resources\odf\manifest.json" type="BINDATA" />
-           <include name="IDR_DGW_MANIFEST" file="resources\dgw\manifest.json" type="BINDATA" />
-         </if>
+ 		<include name="IDR_DGW_MANIFEST" file="resources\dgw\manifest.json" type="BINDATA" />
++		<include name="IDR_ODF_MANIFEST" file="resources\odf\manifest.json" type="BINDATA" />
        </if>
+       <if expr="is_win">
+         <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_win.json" type="BINDATA" />
 diff --git a/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc b/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
-index 952f3be5ff0c9..65845ca94a8ba 100644
+index 4e91bdbd0c4e8..e9b3b10081493 100644
 --- a/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
 +++ b/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
-@@ -30,6 +30,7 @@ bool IsComponentExtensionAllowlisted(const std::string& extension_id) {
+@@ -29,6 +29,7 @@ bool IsComponentExtensionAllowlisted(const std::string& extension_id) {
    const char* const kAllowed[] = {
      extension_misc::kInAppPaymentsSupportAppId,
      extension_misc::kPdfExtensionId,
@@ -55,10 +55,10 @@ index 952f3be5ff0c9..65845ca94a8ba 100644
      extension_misc::kAssessmentAssistantExtensionId,
  #endif
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index b48de196b12e0..276aea7976e17 100644
+index 3ebf4d9c0c745..ee73d2d7fb733 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
-@@ -78,6 +78,7 @@
+@@ -83,6 +83,7 @@
  #endif
  
  #if defined(GOOROOM_BUILD)
@@ -66,7 +66,7 @@ index b48de196b12e0..276aea7976e17 100644
  #include "gooroom/browser/dgw/disable_google_warning.h"
  #endif
  
-@@ -455,6 +456,10 @@ void ComponentLoader::AddDefaultComponentExtensions(
+@@ -462,6 +463,10 @@ void ComponentLoader::AddDefaultComponentExtensions(
  #if BUILDFLAG(ENABLE_PDF)
      Add(pdf_extension_util::GetManifest(),
          base::FilePath(FILE_PATH_LITERAL("pdf")));
@@ -77,7 +77,7 @@ index b48de196b12e0..276aea7976e17 100644
  #endif  // BUILDFLAG(ENABLE_PDF)
    }
  
-@@ -484,6 +489,8 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+@@ -491,6 +496,8 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
    Add(pdf_extension_util::GetManifest(),
        base::FilePath(FILE_PATH_LITERAL("pdf")));
  #if defined(GOOROOM_BUILD)
@@ -87,27 +87,20 @@ index b48de196b12e0..276aea7976e17 100644
        base::FilePath(FILE_PATH_LITERAL("dgw")));
  #endif
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index 9622b08cfc94e..e46f3bd037c4e 100644
+index 1f47731113511..5a1b0478cd6a7 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
-@@ -96,10 +96,13 @@
-         <include name="IDR_ARC_SUPPORT_ICON_HEADER" file="chromeos/arc_support/images/header.png" type="BINDATA" />
-         <include name="IDR_ARC_SUPPORT_RECOMMEND_APP_LIST_VIEW_JS" file="chromeos/arc_support/recommend_app_list_view.js" type="BINDATA" />
+@@ -67,6 +67,10 @@
+         <!-- TODO(crbug.com/1261902): Remove. -->
          <include name="IDR_ARC_SUPPORT_RECOMMEND_APP_LIST_VIEW_HTML" file="chromeos/arc_support/recommend_app_list_view.html" type="chrome_html" flattenhtml="true" />
--        <if expr="_gooroom">
--          <include name="IDR_DGW_INJECT_CSS" file="dgw/inject.css" allowexternalscript="true" type="BINDATA" />
--        </if>
--
-+      </if>
-+      <if expr="_gooroom">
-+        <include name="IDR_DGW_INJECT_CSS" file="dgw/inject.css" allowexternalscript="true" type="BINDATA" />
+         <include name="IDR_DGW_INJECT_CSS" file="dgw/inject.css" allowexternalscript="true" type="BINDATA" />
 +        <include name="IDR_ODF_INDEX_HTML" file="odf/index.html" allowexternalscript="true" type="BINDATA" />
 +        <include name="IDR_ODF_MAIN_JS" file="odf/main.js" type="BINDATA" />
 +        <include name="IDR_ODF_BROWSER_API_JS" file="odf/browser_api.js" type="BINDATA" />
 +        <include name="IDR_ODF_WEBODF_JS" file="odf/webodf.js" type="BINDATA" />
+         <include name="IDS_ARC_INPUT_OVERLAY_ONBOARDING_ILLUSTRATION" file="chromeos/arc_input_overlay/onboarding_illustration.png" type="BINDATA" />
+         <include name="IDS_ARC_INPUT_OVERLAY_ONBOARDING_ILLUSTRATION_DARK" file="chromeos/arc_input_overlay/onboarding_illustration_dark.png" type="BINDATA" />
        </if>
-       <include name="IDR_CRYPTOTOKEN_UTIL_JS" file="cryptotoken/util.js" type="BINDATA" />
-       <include name="IDR_CRYPTOTOKEN_B64_JS" file="cryptotoken/b64.js" type="BINDATA" />
 diff --git a/chrome/browser/resources/odf/browser_api.js b/chrome/browser/resources/odf/browser_api.js
 new file mode 100644
 index 0000000000000..8c08a866cf252
@@ -1356,22 +1349,22 @@ index 0000000000000..d85372a4c2027
 +3);send_all_trees(s,s.l_desc.max_code+1,s.d_desc.max_code+1,max_blindex+1);compress_block(s,s.dyn_ltree,s.dyn_dtree)}init_block(s);if(last)bi_windup(s)}function _tr_tally(s,dist,lc){s.pending_buf[s.d_buf+s.last_lit*2]=dist>>>8&255;s.pending_buf[s.d_buf+s.last_lit*2+1]=dist&255;s.pending_buf[s.l_buf+s.last_lit]=lc&255;s.last_lit++;if(dist===0)s.dyn_ltree[lc*2]++;else{s.matches++;dist--;s.dyn_ltree[(_length_code[lc]+LITERALS+1)*2]++;s.dyn_dtree[d_code(dist)*2]++}return s.last_lit===s.lit_bufsize-1}
 +exports._tr_init=_tr_init;exports._tr_stored_block=_tr_stored_block;exports._tr_flush_block=_tr_flush_block;exports._tr_tally=_tr_tally;exports._tr_align=_tr_align},{"../utils/common":27}],39:[function(_dereq_,module,exports){function ZStream(){this.input=null;this.next_in=0;this.avail_in=0;this.total_in=0;this.output=null;this.next_out=0;this.avail_out=0;this.total_out=0;this.msg="";this.state=null;this.data_type=2;this.adler=0}module.exports=ZStream},{}]},{},[9])(9)});
 diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
-index d2e0c22e794b2..9f8d940ce7804 100644
+index 31207c5ee31f1..0c79ff5f75b73 100644
 --- a/extensions/common/constants.cc
 +++ b/extensions/common/constants.cc
-@@ -132,6 +132,7 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
- const char kFeedbackExtensionId[] = "gfdkimpbcpahaombhbimeihdjnejgicl";
+@@ -134,6 +134,7 @@ const char kChromeVoxExtensionId[] = "kgejglhpjiefppelpmljglcjbhoiplfn";
  const char kPdfExtensionId[] = "mhjfbmdgcfjbbpaeojofohoefgiehjai";
  #if defined(GOOROOM_BUILD)
-+const char kOdfExtensionId[] = "ghoimckhmmpipdjmddpfckjmooiokomo";
  const char kDgwExtensionId[] = "ppjhjgbbllkfebjommlcojifooeihdoh";
++const char kOdfExtensionId[] = "ghoimckhmmpipdjmddpfckjmooiokomo";
  #endif
  const char kQuickOfficeComponentExtensionId[] =
+     "bpmcpldpdmajfigpchkicefoigmkfalc";
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index b1b33ba3b13e4..e0412e59f352e 100644
+index c2ff2ba1043e8..cf1dca0bd9cbd 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
-@@ -244,7 +244,8 @@ EXTENSIONS_EXPORT extern const char kFeedbackExtensionId[];
+@@ -243,7 +243,8 @@ EXTENSIONS_EXPORT extern const char kChromeVoxExtensionId[];
  EXTENSIONS_EXPORT extern const char kPdfExtensionId[];
  
  #if defined(GOOROOM_BUILD)
@@ -1382,10 +1375,10 @@ index b1b33ba3b13e4..e0412e59f352e 100644
  #endif
  
 diff --git a/extensions/common/manifest_handlers/mime_types_handler.cc b/extensions/common/manifest_handlers/mime_types_handler.cc
-index a74df21ab27b0..e22470dacbfae 100644
+index 26ebb6f71b0b3..b59264ae061b0 100644
 --- a/extensions/common/manifest_handlers/mime_types_handler.cc
 +++ b/extensions/common/manifest_handlers/mime_types_handler.cc
-@@ -28,6 +28,7 @@ namespace {
+@@ -27,6 +27,7 @@ namespace {
  // higher-indexed entry will clobber earlier entries.
  const char* kMIMETypeHandlersAllowlist[] = {
      extension_misc::kPdfExtensionId,
@@ -1393,10 +1386,10 @@ index a74df21ab27b0..e22470dacbfae 100644
      extension_misc::kQuickOfficeComponentExtensionId,
      extension_misc::kQuickOfficeInternalExtensionId,
      extension_misc::kQuickOfficeExtensionId,
-@@ -48,7 +49,7 @@ enum class MimeHandlerType {
+@@ -47,7 +48,7 @@ enum class MimeHandlerType {
  
  static_assert(
-     base::size(kMIMETypeHandlersAllowlist) ==
+     std::size(kMIMETypeHandlersAllowlist) ==
 -        static_cast<size_t>(MimeHandlerType::kMaxValue) + 1,
 +        static_cast<size_t>(MimeHandlerType::kMaxValue) + 1 + 1,
      "MimeHandlerType enum is not in sync with kMIMETypeHandlersAllowlist.");
@@ -1500,11 +1493,11 @@ index 0000000000000..26b585dabd6bf
 +
 +#endif  // CHROME_BROWSER_ODF_ODF_EXTENSION_UTIL_H_
 diff --git a/net/base/mime_util.cc b/net/base/mime_util.cc
-index 015a1f937711b..d601e9026efec 100644
+index 1779ec4f96583..1599bf3fcd83d 100644
 --- a/net/base/mime_util.cc
 +++ b/net/base/mime_util.cc
-@@ -189,6 +189,9 @@ static const MimeInfo kSecondaryMappings[] = {
-     {"application/json", "json"},  // Per http://www.ietf.org/rfc/rfc4627.txt.
+@@ -196,6 +196,9 @@ static const MimeInfo kSecondaryMappings[] = {
+     {"application/msword", "doc,dot"},
      {"application/octet-stream", "bin,exe,com"},
      {"application/pdf", "pdf"},
 +    {"application/vnd.oasis.opendocument.text", "odt"},

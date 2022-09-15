@@ -1,7 +1,7 @@
-From 72708cdddc15b35a93a619ca3e3dcf2ac3a5cb92 Mon Sep 17 00:00:00 2001
+From 51af444182d5d3b5514d8fc24fc72a4f0793588e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 12:00:11 +0900
-Subject: [PATCH 32/63] Support ppapi-flash module
+Subject: [PATCH 32/66] Support ppapi-flash module
 
 ---
  gooroom/browser/gooroom_pref.cc | 7 +++++--

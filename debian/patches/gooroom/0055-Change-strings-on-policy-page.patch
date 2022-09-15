@@ -1,0 +1,25 @@
+From ef77ce8eed52fa1a85b769aaafeea755a53b07f5 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:09:42 +0900
+Subject: [PATCH 55/66] Change strings on policy page
+
+---
+ components/policy/core/browser/policy_conversions.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/components/policy/core/browser/policy_conversions.cc b/components/policy/core/browser/policy_conversions.cc
+index e6847d9edb4af..8d87c8c7c43a2 100644
+--- a/components/policy/core/browser/policy_conversions.cc
++++ b/components/policy/core/browser/policy_conversions.cc
+@@ -393,7 +393,7 @@ ArrayPolicyConversions& ArrayPolicyConversions::WithUpdaterPolicySchemas(
+ Value::Dict ArrayPolicyConversions::GetChromePolicies() {
+   Value::Dict chrome_policies_data;
+   chrome_policies_data.Set("id", "chrome");
+-  chrome_policies_data.Set("name", "Chrome Policies");
++  chrome_policies_data.Set("name", "Gooroom Policies");
+   Value::Dict chrome_policies = client()->GetChromePolicies();
+ #if BUILDFLAG(IS_CHROMEOS_LACROS)
+   if (additional_chrome_policies_ != base::Value()) {
+-- 
+2.30.2
+

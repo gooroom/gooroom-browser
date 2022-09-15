@@ -1,21 +1,22 @@
 description: Disable ANGLE perftests
 author: Michel Le Bihan <michel@lebihan.pl>
 
---- a/chrome/test/BUILD.gn
-+++ b/chrome/test/BUILD.gn
-@@ -4275,10 +4275,6 @@ template("performance_test_suite_templat
-       data_deps += [ "//third_party/dawn/src/tests:dawn_perf_tests" ]
+Index: chromium-104.0.5112.65/chrome/test/BUILD.gn
+===================================================================
+--- chromium-104.0.5112.65.orig/chrome/test/BUILD.gn
++++ chromium-104.0.5112.65/chrome/test/BUILD.gn
+@@ -4859,7 +4859,6 @@ template("performance_test_suite_templat
      }
  
--    if (!is_chromeos_lacros) {
+     if (!is_chromeos_lacros) {
 -      data_deps += [ "//third_party/angle/src/tests:angle_perftests" ]
--    }
--
-     if (!is_android && !is_fuchsia) {
-       data_deps += [
-         "//chrome/test:load_library_perf_tests",
---- a/third_party/angle/src/tests/BUILD.gn
-+++ b/third_party/angle/src/tests/BUILD.gn
+     }
+ 
+     if (!is_android && !is_chromeos_lacros) {
+Index: chromium-104.0.5112.65/third_party/angle/src/tests/BUILD.gn
+===================================================================
+--- chromium-104.0.5112.65.orig/third_party/angle/src/tests/BUILD.gn
++++ chromium-104.0.5112.65/third_party/angle/src/tests/BUILD.gn
 @@ -12,8 +12,7 @@ declare_args() {
    build_angle_deqp_tests = false
    build_angle_gles1_conform_tests = false
@@ -26,7 +27,7 @@ author: Michel Le Bihan <michel@lebihan.pl>
  }
  
  if (is_android) {
-@@ -178,7 +177,6 @@ angle_test("angle_unittests") {
+@@ -181,7 +180,6 @@ angle_test("angle_unittests") {
  
    deps = [
      ":angle_test_expectations",
@@ -34,7 +35,7 @@ author: Michel Le Bihan <michel@lebihan.pl>
      "$angle_root:libANGLE",
      "$angle_root:libEGL_static",
      "$angle_root:libGLESv2_static",
-@@ -337,48 +335,7 @@ config("angle_maybe_has_histograms") {
+@@ -343,48 +341,7 @@ config("angle_maybe_has_histograms") {
    }
  }
  
@@ -84,7 +85,7 @@ author: Michel Le Bihan <michel@lebihan.pl>
    import("angle_perftests.gni")
  
    # This test suite is for perf tests that use ANGLE's internals in some direct way.
-@@ -1562,12 +1519,11 @@ group("angle_tests") {
+@@ -1623,12 +1580,11 @@ group("angle_tests") {
    testonly = true
    deps = [
      ":angle_end2end_tests",
@@ -98,14 +99,16 @@ author: Michel Le Bihan <michel@lebihan.pl>
      deps += [
        ":angle_white_box_perftests",
        ":angle_white_box_tests",
---- a/third_party/angle/gni/angle.gni
-+++ b/third_party/angle/gni/angle.gni
-@@ -227,7 +227,7 @@ declare_args() {
+Index: chromium-104.0.5112.65/third_party/angle/gni/angle.gni
+===================================================================
+--- chromium-104.0.5112.65.orig/third_party/angle/gni/angle.gni
++++ chromium-104.0.5112.65/third_party/angle/gni/angle.gni
+@@ -249,7 +249,7 @@ declare_args() {
        is_apple &&
        (angle_enable_glsl || angle_enable_metal || use_fuzzing_engine)
  
 -  angle_has_histograms = angle_has_build
 +  angle_has_histograms = false
- }
  
- if (!defined(angle_zlib_compression_utils_dir)) {
+   # True if we want to build the ANGLE test suites. On by default in most configs.
+   angle_build_tests = angle_has_build

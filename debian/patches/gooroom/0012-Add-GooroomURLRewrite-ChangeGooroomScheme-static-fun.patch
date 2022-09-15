@@ -1,7 +1,7 @@
-From e32153b85756f92f81945b13accd4290f3b847e2 Mon Sep 17 00:00:00 2001
+From cdec16503faf7f87bcb7536ee1b4263a038ccc5c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:03:53 +0900
-Subject: [PATCH 12/63] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
+Subject: [PATCH 12/66] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
  function
 
 ---
@@ -12,7 +12,7 @@ Subject: [PATCH 12/63] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
  4 files changed, 29 insertions(+)
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index db9c606e0ebc3..f67947ebd5dda 100644
+index e1abc72e4e6bb..e884a9d9953c7 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -11,6 +11,10 @@
@@ -25,8 +25,8 @@ index db9c606e0ebc3..f67947ebd5dda 100644
 +
  #include "base/base_switches.h"
  #include "base/bind.h"
- #include "base/command_line.h"
-@@ -1267,6 +1271,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
+ #include "base/callback.h"
+@@ -1367,6 +1371,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
  #endif
  
    extra_parts_.push_back(new ChromeContentBrowserClientPerformanceManagerPart);
@@ -38,7 +38,7 @@ index db9c606e0ebc3..f67947ebd5dda 100644
  
  ChromeContentBrowserClient::~ChromeContentBrowserClient() {
 diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-index c08ff638e7d86..1e0df485d482d 100644
+index 2e69ca1574584..65349967ce09d 100644
 --- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 +++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 @@ -4,6 +4,10 @@

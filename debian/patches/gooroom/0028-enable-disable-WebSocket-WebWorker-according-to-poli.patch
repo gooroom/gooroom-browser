@@ -1,7 +1,7 @@
-From ed2ff020773fd53c2a8a6e398b18cb8aa68f9259 Mon Sep 17 00:00:00 2001
+From bb70d9711d1357537d0422041483cdd40eac851c Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 11:43:14 +0900
-Subject: [PATCH 28/63] enable/disable WebSocket & WebWorker according to
+Subject: [PATCH 28/66] enable/disable WebSocket & WebWorker according to
  policy and settings page
 
 ---
@@ -24,10 +24,10 @@ Subject: [PATCH 28/63] enable/disable WebSocket & WebWorker according to
  16 files changed, 119 insertions(+), 4 deletions(-)
 
 diff --git a/chrome/app/settings_strings.grdp b/chrome/app/settings_strings.grdp
-index a1be434aa72b2..d31fca913aa4f 100644
+index 8150ad50079fe..57b92406d6de6 100644
 --- a/chrome/app/settings_strings.grdp
 +++ b/chrome/app/settings_strings.grdp
-@@ -1668,6 +1668,20 @@
+@@ -1889,6 +1889,20 @@
    <message name="IDS_SETTINGS_NETWORK_PREDICTION_ENABLED_DESC_COOKIES_PAGE" desc="On the cookies page, the secondary text next to the checkbox that enables prediction of network actions.">
      Preloads pages that Chrome thinks you might visit. To do this, Chrome may use cookies, if you allow cookies, and may encrypt and send pages through Google to hide your identity from sites.
    </message>
@@ -49,10 +49,10 @@ index a1be434aa72b2..d31fca913aa4f 100644
      Safe Browsing (protects you and your device from dangerous sites)
    </message>
 diff --git a/chrome/browser/extensions/api/settings_private/prefs_util.cc b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-index 813fbbcc9b5e0..327c1d25fc602 100644
+index efb2269b98d70..458cafd30ff1a 100644
 --- a/chrome/browser/extensions/api/settings_private/prefs_util.cc
 +++ b/chrome/browser/extensions/api/settings_private/prefs_util.cc
-@@ -848,6 +848,13 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
+@@ -883,6 +883,13 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetAllowlistedKeys() {
        settings_api::PrefType::PREF_TYPE_BOOLEAN;
  #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
  
@@ -67,10 +67,10 @@ index 813fbbcc9b5e0..327c1d25fc602 100644
    (*s_allowlist)[media_router::prefs::kMediaRouterMediaRemotingEnabled] =
        settings_api::PrefType::PREF_TYPE_BOOLEAN;
 diff --git a/chrome/browser/ui/prefs/pref_watcher.cc b/chrome/browser/ui/prefs/pref_watcher.cc
-index ecffc3bca30e8..7e20e992428a0 100644
+index a7dbd620781b5..de8460dd15fc5 100644
 --- a/chrome/browser/ui/prefs/pref_watcher.cc
 +++ b/chrome/browser/ui/prefs/pref_watcher.cc
-@@ -62,6 +62,10 @@ const char* const kWebPrefsToObserve[] = {
+@@ -66,6 +66,10 @@ const char* const kWebPrefsToObserve[] = {
  #else
      prefs::kAccessibilityFocusHighlightEnabled,
  #endif
@@ -80,12 +80,12 @@ index ecffc3bca30e8..7e20e992428a0 100644
 +#endif
  };
  
- const int kWebPrefsToObserveLength = base::size(kWebPrefsToObserve);
+ const int kWebPrefsToObserveLength = std::size(kWebPrefsToObserve);
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index 92ff66c61efc0..c60bd9beaef84 100644
+index 38e7f5c8b59ab..54a541dfab399 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-@@ -425,6 +425,13 @@ void PrefsTabHelper::RegisterProfilePrefs(
+@@ -431,6 +431,13 @@ void PrefsTabHelper::RegisterProfilePrefs(
    RegisterLocalizedFontPref(registry, prefs::kWebKitMinimumLogicalFontSize,
                              IDS_MINIMUM_LOGICAL_FONT_SIZE);
  #endif
@@ -100,10 +100,10 @@ index 92ff66c61efc0..c60bd9beaef84 100644
  
  // static
 diff --git a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-index 592aa8256818e..8c262ba457ab8 100644
+index 29a39fe5bccbd..7c525c411a2c6 100644
 --- a/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
 +++ b/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
-@@ -1453,6 +1453,8 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
+@@ -1503,6 +1503,8 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
       IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION},
      {"safeBrowsingEnableProtectionDesc",
       IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION_DESC},
@@ -113,21 +113,21 @@ index 592aa8256818e..8c262ba457ab8 100644
      {"syncAndGoogleServicesPrivacyDescription",
       IDS_SETTINGS_SYNC_AND_GOOGLE_SERVICES_PRIVACY_DESC_UNIFIED_CONSENT},
 diff --git a/chrome/browser/ui/webui/settings/settings_ui.cc b/chrome/browser/ui/webui/settings/settings_ui.cc
-index 83f17be1c6797..dd07518340242 100644
+index 3938ee76adcf0..eced1f2652a6e 100644
 --- a/chrome/browser/ui/webui/settings/settings_ui.cc
 +++ b/chrome/browser/ui/webui/settings/settings_ui.cc
-@@ -147,6 +147,10 @@
- #include "chrome/browser/web_applications/web_app_provider.h"
- #endif
+@@ -4,6 +4,10 @@
+ 
+ #include "chrome/browser/ui/webui/settings/settings_ui.h"
  
 +#if defined(GOOROOM_BUILD)
 +#include "gooroom/browser/gooroom_pref.h"
 +#endif
 +
- namespace settings {
+ #include <stddef.h>
  
- // static
-@@ -353,6 +357,11 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
+ #include <memory>
+@@ -363,6 +367,11 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
  
    AddLocalizedStrings(html_source, profile, web_ui->GetWebContents());
  
@@ -140,10 +140,10 @@ index 83f17be1c6797..dd07518340242 100644
  
    content::WebUIDataSource::Add(web_ui->GetWebContents()->GetBrowserContext(),
 diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index c1a38cc9a01ea..1b8be2853eb99 100644
+index fa9f63313b213..310b7a25470c5 100644
 --- a/chrome/common/pref_names.cc
 +++ b/chrome/common/pref_names.cc
-@@ -3086,6 +3086,11 @@ const char kIsolateOrigins[] = "site_isolation.isolate_origins";
+@@ -3217,6 +3217,11 @@ const char kIsolateOrigins[] = "site_isolation.isolate_origins";
  // Boolean that specifies opting into --site-per-process (full Site Isolation).
  const char kSitePerProcess[] = "site_isolation.site_per_process";
  
@@ -156,10 +156,10 @@ index c1a38cc9a01ea..1b8be2853eb99 100644
  // This permissions-policy gates access to getDisplayMedia(), as per this spec:
  // https://www.w3.org/TR/screen-capture/#feature-policy-integration
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index cefcfb3923997..5f32259445758 100644
+index 43a21f5996cdf..722206683d66a 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -1062,6 +1062,11 @@ extern const char kSitePerProcess[];
+@@ -1103,6 +1103,11 @@ extern const char kSitePerProcess[];
  
  extern const char kDisplayCapturePermissionsPolicyEnabled[];
  
@@ -249,7 +249,7 @@ index d57cfcdf4230e..86b07d5838794 100644
      web_prefs->webworker_enabled = false;
    }
 diff --git a/third_party/blink/public/platform/web_runtime_features.h b/third_party/blink/public/platform/web_runtime_features.h
-index 90e7e8cdd6049..223799eae8f66 100644
+index 0f5f5d2a22390..ae5f2092a580b 100644
 --- a/third_party/blink/public/platform/web_runtime_features.h
 +++ b/third_party/blink/public/platform/web_runtime_features.h
 @@ -44,6 +44,8 @@ class WebRuntimeFeatures {
@@ -262,7 +262,7 @@ index 90e7e8cdd6049..223799eae8f66 100644
  
    // Enable or disable features with status=experimental listed in
 diff --git a/third_party/blink/renderer/core/workers/dedicated_worker.cc b/third_party/blink/renderer/core/workers/dedicated_worker.cc
-index 5be6f6f9d9775..f141b4dab6719 100644
+index d45460f79cd66..d58bdedf8ab37 100644
 --- a/third_party/blink/renderer/core/workers/dedicated_worker.cc
 +++ b/third_party/blink/renderer/core/workers/dedicated_worker.cc
 @@ -4,6 +4,19 @@
@@ -285,7 +285,7 @@ index 5be6f6f9d9775..f141b4dab6719 100644
  #include <utility>
  
  #include "base/feature_list.h"
-@@ -63,6 +76,24 @@ DedicatedWorker* DedicatedWorker::Create(ExecutionContext* context,
+@@ -65,6 +78,24 @@ DedicatedWorker* DedicatedWorker::Create(ExecutionContext* context,
                                           const WorkerOptions* options,
                                           ExceptionState& exception_state) {
    DCHECK(context->IsContextThread());
@@ -334,10 +334,10 @@ index d86324efb08c0..51c42bb14e105 100644
      //    frm, "External connection attempts were blocked by policy.");
   
 diff --git a/third_party/blink/renderer/platform/exported/web_runtime_features.cc b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-index a65bc95c48c50..21d2f612acdd6 100644
+index b4b6402767501..4740690f10a99 100644
 --- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 +++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-@@ -585,6 +585,14 @@ void WebRuntimeFeatures::EnableWebSocket(bool enable) {
+@@ -543,6 +543,14 @@ void WebRuntimeFeatures::EnableWebSocket(bool enable) {
  void WebRuntimeFeatures::EnableWebWorker(bool enable) {
    GooroomEnabledFeatures::SetWebWorkerEnabled(enable);
  }

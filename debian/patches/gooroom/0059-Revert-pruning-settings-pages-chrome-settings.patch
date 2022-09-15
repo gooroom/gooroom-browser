@@ -1,0 +1,125 @@
+From c20a99fcf9555a0dd5596fccb947ee058cc90412 Mon Sep 17 00:00:00 2001
+From: hnc-cjs <cjs@hancom>
+Date: Wed, 14 Sep 2022 17:11:17 +0900
+Subject: [PATCH 59/66] Revert "pruning settings pages(chrome://settings)"
+
+This reverts commit 499678933d474530995d4daabf214ea9a240c0a4.
+---
+ .../settings/about_page/about_page.html       |  2 +
+ .../settings/basic_page/basic_page.html       | 47 +++++++++++++++++++
+ .../settings/settings_menu/settings_menu.html | 14 ++++++
+ 3 files changed, 63 insertions(+)
+
+diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
+index 25a78c1c8db8e..f8b2415164182 100644
+--- a/chrome/browser/resources/settings/about_page/about_page.html
++++ b/chrome/browser/resources/settings/about_page/about_page.html
+@@ -131,6 +131,8 @@
+         </div>
+       </template>
+ </if>
++      <cr-link-row class="hr" id="help" on-click="onHelpTap_"
++          label="$i18n{aboutGetHelpUsingChrome}" external></cr-link-row>
+ <if expr="_google_chrome">
+       <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueTap_"
+           hidden="[[!prefs.feedback_allowed.value]]"
+diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
+index 2742d220bc5d3..931f845240388 100644
+--- a/chrome/browser/resources/settings/basic_page/basic_page.html
++++ b/chrome/browser/resources/settings/basic_page/basic_page.html
+@@ -37,6 +37,46 @@
+           </div>
+         </template>
+ </if>
++        <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
++          <settings-section page-title="$i18n{peoplePageTitle}"
++              section="people">
++            <settings-people-page prefs="{{prefs}}"
++                page-visibility="[[pageVisibility]]">
++            </settings-people-page>
++          </settings-section>
++        </template>
++        <template is="dom-if" if="[[showPage_(pageVisibility.autofill)]]"
++            restamp>
++          <settings-section page-title="$i18n{autofillPageTitle}"
++              section="autofill">
++            <settings-autofill-page prefs="{{prefs}}"></settings-autofill-page>
++          </settings-section>
++        </template>
++        <settings-section id="privacyGuidePromoSection" page-title=""
++            hidden$="[[!showPrivacyGuidePromo_]]" nest-under-section="privacy"
++            no-search>
++          <settings-privacy-guide-promo id="privacyGuidePromo"
++              prefs="{{prefs}}">
++          </settings-privacy-guide-promo>
++        </settings-section>
++        <template is="dom-if" if="[[showPage_(pageVisibility.safetyCheck)]]"
++            restamp>
++          <settings-section page-title="$i18n{safetyCheckSectionTitle}"
++              section="safetyCheck" nest-under-section="privacy"
++              id="safetyCheckSettingsSection">
++            <settings-safety-check-page prefs="{{prefs}}">
++            </settings-safety-check-page>
++          </settings-section>
++        </template>
++        <template is="dom-if" if="[[showPage_(pageVisibility.privacy)]]"
++            restamp>
++          <settings-section page-title="$i18n{privacyPageTitle}"
++              section="privacy">
++            <settings-privacy-page prefs="{{prefs}}"
++                page-visibility="[[pageVisibility.privacy]]">
++            </settings-privacy-page>
++          </settings-section>
++        </template>
+         <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
+             restamp>
+           <settings-section page-title="$i18n{appearancePageTitle}"
+@@ -125,6 +165,13 @@
+                 </settings-downloads-page>
+               </settings-section>
+             </template>
++            <template is="dom-if" if="[[showPage_(pageVisibility.a11y)]]"
++                restamp>
++              <settings-section page-title="$i18n{a11yPageTitle}"
++                  section="a11y">
++                <settings-a11y-page prefs="{{prefs}}"></settings-a11y-page>
++              </settings-section>
++            </template>
+ <if expr="not chromeos_ash">
+             <settings-section page-title="$i18n{systemPageTitle}"
+                 section="system">
+diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+index e454ed358d256..8278812f6a859 100644
+--- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
++++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+@@ -58,6 +58,13 @@
+         <iron-selector id="menu" selectable="a:not(#extensionsLink)"
+             attr-for-selected="href" on-iron-activate="onSelectorActivate_"
+             on-click="onLinkClick_" selected-attribute="selected">
++          <a role="menuitem"
++              id="people" href="/people" hidden="[[!pageVisibility.people]]"
++              class="cr-nav-menu-item">
++            <iron-icon icon="cr:person"></iron-icon>
++            $i18n{peoplePageTitle}
++            <paper-ripple></paper-ripple>
++          </a>
+           <a role="menuitem" id="autofill" href="/autofill"
+               hidden="[[!pageVisibility.autofill]]"
+               class="cr-nav-menu-item">
+@@ -115,6 +122,13 @@
+             $i18n{downloadsPageTitle}
+             <paper-ripple></paper-ripple>
+           </a>
++          <a role="menuitem" id="accessibility" href="/accessibility"
++              class="cr-nav-menu-item"
++              hidden="[[!pageVisibility.a11y]]">
++            <iron-icon icon="settings:accessibility"></iron-icon>
++            $i18n{a11yPageTitle}
++            <paper-ripple></paper-ripple>
++          </a>
+     <if expr="not chromeos_ash">
+           <a role="menuitem" id="system" href="/system" class="cr-nav-menu-item"
+               hidden="[[!pageVisibility.system]]">
+-- 
+2.30.2
+

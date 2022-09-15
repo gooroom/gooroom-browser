@@ -1,14 +1,14 @@
-From d19710618309d6516691302fd871e2428323b987 Mon Sep 17 00:00:00 2001
+From b7bab47fffa9bc8f751dffd5d087c0eac1e400f8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 16:12:43 +0900
-Subject: [PATCH 14/63] pruning extensions pages(chrome://extensions)
+Subject: [PATCH 14/66] pruning extensions pages(chrome://extensions)
 
 ---
  chrome/browser/resources/extensions/sidebar.html | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/resources/extensions/sidebar.html b/chrome/browser/resources/extensions/sidebar.html
-index 486e3c6994421..6b6041c8f6ff1 100644
+index a7e4de0d3c75b..4240da7734dcd 100644
 --- a/chrome/browser/resources/extensions/sidebar.html
 +++ b/chrome/browser/resources/extensions/sidebar.html
 @@ -78,10 +78,12 @@

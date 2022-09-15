@@ -1,7 +1,7 @@
-From 8a16f349652966b774c0858506ac58d84006a7c1 Mon Sep 17 00:00:00 2001
+From 31f074ea2d506e225586e636982b86d59ac21fde Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:22:30 +0900
-Subject: [PATCH 23/63] Modify ntp(newtab) page
+Subject: [PATCH 23/66] Modify ntp(newtab) page
 
 ---
  .../browser/resources/new_tab_page/icons/BUILD.gn   |  1 +
@@ -9,10 +9,10 @@ Subject: [PATCH 23/63] Modify ntp(newtab) page
  2 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/chrome/browser/resources/new_tab_page/icons/BUILD.gn b/chrome/browser/resources/new_tab_page/icons/BUILD.gn
-index c0cf6e13472b6..58837e980626f 100644
+index 8ae9a3a8755f4..10fcb5f89dc6c 100644
 --- a/chrome/browser/resources/new_tab_page/icons/BUILD.gn
 +++ b/chrome/browser/resources/new_tab_page/icons/BUILD.gn
-@@ -20,6 +20,7 @@ generate_grd("build_grdp") {
+@@ -22,6 +22,7 @@ generate_grd("build_grdp") {
      "facebook.svg",
      "generic_globe.svg",
      "google_logo.svg",
@@ -21,7 +21,7 @@ index c0cf6e13472b6..58837e980626f 100644
      "icon_pencil.svg",
      "info.svg",
 diff --git a/chrome/browser/resources/new_tab_page/logo.html b/chrome/browser/resources/new_tab_page/logo.html
-index 7983b6f723a1d..338f6abbf40cd 100644
+index 50d8b40a61455..50c6da2e4e060 100644
 --- a/chrome/browser/resources/new_tab_page/logo.html
 +++ b/chrome/browser/resources/new_tab_page/logo.html
 @@ -14,19 +14,24 @@

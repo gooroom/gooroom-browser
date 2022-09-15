@@ -1,7 +1,7 @@
-From 8c61c349ddeda522616c2e77ff203f04d28d28d8 Mon Sep 17 00:00:00 2001
+From 15c5dcd04288cc57aac72eda6eacba63c571e913 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 18:12:09 +0900
-Subject: [PATCH 27/63] change default path of policy including content
+Subject: [PATCH 27/66] change default path of policy including content
  settings
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH 27/63] change default path of policy including content
  1 file changed, 16 insertions(+)
 
 diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
-index 44794d1830a16..2afea5b583f08 100644
+index 215042d163ed7..0e9ed55d19eb6 100644
 --- a/chrome/common/chrome_paths.cc
 +++ b/chrome/common/chrome_paths.cc
 @@ -4,6 +4,9 @@
@@ -22,7 +22,7 @@ index 44794d1830a16..2afea5b583f08 100644
  #include "base/files/file_util.h"
  #include "base/logging.h"
  #include "base/native_library.h"
-@@ -418,6 +421,19 @@ bool PathProvider(int key, base::FilePath* result) {
+@@ -428,6 +431,19 @@ bool PathProvider(int key, base::FilePath* result) {
      case chrome::DIR_POLICY_FILES: {
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
        cur = base::FilePath(FILE_PATH_LITERAL("/etc/opt/chrome/policies"));

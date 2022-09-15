@@ -1,17 +1,17 @@
-From 04dd9cecbac28901644ea822d82275ad13427e63 Mon Sep 17 00:00:00 2001
+From 3dfb4a248d1b6221a4216130c7e627ae21c6defa Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 10:28:07 +0900
-Subject: [PATCH 34/63] Remove 'Cast...'
+Subject: [PATCH 34/66] Remove 'Cast...'
 
 ---
  chrome/browser/media/router/media_router_feature.cc | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/chrome/browser/media/router/media_router_feature.cc b/chrome/browser/media/router/media_router_feature.cc
-index f28f9b0b802bf..3ed4fba22dfb5 100644
+index fe8c8ca4a664a..575ac0606e22b 100644
 --- a/chrome/browser/media/router/media_router_feature.cc
 +++ b/chrome/browser/media/router/media_router_feature.cc
-@@ -62,6 +62,9 @@ void ClearMediaRouterStoredPrefsForTesting() {
+@@ -71,6 +71,9 @@ void ClearMediaRouterStoredPrefsForTesting() {
  }
  
  bool MediaRouterEnabled(content::BrowserContext* context) {

@@ -1,0 +1,94 @@
+From d625c2ba1db45636d28e19f73752e7ddf0003adb Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 11:59:22 +0900
+Subject: [PATCH 37/66] change chrome to gooroom scheme on error page [Gooroom
+ Bug Tracking System - 0000400] change chrome to gooroom scheme on
+ content-settings bubble model
+
+---
+ .../settings/reset_page/reset_profile_dialog.html      |  7 -------
+ .../content_settings/content_setting_bubble_model.cc   | 10 ++++++++++
+ components/error_page/common/localized_error.cc        | 10 ++++++++++
+ 3 files changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+index ac0ee70799e1d..392b1fca4dc38 100644
+--- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
++++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+@@ -18,13 +18,6 @@
+           [[getExplanationText_(isTriggered_, triggeredResetToolName_)]]">
+         </span>
+         <span>
+-<!--
+-<if expr="not _gooroom">
+-          <a href="$i18nRaw{resetPageLearnMoreUrl}" target="_blank">
+-            $i18n{learnMore}
+-          </a>
+-</if>
+--->
+         </span>
+       </div>
+       <div slot="button-container">
+diff --git a/chrome/browser/ui/content_settings/content_setting_bubble_model.cc b/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
+index 361558a8b3e46..56568263cba03 100644
+--- a/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
++++ b/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
+@@ -90,6 +90,8 @@
+ #include "services/device/public/cpp/geolocation/geolocation_manager.h"
+ #endif
+ 
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++
+ using base::UserMetricsAction;
+ using content::WebContents;
+ using content_settings::PageSpecificContentSettings;
+@@ -979,7 +981,15 @@ void ContentSettingMediaStreamBubbleModel::SetRadioGroup() {
+   RadioGroup radio_group;
+   radio_group.url = url;
+ 
++#if defined(GOOROOM_BUILD)
++// change chrome:// to gooroom:// on content-setting-bubble-popup.
++  GURL changed_url = GooroomURLRewrite::ChangeGooroomScheme(url);
++  std::u16string display_host = url_formatter::FormatUrlForSecurityDisplay(changed_url);
++  if (display_host.empty())
++    display_host = base::ASCIIToUTF16(changed_url.spec());
++#else
+   std::u16string display_host = url_formatter::FormatUrlForSecurityDisplay(url);
++#endif
+ 
+   DCHECK(CameraAccessed() || MicrophoneAccessed());
+   int radio_allow_label_id = 0;
+diff --git a/components/error_page/common/localized_error.cc b/components/error_page/common/localized_error.cc
+index 2668f5ba53a35..127839ced89f4 100644
+--- a/components/error_page/common/localized_error.cc
++++ b/components/error_page/common/localized_error.cc
+@@ -40,6 +40,8 @@
+ #include "base/win/windows_version.h"
+ #endif
+ 
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++
+ namespace error_page {
+ 
+ namespace {
+@@ -960,9 +962,17 @@ LocalizedError::PageState LocalizedError::GetPageState(
+     options.suggestions &= ~SUGGEST_CONTACT_ADMINISTRATOR;
+   }
+ 
++#if defined(GOOROOM_BUILD)
++//Change chrome:// to gooroom:// on error pages
++  GURL changed_failed_url = GooroomURLRewrite::ChangeGooroomScheme(failed_url);
++  std::u16string failed_url_string(url_formatter::FormatUrl(
++      changed_failed_url, url_formatter::kFormatUrlOmitNothing,
++      base::UnescapeRule::NORMAL, nullptr, nullptr, nullptr));
++#else
+   std::u16string failed_url_string(url_formatter::FormatUrl(
+       failed_url, url_formatter::kFormatUrlOmitNothing,
+       base::UnescapeRule::NORMAL, nullptr, nullptr, nullptr));
++#endif
+   // URLs are always LTR.
+   if (base::i18n::IsRTL())
+     base::i18n::WrapStringWithLTRFormatting(&failed_url_string);
+-- 
+2.30.2
+

@@ -1,7 +1,7 @@
-From 2988d8035eb2216baa5ace31d26d5ae2e0652382 Mon Sep 17 00:00:00 2001
+From 139b823f3a85b23434ce3e951f3865d3f769cdb8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:01:01 +0900
-Subject: [PATCH 11/63] Add scheme module to convert (chrome://->gooroom://)
+Subject: [PATCH 11/66] Add scheme module to convert (chrome://->gooroom://)
 
 ---
  chrome/browser/extensions/extension_web_ui.cc |  5 +++
@@ -13,10 +13,10 @@ Subject: [PATCH 11/63] Add scheme module to convert (chrome://->gooroom://)
  create mode 100644 gooroom/URLRewrite/gooroom_url_rewrite.h
 
 diff --git a/chrome/browser/extensions/extension_web_ui.cc b/chrome/browser/extensions/extension_web_ui.cc
-index 45f07e12b8cb2..cb34119f68585 100644
+index e2269f97c0db3..ab5078a68f891 100644
 --- a/chrome/browser/extensions/extension_web_ui.cc
 +++ b/chrome/browser/extensions/extension_web_ui.cc
-@@ -433,8 +433,13 @@ void ExtensionWebUI::RegisterProfilePrefs(
+@@ -437,8 +437,13 @@ void ExtensionWebUI::RegisterProfilePrefs(
  bool ExtensionWebUI::HandleChromeURLOverride(
      GURL* url,
      content::BrowserContext* browser_context) {
@@ -31,10 +31,10 @@ index 45f07e12b8cb2..cb34119f68585 100644
    std::vector<GURL> overrides =
        GetOverridesForChromeURL(*url, browser_context, /*get_all=*/false);
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 892c14ab050fb..83e007c59d721 100644
+index da62dab711d54..8800007cd24e1 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -236,6 +236,10 @@ if (!is_android && !is_mac) {
+@@ -235,6 +235,10 @@ if (!is_android && !is_mac) {
          "browser/gooroom_pref.h",
          "browser/gooroom_url_filter_impl.cc",
          "browser/gooroom_url_filter_impl.h", 

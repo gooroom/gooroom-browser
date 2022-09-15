@@ -1,0 +1,25 @@
+From 0a6d0567954c8dfe338bbcf368f476a6539c9adf Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:11:39 +0900
+Subject: [PATCH 58/66] Change Cookie default value to easily use
+
+---
+ components/content_settings/core/browser/cookie_settings.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/components/content_settings/core/browser/cookie_settings.cc b/components/content_settings/core/browser/cookie_settings.cc
+index ccb986759151b..c93d007e97253 100644
+--- a/components/content_settings/core/browser/cookie_settings.cc
++++ b/components/content_settings/core/browser/cookie_settings.cc
+@@ -66,7 +66,7 @@ void CookieSettings::RegisterProfilePrefs(
+     user_prefs::PrefRegistrySyncable* registry) {
+   registry->RegisterIntegerPref(
+       prefs::kCookieControlsMode,
+-      static_cast<int>(CookieControlsMode::kBlockThirdParty),
++      static_cast<int>(CookieControlsMode::kOff),
+       user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+ }
+ 
+-- 
+2.30.2
+

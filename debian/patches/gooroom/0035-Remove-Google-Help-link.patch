@@ -1,23 +1,21 @@
-From 228f49dd93f6e661324b50a3bcae3ec6ea04c0f7 Mon Sep 17 00:00:00 2001
+From d2d0a72303ee6f6171e19941822c317a9f212af1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Mon, 27 Jul 2020 10:28:35 +0900
-Subject: [PATCH 35/63] Remove Google-Help link
+Subject: [PATCH 35/66] Remove Google-Help link
 
 ---
- .../browser/resources/settings/settings_main/settings_main.html | 2 ++
- 1 file changed, 2 insertions(+)
+ .../browser/resources/settings/settings_main/settings_main.html  | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/chrome/browser/resources/settings/settings_main/settings_main.html b/chrome/browser/resources/settings/settings_main/settings_main.html
-index 99dd44120625f..253c80b2cee6c 100644
+index 99dd44120625f..d80e84987cb59 100644
 --- a/chrome/browser/resources/settings/settings_main/settings_main.html
 +++ b/chrome/browser/resources/settings/settings_main/settings_main.html
-@@ -26,7 +26,9 @@
+@@ -26,7 +26,6 @@
      </style>
      <div id="noSearchResults" hidden$="[[!showNoResultsFound_]]">
        <div>$i18n{searchNoResults}</div>
-+<if expr="not _gooroom">
-       <div>$i18nRaw{searchNoResultsHelp}</div>
-+</if>
+-      <div>$i18nRaw{searchNoResultsHelp}</div>
      </div>
      <template is="dom-if"
          if="[[showManagedHeader_(inSearchMode_, showingSubpage_,

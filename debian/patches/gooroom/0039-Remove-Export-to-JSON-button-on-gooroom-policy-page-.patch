@@ -1,0 +1,41 @@
+From 29f30f7dc68985f3255d797bacf12285747fed13 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 12:23:32 +0900
+Subject: [PATCH 39/66] Remove 'Export to JSON' button on gooroom://policy page
+ [Gooroom Bug Tracking System - 0000560] Change 'Chrome policies' to 'Gooroom
+ policies' string on gooroom://policy page
+
+---
+ chrome/browser/ui/webui/policy/policy_ui_handler.cc | 2 +-
+ components/policy/resources/webui/policy.html       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/chrome/browser/ui/webui/policy/policy_ui_handler.cc b/chrome/browser/ui/webui/policy/policy_ui_handler.cc
+index 238298dcbf589..ef37739364917 100644
+--- a/chrome/browser/ui/webui/policy/policy_ui_handler.cc
++++ b/chrome/browser/ui/webui/policy/policy_ui_handler.cc
+@@ -432,7 +432,7 @@ base::Value::Dict PolicyUIHandler::GetPolicyNames() {
+     chrome_policy_names.Append(it.key());
+   }
+   base::Value::Dict chrome_values;
+-  chrome_values.Set("name", "Chrome Policies");
++  chrome_values.Set("name", "Gooroom Policies");
+   chrome_values.Set("policyNames", std::move(chrome_policy_names));
+   names.Set("chrome", std::move(chrome_values));
+ 
+diff --git a/components/policy/resources/webui/policy.html b/components/policy/resources/webui/policy.html
+index 5126fac29ff73..94ec0e4dd0044 100644
+--- a/components/policy/resources/webui/policy.html
++++ b/components/policy/resources/webui/policy.html
+@@ -20,7 +20,7 @@
+     </div>
+     <div class="header-row">
+       <button id="reload-policies">$i18n{reloadPolicies}</button>
+-      <button id="export-policies">$i18n{exportPoliciesJSON}</button>
++      <button id="export-policies" hidden>$i18n{exportPoliciesJSON}</button>
+       <button id="copy-policies">$i18n{copyPoliciesJSON}</button>
+       <div id="show-unset-container" class="show-unset-checkbox">
+         <label>
+-- 
+2.30.2
+

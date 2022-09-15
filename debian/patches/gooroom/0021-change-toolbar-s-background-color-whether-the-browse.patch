@@ -1,68 +1,86 @@
-From 3522957e7ab09e97c435804cd0bba43d0e253070 Mon Sep 17 00:00:00 2001
+From 93dcb777c625045ec50b4d064e3e6ad30ce8fdce Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:16:15 +0900
-Subject: [PATCH 21/63] change toolbar's background color whether the browser's
+Subject: [PATCH 21/66] change toolbar's background color whether the browser's
  type is trust or untrust
 
 ---
- chrome/browser/themes/theme_properties.cc | 26 +++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ ui/color/ui_color_mixer.cc | 49 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 46 insertions(+), 3 deletions(-)
 
-diff --git a/chrome/browser/themes/theme_properties.cc b/chrome/browser/themes/theme_properties.cc
-index 1a38bdb9ada0b..d07bee9be58e1 100644
---- a/chrome/browser/themes/theme_properties.cc
-+++ b/chrome/browser/themes/theme_properties.cc
-@@ -18,6 +18,10 @@
- #include <windows.h>
- #endif
+diff --git a/ui/color/ui_color_mixer.cc b/ui/color/ui_color_mixer.cc
+index ca33acaffdb3c..2150a9777feb6 100644
+--- a/ui/color/ui_color_mixer.cc
++++ b/ui/color/ui_color_mixer.cc
+@@ -13,10 +13,54 @@
+ #include "ui/color/color_transform.h"
+ #include "ui/gfx/color_palette.h"
  
++#include "base/path_service.h"
++#include "base/command_line.h"
++#include "base/files/file_path.h"
++
+ namespace ui {
+ 
+ void AddUiColorMixer(ColorProvider* provider,
+                      const ColorProviderManager::Key& key) {
++
 +#if defined(GOOROOM_BUILD)
-+#include "gooroom/base/gooroom_base.h"
++  // if there is a url in command line, check the url is trust to determine the
++  // mode whether trust or not.
++  // ===========================================================================
++  // Test whether there is a url in command line.
++  base::CommandLine* cmd = base::CommandLine::ForCurrentProcess();
++  const base::CommandLine::StringVector argv = cmd->argv();
++
++  base::FilePath home_path_dir;
++  base::PathService::Get(base::DIR_HOME, &home_path_dir);
++  std::string trust_user_data_dir_option =
++      "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
++      "/.config/gooroom/trust";
++  bool isTrustMode = false;
++  for (base::CommandLine::StringVector::const_iterator it = argv.begin();
++     it != argv.end(); ++it) {
++       std::string command = *it;
++       if (command.find("--user-data-dir") != std::string::npos) {
++         if(command == trust_user_data_dir_option)
++           isTrustMode = true;
++         else
++           isTrustMode = false;
++         break;
++       }
++  }
++  const SkColor kDefaultColorFrameUntrust = SkColorSetRGB(0xb2, 0x2f, 0x00);
++  const SkColor kDefaultColorFrameTrust = SkColorSetRGB(0x00, 0x60, 0xb5);
++
++  const SkColor kDefaultColorFrameInactiveUntrust = SkColorSetRGB(0x93, 0x27, 0x00);
++  const SkColor kDefaultColorFrameInactiveTrust = SkColorSetRGB(0x00, 0x51, 0x99);
++  /*
++  if (base::GetGooroomBase()->isTrustMode()) {
++      isTrustMode = true;
++  }
++  else {
++      isTrustMode = false;
++  }*/
 +#endif
 +
- namespace {
+   const bool dark_mode =
+       key.color_mode == ColorProviderManager::ColorMode::kDark;
  
- // Strings used in alignment properties.
-@@ -33,6 +37,14 @@ constexpr char kTilingRepeatX[] = "repeat-x";
- constexpr char kTilingRepeatY[] = "repeat-y";
- constexpr char kTilingRepeat[] = "repeat";
- 
-+#if defined(GOOROOM_BUILD)
-+const SkColor kDefaultColorFrameUntrust = SkColorSetRGB(0xb2, 0x2f, 0x00);
-+const SkColor kDefaultColorFrameTrust = SkColorSetRGB(0x00, 0x60, 0xb5);
-+
-+const SkColor kDefaultColorFrameInactiveUntrust = SkColorSetRGB(0x93, 0x27, 0x00);
-+const SkColor kDefaultColorFrameInactiveTrust = SkColorSetRGB(0x00, 0x51, 0x99);
-+#endif
-+
- SkColor GetLightModeColor(int id) {
- #if BUILDFLAG(IS_WIN)
-   const SkColor kDefaultColorNTPBackground =
-@@ -55,10 +67,24 @@ SkColor GetLightModeColor(int id) {
-     case ThemeProperties::COLOR_TAB_BACKGROUND_INACTIVE_FRAME_ACTIVE:
-     case ThemeProperties::COLOR_WINDOW_CONTROL_BUTTON_BACKGROUND_ACTIVE:
-     case ThemeProperties::COLOR_STATUS_BUBBLE:
-+#if defined(GOOROOM_BUILD)
-+      if (base::GetGooroomBase()->isTrustMode()) {
-+        return kDefaultColorFrameTrust;
-+      }
-+      else {
-+        return kDefaultColorFrameUntrust;
-+      }
-+#endif
-       return SkColorSetRGB(0xDE, 0xE1, 0xE6);
-     case ThemeProperties::COLOR_FRAME_INACTIVE:
-     case ThemeProperties::COLOR_TAB_BACKGROUND_INACTIVE_FRAME_INACTIVE:
-     case ThemeProperties::COLOR_WINDOW_CONTROL_BUTTON_BACKGROUND_INACTIVE:
-+#if defined(GOOROOM_BUILD)
-+      if (base::GetGooroomBase()->isTrustMode())
-+        return kDefaultColorFrameInactiveTrust;
-+      else
-+        return kDefaultColorFrameInactiveUntrust;
-+#endif
-       return color_utils::HSLShift(
-           GetLightModeColor(ThemeProperties::COLOR_FRAME_ACTIVE),
-           ThemeProperties::GetDefaultTint(ThemeProperties::TINT_FRAME_INACTIVE,
+@@ -59,11 +103,10 @@ void AddUiColorMixer(ColorProvider* provider,
+   mixer[kColorDropdownForegroundSelected] = {kColorPrimaryForeground};
+   mixer[kColorFocusableBorderFocused] = {kColorItemHighlight};
+   mixer[kColorFocusableBorderUnfocused] = {kColorMidground};
+-  mixer[kColorFrameActive] = {kColorFrameActiveUnthemed};
++  mixer[kColorFrameActive] = {isTrustMode ? kDefaultColorFrameTrust : kDefaultColorFrameUntrust};
+   mixer[kColorFrameActiveUnthemed] = {
+       dark_mode ? gfx::kGoogleGrey900 : SkColorSetRGB(0xDE, 0xE1, 0xE6)};
+-  mixer[kColorFrameInactive] = {dark_mode ? gfx::kGoogleGrey800
+-                                          : gfx::kGoogleGrey200};
++  mixer[kColorFrameInactive] = {isTrustMode ? kDefaultColorFrameInactiveTrust : kDefaultColorFrameInactiveUntrust};
+   mixer[kColorHelpIconActive] = {kColorPrimaryForeground};
+   mixer[kColorHelpIconInactive] = {kColorSecondaryForeground};
+   mixer[kColorIcon] = {kColorSecondaryForeground};
 -- 
 2.30.2
 
