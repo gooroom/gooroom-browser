@@ -21,6 +21,7 @@ Build-Depends:
  brotli,
  libdouble-conversion-dev,
  libxnvctrl-dev,
+ libxnvctrl0,
  libwoff-dev,
  git,
  libssl-dev,

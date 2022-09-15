@@ -12,6 +12,7 @@ debian/gooroom-browser.xml usr/share/gnome-control-center/default-apps
 debian/gooroom-browser.desktop usr/share/applications
 debian/setups/gooroom-browser-setup.sh usr/lib/gooroom-browser
 debian/setups/mainpref.json usr/lib/gooroom-browser
+debian/setups/icudtl.dat usr/lib/gooroom-browser
 
 debian/etc/README etc/gooroom-browser.d
 debian/etc/apikeys etc/gooroom-browser.d

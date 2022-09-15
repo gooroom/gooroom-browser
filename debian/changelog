@@ -1,3 +1,11 @@
+gooroom-browser (3.4.0-1+grm3u2) stretch; urgency=medium
+
+  * Update 3.4.0-1+grm3u2
+    - Include icudtl.dat file
+    - Add libxnvctrl0 dependency
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 23 Sep 2022 15:20:00 +0900
+
 gooroom-browser (3.4.0-1+grm3u1) stretch; urgency=medium
 
   * Init gooroom-browser 3.4.0-1+grm3u1
