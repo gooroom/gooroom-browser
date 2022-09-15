@@ -179,6 +179,9 @@ gooroom/CVE-2021-30549.patch
 gooroom/CVE-2021-30550.patch
 gooroom/CVE-2021-30566.patch
 gooroom/CVE-2021-30610.patch
+gooroom/CVE-2022-1855.patch
+gooroom/CVE-2022-1857.patch
+gooroom/CVE-2022-1861.patch
 
 cve/0001-Fix-use-after-free-in-SendTabToSelfSubMenuModel.patch
 cve/0002-Initialize-FFT-HashMap-with-all-possible-keys.patch

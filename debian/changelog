@@ -1,3 +1,12 @@
+gooroom-browser (2.10.0-1+grm2u6) stretch; urgency=medium
+
+  * Security patch
+    - CVE-2022-1861: Use after free in Sharing.
+    - CVE-2022-1857: Insufficient policy enforcement in File System API.
+    - CVE-2022-1855: Use after free in Messaging.
+
+ -- Choi J.S. <junsungc91@gmail.com>  Thu, 15 Sep 2022 16:52:00 +0900
+
 gooroom-browser (2.10.0-1+grm2u5) stretch; urgency=medium
 
   * Security patch
