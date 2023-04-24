@@ -8,6 +8,9 @@ sys.path.append("build/linux/unbundle")
 
 import replace_gn_files
 
+# Note: libvpx unbundling is currently broken with no easy fix;
+# see https://crbug.com/1307941
+
 keepers = ('ffmpeg', 'harfbuzz-ng', 'icu', 'libvpx',
     'absl_algorithm',
     'absl_base',
@@ -17,6 +20,8 @@ keepers = ('ffmpeg', 'harfbuzz-ng', 'icu', 'libvpx',
     'absl_flags',
     'absl_functional',
     'absl_hash',
+    'absl_log',
+    'absl_log_internal',
     'absl_memory',
     'absl_meta',
     'absl_numeric',
@@ -26,11 +31,11 @@ keepers = ('ffmpeg', 'harfbuzz-ng', 'icu', 'libvpx',
     'absl_synchronization',
     'absl_time',
     'absl_types',
+    'absl_utility',
     'crc32c',
     'dav1d',
     'libaom' ,
     'libavif' ,
-    'libjxl' ,
     'libyuv' ,
     'swiftshader-SPIRV-Headers' ,
     'swiftshader-SPIRV-Tools' ,

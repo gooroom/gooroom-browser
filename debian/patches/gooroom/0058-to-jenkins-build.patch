@@ -1,0 +1,38 @@
+From d15b32f37397e61b3ccf9449ae5a8a28ee0f3497 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 29 Mar 2022 14:21:45 +0900
+Subject: [PATCH 58/65] to jenkins build
+
+---
+ components/content_settings/core/browser/cookie_settings.cc | 2 --
+ content/browser/BUILD.gn                                    | 1 -
+ 2 files changed, 3 deletions(-)
+
+diff --git a/components/content_settings/core/browser/cookie_settings.cc b/components/content_settings/core/browser/cookie_settings.cc
+index 9900595d79b77..b4d3d0b9f38f9 100644
+--- a/components/content_settings/core/browser/cookie_settings.cc
++++ b/components/content_settings/core/browser/cookie_settings.cc
+@@ -267,8 +267,6 @@ bool CookieSettings::ShouldBlockThirdPartyCookiesInternal() {
+       pref_change_registrar_.prefs()->GetInteger(prefs::kCookieControlsMode));
+ 
+   switch (mode) {
+-    case CookieControlsMode::kOff:
+-      return true;
+     case CookieControlsMode::kIncognitoOnly:
+       return is_incognito_;
+     case CookieControlsMode::kOff:
+diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
+index cf40a55c06d9c..62a5aa48fdf02 100644
+--- a/content/browser/BUILD.gn
++++ b/content/browser/BUILD.gn
+@@ -294,7 +294,6 @@ source_set("browser") {
+   ]
+ 
+   public_deps = [
+-    "//components/policy/core/browser:internal",
+     "//base",
+     "//components/memory_pressure",
+     "//ipc",
+-- 
+2.30.2
+

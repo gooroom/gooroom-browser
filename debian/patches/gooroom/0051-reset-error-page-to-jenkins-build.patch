@@ -1,0 +1,42 @@
+From b365696e0d97d05b7367ccb917c6e2b258743450 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 10:17:40 +0900
+Subject: [PATCH 51/65] reset error page to jenkins build
+
+---
+ components/error_page/common/localized_error.cc | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/components/error_page/common/localized_error.cc b/components/error_page/common/localized_error.cc
+index 74f6b499a794a..9fc025a271069 100644
+--- a/components/error_page/common/localized_error.cc
++++ b/components/error_page/common/localized_error.cc
+@@ -40,7 +40,6 @@
+ #include "base/win/windows_version.h"
+ #endif
+ 
+-#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
+ 
+ namespace error_page {
+ 
+@@ -962,17 +961,9 @@ LocalizedError::PageState LocalizedError::GetPageState(
+     options.suggestions &= ~SUGGEST_CONTACT_ADMINISTRATOR;
+   }
+ 
+-#if defined(GOOROOM_BUILD)
+-//Change chrome:// to gooroom:// on error pages
+-  GURL changed_failed_url = GooroomURLRewrite::ChangeGooroomScheme(failed_url);
+-  std::u16string failed_url_string(url_formatter::FormatUrl(
+-      changed_failed_url, url_formatter::kFormatUrlOmitNothing,
+-      base::UnescapeRule::NORMAL, nullptr, nullptr, nullptr));
+-#else
+   std::u16string failed_url_string(url_formatter::FormatUrl(
+       failed_url, url_formatter::kFormatUrlOmitNothing,
+       base::UnescapeRule::NORMAL, nullptr, nullptr, nullptr));
+-#endif
+   // URLs are always LTR.
+   if (base::i18n::IsRTL())
+     base::i18n::WrapStringWithLTRFormatting(&failed_url_string);
+-- 
+2.30.2
+

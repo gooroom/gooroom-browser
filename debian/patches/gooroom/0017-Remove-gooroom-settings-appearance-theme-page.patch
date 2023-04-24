@@ -1,0 +1,25 @@
+From c252a5f73fedbfaee9a09b167d79a8e80760ac89 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:09:28 +0900
+Subject: [PATCH 17/65] Remove gooroom://settings appearance theme page
+
+---
+ .../resources/settings/appearance_page/appearance_page.html     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/chrome/browser/resources/settings/appearance_page/appearance_page.html b/chrome/browser/resources/settings/appearance_page/appearance_page.html
+index 25a708e9e18fd..e1906174d2a20 100644
+--- a/chrome/browser/resources/settings/appearance_page/appearance_page.html
++++ b/chrome/browser/resources/settings/appearance_page/appearance_page.html
+@@ -23,7 +23,7 @@
+         focus-config="[[focusConfig_]]">
+       <div route-path="default">
+         <div class="settings-row first" id="themeRow"
+-            hidden="[[!pageVisibility.setTheme]]">
++            hidden="[[!pageVisibility.setTheme]]" hidden>
+           <cr-link-row class="first" hidden="[[!pageVisibility.setTheme]]"
+               label="$i18n{themes}" sub-label="[[themeSublabel_]]"
+               button-aria-description="$i18n{opensInNewTab}"
+-- 
+2.30.2
+

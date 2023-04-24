@@ -1,0 +1,23 @@
+From 3f7aca0e9521bb2bc840c254458160baae97f0b7 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:10:53 +0900
+Subject: [PATCH 56/65] Fix wrong highlight on settings page
+
+---
+ ui/webui/resources/js/search_highlight_utils.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ui/webui/resources/js/search_highlight_utils.ts b/ui/webui/resources/js/search_highlight_utils.ts
+index 33302fcefc10d..ed89617abc2fe 100644
+--- a/ui/webui/resources/js/search_highlight_utils.ts
++++ b/ui/webui/resources/js/search_highlight_utils.ts
+@@ -169,5 +169,5 @@ export function createEmptySearchBubble(
+ }
+ 
+ export function stripDiacritics(text: string): string {
+-  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
++  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC');
+ }
+-- 
+2.30.2
+

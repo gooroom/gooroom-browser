@@ -1,17 +1,34 @@
-From 958e41d6206a321a2627e11d8c5db44d46180eeb Mon Sep 17 00:00:00 2001
+From 62a53f33bd8fdbcf4fdc2ef63a0ff6c445728c9e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:07:50 +0900
-Subject: [PATCH 02/66] add GooroomExtraPartsSecurity that will initialize
+Subject: [PATCH 02/65] add GooroomExtraPartsSecurity that will initialize
  GooroomBase via GooroomPrefs
 
 ---
+ gooroom/BUILD.gn                              |  4 +++
  gooroom/browser/BUILD.gn                      |  2 ++
- .../gooroom_browser_extra_parts_security.cc   | 36 +++++++++++++++++++
+ .../gooroom_browser_extra_parts_security.cc   | 35 +++++++++++++++++++
  .../gooroom_browser_extra_parts_security.h    | 27 ++++++++++++++
- 3 files changed, 65 insertions(+)
+ .../browser/gooroom_content_browser_client.cc |  5 ++-
+ 5 files changed, 72 insertions(+), 1 deletion(-)
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.cc
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.h
 
+diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
+index 744052668b1c6..89bf2a517ceb7 100644
+--- a/gooroom/BUILD.gn
++++ b/gooroom/BUILD.gn
+@@ -221,6 +221,10 @@ if (!is_android && !is_mac) {
+         "browser/gooroom_content_browser_client.h",
+         "browser/gooroom_content_client.cc",
+         "browser/gooroom_content_client.h",
++
++         # for commit #3
++        "browser/gooroom_browser_extra_parts_security.cc",
++        "browser/gooroom_browser_extra_parts_security.h",
+       ]
+     }
+   }
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
 index 811fdd7c1d891..309bd48c7d9b8 100644
 --- a/gooroom/browser/BUILD.gn
@@ -27,10 +44,10 @@ index 811fdd7c1d891..309bd48c7d9b8 100644
      "gooroom_content_client.cc",
 diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.cc b/gooroom/browser/gooroom_browser_extra_parts_security.cc
 new file mode 100644
-index 0000000000000..843978e9f8fb5
+index 0000000000000..188d3b8daafba
 --- /dev/null
 +++ b/gooroom/browser/gooroom_browser_extra_parts_security.cc
-@@ -0,0 +1,36 @@
+@@ -0,0 +1,35 @@
 +// Copyright (c) 2013 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -39,7 +56,6 @@ index 0000000000000..843978e9f8fb5
 +
 +#include "base/command_line.h"
 +#include "base/files/file_path.h"
-+#include "base/threading/thread_task_runner_handle.h"
 +#include "chrome/browser/profiles/profile.h"
 +#include "chrome/browser/profiles/profile_manager.h"
 +#include "chrome/browser/browser_process.h"
@@ -100,6 +116,36 @@ index 0000000000000..b53088fd8c7c7
 +};
 +
 +#endif  // GOOROOM_BROWSER_EXTRA_PARTS_SECURITY_H_
+diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
+index 278ae535b5d7d..3b6cf4d785bd1 100644
+--- a/gooroom/browser/gooroom_content_browser_client.cc
++++ b/gooroom/browser/gooroom_content_browser_client.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "gooroom/browser/gooroom_content_browser_client.h"
++#include "gooroom/browser/gooroom_browser_extra_parts_security.h"
+ 
+ #include <algorithm>
+ #include <iterator>
+@@ -31,7 +32,6 @@
+ #include "base/strings/string_split.h"
+ #include "base/strings/string_util.h"
+ #include "base/strings/stringprintf.h"
+-#include "base/task/sequenced_task_runner.h"
+ #include "base/types/expected.h"
+ #include "base/values.h"
+ #include "build/build_config.h"
+@@ -851,6 +851,9 @@ GooroomContentBrowserClient::CreateBrowserMainParts(bool is_integration_test) {
+   main_parts->AddParts(
+       std::make_unique<ChromeBrowserMainExtraPartsOptimizationGuide>());
+ 
++  main_parts->AddParts(
++      std::make_unique<GooroomBrowserExtraPartsSecurity>());
++
+   return main_parts;
+ }
+ 
 -- 
 2.30.2
 

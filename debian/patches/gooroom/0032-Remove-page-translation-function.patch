@@ -1,0 +1,33 @@
+From 0553a388cc16ae4c18d737d4503ab6cff7aa1c01 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 24 Jul 2020 13:43:23 +0900
+Subject: [PATCH 32/65] * Remove page-translation function.
+
+---
+ .../browser/renderer_context_menu/render_view_context_menu.cc  | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+index 320f0cbcd14f9..20f7a22da02a4 100644
+--- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
++++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+@@ -1836,6 +1836,8 @@ void RenderViewContextMenu::AppendPageItems() {
+   if (has_sharing_menu_items)
+     menu_model_.AddSeparator(ui::NORMAL_SEPARATOR);
+ 
++//Gooroom-browser unsupport Page-translation
++#if !defined(GOOROOM_BUILD)
+   if (CanTranslate(/*menu_logging=*/true)) {
+     menu_model_.AddItem(
+         IDC_CONTENT_CONTEXT_TRANSLATE,
+@@ -1843,6 +1845,7 @@ void RenderViewContextMenu::AppendPageItems() {
+             IDS_CONTENT_CONTEXT_TRANSLATE,
+             GetTargetLanguageDisplayName(/*is_full_page_translation=*/true)));
+   }
++#endif
+ }
+ 
+ void RenderViewContextMenu::AppendExitFullscreenItem() {
+-- 
+2.30.2
+

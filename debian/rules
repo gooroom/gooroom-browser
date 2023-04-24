@@ -6,6 +6,9 @@ export DH_VERBOSE=1
 # enable all build hardening flags
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
+# disable lto flags, as they are for gcc, not clang
+export DEB_BUILD_MAINT_OPTIONS+=optimize=-lto
+
 # indicate that binary targets do not require root
 export DEB_RULES_REQUIRES_ROOT=no
 
@@ -15,12 +18,13 @@ export NM=nm
 export CC=clang-13
 export CXX=clang++-13
 
-# more verbose linker output
-export LDFLAGS+=-Wl,--stats
-
 # initial flags from dpkg-buildflags
 export DEB_CXXFLAGS_MAINT_STRIP=-g
 export CXXFLAGS=$(shell dpkg-buildflags --get CXXFLAGS)
+export LDFLAGS=$(shell dpkg-buildflags --get LDFLAGS)
+
+# more verbose linker output
+export LDFLAGS+=-Wl,--stats
 
 # extra flags to reduce warnings that aren't very useful
 export CXXFLAGS+=-Wno-conversion \
@@ -59,7 +63,6 @@ endif
 defines+=is_debug=false \
          use_goma=false \
          use_sysroot=false \
-         use_allocator=\"none\" \
          use_libjpeg_turbo=true \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
@@ -77,6 +80,7 @@ defines+=is_debug=false \
          build_angle_perftests=false \
          enable_js_type_check=false \
          treat_warnings_as_errors=false \
+         use_qt=false \
          is_cfi=false \
          use_thin_lto=false \
          chrome_pgo_phase=0 \
@@ -121,7 +125,7 @@ override_dh_auto_configure:
 	./debian/scripts/unbundle
 
 override_dh_auto_build-arch:
-	git apply debian/patches/gooroom/0009-Put-gooroom-logo-into-the-browser.patch
+	git apply debian/patches/gooroom/0008-Put-gooroom-logo-into-the-browser.patch
 	gn gen out/Release --args="$(defines)"
 	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox
 	cp out/Release/chrome_sandbox out/Release/chrome-sandbox

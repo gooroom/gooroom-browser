@@ -1,7 +1,7 @@
-From c20a99fcf9555a0dd5596fccb947ee058cc90412 Mon Sep 17 00:00:00 2001
+From a4a4eaad3227f96a345dc6f41216206c8e25615a Mon Sep 17 00:00:00 2001
 From: hnc-cjs <cjs@hancom>
 Date: Wed, 14 Sep 2022 17:11:17 +0900
-Subject: [PATCH 59/66] Revert "pruning settings pages(chrome://settings)"
+Subject: [PATCH 59/65] Revert "pruning settings pages(chrome://settings)"
 
 This reverts commit 499678933d474530995d4daabf214ea9a240c0a4.
 ---
@@ -11,10 +11,10 @@ This reverts commit 499678933d474530995d4daabf214ea9a240c0a4.
  3 files changed, 63 insertions(+)
 
 diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
-index 25a78c1c8db8e..f8b2415164182 100644
+index 3f3893ba42cda..fb37ee07e3dcd 100644
 --- a/chrome/browser/resources/settings/about_page/about_page.html
 +++ b/chrome/browser/resources/settings/about_page/about_page.html
-@@ -131,6 +131,8 @@
+@@ -120,6 +120,8 @@
          </div>
        </template>
  </if>
@@ -24,13 +24,13 @@ index 25a78c1c8db8e..f8b2415164182 100644
        <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueTap_"
            hidden="[[!prefs.feedback_allowed.value]]"
 diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
-index 2742d220bc5d3..931f845240388 100644
+index 866abbe49643b..5169e0c08d45a 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
-@@ -37,6 +37,46 @@
-           </div>
+@@ -16,6 +16,46 @@
+           <settings-reset-profile-banner on-close="onResetProfileBannerClosed_">
+           </settings-reset-profile-banner>
          </template>
- </if>
 +        <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
 +          <settings-section page-title="$i18n{peoplePageTitle}"
 +              section="people">
@@ -74,7 +74,7 @@ index 2742d220bc5d3..931f845240388 100644
          <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
              restamp>
            <settings-section page-title="$i18n{appearancePageTitle}"
-@@ -125,6 +165,13 @@
+@@ -115,6 +155,13 @@
                  </settings-downloads-page>
                </settings-section>
              </template>
@@ -89,37 +89,37 @@ index 2742d220bc5d3..931f845240388 100644
              <settings-section page-title="$i18n{systemPageTitle}"
                  section="system">
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-index e454ed358d256..8278812f6a859 100644
+index 53c5c8978074a..2e884dabe7414 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
 +++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
-@@ -58,6 +58,13 @@
-         <iron-selector id="menu" selectable="a:not(#extensionsLink)"
-             attr-for-selected="href" on-iron-activate="onSelectorActivate_"
-             on-click="onLinkClick_" selected-attribute="selected">
-+          <a role="menuitem"
-+              id="people" href="/people" hidden="[[!pageVisibility.people]]"
-+              class="cr-nav-menu-item">
-+            <iron-icon icon="cr:person"></iron-icon>
-+            $i18n{peoplePageTitle}
-+            <paper-ripple></paper-ripple>
-+          </a>
-           <a role="menuitem" id="autofill" href="/autofill"
-               hidden="[[!pageVisibility.autofill]]"
-               class="cr-nav-menu-item">
-@@ -115,6 +122,13 @@
-             $i18n{downloadsPageTitle}
-             <paper-ripple></paper-ripple>
-           </a>
-+          <a role="menuitem" id="accessibility" href="/accessibility"
-+              class="cr-nav-menu-item"
-+              hidden="[[!pageVisibility.a11y]]">
-+            <iron-icon icon="settings:accessibility"></iron-icon>
-+            $i18n{a11yPageTitle}
-+            <paper-ripple></paper-ripple>
-+          </a>
-     <if expr="not chromeos_ash">
-           <a role="menuitem" id="system" href="/system" class="cr-nav-menu-item"
-               hidden="[[!pageVisibility.system]]">
+@@ -57,6 +57,13 @@
+       <cr-menu-selector id="menu" selectable="a:not(#extensionsLink)"
+           attr-for-selected="href" on-iron-activate="onSelectorActivate_"
+           on-click="onLinkClick_" selected-attribute="selected">
++        <a role="menuitem"
++            id="people" href="/people" hidden="[[!pageVisibility.people]]"
++            class="cr-nav-menu-item">
++          <iron-icon icon="cr:person"></iron-icon>
++          $i18n{peoplePageTitle}
++          <paper-ripple></paper-ripple>
++        </a>
+         <a role="menuitem" id="autofill" href="/autofill"
+             hidden="[[!pageVisibility.autofill]]"
+             class="cr-nav-menu-item">
+@@ -124,6 +131,13 @@
+           $i18n{downloadsPageTitle}
+           <paper-ripple></paper-ripple>
+         </a>
++        <a role="menuitem" id="accessibility" href="/accessibility"
++            class="cr-nav-menu-item"
++            hidden="[[!pageVisibility.a11y]]">
++          <iron-icon icon="settings:accessibility"></iron-icon>
++          $i18n{a11yPageTitle}
++          <paper-ripple></paper-ripple>
++        </a>
+   <if expr="not chromeos_ash">
+         <a role="menuitem" id="system" href="/system" class="cr-nav-menu-item"
+             hidden="[[!pageVisibility.system]]">
 -- 
 2.30.2
 

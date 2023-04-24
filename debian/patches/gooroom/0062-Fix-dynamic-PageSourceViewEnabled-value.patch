@@ -1,0 +1,26 @@
+From 4ce6dd6a31c1328b8f190753c4190d3b63c6d270 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 8 Jun 2022 14:59:24 +0900
+Subject: [PATCH 62/65] Fix dynamic PageSourceViewEnabled value
+
+---
+ components/policy/core/browser/configuration_policy_handler.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
+index 7306a4663aead..5f2b4d2c60266 100644
+--- a/components/policy/core/browser/configuration_policy_handler.cc
++++ b/components/policy/core/browser/configuration_policy_handler.cc
+@@ -408,6 +408,9 @@ void PageSourceViewPolicyHandler::ProcessPolicy(const policy::PolicyMap& policie
+   if(policies.GetValueUnsafe(policy::key::kPageSourceViewEnabled))
+     if(!policies.GetValueUnsafe(policy::key::kPageSourceViewEnabled)->GetBool())
+       PageSourceViewPolicyHandler::enabled = false;
++    else
++      PageSourceViewPolicyHandler::enabled = true;
++
+   return;
+ }
+ 
+-- 
+2.30.2
+
