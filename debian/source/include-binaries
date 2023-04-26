@@ -1,3 +1,4 @@
 debian/setups/calculator.crx
 debian/setups/note.crx
 debian/setups/icudtl.dat
+debian/setups/chrome_crashpad_handler

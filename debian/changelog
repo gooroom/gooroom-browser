@@ -1,3 +1,9 @@
+gooroom-browser (3.5.0-1+grm3u2) stretch; urgency=medium
+
+  * Add chrome_crashpad_handler module
+
+ -- Choi J.S. <junsungc91@gmail.com>  Wed, 26 Apr 2023 13:24:00 +0900
+
 gooroom-browser (3.5.0-1+grm3u1) stretch; urgency=medium
 
   * Init gooroom-browser 3.5.0-1+grm3u1
