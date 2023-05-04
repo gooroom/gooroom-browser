@@ -1,3 +1,12 @@
+gooroom-browser (3.5.0-1+grm3u3) stretch; urgency=medium
+
+  * Fix bugs
+    - 5381 : Remove 'New Incognito Window' on menu button
+    - 5383 : Bookmark manager crash by Incognito mode
+    - 5384 : Remove Incognito mode in bookmark manager page
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 04 May 2023 15:09:00 +0900
+
 gooroom-browser (3.5.0-1+grm3u2) stretch; urgency=medium
 
   * Add chrome_crashpad_handler module

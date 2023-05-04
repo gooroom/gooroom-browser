@@ -167,4 +167,6 @@ gooroom/0062-Fix-dynamic-PageSourceViewEnabled-value.patch
 gooroom/0063-Fix-trust-untrust-changing-bug.patch
 gooroom/0064-Revert-pruning-extensions-pages-chrome-extensions.patch
 gooroom/0065-Change-Chromium-strings-to-Gooroom.patch
-
+gooroom/Bug-5381-fix-remove-New-Incognito-Window-on-menu-but.patch
+gooroom/Bug-5383-fix-bookmark-manager-crash.patch
+gooroom/Bug-5384-fix-remove-secret-mode-in-bookmark-manager.patch
