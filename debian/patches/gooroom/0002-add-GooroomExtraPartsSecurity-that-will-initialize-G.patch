@@ -1,4 +1,4 @@
-From 62a53f33bd8fdbcf4fdc2ef63a0ff6c445728c9e Mon Sep 17 00:00:00 2001
+From b8afad9afbd6f839e6c732a71370ae1976e5d4d0 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:07:50 +0900
 Subject: [PATCH 02/65] add GooroomExtraPartsSecurity that will initialize
@@ -15,10 +15,10 @@ Subject: [PATCH 02/65] add GooroomExtraPartsSecurity that will initialize
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 744052668b1c6..89bf2a517ceb7 100644
+index 2c35a6c10baeb..435c6f25671ba 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -221,6 +221,10 @@ if (!is_android && !is_mac) {
+@@ -225,6 +225,10 @@ if (!is_android && !is_mac) {
          "browser/gooroom_content_browser_client.h",
          "browser/gooroom_content_client.cc",
          "browser/gooroom_content_client.h",
@@ -117,7 +117,7 @@ index 0000000000000..b53088fd8c7c7
 +
 +#endif  // GOOROOM_BROWSER_EXTRA_PARTS_SECURITY_H_
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
-index 278ae535b5d7d..3b6cf4d785bd1 100644
+index 470b83bd03f0f..7e09024442f95 100644
 --- a/gooroom/browser/gooroom_content_browser_client.cc
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
 @@ -3,6 +3,7 @@
@@ -126,9 +126,9 @@ index 278ae535b5d7d..3b6cf4d785bd1 100644
  #include "gooroom/browser/gooroom_content_browser_client.h"
 +#include "gooroom/browser/gooroom_browser_extra_parts_security.h"
  
- #include <algorithm>
  #include <iterator>
-@@ -31,7 +32,6 @@
+ #include <map>
+@@ -36,7 +37,6 @@
  #include "base/strings/string_split.h"
  #include "base/strings/string_util.h"
  #include "base/strings/stringprintf.h"
@@ -136,7 +136,7 @@ index 278ae535b5d7d..3b6cf4d785bd1 100644
  #include "base/types/expected.h"
  #include "base/values.h"
  #include "build/build_config.h"
-@@ -851,6 +851,9 @@ GooroomContentBrowserClient::CreateBrowserMainParts(bool is_integration_test) {
+@@ -890,6 +890,9 @@ GooroomContentBrowserClient::CreateBrowserMainParts(bool is_integration_test) {
    main_parts->AddParts(
        std::make_unique<ChromeBrowserMainExtraPartsOptimizationGuide>());
  
@@ -147,5 +147,5 @@ index 278ae535b5d7d..3b6cf4d785bd1 100644
  }
  
 -- 
-2.30.2
+2.39.2
 

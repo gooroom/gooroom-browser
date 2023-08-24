@@ -1,4 +1,4 @@
-From d7d941dd2f42b7554e18311d047dad8e6e34b514 Mon Sep 17 00:00:00 2001
+From 3d80d07e91265185a5456739e86ec8d257196138 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:33:29 +0900
 Subject: [PATCH 07/65] disable prerender
@@ -8,10 +8,10 @@ Subject: [PATCH 07/65] disable prerender
  1 file changed, 2 insertions(+)
 
 diff --git a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
-index bfd723760c6fb..0397624c75cc6 100644
+index 90f88731be27b..3877b6d119fd3 100644
 --- a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
 +++ b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
-@@ -369,10 +369,12 @@ void ChromeOmniboxClient::OnTextChanged(const AutocompleteMatch& current_match,
+@@ -357,10 +357,12 @@ void ChromeOmniboxClient::OnTextChanged(const AutocompleteMatch& current_match,
        // (http://crbug.com/105689)
        if (!CurrentPageExists())
          break;
@@ -25,5 +25,5 @@ index bfd723760c6fb..0397624c75cc6 100644
      case AutocompleteActionPredictor::ACTION_PRECONNECT:
        DoPreconnect(current_match);
 -- 
-2.30.2
+2.39.2
 

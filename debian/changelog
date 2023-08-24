@@ -1,25 +1,391 @@
-gooroom-browser (3.5.0-1+grm3u3) stretch; urgency=medium
+gooroom-browser (4.0.1-1+grm4u1) stretch; urgency=medium
 
-  * Fix bugs
-    - 5381 : Remove 'New Incognito Window' on menu button
-    - 5383 : Bookmark manager crash by Incognito mode
-    - 5384 : Remove Incognito mode in bookmark manager page
+  * Init 4.0.1-1+grm4u1
 
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 04 May 2023 15:09:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Tue, 22 Aug 2023 15:09:00 +0900
 
-gooroom-browser (3.5.0-1+grm3u2) stretch; urgency=medium
+chromium (115.0.5790.170-1~deb12u1) bookworm-security; urgency=high
 
-  * Add chrome_crashpad_handler module
+  * New upstream security release.
+    - CVE-2023-4068: Type Confusion in V8. Reported by Jerry.
+    - CVE-2023-4069: Type Confusion in V8.
+      Reported by Man Yue Mo of GitHub Security Lab.
+    - CVE-2023-4070: Type Confusion in V8. Reported by Jerry.
+    - CVE-2023-4071: Heap buffer overflow in Visuals.
+      Reported by Guang and Weipeng Jiang of VRI.
+    - CVE-2023-4072: Out of bounds read and write in WebGL.
+      Reported by Apple Security Engineering and Architecture (SEAR).
+    - CVE-2023-4073: Out of bounds memory access in ANGLE.
+      Reported by Jaehun Jeong(@n3sk) of Theori.
+    - CVE-2023-4074: Use after free in Blink Task Scheduling.
+      Reported by Anonymous.
+    - CVE-2023-4075: Use after free in Cast.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2023-4076: Use after free in WebRTC.
+      Reported by Natalie Silvanovich of Google Project Zero.
+    - CVE-2023-4077: Insufficient data validation in Extensions.
+      Reported by Anonymous.
+    - CVE-2023-4078: Inappropriate implementation in Extensions.
+      Reported by Anonymous.
+  * debian/patches/disable/driver-chrome-path.patch: refresh for minor changes.
 
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 26 Apr 2023 13:24:00 +0900
+ -- Andres Salomon <dilinger@debian.org>  Wed, 02 Aug 2023 19:26:52 -0400
 
-gooroom-browser (3.5.0-1+grm3u1) stretch; urgency=medium
+chromium (115.0.5790.102-2) unstable; urgency=high
 
-  * Init gooroom-browser 3.5.0-1+grm3u1
+  * debian/patches/upstream/contains.patch:Yet Another v4l2 ARM build fix.
 
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 21 Apr 2023 13:48:00 +0900
+ -- Andres Salomon <dilinger@debian.org>  Tue, 25 Jul 2023 18:25:50 -0400
 
-chromium (111.0.5563.110-1~deb11u1) bullseye-security; urgency=high
+chromium (115.0.5790.102-1) unstable; urgency=high
+
+  * New upstream stable release.
+  * debian/patches/upstream/statelessV4L2.patch: add v4l2 build fix.
+
+ -- Andres Salomon <dilinger@debian.org>  Fri, 21 Jul 2023 02:36:46 -0400
+
+chromium (115.0.5790.98-2) unstable; urgency=high
+
+  * Add build fix for gcc13 on arm64.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 19 Jul 2023 22:23:08 -0400
+
+chromium (115.0.5790.98-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream release
+    - CVE-2023-3727: Use after free in WebRTC.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2023-3728: Use after free in WebRTC.
+      Reported by Zhenghang Xiao (@Kipreyyy).
+    - CVE-2023-3730: Use after free in Tab Groups. Reported by @ginggilBesel.
+    - CVE-2023-3732: Out of bounds memory access in Mojo.
+      Reported by Mark Brand of Google Project Zero.
+    - CVE-2023-3733: Inappropriate implementation in WebApp Installs.
+      Reported by Ahmed ElMasry.
+    - CVE-2023-3734: Inappropriate implementation in Picture In Picture.
+      Reported by Thomas Orlita.
+    - CVE-2023-3735: Inappropriate implementation in Web API Permission Prompts.
+      Reported by Ahmed ElMasry.
+    - CVE-2023-3736: Inappropriate implementation in Custom Tabs.
+      Reported by Philipp Beer (TU Wien).
+    - CVE-2023-3737: Inappropriate implementation in Notifications.
+      Reported by Narendra Bhati of Suma Soft Pvt. Ltd. Pune (India) .
+    - CVE-2023-3738: Inappropriate implementation in Autofill.
+      Reported by Hafiizh.
+    - CVE-2023-3740: Insufficient validation of untrusted input in Themes.
+      Reported by Fardeen Siddiqui.
+
+  * d/rules:
+    - use system rustc installation
+  * Add build-dep on rustc.
+  * d/patches:
+    - debianization/master-preferences.patch: upstream variable renamed
+    - disable/catapult.patch: upstream changes required reworking
+    - disable/tests.patch: remove new upstream puffin test data file
+      dependencies
+    - disable/unrar.patch: upstream changes required reworking
+    - fixes/cmath.patch: add missing header include for skia
+    - fixes/vector.patch: add missing header include for net
+    - upstream/sizet.patch: drop, merged upstream
+    - ppc64le/fixes/fix-partition-alloc-compile.patch: refresh for upstream
+      changes
+    - ppc64le/third_party/0001-Add-PPC64-support-for-boringssl.patch: refresh
+      for upstream changes
+    - ppc64le/third_party/0002-third_party-libvpx-Remove-bad-ppc64-config.patch:
+      refresh for upstream changes
+    - ppc64le/third_party/0003-third_party-libvpx-Add-ppc64-generated-config.patch:
+      regenerate configs from upstream source
+    - ppc64le/third_party/skia-vsx-instructions.patch: refresh for upstream
+      changes
+
+  [ Andres Salomon ]
+    - fixes/clang-and-gcc11.patch: drop, (a different version) merged upstream.
+    - bookworm/typename.patch: drop parts that were merged upstream, and add
+      new build fixes.
+    - bookworm/structured-binding-scope-bug.patch: drop some of it, add new bits
+    - bullseye/constexpr.patch: refresh for string -> StringPiece change.
+    - bullseye/stringpiece.patch: add to work around older libre2.
+    - bullseye/default-equality-op.patch: add more workarounds for older
+      compilers
+    - fixes/brandversion-construct.patch: add to fix build failure.
+    - fixes/SkColor4f-init.patch: another missing struct constructor fix.
+    - fixes/cookieresult.patch: another struct ctor build fix.
+    - ppc64le/third_party/0001-Add-PPC64-support-for-boringssl.patch: refresh.
+    - ppc64le/libaom/0001-Add-ppc64-target-to-libaom.patch: refresh.
+    - ppc64le/third_party/0002-third-party-boringssl-add-generated-files.patch:
+      refresh.
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Tue, 18 Jul 2023 17:50:00 -0500
+
+chromium (114.0.5735.198-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-3420: Type Confusion in V8.
+      Reported by Man Yue Mo of GitHub Security Lab.
+    - CVE-2023-3421: Use after free in Media.
+      Reported by Piotr Bania of Cisco Talos.
+    - CVE-2023-3422: Use after free in Guest View. Reported by asnine.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 27 Jun 2023 02:21:12 -0400
+
+chromium (114.0.5735.133-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-3214: Use after free in Autofill payments.
+      Reported by Rong Jian of VRI.
+    - CVE-2023-3215: Use after free in WebRTC. Reported by asnine.
+    - CVE-2023-3216: Type Confusion in V8.
+      Reported by 5n1p3r0010 from Topsec ChiXiao Lab.
+    - CVE-2023-3217: Use after free in WebXR.
+      Reported by Sergei Glazunov of Google Project Zero.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 13 Jun 2023 13:31:55 -0400
+
+chromium (114.0.5735.106-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream stable release.
+    - CVE-2023-3079: Type Confusion in V8.
+      Reported by Clément Lecigne of Google's Threat Analysis Group.
+  * d/patches:
+    - ppc64le/third_party/skia-vsx-instructions.patch: rewrite for POWER8
+      compatibility, fix graphics corruption, and enable in builds
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Mon, 05 Jun 2023 21:38:00 -0500
+
+chromium (114.0.5735.90-2~deb12u1) bookworm-security; urgency=high
+
+  * d/patches:
+    - Add upstream/feature-list-static.patch
+      This patch fixes an out of scope array access that can lead to crashes at startup
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Wed, 31 May 2023 12:36:00 -0500
+
+chromium (114.0.5735.90-1) unstable; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream stable release.
+    - CVE-2023-2929: Out of bounds write in Swiftshader.
+      Reported by Jaehun Jeong(@n3sk) of Theori.
+    - CVE-2023-2930: Use after free in Extensions. Reported by asnine.
+    - CVE-2023-2931: Use after free in PDF.
+      Reported by Huyna at Viettel Cyber Security.
+    - CVE-2023-2932: Use after free in PDF.
+      Reported by Huyna at Viettel Cyber Security.
+    - CVE-2023-2933: Use after free in PDF. Reported by
+      Quang Nguyễn (@quangnh89) of Viettel Cyber Security and Nguyen Phuong.
+    - CVE-2023-2934: Out of bounds memory access in Mojo.
+      Reported by Mark Brand of Google Project Zero.
+    - CVE-2023-2935: Type Confusion in V8.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2023-2936: Type Confusion in V8.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2023-2937: Inappropriate implementation in Picture In Picture.
+      Reported by NDevTK.
+    - CVE-2023-2938: Inappropriate implementation in Picture In Picture.
+      Reported by Alesandro Ortiz.
+    - CVE-2023-2939: Insufficient data validation in Installer.
+      Reported by ycdxsb from VARAS@IIE.
+    - CVE-2023-2940: Inappropriate implementation in Downloads.
+      Reported by Axel Chong.
+    - CVE-2023-2941: Inappropriate implementation in Extensions API.
+      Reported by Jasper Rebane.
+  * d/copyright: properly delete some android & chromeos stuff.
+  * d/patches:
+    - fixes/clang-and-gcc11.patch: refresh.
+    - upstream/webview-cstr.patch: drop, merged upstream.
+    - upstream/monostate.patch: drop, merged upstream.
+    - disable/unrar.patch: additional upstream changes required more reworking.
+    - disable/android.patch: refresh, & add one more build fix.
+    - disable/catapult.patch: refresh.
+    - disable/swiftshader.patch: refresh.
+    - disable/angle-perftest.patch: refresh.
+    - system/jpeg.patch: refresh.
+    - upstream/mojo.patch: regenerate from git.
+    - upstream/sizet.patch: add an upstream build fix.
+    - bookworm/typename.patch: include more build fixes.
+    - bookworm/lambda-bug.patch -> bookworm/structured-binding-scope-bug.patch,
+      and add another place it's happening (turns out it's not just lambdas).
+  * Add build-dep on libevdev-dev - now required by upstream.
+
+  [ Timothy Pearson ]
+   * d/patches:
+     - Refresh ppc64le patches
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 31 May 2023 03:06:35 -0400
+
+chromium (113.0.5672.126-1) unstable; urgency=low
+
+  * New upstream security release.
+    - CVE-2023-2721: Use after free in Navigation.
+      Reported by Guang Gong of Alpha Lab, Qihoo 360.
+    - CVE-2023-2722: Use after free in Autofill UI.
+      Reported by Rong Jian of VRI.
+    - CVE-2023-2723: Use after free in DevTools. Reported by asnine.
+    - CVE-2023-2724: Type Confusion in V8.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2023-2725: Use after free in Guest View. Reported by asnine.
+    - CVE-2023-2726: Inappropriate implementation in WebApp Installs.
+      Reported by Ahmed ElMasry.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 16 May 2023 16:25:03 -0400
+
+chromium (113.0.5672.63-2) unstable; urgency=low
+
+  * d/patches:
+    - Set baseline ppc64 CPU back to POWER ISA 2.07 (POWER8)
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Wed, 03 May 2023 10:47:00 -0500
+
+chromium (113.0.5672.63-1) unstable; urgency=high
+
+  * New upstream stable release.
+    - CVE-2023-2459: Inappropriate implementation in Prompts.
+      Reported by Rong Jian of VRI.
+    - CVE-2023-2460: Insufficient validation of untrusted input in Extensions.
+      Reported by Martin Bajanik, Fingerprint[.]com.
+    - CVE-2023-2461: Use after free in OS Inputs. Reported by @ginggilBesel.
+    - CVE-2023-2462: Inappropriate implementation in Prompts.
+      Reported by Alesandro Ortiz.
+    - CVE-2023-2463: Inappropriate implementation in Full Screen Mode.
+      Reported by Irvan Kurniawan (sourc7).
+    - CVE-2023-2464: Inappropriate implementation in PictureInPicture.
+      Reported by Thomas Orlita.
+    - CVE-2023-2465: Inappropriate implementation in CORS.
+      Reported by @kunte_ctf.
+    - CVE-2023-2466: Inappropriate implementation in Prompts.
+      Reported by Jasper Rebane (popstonia).
+    - CVE-2023-2467: Inappropriate implementation in Prompts.
+      Reported by Thomas Orlita.
+    - CVE-2023-2468: Inappropriate implementation in PictureInPicture.
+      Reported by Alesandro Ortiz.
+
+  [ Andres Salomon]
+   * Remove Michel from Uploaders.
+   * Build against libopenh264-dev (closes: #1031352).
+   * d/copyright:
+     - drop fuchsia*: entirely different OS.
+     - drop chrome/build: 200MB of PGO optimizations for official chrome builds.
+     - drop third_party/updater: upstream included update binary.
+     - re-add part of chrome/browser/resources/chromeos/ and chrome/android/ to
+       fix build errors.
+   * d/patches:
+     - debianization/master-preferences.patch: check for initial_preferences or
+       master_preferences, rather than just for the latter (closes: #992178).
+     - disable/unrar.patch: complete rewrite for upstream's nested archive changes.
+     - disable/catapult.patch: refresh.
+     - upstream/webview-cstr.patch: add simple build fix from upstream.
+     - upstream/monostate.patch: add simple build fix from upstream.
+     - bookworm/clang-attribs.patch: build fix for clang-14 to keep from
+       generating hundreds of warnings per compilation unit.
+     - bookworm/typename.patch: add another build fix for missing typename.
+     - bookworm/lamba-bug.patch: add to work around compiler bug (clang < 16).
+     - bullseye/constexpr.patch: work around build failure w/ bullseye's
+       clang/libstdc++.
+     - disable/openh264.patch -> bullseye/openh264.patch, and stop using it
+       for sid & bookworm.
+
+  [ Timothy Pearson ]
+   * d/patches:
+     - Set baseline ppc64 CPU to POWER ISA 3.0 (OpenPOWER, POWER9)
+     - Enable VSX acceleration in Skia
+     - Refresh ppc64le/third_party/0002-third_party-libvpx-Remove-bad-ppc64-config.patch
+     - Add fixes for new Highway library on ppc64
+     - Suppress harmless warning messages from compiler during ppc64 builds
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Wed, 03 May 2023 00:42:00 -0500
+
+chromium (112.0.5615.138-1) unstable; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-2133: Out of bounds memory access in Service Worker API.
+      Reported by Rong Jian of VRI.
+    - CVE-2023-2134: Out of bounds memory access in Service Worker API.
+      Reported by Rong Jian of VRI.
+    - CVE-2023-2135: Use after free in DevTools.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2023-2136: Integer overflow in Skia.
+      Reported by Clément Lecigne of Google's Threat Analysis Group.
+    - CVE-2023-2137: Heap buffer overflow in sqlite.
+      Reported by Nan Wang(@eternalsakura13) and Guang Gong of 360 Vulnerability Research Institute
+  * d/patches:
+    - upstream/protobuf.patch: drop, merged upstream.
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Tue, 18 Apr 2023 22:00:00 -0500
+
+chromium (112.0.5615.121-1) unstable; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-2033: Type Confusion in V8.
+      Reported by Clément Lecigne of Google's Threat Analysis Group.
+  * Build-dep on rollup.
+  * Delete the bundled acorn & rollup node modules, and build using the
+    debian packaged version of those and other modules.
+  * (Re-)enable optimize_webui.
+  * Add d/patches/upstream/protobuf.patch to fix FTBFS due to race.
+
+ -- Andres Salomon <dilinger@debian.org>  Sat, 15 Apr 2023 00:24:54 -0400
+
+chromium (112.0.5615.49-2) unstable; urgency=high
+
+  [ Andres Salomon ]
+  * Add d/patches/i386/angle-lockfree.patch to fix FTBFS on i386. Also create
+    & populate that d/patches/i386/ directory, since we now have multiple
+    i386 patches.
+  * Remove enable_js_type_check=false build arg; upstream dropped it.
+
+  [ Timothy Pearson ]
+   * d/patches:   
+    - Re-add boringssl support for ppc64le (dropped by Google upstream)
+    - Add ppc64le detection to partition allocator build
+    - Regenerate 0003-third_party-ffmpeg-Add-ppc64-generated-config.patch
+
+ -- Andres Salomon <dilinger@debian.org>  Fri, 07 Apr 2023 03:40:50 -0400
+
+chromium (112.0.5615.49-1) unstable; urgency=high
+
+  * New upstream stable release.
+    - CVE-2023-1810: Heap buffer overflow in Visuals.
+      Reported by Weipeng Jiang (@Krace) of VRI.
+    - CVE-2023-1811: Use after free in Frames. Reported by Thomas Orlita.
+    - CVE-2023-1812: Out of bounds memory access in DOM Bindings.
+      Reported by Shijiang Yu.
+    - CVE-2023-1813: Inappropriate implementation in Extensions.
+      Reported by Axel Chong.
+    - CVE-2023-1814: Insufficient validation of untrusted input in
+      Safe Browsing. Reported by Young Min Kim (@ylemkimon),
+      CompSec Lab at Seoul National University.
+    - CVE-2023-1815: Use after free in Networking APIs. Reported by DDV_UA.
+    - CVE-2023-1816: Incorrect security UI in Picture In Picture.
+      Reported by NDevTK.
+    - CVE-2023-1817: Insufficient policy enforcement in Intents.
+      Reported by Axel Chong.
+    - CVE-2023-1818: Use after free in Vulkan. Reported by Abdulrahman
+      Alqabandi, Microsoft Browser Vulnerability Research, Eric Lawrence,
+      Microsoft, Patrick Walker (@HomeSen), & Kirtikumar Anandrao Ramchandani.
+    - CVE-2023-1819: Out of bounds read in Accessibility.
+      Reported by Microsoft Edge Team.
+    - CVE-2023-1820: Heap buffer overflow in Browser History.
+      Reported by raven at KunLun lab.
+    - CVE-2023-1821: Inappropriate implementation in WebShare.
+      Reported by Axel Chong.
+    - CVE-2023-1822: Incorrect security UI in Navigation. Reported by 강우진.
+    - CVE-2023-1823: Inappropriate implementation in FedCM.
+      Reported by Jasper Rebane (popstonia).
+  * d/copyright: change location for deleted image_diff directory.
+  * d/patches:
+    - disable/unrar.patch: update for stuff dropped upstream.
+    - disable/swiftshader.patch: straight refresh.
+    - bullseye/clang13.patch: straight refresh.
+    - ppc64le/third_party/0001-third_party-angle-Include-missing-header-cstddef-in-.patch:
+      straight refresh.
+    - ppc64le/third_party/use-sysconf-page-size-on-ppc64.patch: straight
+      refresh.
+    - debian/patches/ppc64le/third_party/0003-third_party-ffmpeg-Add-ppc64-generated-config.patch:
+      change is_mac to is_apple.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 04 Apr 2023 18:44:47 -0400
+
+chromium (111.0.5563.110-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2023-1528: Use after free in Passwords.
@@ -43,7 +409,7 @@ chromium (111.0.5563.110-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 22 Mar 2023 03:17:36 -0400
 
-chromium (111.0.5563.64-1~deb11u1) bullseye-security; urgency=high
+chromium (111.0.5563.64-1) unstable; urgency=high
 
   [ Andres Salomon ]
   * New upstream stable release.
@@ -102,7 +468,6 @@ chromium (111.0.5563.64-1~deb11u1) bullseye-security; urgency=high
     - upstream/v4l2-fix.patch: drop, merged upstream.
     - disable/catapult.patch: refresh & remove unnecessary android bits.
     - disable/google-api-warning.patch: refresh.
-    - bullseye/mulodic.patch: add missing import.
 
   [ Timothy Pearson ]
    * d/patches:
@@ -115,7 +480,7 @@ chromium (111.0.5563.64-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Tue, 07 Mar 2023 18:12:37 -0500
 
-chromium (110.0.5481.177-1~deb11u1) bullseye-security; urgency=high
+chromium (110.0.5481.177-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2023-0941: Use after free in Prompts. Reported by Anonymous.
@@ -132,8 +497,6 @@ chromium (110.0.5481.177-1~deb11u1) bullseye-security; urgency=high
       Reported by Omri Bushari (Talon Cyber Security).
     - CVE-2023-0933: Integer overflow in PDF. Reported by
       Zhiyi Zhang from Codesafe Team of Legendsec at QI-ANXIN Group.
-  * d/patches/bullseye/mulodic.patch: add another workaround for clang-13
-    failure in v8.
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 22 Feb 2023 16:11:07 -0500
 
@@ -143,7 +506,7 @@ chromium (110.0.5481.77-2) unstable; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 08 Feb 2023 15:20:57 -0500
 
-chromium (110.0.5481.77-1~deb11u1) bullseye-security; urgency=high
+chromium (110.0.5481.77-1) unstable; urgency=high
 
   [ Andres Salomon ]
   * New upstream stable release.
@@ -184,8 +547,6 @@ chromium (110.0.5481.77-1~deb11u1) bullseye-security; urgency=high
     the build flag in chromium v109. So in v109 we switched to the default
     "partition" allocator and I don't think anyone noticed, so let's just
     leave it on. Report issues if you notice any.
-  * Disable v4l2 on bullseye; I forgot that it doesn't have new enough kernel
-    headers (closes: #1030160).
 
   [ Timothy Pearson ]
   * d/patches:
@@ -195,7 +556,7 @@ chromium (110.0.5481.77-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 08 Feb 2023 00:20:01 -0500
 
-chromium (109.0.5414.119-1~deb11u1) bullseye-security; urgency=high
+chromium (109.0.5414.119-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2023-0471: Use after free in WebTransport.
@@ -209,7 +570,7 @@ chromium (109.0.5414.119-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 25 Jan 2023 01:19:49 -0500
 
-chromium (109.0.5414.74-2~deb11u1) bullseye-security; urgency=high
+chromium (109.0.5414.74-2) unstable; urgency=high
 
   [ Andres Salomon ]
   * d/patches/bullseye/clang13.patch: don't use -gsimple-template-names in
@@ -264,7 +625,7 @@ chromium (109.0.5414.74-1) unstable; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Thu, 12 Jan 2023 13:01:02 -0500
 
-chromium (108.0.5359.124-1~deb11u1) bullseye-security; urgency=high
+chromium (108.0.5359.124-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-4436: Use after free in Blink Media.
@@ -285,15 +646,17 @@ chromium (108.0.5359.124-1~deb11u1) bullseye-security; urgency=high
 
  -- Timothy Pearson <tpearson@raptorengineering.com>  Tue, 13 Dec 2022 19:10:00 -0600
 
-chromium (108.0.5359.94-1~deb11u1) bullseye-security; urgency=high
+chromium (108.0.5359.94-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-4262: Type Confusion in V8.
       Reported by Clement Lecigne of Google's Threat Analysis Group.
+  * Drop bullseye/mulodic.patch from unstable, it's too difficult to get this
+    right between the two distributions. It'll live in the bullseye branch only.
 
  -- Andres Salomon <dilinger@debian.org>  Sat, 03 Dec 2022 13:29:49 -0500
 
-chromium (108.0.5359.71-2~deb11u1) bullseye-security; urgency=high
+chromium (108.0.5359.71-2) unstable; urgency=high
 
   * Fix bullseye/mulodic.patch to actually work right on 32-bit platforms.
     Again.
@@ -366,7 +729,7 @@ chromium (108.0.5359.71-1) unstable; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Thu, 01 Dec 2022 22:23:10 -0500
 
-chromium (107.0.5304.121-1~deb11u1) bullseye-security; urgency=high
+chromium (107.0.5304.121-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-4135: Heap buffer overflow in GPU. Reported by Clement Lecigne
@@ -380,7 +743,7 @@ chromium (107.0.5304.110-2) unstable; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Thu, 10 Nov 2022 13:48:01 -0500
 
-chromium (107.0.5304.110-1~deb11u1) bullseye-security; urgency=high
+chromium (107.0.5304.110-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-3885: Use after free in V8. Reported by gzobqq@.
@@ -396,7 +759,7 @@ chromium (107.0.5304.110-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 09 Nov 2022 19:57:34 -0500
 
-chromium (107.0.5304.87-1~deb11u1) bullseye-security; urgency=high
+chromium (107.0.5304.87-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-3723: Type Confusion in V8. Reported by Jan Vojtěšek, Milánek,
@@ -405,7 +768,7 @@ chromium (107.0.5304.87-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Fri, 28 Oct 2022 07:02:02 -0400
 
-chromium (107.0.5304.68-1~deb11u1) bullseye-security; urgency=high
+chromium (107.0.5304.68-1) unstable; urgency=high
 
   * New upstream stable release.
     - CVE-2022-3652: Type Confusion in V8. Reported by srodulv and ZNMchtss at
@@ -449,7 +812,7 @@ chromium (107.0.5304.68-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Tue, 25 Oct 2022 17:40:14 -0400
 
-chromium (106.0.5249.119-1~deb11u1) bullseye-security; urgency=high
+chromium (106.0.5249.119-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-3445: Use after free in Skia. Reported by Nan Wang
@@ -483,7 +846,7 @@ chromium (106.0.5249.103-1) unstable; urgency=medium
 
  -- Timothy Pearson <tpearson@raptorengineering.com>  Fri, 07 Oct 2022 17:54:00 -0500
 
-chromium (106.0.5249.91-1~deb11u1) bullseye-security; urgency=high
+chromium (106.0.5249.91-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-3370: Use after free in Custom Elements.
@@ -493,7 +856,7 @@ chromium (106.0.5249.91-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Sat, 01 Oct 2022 03:21:58 -0400
 
-chromium (106.0.5249.61-1~deb11u1) bullseye-security; urgency=high
+chromium (106.0.5249.61-1) unstable; urgency=high
 
   * New upstream stable release.
     - CVE-2022-3304: Use after free in CSS. Reported by Anonymous.
@@ -551,10 +914,12 @@ chromium (106.0.5249.61-1~deb11u1) bullseye-security; urgency=high
   * Stop deleting chrome/install_static in d/copyright, and also start
     deleting third party libraries that we began linking to in v105 as
     well as tools/gn.
+  * Remove mgilbert as an uploader; thanks for all your work on chromium
+    packaging!
 
  -- Andres Salomon <dilinger@debian.org>  Tue, 27 Sep 2022 14:14:44 -0400
 
-chromium (105.0.5195.125-1~deb11u1) bullseye-security; urgency=high
+chromium (105.0.5195.125-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-3195: Out of bounds write in Storage. Reported by
@@ -571,17 +936,20 @@ chromium (105.0.5195.125-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 14 Sep 2022 12:43:31 -0400
 
-chromium (105.0.5195.102-1~deb11u1) bullseye-security; urgency=high
+chromium (105.0.5195.102-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-3075: Insufficient data validation in Mojo.
   * Update the cpu check to allow pni instead of sse3 (closes: #1018937).
+  * Enable v4l2 for arm platforms. This also disables VA-API on arm64, so
+    if that breaks things let me know. Thanks
+    Eschenbacher.Stefan@Scheidt-Bachmann.de for the patch (#1011346).
   * debian/patches:
     - upstream/armhf-ftbfs.patch: fix FTBFS introduced with v105 on armhf.
 
  -- Andres Salomon <dilinger@debian.org>  Mon, 05 Sep 2022 15:57:26 -0400
 
-chromium (105.0.5195.52-1~deb11u1) bullseye-security; urgency=high
+chromium (105.0.5195.52-1) unstable; urgency=high
 
   * New upstream stable release.
     - CVE-2022-3038: Use after free in Network Service.
@@ -677,7 +1045,7 @@ chromium (105.0.5195.52-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 31 Aug 2022 20:48:11 -0400
 
-chromium (104.0.5112.101-1~deb11u1) bullseye-security; urgency=high
+chromium (104.0.5112.101-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-2852: Use after free in FedCM.
@@ -716,9 +1084,8 @@ chromium (104.0.5112.101-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Tue, 16 Aug 2022 17:29:29 -0400
 
-chromium (104.0.5112.79-1~deb11u1) bullseye-security; urgency=high
+chromium (104.0.5112.79-1) unstable; urgency=high
 
-  * Build with Clang 13 instead of the bullseye default of Clang 11.
   * New upstream stable release.
     - CVE-2022-2603: Use after free in Omnibox. Reported by Anonymous
     - CVE-2022-2604: Use after free in Safe Browsing. Reported by
@@ -773,9 +1140,9 @@ chromium (104.0.5112.79-1~deb11u1) bullseye-security; urgency=high
   * debian/copyright:
     - upstream dropped perfetto/ui/src/gen/.
 
- -- Andres Salomon <dilinger@debian.org>  Thu, 04 Aug 2022 21:39:17 -0400
+ -- Andres Salomon <dilinger@debian.org>  Thu, 04 Aug 2022 11:31:44 -0400
 
-chromium (103.0.5060.134-1~deb11u1) bullseye-security; urgency=high
+chromium (103.0.5060.134-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-2477 : Use after free in Guest View. Reported by anonymous
@@ -791,7 +1158,7 @@ chromium (103.0.5060.134-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Wed, 20 Jul 2022 00:51:39 -0400
 
-chromium (103.0.5060.114-1~deb11u1) bullseye-security; urgency=high
+chromium (103.0.5060.114-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-2294: Heap buffer overflow in WebRTC. Reported by
@@ -803,7 +1170,7 @@ chromium (103.0.5060.114-1~deb11u1) bullseye-security; urgency=high
 
  -- Andres Salomon <dilinger@debian.org>  Sun, 10 Jul 2022 12:44:03 -0400
 
-chromium (103.0.5060.53-1~deb11u1) bullseye-security; urgency=high
+chromium (103.0.5060.53-1) unstable; urgency=high
 
   * New upstream stable release.
     - CVE-2022-2156: Use after free in Base.
@@ -838,9 +1205,9 @@ chromium (103.0.5060.53-1~deb11u1) bullseye-security; urgency=high
     - system/openjpeg.patch: update for libopenjp2-7-dev's 2.4 -> 2.5 path
       change.
 
- -- Andres Salomon <dilinger@debian.org>  Tue, 21 Jun 2022 21:40:12 -0400
+ -- Andres Salomon <dilinger@debian.org>  Tue, 21 Jun 2022 02:59:01 +0000
 
-chromium (102.0.5005.115-1~deb11u1) bullseye-security; urgency=high
+chromium (102.0.5005.115-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-2007: Use after free in WebGPU. Reported by David Manouchehri
@@ -857,9 +1224,9 @@ chromium (102.0.5005.115-1~deb11u1) bullseye-security; urgency=high
       Upstream no longer officially supports i386 builds on linux, so we
       are on our own here.
 
- -- Andres Salomon <dilinger@debian.org>  Fri, 10 Jun 2022 20:56:01 -0400
+ -- Andres Salomon <dilinger@debian.org>  Fri, 10 Jun 2022 02:37:57 +0000
 
-chromium (102.0.5005.61-1~deb11u1) bullseye-security; urgency=high
+chromium (102.0.5005.61-1) unstable; urgency=high
 
   * New upstream stable release.
     - CVE-2022-1853: Use after free in Indexed DB. Reported by Anonymous
@@ -923,9 +1290,9 @@ chromium (102.0.5005.61-1~deb11u1) bullseye-security; urgency=high
       32-bit platforms (closes: #1011096).
   * Don't build unneccessary dawn build tests.
 
- -- Andres Salomon <dilinger@debian.org>  Wed, 25 May 2022 02:24:52 -0400
+ -- Andres Salomon <dilinger@debian.org>  Wed, 25 May 2022 02:09:10 -0400
 
-chromium (101.0.4951.64-1~deb11u1) bullseye-security; urgency=high
+chromium (101.0.4951.64-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-1633: Use after free in Sharesheet. Reported by Khalil Zhani
@@ -945,7 +1312,7 @@ chromium (101.0.4951.64-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-1641: Use after free in Web UI Diagnostics.
       Reported by Rong Jian of VRI
 
- -- Andres Salomon <dilinger@debian.org>  Wed, 11 May 2022 11:08:36 -0400
+ -- Andres Salomon <dilinger@debian.org>  Tue, 10 May 2022 21:52:11 -0400
 
 chromium (101.0.4951.54-1) unstable; urgency=low
 
@@ -957,22 +1324,10 @@ chromium (101.0.4951.54-1) unstable; urgency=low
 
  -- Andres Salomon <dilinger@debian.org>  Tue, 03 May 2022 12:16:07 -0400
 
-chromium (101.0.4951.41-1~deb11u1) bullseye-security; urgency=high
+chromium (101.0.4951.41-2) unstable; urgency=high
 
-  * debian/copyright:
-    - Delete a bunch of file exclusion lines that no longer exist. That
-      png file workaround also goes away.
-    - Add a line to delete a prebuilt apache server & related modules that
-      upstream now includes for some reason?
-  * debian/patches:
-    - upstream/rvo-workaround.patch - drop, merged upstream.
-    - disable/android.patch - drop part of it that upstream fixed.
-    - disable/swiftshader.patch - refresh.
-    - upstream/libxml.patch - add fix for upstream bug related to
-      building against the system libxml.
-    - bullseye/cast-call.patch - add a patch to silence unsupported
-      flag warnings in clang <= 13.
-  * New upstream stable release.
+  * No changes, just the CVE list. The original blog post *did not*
+    have CVEs.  >:(
     - CVE-2022-1477: Use after free in Vulkan.
       Reported by SeongHwan Park (SeHwa)
     - CVE-2022-1478: Use after free in SwiftShader.
@@ -1020,17 +1375,36 @@ chromium (101.0.4951.41-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-1501: Inappropriate implementation in iframe.
       Reported by Oriol Brufau
 
- -- Andres Salomon <dilinger@debian.org>  Tue, 26 Apr 2022 18:25:05 -0400
+ -- Andres Salomon <dilinger@debian.org>  Tue, 26 Apr 2022 18:06:08 -0400
 
-chromium (100.0.4896.127-1~deb11u1) bullseye-security; urgency=high
+chromium (101.0.4951.41-1) unstable; urgency=low
+
+  * New upstream stable release.
+  * debian/copyright:
+    - Delete a bunch of file exclusion lines that no longer exist. That
+      png file workaround also goes away.
+    - Add a line to delete a prebuilt apache server & related modules that
+      upstream now includes for some reason?
+  * debian/patches:
+    - upstream/rvo-workaround.patch - drop, merged upstream.
+    - disable/android.patch - drop part of it that upstream fixed.
+    - disable/swiftshader.patch - refresh.
+    - upstream/libxml.patch - add fix for upstream bug related to
+      building against the system libxml.
+    - bullseye/cast-call.patch - add a patch to silence unsupported
+      flag warnings in clang <= 13.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 26 Apr 2022 17:18:09 -0400
+
+chromium (100.0.4896.127-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-1364: Type Confusion in V8.
       Reported by Clément Lecigne of Google's Threat Analysis Group
 
- -- Andres Salomon <dilinger@debian.org>  Fri, 15 Apr 2022 13:12:11 -0400
+ -- Andres Salomon <dilinger@debian.org>  Thu, 14 Apr 2022 20:51:15 -0400
 
-chromium (100.0.4896.88-1~deb11u1) bullseye-security; urgency=high
+chromium (100.0.4896.88-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-1305: Use after free in storage. Reported by Anonymous
@@ -1052,9 +1426,9 @@ chromium (100.0.4896.88-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-1314: Type Confusion in V8.
       Reported by Bohan Liu (@P4nda20371774) of Tencent Security Xuanwu Lab
 
- -- Andres Salomon <dilinger@debian.org>  Tue, 12 Apr 2022 04:03:19 -0400
+ -- Andres Salomon <dilinger@debian.org>  Mon, 11 Apr 2022 23:45:07 -0400
 
-chromium (100.0.4896.75-1~deb11u1) bullseye-security; urgency=high
+chromium (100.0.4896.75-1) unstable; urgency=high
 
   * debian/copyright:
     - Stop dropping third_party/zlib/contrib/, which is just source code
@@ -1066,6 +1440,8 @@ chromium (100.0.4896.75-1~deb11u1) bullseye-security; urgency=high
       with just dropping all wasm files ('*.wasm'), as well as
       third_party/devtools-frontend/src/test/screenshots/image_diff/.
   * debian/patches:
+    - upstream/rvo-workaround.patch - added to fix FTBFS w/ clang-11. Pulled
+      from upstream git.
     - disable/swiftshader-2.patch - drop most of it that's wrapped in a
       check for windows.
     - disable/fuzzers.patch - drop it; with the last release modifying
@@ -1083,9 +1459,9 @@ chromium (100.0.4896.75-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-1232: Type Confusion in V8.
       Reported by Sergei Glazunov of Google Project Zero.
 
- -- Andres Salomon <dilinger@debian.org>  Wed, 06 Apr 2022 04:35:21 -0400
+ -- Andres Salomon <dilinger@debian.org>  Wed, 06 Apr 2022 04:24:45 -0400
 
-chromium (100.0.4896.60-1~deb11u1) bullseye-security; urgency=high
+chromium (100.0.4896.60-1) unstable; urgency=high
 
   * Fix debian/watch to find the correct upstream version.
   * Ensure xz uses all available cpu cores when preparing orig.tar.gz
@@ -1116,8 +1492,6 @@ chromium (100.0.4896.60-1~deb11u1) bullseye-security; urgency=high
     - disable/driver-chrome-path.patch - refresh for BUILDFLAG() macro.
     - system/jsoncpp.patch - refresh for unrelated ios change.
     - disable/catapult.patch - refresh due to moving around of .pak files.
-    - upstream/rvo-workaround.patch - added to fix FTBFS w/ clang-11. Pulled
-      from upstream git.
   * New upstream stable release.
     - CVE-2022-1125: Use after free in Portals. Reported by Khalil Zhani
     - CVE-2022-1127: Use after free in QR Code Generator.
@@ -1157,16 +1531,16 @@ chromium (100.0.4896.60-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-1146: Inappropriate implementation in Resource Timing.
       Reported by Sohom Datta
 
- -- Andres Salomon <dilinger@debian.org>  Fri, 01 Apr 2022 23:22:56 -0400
+ -- Andres Salomon <dilinger@debian.org>  Fri, 01 Apr 2022 15:02:16 -0400
 
-chromium (99.0.4844.84-1~deb11u1) bullseye-security; urgency=high
+chromium (99.0.4844.84-1) unstable; urgency=high
 
   * New upstream security ("just *ONE* security hole, that's it?!") release.
     - CVE-2022-1096: Type Confusion in V8. Reported by anonymous.
 
- -- Andres Salomon <dilinger@debian.org>  Sat, 26 Mar 2022 13:24:59 -0500
+ -- Andres Salomon <dilinger@debian.org>  Sat, 26 Mar 2022 00:16:52 -0500
 
-chromium (99.0.4844.74-1~deb11u1) bullseye-security; urgency=high
+chromium (99.0.4844.74-1) unstable; urgency=high
 
   * New upstream security release.
     - CVE-2022-0971: Use after free in Blink Layout.
@@ -1186,7 +1560,7 @@ chromium (99.0.4844.74-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-0979: Use after free in Safe Browsing. Reported by anonymous.
     - CVE-2022-0980: Use after free in New Tab Page. Reported by Krace.
 
- -- Andres Salomon <dilinger@debian.org>  Wed, 16 Mar 2022 13:51:21 -0500
+ -- Andres Salomon <dilinger@debian.org>  Wed, 16 Mar 2022 13:30:00 -0500
 
 chromium (99.0.4844.51-2) unstable; urgency=medium
 
@@ -1201,7 +1575,7 @@ chromium (99.0.4844.51-2) unstable; urgency=medium
 
  -- Andres Salomon <dilinger@debian.org>  Sun, 06 Mar 2022 12:46:55 -0500
 
-chromium (99.0.4844.51-1~deb11u1) bullseye-security; urgency=high
+chromium (99.0.4844.51-1) unstable; urgency=high
 
   * Embed harfbuzz instead of using the system harfbuzz. Debian doesn't
     yet package harfbuzz-subset (see #988781). Once it is packaged, we
@@ -1261,9 +1635,9 @@ chromium (99.0.4844.51-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-0809: Out of bounds memory access in WebXR.
       Reported by @uwu7586.
 
- -- Andres Salomon <dilinger@debian.org>  Thu, 03 Mar 2022 00:14:50 -0500
+ -- Andres Salomon <dilinger@debian.org>  Wed, 02 Mar 2022 21:53:14 -0500
 
-chromium (98.0.4758.102-1~deb11u1) bullseye-security; urgency=high
+chromium (98.0.4758.102-1) unstable; urgency=high
 
   * Enable pipewire support in webrtc (closes: #954824).
   * Enable optimize_webui. This UI speed improvement was originally
@@ -1290,9 +1664,9 @@ chromium (98.0.4758.102-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-0610: Inappropriate implementation in Gamepad API.
       Reported by Anonymous.
 
- -- Andres Salomon <dilinger@debian.org>  Tue, 15 Feb 2022 20:15:03 -0500
+ -- Andres Salomon <dilinger@debian.org>  Tue, 15 Feb 2022 15:37:54 -0500
 
-chromium (98.0.4758.80-1~deb11u1) bullseye-security; urgency=high
+chromium (98.0.4758.80-1) unstable; urgency=high
 
   * Update manpage for package rename and everyone moving to https.
   * Drop libnpsr4-dev versioned dep.
@@ -1333,17 +1707,14 @@ chromium (98.0.4758.80-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-0469: Use after free in Cast. Reported by Thomas Orlita.
     - CVE-2022-0470: Out of bounds memory access in V8. Reported by Looben Yang.
 
- -- Andres Salomon <dilinger@debian.org>  Sat, 05 Feb 2022 20:18:00 -0500
+ -- Andres Salomon <dilinger@debian.org>  Sat, 05 Feb 2022 01:12:10 -0500
 
-chromium (97.0.4692.99-1~deb11u2) bullseye-security; urgency=high
-
-  * Revert the terser build-dep for bullseye.
-
- -- Andres Salomon <dilinger@debian.org>  Sat, 22 Jan 2022 16:46:08 -0500
-
-chromium (97.0.4692.99-1~deb11u1) bullseye-security; urgency=high
+chromium (97.0.4692.99-1) unstable; urgency=high
 
   * Add myself as an uploader.
+  * Ack my NMU (closes: #1003440).
+  * Remove Riku Voipio from uploaders at the request of the Debian MIA team -
+    thanks for all your past work on chromium, Riku! (closes: #1001562)
   * Build-dep on terser | uglifyjs.terser (closes: #1001036).
   * Revert automatic wayland detection for now (closes: #1003689).
     We'll try again in chromium v98 or v99.
@@ -1393,9 +1764,9 @@ chromium (97.0.4692.99-1~deb11u1) bullseye-security; urgency=high
     - CVE-2022-0311: Heap buffer overflow in Task Manager.
       Reported by Samet Bekmezci @sametbekmezci.
 
- -- Andres Salomon <dilinger@debian.org>  Thu, 20 Jan 2022 22:30:05 -0500
+ -- Andres Salomon <dilinger@debian.org>  Wed, 19 Jan 2022 23:53:45 -0500
 
-chromium (97.0.4692.71-0.1~deb11u1) bullseye-security; urgency=high
+chromium (97.0.4692.71-0.1) unstable; urgency=high
 
   * Non-maintainer upload.
   * Stop building chromium's bunded gn and instead build-dep on generate-ninja.
@@ -1643,7 +2014,7 @@ chromium (97.0.4692.71-0.1~deb11u1) bullseye-security; urgency=high
     - CVE-2021-37972: Out of bounds read in libjpeg-turbo. Reported by Xu
       Hanyu and Lu Yutao from Panguite-Forensics-Lab of Qianxin
 
- -- Andres Salomon <dilinger@debian.org>  Thu, 13 Jan 2022 18:30:21 -0500
+ -- Andres Salomon <dilinger@debian.org>  Mon, 10 Jan 2022 01:38:13 -0500
 
 chromium (93.0.4577.82-1) unstable; urgency=medium
 

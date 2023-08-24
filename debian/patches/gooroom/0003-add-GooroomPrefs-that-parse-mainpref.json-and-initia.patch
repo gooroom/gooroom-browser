@@ -1,4 +1,4 @@
-From 56923eda41d54ed31ed64f2bb9654a74452b5f11 Mon Sep 17 00:00:00 2001
+From 93ab40cd8a760ee0408e7ea61319e21fb7a07724 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:13:47 +0900
 Subject: [PATCH 03/65] add GooroomPrefs that parse mainpref.json and
@@ -27,10 +27,10 @@ Subject: [PATCH 03/65] add GooroomPrefs that parse mainpref.json and
  create mode 100644 gooroom/browser/gooroom_url_filter_impl.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 89bf2a517ceb7..da62dab711d54 100644
+index 435c6f25671ba..5d632f706e60c 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -225,6 +225,16 @@ if (!is_android && !is_mac) {
+@@ -229,6 +229,16 @@ if (!is_android && !is_mac) {
           # for commit #3
          "browser/gooroom_browser_extra_parts_security.cc",
          "browser/gooroom_browser_extra_parts_security.h",
@@ -48,7 +48,7 @@ index 89bf2a517ceb7..da62dab711d54 100644
      }
    }
 diff --git a/gooroom/app/gooroom_main_delegate.h b/gooroom/app/gooroom_main_delegate.h
-index 019e7df5a85b3..ab8ca00354b38 100644
+index c51cefdf68468..65852c41513e3 100644
 --- a/gooroom/app/gooroom_main_delegate.h
 +++ b/gooroom/app/gooroom_main_delegate.h
 @@ -5,6 +5,9 @@
@@ -58,18 +58,18 @@ index 019e7df5a85b3..ab8ca00354b38 100644
 +#include "gooroom/browser/gooroom_content_client.h"
 +#include "gooroom/browser/gooroom_pref.h"
 +
- #include <iostream>
- #include <istream>
- #include <ostream>
-@@ -14,7 +17,6 @@
- #include "base/time/time.h"
+ #include <memory>
+ #include <vector>
+ 
+@@ -18,7 +21,6 @@
+ #include "third_party/abseil-cpp/absl/types/optional.h"
+ 
  #include "chrome/app/chrome_main_delegate.h"
- #include "content/public/app/content_main_delegate.h"
 -#include "gooroom/browser/gooroom_content_client.h"
  
+ 
  namespace base {
- class CommandLine;
-@@ -39,6 +41,8 @@ class GooroomMainDelegate : public ChromeMainDelegate {
+@@ -44,6 +46,8 @@ class GooroomMainDelegate : public ChromeMainDelegate {
  
    GooroomContentClient gooroom_content_client_;
  
@@ -518,5 +518,5 @@ index 0000000000000..58b942869a2c9
 +
 +#endif  // GOOROOM_URL_FILTER_IMPL_H_
 -- 
-2.30.2
+2.39.2
 

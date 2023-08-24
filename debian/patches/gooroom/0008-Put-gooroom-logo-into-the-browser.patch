@@ -1,4 +1,4 @@
-From 8c640cd524f85c264e96e62c292fcf80cc187c1c Mon Sep 17 00:00:00 2001
+From ed349da06ce3cab807425dc7d2285b3e4a1ff0ae Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:34:42 +0900
 Subject: [PATCH 08/65] Put gooroom logo into the browser
@@ -90,10 +90,10 @@ Subject: [PATCH 08/65] Put gooroom logo into the browser
  create mode 100644 components/resources/default_200_percent/gooroom/product_logo_white.png
 
 diff --git a/chrome/app/theme/chrome_unscaled_resources.grd b/chrome/app/theme/chrome_unscaled_resources.grd
-index 631c3fd015316..02555c85de984 100644
+index 04441f0620f2a..048fcd54329b4 100644
 --- a/chrome/app/theme/chrome_unscaled_resources.grd
 +++ b/chrome/app/theme/chrome_unscaled_resources.grd
-@@ -60,50 +60,12 @@
+@@ -59,50 +59,12 @@
            </if>
          </then>
          <else> <!-- not _google_chrome -->
@@ -12155,7 +12155,7 @@ literal 0
 HcmV?d00001
 
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index d0539df0b0210..b52d6e5f4ea53 100644
+index 0aec5267f58ec..604d09cc26d49 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
 @@ -176,8 +176,8 @@
@@ -12862,5 +12862,5 @@ index 34a51f6bd7e49..a944acabfa042 100644
  
  #company {
 -- 
-2.30.2
+2.39.2
 

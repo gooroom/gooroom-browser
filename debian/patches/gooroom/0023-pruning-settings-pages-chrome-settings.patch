@@ -1,0 +1,138 @@
+From cbb40a4f131d94c78b73258f31e7fdd1af3a994d Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:46:38 +0900
+Subject: [PATCH 23/65] pruning settings pages(chrome://settings)
+
+---
+ .../settings/about_page/about_page.html       |  3 -
+ .../settings/basic_page/basic_page.html       | 67 -------------------
+ .../settings/settings_menu/settings_menu.html | 14 ----
+ 3 files changed, 84 deletions(-)
+
+diff --git a/chrome/browser/resources/settings/about_page/about_page.html b/chrome/browser/resources/settings/about_page/about_page.html
+index 78ef1e9b6d061..02b402f2bb23d 100644
+--- a/chrome/browser/resources/settings/about_page/about_page.html
++++ b/chrome/browser/resources/settings/about_page/about_page.html
+@@ -120,9 +120,6 @@
+         </div>
+       </template>
+ </if>
+-      <cr-link-row class="hr" id="help" on-click="onHelpClick_"
+-          label="$i18n{aboutGetHelpUsingChrome}"
+-          external></cr-link-row>
+ <if expr="_google_chrome">
+       <cr-link-row class="hr" id="reportIssue" on-click="onReportIssueClick_"
+           hidden="[[!prefs.feedback_allowed.value]]"
+diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chrome/browser/resources/settings/basic_page/basic_page.html
+index 20f82484a9076..8700eecfc83bb 100644
+--- a/chrome/browser/resources/settings/basic_page/basic_page.html
++++ b/chrome/browser/resources/settings/basic_page/basic_page.html
+@@ -16,73 +16,6 @@
+           <settings-reset-profile-banner on-close="onResetProfileBannerClosed_">
+           </settings-reset-profile-banner>
+         </template>
+-        <template is="dom-if" if="[[showPage_(pageVisibility.people)]]" restamp>
+-          <settings-section page-title="$i18n{peoplePageTitle}"
+-              section="people">
+-            <settings-people-page prefs="{{prefs}}"
+-                page-visibility="[[pageVisibility]]">
+-            </settings-people-page>
+-          </settings-section>
+-        </template>
+-        <template is="dom-if" if="[[showPage_(pageVisibility.autofill)]]"
+-            restamp>
+-          <settings-section page-title="$i18n{autofillPageTitle}"
+-              section="autofill">
+-            <settings-autofill-page prefs="{{prefs}}"></settings-autofill-page>
+-          </settings-section>
+-        </template>
+-        <settings-section id="privacyGuidePromoSection" page-title=""
+-            hidden$="[[!showPrivacyGuidePromo_]]" nest-under-section="privacy"
+-            no-search>
+-          <settings-privacy-guide-promo id="privacyGuidePromo"
+-              prefs="{{prefs}}">
+-          </settings-privacy-guide-promo>
+-        </settings-section>
+-        <template is="dom-if" if="[[showPage_(pageVisibility.safetyCheck)]]"
+-            restamp>
+-          <settings-section page-title="$i18n{safetyCheckSectionTitle}"
+-              section="safetyCheck" nest-under-section="privacy"
+-              id="safetyCheckSettingsSection">
+-            <settings-safety-check-page prefs="{{prefs}}">
+-            </settings-safety-check-page>
+-          </settings-section>
+-        </template>
+-        <template is="dom-if" if="[[showPage_(pageVisibility.privacy)]]"
+-            restamp>
+-          <settings-section page-title="$i18n{privacyPageTitle}"
+-              section="privacy">
+-            <settings-privacy-page prefs="{{prefs}}"
+-                page-visibility="[[pageVisibility.privacy]]">
+-            </settings-privacy-page>
+-          </settings-section>
+-        </template>
+-        <template is="dom-if"
+-            if="[[showPerformancePage_(pageVisibility.performance)]]"
+-            restamp>
+-          <settings-section page-title="$i18n{performancePageTitle}"
+-<if expr="_google_chrome">
+-              show-send-feedback-button
+-              on-send-feedback="onSendHighEfficiencyFeedbackClick_"
+-</if>
+-              section="performance" id="performanceSettingsSection">
+-            <settings-performance-page prefs="{{prefs}}">
+-            </settings-performance-page>
+-          </settings-section>
+-        </template>
+-        <template is="dom-if"
+-            if="[[showBatteryPage_(pageVisibility.performance)]]"
+-            restamp>
+-          <settings-section page-title="$i18n{batteryPageTitle}"
+-              section="battery" nest-under-section="performance"
+-<if expr="_google_chrome">
+-              show-send-feedback-button
+-              on-send-feedback="onSendBatterySaverFeedbackClick_"
+-</if>
+-              id="batterySettingsSection" hidden="[[!showBatterySettings_]]">
+-            <settings-battery-page prefs="{{prefs}}">
+-            </settings-battery-page>
+-          </settings-section>
+-        </template>
+         <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
+             restamp>
+           <settings-section page-title="$i18n{appearancePageTitle}"
+diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+index caa9aad0400b6..e2c8ecc8838d8 100644
+--- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
++++ b/chrome/browser/resources/settings/settings_menu/settings_menu.html
+@@ -61,13 +61,6 @@
+       <cr-menu-selector id="menu" selectable="a:not(#extensionsLink)"
+           attr-for-selected="href" on-iron-activate="onSelectorActivate_"
+           on-click="onLinkClick_" selected-attribute="selected">
+-        <a role="menuitem"
+-            id="people" href="/people" hidden="[[!pageVisibility.people]]"
+-            class="cr-nav-menu-item">
+-          <iron-icon icon="cr:person"></iron-icon>
+-          $i18n{peoplePageTitle}
+-          <paper-ripple></paper-ripple>
+-        </a>
+         <a role="menuitem" id="autofill" href="/autofill"
+             hidden="[[!pageVisibility.autofill]]"
+             class="cr-nav-menu-item">
+@@ -132,13 +125,6 @@
+           $i18n{downloadsPageTitle}
+           <paper-ripple></paper-ripple>
+         </a>
+-        <a role="menuitem" id="accessibility" href="/accessibility"
+-            class="cr-nav-menu-item"
+-            hidden="[[!pageVisibility.a11y]]">
+-          <iron-icon icon="settings:accessibility"></iron-icon>
+-          $i18n{a11yPageTitle}
+-          <paper-ripple></paper-ripple>
+-        </a>
+   <if expr="not chromeos_ash">
+         <a role="menuitem" id="system" href="/system" class="cr-nav-menu-item"
+             hidden="[[!pageVisibility.system]]">
+-- 
+2.39.2
+

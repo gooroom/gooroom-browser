@@ -1,4 +1,4 @@
-From 9a16c5379ca52fcbe20da8408ab199310f703c5d Mon Sep 17 00:00:00 2001
+From 3ee787baf4da8758dba6ad0206e70f604127c5c5 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:14:47 +0900
 Subject: [PATCH 05/65] add guard for the whitelist based browser separation
@@ -45,5 +45,5 @@ index 9f1cc34954b74..f43f0d22838d5 100644
  
  declare_args() {
 -- 
-2.30.2
+2.39.2
 

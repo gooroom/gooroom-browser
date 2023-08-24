@@ -24,7 +24,6 @@ Files-Excluded:
  ui/chromeos/B*
  ui/chromeos/D*
  ui/chromeos/devicetype_utils.cc
- ui/chromeos/e*
  ui/chromeos/f*
  ui/chromeos/r*
  ui/chromeos/s*
@@ -35,6 +34,7 @@ Files-Excluded:
  base/test/data
  base/third_party/double_conversion
  chrome/android
+ chrome/build
  chrome/installer/mac
  chrome/installer/test
  chrome/installer/tools
@@ -43,10 +43,14 @@ Files-Excluded:
  chrome/installer/gcapi*
  chrome/installer/mini_installer
  chrome/installer/launcher_support
- chrome/common/safe_browsing/rar_analyzer.*
- chrome/browser/resources/chromeos
+ chrome/utility/safe_browsing/rar_analyzer.*
+ chrome/browser/resources/chromeos/ac*
+ chrome/browser/resources/chromeos/s*
+ chrome/browser/resources/chromeos/l*
+ chrome/browser/resources/chromeos/n*
  chrome/browser/resources/default_apps
  chrome/chrome_cleaner/test/resources/signed_dll
+ fuchsia*
  tools/emacs
  tools/luci-go
  tools/android
@@ -77,6 +81,7 @@ Files-Excluded:
  third_party/opus
  third_party/flac
  third_party/llvm
+ third_party/libei
  third_party/webgl
  third_party/libpng
  third_party/libdrm
@@ -144,6 +149,8 @@ Files-Excluded:
  third_party/libxml/BUILD.gn
  third_party/libxml/src
  third_party/node/node_modules.tar.gz
+ third_party/node/node_modules/acorn
+ third_party/node/node_modules/rollup
  third_party/mocha/mocha.js
  third_party/chaijs/chai.js
  third_party/blanketjs/src/blanket.js
@@ -157,7 +164,7 @@ Files-Excluded:
  third_party/breakpad/breakpad/src/common/convert_UTF.*
  third_party/boringssl/src/crypto/cipher_extra/test
  third_party/dom_distiller_js/dist/js/domdistiller_wrapped.js
- third_party/devtools-frontend/src/test/screenshots/image_diff
+ third_party/devtools-frontend/src/third_party/image_diff
  third_party/devtools-frontend/src/node_modules/.bin
  third_party/libphonenumber/dist/javascript/i18n/phonenumbers/metadata.js
  third_party/libphonenumber/dist/javascript/i18n/phonenumbers/metadatalite.js
@@ -165,6 +172,7 @@ Files-Excluded:
  third_party/tflite/src/tensorflow/lite/experimental/acceleration/mini_benchmark/models/blazeface_mlkit_v1.tfl
  third_party/devtools-frontend/src/third_party/esbuild/esbuild
  third_party/nearby/src/third_party
+ third_party/updater
 
 
 Files: *

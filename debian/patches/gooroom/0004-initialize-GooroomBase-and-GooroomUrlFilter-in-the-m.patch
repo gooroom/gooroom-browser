@@ -1,4 +1,4 @@
-From 43bf677669280c4ec55d4b61ccf51ec57662a862 Mon Sep 17 00:00:00 2001
+From 88923b2add1db8eaa44ea05ab2f67b3e6211e449 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 10 Mar 2022 09:04:17 +0900
 Subject: [PATCH 04/65] initialize GooroomBase and GooroomUrlFilter in the
@@ -111,5 +111,5 @@ index 3e94b7fb6b223..6c888d3cfedda 100644
  
  extern gooroom::GooroomPref* g_gooroom;
 -- 
-2.30.2
+2.39.2
 

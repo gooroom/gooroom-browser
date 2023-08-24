@@ -1,0 +1,5 @@
+# currently unavoidable embedded libraries
+embedded-library usr/lib/gooroom-browser/gooroom-browser: srtp
+embedded-library usr/lib/gooroom-browser/gooroom-browser: sqlite
+# too many upstream spelling mistakes
+spelling-error-in-binary

@@ -29,29 +29,3 @@ bookworm, only in bullseye.
    include_dirs = [
      "${tint_root_dir}/",
      "${tint_root_dir}/include/",
---- a/v8/BUILD.gn
-+++ b/v8/BUILD.gn
-@@ -16,6 +16,7 @@ if (is_android) {
- 
- import("gni/snapshot_toolchain.gni")
- import("gni/v8.gni")
-+import("//build/config/sysroot.gni")
- 
- # Specifies if the target build is a simulator build. Comparing target cpu
- # with v8 target cpu to not affect simulator builds for making cross-compile
-@@ -648,6 +649,15 @@ config("internal_config_base") {
-     "$target_gen_dir",
-     "$target_gen_dir/include",
-   ]
-+
-+  # work around a bug with clang not being able to find the __mulodi4 symbol on 32-bit archs
-+  if (v8_current_cpu == "x86") {
-+    lib_dirs = [ "${sysroot}/usr/lib/llvm-13/lib/clang/13.0.1/lib/linux" ]
-+    libs = [ ":libclang_rt.builtins-i386.a" ]
-+  } else if (v8_current_cpu == "arm") {
-+    lib_dirs = [ "${sysroot}/usr/lib/llvm-13/lib/clang/13.0.1/lib/linux" ]
-+    libs = [ ":libclang_rt.builtins-armhf.a" ]
-+  }
- }
- 
- config("internal_config") {

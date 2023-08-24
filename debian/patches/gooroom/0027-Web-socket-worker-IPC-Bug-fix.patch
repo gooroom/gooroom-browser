@@ -1,0 +1,197 @@
+From 250953604c432a919ad560a2057922e54e5317a9 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Mar 2021 09:48:26 +0900
+Subject: [PATCH 27/65] Web socket-worker IPC Bug fix
+
+---
+ .../browser/chrome_content_browser_client.cc  |  2 --
+ .../settings/privacy_page/privacy_page.html   | 14 +++++++++++++
+ chrome/browser/ui/prefs/prefs_tab_helper.cc   |  4 ++--
+ gooroom/content/gooroom_safety_policy_part.cc |  4 ++--
+ .../common/web_preferences/web_preferences.cc |  4 ++--
+ .../common/web_preferences/web_preferences.h  |  4 ++--
+ .../web_preferences_mojom_traits.h            |  4 ++--
+ .../webpreferences/web_preferences.mojom      |  4 ++--
+ .../renderer/core/exported/web_view_impl.cc   | 20 ++++++++++++++++---
+ 9 files changed, 43 insertions(+), 17 deletions(-)
+
+diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
+index 1d8e0a5987974..2ca80e3bf780f 100644
+--- a/chrome/browser/chrome_content_browser_client.cc
++++ b/chrome/browser/chrome_content_browser_client.cc
+@@ -3985,8 +3985,6 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
+       prefs->GetInteger(prefs::kWebKitMinimumLogicalFontSize);
+ #endif
+ 
+-  web_prefs->websocket_enabled = true;
+-  web_prefs->webworker_enabled = true;
+   web_prefs->default_encoding = prefs->GetString(prefs::kDefaultCharset);
+ 
+   web_prefs->dom_paste_enabled =
+diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+index c0771b21e90dc..05b66e6c566bb 100644
+--- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
++++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
+@@ -108,6 +108,20 @@
+           <a id="privacySandboxLink" href="privacySandbox"
+               target="_blank" tabindex="-1" aria-disabled="true"
+               role="none"></a>
++                        <!-- gooroom-browser -->
++                       <div hidden="[[!pageVisibility.websocketSettings]]">
++                         <settings-toggle-button
++                                pref="{{prefs.gooroom_option.websocket_confirm}}"
++                                 label="$i18n{websocketEnable}">
++                         </settings-toggle-button>
++                       </div>
++                       <div hidden="[[!pageVisibility.webworkerSettings]]">
++                        <settings-toggle-button
++                                 pref="{{prefs.gooroom_option.webworker_confirm}}"
++                                 label="$i18n{webworkerEnable}">
++                         </settings-toggle-button>
++                       </div>
++
+         </template>
+       </div>
+ 
+diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
+index a7a5c02deb4ff..5cd324b7f5cb5 100644
+--- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
++++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
+@@ -339,9 +339,9 @@ void PrefsTabHelper::RegisterProfilePrefs(
+     user_prefs::PrefRegistrySyncable* registry,
+     const std::string& locale) {
+   WebPreferences pref_defaults;
+-  registry->RegisterBooleanPref(prefs::kWebKitWebSocketEnabled,
++  registry->RegisterIntegerPref(prefs::kWebKitWebSocketEnabled,
+                                 pref_defaults.websocket_enabled);
+-  registry->RegisterBooleanPref(prefs::kWebKitWebWorkerEnabled,
++  registry->RegisterIntegerPref(prefs::kWebKitWebWorkerEnabled,
+                                 pref_defaults.webworker_enabled);
+   registry->RegisterBooleanPref(prefs::kWebKitJavascriptEnabled,
+                                 pref_defaults.javascript_enabled);
+diff --git a/gooroom/content/gooroom_safety_policy_part.cc b/gooroom/content/gooroom_safety_policy_part.cc
+index 732944f5ddb9d..caf931fe3332b 100644
+--- a/gooroom/content/gooroom_safety_policy_part.cc
++++ b/gooroom/content/gooroom_safety_policy_part.cc
+@@ -22,14 +22,14 @@ void GooroomSafetyPolicyPart::OverrideWebkitPrefs(
+     bool confirm = ps->GetBoolean("gooroom_option.websocket_confirm");
+     web_prefs->websocket_enabled = confirm;
+   } else {
+-    web_prefs->websocket_enabled = false;
++    web_prefs->websocket_enabled = 0;
+   }
+ 
+   if (gooroom::g_gooroom->useWebWorker()) {
+     bool confirm = ps->GetBoolean("gooroom_option.webworker_confirm");
+     web_prefs->webworker_enabled = confirm;
+   } else {
+-    web_prefs->webworker_enabled = false;
++    web_prefs->webworker_enabled = 0;
+   }
+ 
+   return;
+diff --git a/third_party/blink/common/web_preferences/web_preferences.cc b/third_party/blink/common/web_preferences/web_preferences.cc
+index 16aa70595920b..5720e92843ef6 100644
+--- a/third_party/blink/common/web_preferences/web_preferences.cc
++++ b/third_party/blink/common/web_preferences/web_preferences.cc
+@@ -39,8 +39,8 @@ WebPreferences::WebPreferences()
+       minimum_font_size(0),
+       minimum_logical_font_size(6),
+       default_encoding("ISO-8859-1"),
+-      websocket_enabled(true),
+-      webworker_enabled(true),
++      websocket_enabled(1),
++      webworker_enabled(1),
+ #if BUILDFLAG(IS_WIN)
+       context_menu_on_mouse_up(true),
+ #else
+diff --git a/third_party/blink/public/common/web_preferences/web_preferences.h b/third_party/blink/public/common/web_preferences/web_preferences.h
+index 6aaf694e0ae98..6e02be3fa943f 100644
+--- a/third_party/blink/public/common/web_preferences/web_preferences.h
++++ b/third_party/blink/public/common/web_preferences/web_preferences.h
+@@ -55,8 +55,8 @@ struct BLINK_COMMON_EXPORT WebPreferences {
+   int minimum_font_size;
+   int minimum_logical_font_size;
+   std::string default_encoding;
+-  bool websocket_enabled;
+-  bool webworker_enabled;
++  int websocket_enabled;
++  int webworker_enabled;
+   bool context_menu_on_mouse_up;
+   bool javascript_enabled;
+   bool web_security_enabled;
+diff --git a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
+index 762a837510540..347cb05dace25 100644
+--- a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
++++ b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
+@@ -75,12 +75,12 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::WebPreferencesDataView,
+     return r.default_encoding;
+   }
+ 
+-  static bool webworker_enabled(
++  static uint32_t webworker_enabled(
+       const blink::web_pref::WebPreferences& r) {
+     return r.webworker_enabled;
+   }
+ 
+-  static bool websocket_enabled(
++  static uint32_t websocket_enabled(
+       const blink::web_pref::WebPreferences& r) {
+     return r.websocket_enabled;
+   }
+diff --git a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
+index c45b319d5d36f..208e6dfa2afff 100644
+--- a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
++++ b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
+@@ -119,8 +119,8 @@ struct WebPreferences {
+   int32 minimum_font_size;
+   int32 minimum_logical_font_size;
+   string default_encoding;
+-  bool websocket_enabled;
+-  bool webworker_enabled;
++  int32 websocket_enabled;
++  int32 webworker_enabled;
+   bool context_menu_on_mouse_up;
+   bool javascript_enabled;
+   bool web_security_enabled;
+diff --git a/third_party/blink/renderer/core/exported/web_view_impl.cc b/third_party/blink/renderer/core/exported/web_view_impl.cc
+index 37fd5ef979044..214cdfcd6e4aa 100644
+--- a/third_party/blink/renderer/core/exported/web_view_impl.cc
++++ b/third_party/blink/renderer/core/exported/web_view_impl.cc
+@@ -1486,9 +1486,6 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
+   settings->SetDefaultTextEncodingName(
+       WebString::FromASCII(prefs.default_encoding));
+   settings->SetJavaScriptEnabled(prefs.javascript_enabled);
+-  settings->SetJavaScriptEnabled(prefs.websocket_enabled);
+-  settings->SetJavaScriptEnabled(prefs.webworker_enabled);
+-  settings->SetJavaScriptEnabled(prefs.javascript_enabled);
+   settings->SetWebSecurityEnabled(prefs.web_security_enabled);
+   settings->SetLoadsImagesAutomatically(prefs.loads_images_automatically);
+   settings->SetImagesEnabled(prefs.images_enabled);
+@@ -1499,6 +1496,23 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
+   settings->SetDownloadableBinaryFontsEnabled(prefs.remote_fonts_enabled);
+   settings->SetJavaScriptCanAccessClipboard(
+       prefs.javascript_can_access_clipboard);
++#if defined(GOOROOM_BUILD)
++  if (prefs.websocket_enabled) {
++    WebRuntimeFeatures::EnableWebSocket(true);
++    WebRuntimeFeatures::EnableWebSocketConfirm(prefs.websocket_enabled == 1);
++  } else {
++    WebRuntimeFeatures::EnableWebSocket(false);
++    WebRuntimeFeatures::EnableWebSocketConfirm(false);
++  }
++
++  if (prefs.webworker_enabled) {
++    WebRuntimeFeatures::EnableWebWorker(true);
++    WebRuntimeFeatures::EnableWebWorkerConfirm(prefs.webworker_enabled == 1);
++  } else {
++    WebRuntimeFeatures::EnableWebWorker(false);
++    WebRuntimeFeatures::EnableWebWorkerConfirm(false);
++  }
++#endif
+   settings->SetDNSPrefetchingEnabled(prefs.dns_prefetching_enabled);
+   blink::WebNetworkStateNotifier::SetSaveDataEnabled(prefs.data_saver_enabled);
+   settings->SetLocalStorageEnabled(prefs.local_storage_enabled);
+-- 
+2.39.2
+
