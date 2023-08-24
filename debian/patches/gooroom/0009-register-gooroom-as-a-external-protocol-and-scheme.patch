@@ -1,4 +1,4 @@
-From 203e5fa704f3158629db9d75fe8375bc3d008ad1 Mon Sep 17 00:00:00 2001
+From 29f61bef4356c922cacc37cfacbca2d9e0eea669 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 14:59:35 +0900
 Subject: [PATCH 09/65] register /gooroom/ as a external protocol and scheme
@@ -26,7 +26,7 @@ index 214f806bac055..e3e771bd20258 100644
      url::kDataScheme,
  #if BUILDFLAG(IS_CHROMEOS_ASH)
 diff --git a/content/common/url_schemes.cc b/content/common/url_schemes.cc
-index f896d3315f38d..17906f0bea3ad 100644
+index ce9644d33fe83..0c6414a76f3eb 100644
 --- a/content/common/url_schemes.cc
 +++ b/content/common/url_schemes.cc
 @@ -60,6 +60,10 @@ void RegisterContentSchemes(bool should_lock_registry) {
@@ -38,10 +38,10 @@ index f896d3315f38d..17906f0bea3ad 100644
 +  url::AddStandardScheme(kGooroomUIScheme, url::SCHEME_WITH_HOST);
 +#endif
    url::AddStandardScheme(kChromeUIUntrustedScheme, url::SCHEME_WITH_HOST);
-   url::AddStandardScheme(kGuestScheme, url::SCHEME_WITH_HOST);
    url::AddStandardScheme(kChromeErrorScheme, url::SCHEME_WITH_HOST);
+   for (auto& scheme : schemes.standard_schemes)
 diff --git a/content/public/common/url_constants.cc b/content/public/common/url_constants.cc
-index cf074a46d46e3..018e50bc9f38d 100644
+index c96f670dcccd5..ca3e51fa85c31 100644
 --- a/content/public/common/url_constants.cc
 +++ b/content/public/common/url_constants.cc
 @@ -13,6 +13,7 @@ namespace content {
@@ -51,9 +51,9 @@ index cf074a46d46e3..018e50bc9f38d 100644
 +const char kGooroomUIScheme[] = "gooroom";
  const char kChromeUIScheme[] = "chrome";
  const char kChromeUIUntrustedScheme[] = "chrome-untrusted";
- const char kGuestScheme[] = "chrome-guest";
+ const char kViewSourceScheme[] = "view-source";
 diff --git a/content/public/common/url_constants.h b/content/public/common/url_constants.h
-index 73e4b9bc6b034..9a7842fe60bf3 100644
+index 3f331e9162c82..4eadb5078cc06 100644
 --- a/content/public/common/url_constants.h
 +++ b/content/public/common/url_constants.h
 @@ -19,6 +19,7 @@ namespace content {
@@ -63,7 +63,7 @@ index 73e4b9bc6b034..9a7842fe60bf3 100644
 +CONTENT_EXPORT extern const char kGooroomUIScheme[]; // Used for WebUIs.
  CONTENT_EXPORT extern const char kChromeUIScheme[];  // Used for WebUIs.
  CONTENT_EXPORT extern const char kChromeUIUntrustedScheme[];
- CONTENT_EXPORT extern const char kGuestScheme[];
+ CONTENT_EXPORT extern const char kViewSourceScheme[];
 -- 
-2.30.2
+2.39.2
 

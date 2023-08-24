@@ -1,0 +1,16 @@
+author: Andres Salomon <dilinger@debian.org>
+description: disable kMojoIpcz to fix trap runtime error on i386
+
+See https://bugs.debian.org/1034406
+
+--- a/mojo/core/embedder/features.cc
++++ b/mojo/core/embedder/features.cc
+@@ -36,7 +36,7 @@ BASE_FEATURE(kMojoInlineMessagePayloads,
+ #if BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_FUCHSIA)
+ BASE_FEATURE(kMojoIpcz, "MojoIpcz", base::FEATURE_DISABLED_BY_DEFAULT);
+ #else
+-BASE_FEATURE(kMojoIpcz, "MojoIpcz", base::FEATURE_ENABLED_BY_DEFAULT);
++BASE_FEATURE(kMojoIpcz, "MojoIpcz", base::FEATURE_DISABLED_BY_DEFAULT);
+ #endif
+ 
+ }  // namespace core

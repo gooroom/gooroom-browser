@@ -40,6 +40,10 @@ export CXXFLAGS+=-fno-delete-null-pointer-checks
 # disable clang plugins
 defines=clang_use_chrome_plugins=false
 
+# use system rust
+defines+=use_chromium_rust_toolchain=false
+defines+=enable_rust=false
+
 # build using system toolchain
 defines+=host_toolchain=\"//build/toolchain/linux/unbundle:default\"
 defines+=custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
@@ -48,6 +52,8 @@ defines+=custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
 DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifeq (i386,$(DEB_HOST_ARCH))
 defines+=host_cpu=\"x86\" use_vaapi=true
+# temporarily disabled due to FTBFS with v112
+defines+=use_v8_context_snapshot=false
 endif
 ifeq (amd64,$(DEB_HOST_ARCH))
 defines+=host_cpu=\"x64\" use_vaapi=true
@@ -66,7 +72,6 @@ defines+=is_debug=false \
          use_libjpeg_turbo=true \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
-         optimize_webui=false \
          use_unofficial_version_number=false \
          enable_vr=false \
          enable_nacl=false \
@@ -78,7 +83,6 @@ defines+=is_debug=false \
          enable_hangout_services_extension=false \
          angle_has_histograms=false \
          build_angle_perftests=false \
-         enable_js_type_check=false \
          treat_warnings_as_errors=false \
          use_qt=false \
          is_cfi=false \
@@ -119,6 +123,13 @@ override_dh_auto_configure:
 	# use system node w/out patching source; upstream hardcodes x64 in path
 	mkdir -p third_party/node/linux/node-linux-x64/bin
 	cp /usr/bin/node third_party/node/linux/node-linux-x64/bin
+	# use system rollup
+	cp -ra /usr/share/nodejs/rollup third_party/node/node_modules/
+	# bullseye workarounds; delete this post-bullseye
+	cp -ra /usr/share/nodejs/acorn  third_party/node/node_modules/
+	cp -ra /usr/share/nodejs/acorn-walk third_party/node/node_modules/walk
+	sed -i -e "s#'acorn-walk'#'walk'#" third_party/node/node_modules/rollup/dist/es/shared/rollup.js
+	sed -i -e "s#'acorn-walk'#'walk'#" third_party/node/node_modules/rollup/dist/shared/rollup.js
 	# output compiler information
 	$(CXX) --version
 	# prefer unbundled (system) libraries
@@ -127,7 +138,7 @@ override_dh_auto_configure:
 override_dh_auto_build-arch:
 	git apply debian/patches/gooroom/0008-Put-gooroom-logo-into-the-browser.patch
 	gn gen out/Release --args="$(defines)"
-	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox
+	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox chromedriver
 	cp out/Release/chrome_sandbox out/Release/chrome-sandbox
 	cp out/Release/locales/en-US.pak out/Release/resources
 	chmod 4755 out/Release/chrome-sandbox # suid sandbox
@@ -154,6 +165,10 @@ override_dh_fixperms:
 override_dh_auto_clean:
 	rm -rf third_party/node/linux/node-linux-x64
 	rm -rf out
+	rm -rf third_party/node/node_modules/rollup
+	# bullseye workarounds; delete this post-bullseye
+	rm -rf third_party/node/node_modules/acorn
+	rm -rf third_party/node/node_modules/walk
 	find . -name \*.pyc -execdir rm -f {} \;
 	dh_auto_clean
 

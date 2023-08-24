@@ -1,0 +1,8 @@
+out/Release/*.bin usr/lib/gooroom-browser
+out/Release/libEGL.so usr/lib/gooroom-browser
+out/Release/libGLESv2.so usr/lib/gooroom-browser
+
+out/Release/chrome_crashpad_handler usr/lib/gooroom-browser
+
+# only if building against bundled ICU
+out/Release/icudtl.dat usr/lib/gooroom-browser

@@ -13,8 +13,8 @@ bookworm, only in bullseye.
 
 --- a/third_party/dawn/src/tint/BUILD.gn
 +++ b/third_party/dawn/src/tint/BUILD.gn
-@@ -78,6 +78,15 @@ config("tint_public_config") {
-     defines += [ "TINT_BUILD_GLSL_WRITER=0" ]
+@@ -91,6 +91,15 @@ config("tint_public_config") {
+     defines += [ "TINT_BUILD_IR=0" ]
    }
  
 +  # work around a bug with clang not being able to find the __mulodi4 symbol on 32-bit archs
@@ -31,7 +31,7 @@ bookworm, only in bullseye.
      "${tint_root_dir}/include/",
 --- a/v8/BUILD.gn
 +++ b/v8/BUILD.gn
-@@ -16,6 +16,7 @@ if (is_android) {
+@@ -14,6 +14,7 @@ import("//build_overrides/build.gni")
  
  import("gni/snapshot_toolchain.gni")
  import("gni/v8.gni")
@@ -39,7 +39,7 @@ bookworm, only in bullseye.
  
  # Specifies if the target build is a simulator build. Comparing target cpu
  # with v8 target cpu to not affect simulator builds for making cross-compile
-@@ -648,6 +649,15 @@ config("internal_config_base") {
+@@ -700,6 +701,15 @@ config("internal_config_base") {
      "$target_gen_dir",
      "$target_gen_dir/include",
    ]

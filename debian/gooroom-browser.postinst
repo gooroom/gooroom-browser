@@ -1,6 +1,13 @@
 #!/bin/sh
-chmod 4755 /usr/lib/gooroom-browser/chrome-sandbox
-chmod +x /usr/lib/gooroom-browser/chrome_crashpad_handler
+set -e
+
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] ; then
+    update-alternatives --install /usr/bin/x-www-browser \
+        x-www-browser /usr/bin/gooroom-browser 40
+    update-alternatives --install /usr/bin/gnome-www-browser \
+        gnome-www-browser /usr/bin/gooroom-browser 40
+fi
+
 bash /usr/lib/gooroom-browser/gooroom-browser-setup.sh
 exit 0
 

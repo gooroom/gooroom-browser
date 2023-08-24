@@ -1,26 +1,26 @@
-From 13ad8499ba507a8b61445a7216d5dcaf197af290 Mon Sep 17 00:00:00 2001
+From 5f05208f4baa982a1b6ff7642acb4165f910e8f8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:08:02 +0900
 Subject: [PATCH 12/65] Add and show gooroom protocol logo with short brand
  text and fake scheme gooroom:// instead of chrome:// in omnibox.
 
 ---
- .../chrome_location_bar_model_delegate.cc     |  6 +++
+ .../chrome_location_bar_model_delegate.cc     |  5 ++
  .../views/location_bar/location_icon_view.cc  | 11 +++++
- .../views/page_info/page_info_bubble_view.cc  |  9 +++-
+ .../views/page_info/page_info_bubble_view.cc  |  5 +-
  components/omnibox/browser/BUILD.gn           |  3 ++
  .../browser/vector_icons/gooroom_product.icon | 47 +++++++++++++++++++
  .../vector_icons/gooroom_product_1x.icon      | 47 +++++++++++++++++++
- 6 files changed, 122 insertions(+), 1 deletion(-)
+ 6 files changed, 117 insertions(+), 1 deletion(-)
  create mode 100644 components/omnibox/browser/vector_icons/gooroom_product.icon
  create mode 100644 components/omnibox/browser/vector_icons/gooroom_product_1x.icon
 
 diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-index a26fbff9637fe..d4a973553d5a2 100644
+index f7c4e22fbe5d3..2aed761d1f93f 100644
 --- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 +++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-@@ -199,6 +199,12 @@ const gfx::VectorIcon* ChromeLocationBarModelDelegate::GetVectorIconOverride()
-     return &omnibox::kExtensionAppIcon;
+@@ -207,6 +207,11 @@ const gfx::VectorIcon* ChromeLocationBarModelDelegate::GetVectorIconOverride()
+   }
  #endif
  
 +#if defined(GOOROOM_BUILD)
@@ -28,15 +28,14 @@ index a26fbff9637fe..d4a973553d5a2 100644
 +  if (url.SchemeIs(content::kGooroomUIScheme))
 +    return &omnibox::kGooroomProductIcon;
 +#endif // GOOROOM_BUILD
-+
    return nullptr;
  }
  
 diff --git a/chrome/browser/ui/views/location_bar/location_icon_view.cc b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-index 807ec696a8268..bc0a43897c39b 100644
+index 59b900cddf04f..8803435d865c9 100644
 --- a/chrome/browser/ui/views/location_bar/location_icon_view.cc
 +++ b/chrome/browser/ui/views/location_bar/location_icon_view.cc
-@@ -141,6 +141,10 @@ bool LocationIconView::GetShowText() const {
+@@ -187,6 +187,10 @@ bool LocationIconView::GetShowText() const {
    const GURL& url = location_bar_model->GetURL();
    if (url.SchemeIs(content::kChromeUIScheme) ||
        url.SchemeIs(extensions::kExtensionScheme) ||
@@ -47,7 +46,7 @@ index 807ec696a8268..bc0a43897c39b 100644
        url.SchemeIs(url::kFileScheme) ||
        url.SchemeIs(dom_distiller::kDomDistillerScheme)) {
      return true;
-@@ -157,9 +161,16 @@ std::u16string LocationIconView::GetText() const {
+@@ -203,9 +207,16 @@ std::u16string LocationIconView::GetText() const {
    if (delegate_->IsEditingOrEmpty())
      return std::u16string();
  
@@ -65,23 +64,19 @@ index 807ec696a8268..bc0a43897c39b 100644
    if (delegate_->GetLocationBarModel()->GetURL().SchemeIs(url::kFileScheme))
      return l10n_util::GetStringUTF16(IDS_OMNIBOX_FILE);
 diff --git a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-index 428456898e187..f9d0c9623724a 100644
+index 3e9f1ef55c657..a86fa705dd851 100644
 --- a/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
 +++ b/chrome/browser/ui/views/page_info/page_info_bubble_view.cc
-@@ -85,7 +85,11 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
-     } else {
+@@ -86,7 +86,7 @@ InternalPageInfoBubbleView::InternalPageInfoBubbleView(
        text = IDS_PAGE_INFO_READER_MODE_PAGE;
      }
--  } else if (!url.SchemeIs(content::kChromeUIScheme)) {
-+  } else if (!url.SchemeIs(content::kChromeUIScheme) 
-+#if defined(GOOROOM_BUILD)
-+             && !url.SchemeIs(content::kGooroomUIScheme)
-+#endif
-+  ) {
-     NOTREACHED();
+   } else {
+-    CHECK(url.SchemeIs(content::kChromeUIScheme));
++    CHECK(url.SchemeIs(content::kGooroomUIScheme));
    }
  
-@@ -192,6 +196,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
+   // Title insets assume there is content (and thus have no bottom padding). Use
+@@ -192,6 +192,9 @@ views::BubbleDialogDelegateView* PageInfoBubbleView::CreatePageInfoBubble(
    gfx::NativeView parent_view = platform_util::GetViewForWindow(parent_window);
  
    if (PageInfo::IsFileOrInternalPage(url) ||
@@ -92,13 +87,13 @@ index 428456898e187..f9d0c9623724a 100644
        url.SchemeIs(dom_distiller::kDomDistillerScheme)) {
      return new InternalPageInfoBubbleView(anchor_view, anchor_rect, parent_view,
 diff --git a/components/omnibox/browser/BUILD.gn b/components/omnibox/browser/BUILD.gn
-index 00aad3bc6f622..eccc0df330530 100644
+index d58df19e3c115..fbde925b8b945 100644
 --- a/components/omnibox/browser/BUILD.gn
 +++ b/components/omnibox/browser/BUILD.gn
-@@ -69,6 +69,9 @@ aggregate_vector_icons("omnibox_vector_icons") {
-     "switch.icon",
+@@ -92,6 +92,9 @@ aggregate_vector_icons("omnibox_vector_icons") {
      "tab.icon",
      "trending_up.icon",
+     "trending_up_chrome_refresh.icon",
 +    # convert Gooroom protocol logo, .svg to skia
 +    "gooroom_product_1x.icon",
 +    "gooroom_product.icon",
@@ -212,5 +207,5 @@ index 0000000000000..b62188f9d43fe
 +R_ARC_TO, 1.63f, 1.63f, 0, 0, 1, -0.58f, 0.01f,
 +CLOSE
 -- 
-2.30.2
+2.39.2
 

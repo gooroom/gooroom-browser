@@ -1,0 +1,61 @@
+description: fix ftbfs errors due to missing typename
+author: Andres Salomon <dilinger@debian.org>
+
+I think this is also a clang-14 thing?
+
+--- a/ui/base/interaction/interactive_test_internal.h
++++ b/ui/base/interaction/interactive_test_internal.h
+@@ -333,7 +333,7 @@ struct ArgsExtractor<R(Args...)> {
+ };
+ 
+ template <typename F>
+-using ReturnTypeOf = MaybeBindTypeHelper<F>::ReturnType;
++using ReturnTypeOf = typename MaybeBindTypeHelper<F>::ReturnType;
+ 
+ template <size_t N, typename F>
+ using NthArgumentOf = std::tuple_element_t<
+--- a/chrome/browser/download/bubble/download_bubble_update_service.cc
++++ b/chrome/browser/download/bubble/download_bubble_update_service.cc
+@@ -91,7 +91,7 @@ ItemSortKey GetSortKey(const Item& item)
+ // Helper to get an iterator to the last element in the cache. The cache
+ // must not be empty.
+ template <typename Item>
+-SortedItems<Item>::const_iterator GetLastIter(const SortedItems<Item>& cache) {
++typename SortedItems<Item>::const_iterator GetLastIter(const SortedItems<Item>& cache) {
+   CHECK(!cache.empty());
+   auto it = cache.end();
+   return std::prev(it);
+@@ -967,9 +967,9 @@ bool DownloadBubbleUpdateService::CacheM
+ }
+ 
+ template <typename Id, typename Item>
+-SortedItems<Item>::iterator
++typename SortedItems<Item>::iterator
+ DownloadBubbleUpdateService::CacheManager::RemoveItemFromCacheByIter(
+-    SortedItems<Item>::iterator iter,
++    typename SortedItems<Item>::iterator iter,
+     SortedItems<Item>& cache,
+     IterMap<Id, Item>& iter_map) {
+   CHECK(iter != cache.end());
+--- a/components/optimization_guide/core/tflite_model_executor.h
++++ b/components/optimization_guide/core/tflite_model_executor.h
+@@ -189,7 +189,7 @@ class TFLiteModelExecutor : public Model
+   void SendForBatchExecution(
+       BatchExecutionCallback callback_on_complete,
+       base::TimeTicks start_time,
+-      ModelExecutor<OutputType, InputType>::ConstRefInputVector inputs)
++      typename ModelExecutor<OutputType, InputType>::ConstRefInputVector inputs)
+       override {
+     DCHECK(execution_task_runner_->RunsTasksInCurrentSequence());
+     DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+--- a/third_party/blink/renderer/core/html/parser/html_document_parser_fastpath.cc
++++ b/third_party/blink/renderer/core/html/parser/html_document_parser_fastpath.cc
+@@ -169,7 +169,7 @@ class HTMLFastPathParser {
+   using Span = base::span<const Char>;
+   using USpan = base::span<const UChar>;
+   // 32 matches that used by HTMLToken::Attribute.
+-  typedef std::conditional<std::is_same_v<Char, UChar>,
++  typedef typename std::conditional<std::is_same_v<Char, UChar>,
+                            UCharLiteralBuffer<32>,
+                            LCharLiteralBuffer<32>>::type LiteralBufferType;
+   typedef UCharLiteralBuffer<32> UCharLiteralBufferType;

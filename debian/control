@@ -2,38 +2,27 @@ Source: gooroom-browser
 Section: web
 Priority: optional
 Maintainer: Debian Chromium Team <chromium@packages.debian.org>
-Uploaders: Michael Gilbert <mgilbert@debian.org>,
- Riku Voipio <riku.voipio@linaro.org>,
+Uploaders:
  Andres Salomon <dilinger@debian.org>,
- Michel Le Bihan <michel@lebihan.pl>
+ Timothy Pearson <tpearson@raptorengineering.com>,
 Vcs-Git: https://salsa.debian.org/chromium-team/chromium.git
 Vcs-Browser: https://salsa.debian.org/chromium-team/chromium
 Homepage: http://www.chromium.org/Home
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Build-Depends:
- debhelper (>= 11),
- devscripts,
- lld-13,
- clang-13,
- clang-format-13,
- devscripts (>= 2.18.9),
- brotli,
- libdouble-conversion-dev,
- libxnvctrl-dev,
- libxnvctrl0,
- libwoff-dev,
  git,
  libssl-dev,
- python2,
  libavutil-dev,
  libavcodec-dev (>= 7:3.0),
  libavformat-dev,
  libharfbuzz-dev (>= 2.1.1),
  libvpx-dev (>= 1.7.0),
- lld,
- clang,
- clang-format,
+ debhelper (>= 11),
+ devscripts,
+ lld-13,
+ clang-13,
+ clang-format-13,
  python3,
  pkg-config,
  ninja-build,
@@ -50,6 +39,7 @@ Build-Depends:
  bison,
  brotli,
  nodejs,
+ rollup,
  valgrind,
  xz-utils,
  x11-apps,
@@ -109,19 +99,20 @@ Build-Depends:
  libnspr4-dev,
  libcups2-dev,
  libevent-dev,
+ libevdev-dev,
  libgcrypt20-dev,
  libcurl4-openssl-dev,
  fonts-ipafont-gothic,
  fonts-ipafont-mincho,
 
 Package: gooroom-browser
-Architecture: i386 amd64 arm64 armhf
+Architecture: i386 amd64 arm64 armhf ppc64el
 Built-Using: ${Built-Using}
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
  libgtk-3-0 | xdg-desktop-portal-backend,
- gooroom-browser-l10n,
+ gooroom-browser-common (= ${binary:Version}),
 Recommends:
  chromium-sandbox,
 Suggests:
@@ -147,7 +138,7 @@ Architecture: all
 Section: localization
 Depends:
  ${misc:Depends},
- gooroom-browser (>= ${source:Version}), gooroom-browser (<< ${source:Version}.1~),
+ gooroom-browser,
 Description: web browser - language packs
  Web browser that aims to build a safer, faster, and more stable internet
  browsing experience.
@@ -157,3 +148,43 @@ Description: web browser - language packs
  hi, hr, hu, id, it, ja, kn, ko, lt, lv, ml, mr, nb, nl, pl, pt-BR, pt-PT,
  ro, ru, sk, sl, sr, sv, sw, ta, te, th, tr, uk, vi, zh-CN, zh-TW
 
+Package: gooroom-browser-common
+Architecture: i386 amd64 arm64 armhf ppc64el
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+ x11-utils,
+ xdg-utils,
+Recommends:
+ upower,
+ libu2f-udev,
+ libgl1-mesa-dri,
+ chromium-sandbox,
+ fonts-liberation,
+ notification-daemon,
+ system-config-printer,
+Breaks:
+ chromium (<< ${binary:Version}),
+Replaces:
+ chromium (<< ${binary:Version}),
+Description: web browser - common resources used by the chromium packages
+ Web browser that aims to build a safer, faster, and more stable internet
+ browsing experience.
+ .
+ This package contains resources that are in common to different chromium
+ packages.
+
+Package: chromium-sandbox
+Architecture: i386 amd64 arm64 armhf ppc64el
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Breaks:
+ chromium (<< ${binary:Version}),
+Replaces:
+ chromium (<< ${binary:Version}),
+Description: web browser - setuid security sandbox for chromium
+ Web browser that aims to build a safer, faster, and more stable internet
+ browsing experience.
+ .
+ This package contains the setuid chromium sandbox.

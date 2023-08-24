@@ -1,4 +1,4 @@
-From 693b0fd35f8755f10448c14136307aec69cc669a Mon Sep 17 00:00:00 2001
+From c6118c03c95e873f0c1952dc7f495b21fd5c15ea Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 15:03:53 +0900
 Subject: [PATCH 11/65] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
@@ -12,7 +12,7 @@ Subject: [PATCH 11/65] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
  4 files changed, 29 insertions(+)
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 6170a5656eb83..1573c83adc161 100644
+index f5c614464662c..049920aac5f91 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -4,6 +4,10 @@
@@ -23,22 +23,22 @@ index 6170a5656eb83..1573c83adc161 100644
 +#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
 +#endif
 +
- #include <algorithm>
  #include <iterator>
  #include <map>
-@@ -1532,6 +1536,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
- #endif
+ #include <memory>
+@@ -1560,6 +1564,10 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
  
-   extra_parts_.push_back(new ChromeContentBrowserClientPerformanceManagerPart);
-+
+   extra_parts_.push_back(
+       std::make_unique<ChromeContentBrowserClientPerformanceManagerPart>());
 +#if BUILDFLAG(ENABLE_GOOROOM)
-+  extra_parts_.push_back(new GooroomURLRewrite);
++  extra_parts_.push_back(
++      std::make_unique<GooroomURLRewrite>());
 +#endif
  }
  
  ChromeContentBrowserClient::~ChromeContentBrowserClient() {
 diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
-index c63b46925a635..a26fbff9637fe 100644
+index a5c9408f6c2a0..f7c4e22fbe5d3 100644
 --- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 +++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
 @@ -4,6 +4,10 @@
@@ -52,7 +52,7 @@ index c63b46925a635..a26fbff9637fe 100644
  #include "base/check.h"
  #include "base/feature_list.h"
  #include "base/metrics/histogram_macros.h"
-@@ -76,6 +80,11 @@ bool ChromeLocationBarModelDelegate::GetURL(GURL* url) const {
+@@ -78,6 +82,11 @@ bool ChromeLocationBarModelDelegate::GetURL(GURL* url) const {
      return false;
  
    *url = entry->GetVirtualURL();
@@ -99,5 +99,5 @@ index a3e0e2ad948b7..015ce0a313c22 100644
    // ChromeContentBrowserClientParts:
    void OverrideWebkitPrefs(content::WebContents* web_contents,
 -- 
-2.30.2
+2.39.2
 

@@ -1,0 +1,25 @@
+From 1fa42a2e487740b0f7f3d62027f89285f91d37b0 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 12:23:32 +0900
+Subject: [PATCH 37/65] Remove 'Export to JSON' button on gooroom://policy page
+
+---
+ components/policy/resources/webui/policy.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/components/policy/resources/webui/policy.html b/components/policy/resources/webui/policy.html
+index a7cde26503b58..01754d048d9cf 100644
+--- a/components/policy/resources/webui/policy.html
++++ b/components/policy/resources/webui/policy.html
+@@ -20,7 +20,7 @@
+     </div>
+     <div class="header-row">
+       <button id="reload-policies">$i18n{reloadPolicies}</button>
+-      <button id="export-policies">$i18n{exportPoliciesJSON}</button>
++      <button id="export-policies" hidden>$i18n{exportPoliciesJSON}</button>
+       <button id="copy-policies">$i18n{copyPoliciesJSON}</button>
+ <if expr="not is_chromeos">
+       <button id="upload-report">$i18n{uploadReport}</button>
+-- 
+2.39.2
+

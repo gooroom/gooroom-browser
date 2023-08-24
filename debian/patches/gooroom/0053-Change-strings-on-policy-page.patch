@@ -1,0 +1,25 @@
+From 7e9fd0dd1a629a6b61296a22e6b16effcddc4479 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:09:42 +0900
+Subject: [PATCH 53/65] Change strings on policy page
+
+---
+ components/policy/core/browser/policy_conversions.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/components/policy/core/browser/policy_conversions.cc b/components/policy/core/browser/policy_conversions.cc
+index 56d15c5d30ec4..21e1d242cc004 100644
+--- a/components/policy/core/browser/policy_conversions.cc
++++ b/components/policy/core/browser/policy_conversions.cc
+@@ -40,7 +40,7 @@ const char kNameKey[] = "name";
+ const char kPoliciesKey[] = "policies";
+ const char kPolicyNamesKey[] = "policyNames";
+ const char kChromePoliciesId[] = "chrome";
+-const char kChromePoliciesName[] = "Chrome Policies";
++const char kChromePoliciesName[] = "Gooroom Policies";
+ 
+ #if !BUILDFLAG(IS_CHROMEOS)
+ const char kPrecedenceOrderKey[] = "precedenceOrder";
+-- 
+2.39.2
+

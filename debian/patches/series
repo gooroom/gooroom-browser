@@ -1,20 +1,25 @@
 debianization/manpage.patch
 debianization/sandbox.patch
 debianization/master-preferences.patch
-debianization/support-i386.patch
 
 fixes/ps-print.patch
-fixes/clang-and-gcc11.patch
 fixes/widevine-revision.patch
 fixes/widevine-locations.patch
+fixes/cmath.patch
+fixes/vector.patch
+fixes/brandversion-construct.patch
+fixes/SkColor4f-init.patch
+fixes/cookieresult.patch
 
 upstream/mojo.patch
+upstream/feature-list-static.patch
+upstream/statelessV4L2.patch
+upstream/contains.patch
 
 disable/tests.patch
 disable/unrar.patch
 disable/signin.patch
 disable/android.patch
-disable/openh264.patch
 disable/catapult.patch
 disable/font-tests.patch
 disable/swiftshader.patch
@@ -36,10 +41,27 @@ system/clang-format.patch
 system/opus.patch
 system/eu-strip.patch
 system/rapidjson.patch
+system/rollup.patch
+
+bookworm/clang-attribs.patch
+bookworm/typename.patch
+bookworm/structured-binding-scope-bug.patch
 
 bullseye/clang13.patch
+bullseye/constexpr.patch
+bullseye/stringpiece.patch
 bullseye/lld-13.patch
 bullseye/mulodic.patch
+bullseye/default-equality-op.patch
+bullseye/ptr-traits-bug.patch
+bullseye/disable-mojo-ipcz.patch
+bullseye/webui.patch
+bullseye/openh264.patch
+bullseye/av1-vaapi.patch
+
+# i386 support
+i386/support-i386.patch
+i386/angle-lockfree.patch
 
 # POWER support
 ppc64le/sandbox/0001-linux-seccomp-bpf-ppc64-glibc-workaround-in-SIGSYS-h.patch
@@ -60,6 +82,7 @@ ppc64le/sandbox/Sandbox-linux-services-credentials.cc-PPC.patch
 ppc64le/sandbox/0008-sandbox-fix-ppc64le-glibc234.patch
 
 ppc64le/third_party/0001-third_party-angle-Include-missing-header-cstddef-in-.patch
+ppc64le/third_party/0001-Add-PPC64-support-for-boringssl.patch
 ppc64le/third_party/0001-third_party-boringssl-Properly-detect-ppc64le-in-BUI.patch
 ppc64le/third_party/0001-third_party-libvpx-Properly-generate-gni-on-ppc64.patch
 ppc64le/third_party/0001-third_party-lss-Don-t-look-for-mmap2-on-ppc64.patch
@@ -78,11 +101,15 @@ ppc64le/libaom/0001-Add-ppc64-target-to-libaom.patch
 ppc64le/libaom/0001-Add-pregenerated-config-for-libaom-on-ppc64.patch
 
 ppc64le/third_party/0002-third_party-libvpx-Remove-bad-ppc64-config.patch
+ppc64le/third_party/0002-third-party-boringssl-add-generated-files.patch
 ppc64le/third_party/0003-third_party-libvpx-Add-ppc64-generated-config.patch
 # Enabling VSX causes artifacts to appear in VP9 videos
 #ppc64le/third_party/0003-third_party-libvpx-Add-ppc64-vsx-files.patch
 ppc64le/third_party/0003-third_party-ffmpeg-Add-ppc64-generated-config.patch
 ppc64le/third_party/0004-third_party-libvpx-work-around-ambiguous-vsx.patch
+
+# Enable VSX acceleration in Skia.  Requires POWER8 or higher.
+ppc64le/third_party/skia-vsx-instructions.patch
 
 ppc64le/ffmpeg/0001-Add-support-for-ppc64.patch
 ppc64le/breakpad/0001-Implement-support-for-ppc64-on-Linux.patch
@@ -90,18 +117,31 @@ ppc64le/crashpad/0001-Implement-support-for-PPC64-on-Linux.patch
 ppc64le/database/0001-Properly-detect-little-endian-PPC64-systems.patch
 ppc64le/third_party/0001-Force-baseline-POWER8-AltiVec-VSX-CPU-features-when-.patch
 ppc64le/fixes/fix-breakpad-compile.patch
+ppc64le/fixes/fix-partition-alloc-compile.patch
 ppc64le/v8/0002-Add-ppc64-trap-instructions.patch
+ppc64le/third_party/0001-Fix-highway-ppc-hwcap.patch
 
 ppc64le/third_party/0001-Add-PPC64-support-for-libdav1d.patch
 ppc64le/third_party/0001-Fix-libdav1d-compilation-on-clang-ppc.patch
-# Multiple Clang 11 bugs hit with VSX enabled, including bug #50520 (D103386)
-#ppc64le/third_party/skia-vsx-instructions.patch
 ppc64le/sandbox/fix-ppc64-linux-syscalls-headers.patch
 ppc64le/third_party/0003-thirdparty-fix-dav1d-gn.patch
 ppc64le/third_party/use-sysconf-page-size-on-ppc64.patch
 
 ppc64le/third_party/dawn-fix-typos.patch
 ppc64le/third_party/dawn-fix-ppc64le-detection.patch
+
+# Suppress harmless compiler warning messages that appear on ppc64 due to arch-specific warning flags being passed
+ppc64le/fixes/fix-unknown-warning-option-messages.diff
+
+# Needed on Debian while POWER8 remains the build target
+# POWER9 enables hardware 128 bit vector support (ISA 3.0),
+# and Highway gets confused when building in POWER8 mode
+# (POWER8 compiler flags) on POWER9 hosts.
+ppc64le/third_party/0002-Highway-disable-128-bit-vsx.patch
+
+# These patches enable full POWER ISA 3.0 (POWER9) acceleration when applied
+# They will not work on POWER8 (ISA 2.07) or below
+#ppc64le/core/baseline-isa-3-0.patch
 
 gooroom/0001-add-gooroom-and-configs-to-build-gooroom-browser-bin.patch
 gooroom/0002-add-GooroomExtraPartsSecurity-that-will-initialize-G.patch
@@ -110,63 +150,62 @@ gooroom/0004-initialize-GooroomBase-and-GooroomUrlFilter-in-the-m.patch
 gooroom/0005-add-guard-for-the-whitelist-based-browser-separation.patch
 gooroom/0006-Insert-URL-judgement-module-when-observer-the-browse.patch
 gooroom/0007-disable-prerender.patch
+#gooroom/0008-Put-gooroom-logo-into-the-browser.patch
 gooroom/0009-register-gooroom-as-a-external-protocol-and-scheme.patch
 gooroom/0010-Add-scheme-module-to-convert-chrome-gooroom.patch
 gooroom/0011-Add-GooroomURLRewrite-ChangeGooroomScheme-static-fun.patch
 gooroom/0012-Add-and-show-gooroom-protocol-logo-with-short-brand-.patch
-gooroom/0013-pruning-extensions-pages-chrome-extensions.patch
-gooroom/0014-add-extension-for-disable-google.com-s-browser-versi.patch
-gooroom/0015-Add-odf-viewer.patch
-gooroom/0016-Change-gooroom-browser-extensions-path-config-path.patch
-gooroom/0017-Remove-gooroom-settings-appearance-theme-page.patch
-gooroom/0018-Change-the-string-associated-with-bookmarks-chrome-t.patch
-gooroom/0019-add-setTrustMode-path-in-GooroomPref.patch
-gooroom/0020-change-toolbar-s-background-color-whether-the-browse.patch
-gooroom/0021-set-gooroom-browser-using-DefaultTheme.patch
-gooroom/0022-Modify-ntp-newtab-page.patch
-gooroom/0023-disable-chrome-login-shortcut-ctrl-shift-m-and-hide-.patch
-gooroom/0024-pruning-settings-pages-chrome-settings.patch
-gooroom/0025-enable-disable-WebSocket-according-to-policy-but-nee.patch
-gooroom/0026-change-default-path-of-policy-including-content-sett.patch
-gooroom/0027-enable-disable-WebSocket-WebWorker-according-to-poli.patch
-gooroom/0028-Web-socket-worker-IPC-Bug-fix.patch
-gooroom/0029-Add-PageSourceViewEnabled-policy-to-control-page-sou.patch
-gooroom/0030-fix-gooroom-policy-dir-bugs.patch
-gooroom/0031-Support-ppapi-flash-module.patch
-gooroom/0032-Remove-page-translation-function.patch
-gooroom/0033-Remove-Cast.patch
-gooroom/0034-Remove-Google-Help-link.patch
-gooroom/0035-Remove-reset-profile-dialog-learn-more-on-settings-p.patch
-gooroom/0036-change-chrome-to-gooroom-scheme-on-error-page-Gooroo.patch
-gooroom/0037-Remove-Incognito-mode-in-gooroom-browser.patch
-gooroom/0038-Remove-Export-to-JSON-button-on-gooroom-policy-page.patch
+gooroom/0013-add-extension-for-disable-google.com-s-browser-versi.patch
+gooroom/0014-Add-odf-viewer.patch
+gooroom/0015-Change-gooroom-browser-extensions-path-config-path.patch
+gooroom/0016-Remove-gooroom-settings-appearance-theme-page.patch
+gooroom/0017-Change-the-string-associated-with-bookmarks-chrome-t.patch
+gooroom/0018-add-setTrustMode-path-in-GooroomPref.patch
+gooroom/0019-change-toolbar-s-background-color-whether-the-browse.patch
+gooroom/0020-set-gooroom-browser-using-DefaultTheme.patch
+gooroom/0021-Modify-ntp-newtab-page.patch
+gooroom/0022-disable-chrome-login-shortcut-ctrl-shift-m-and-hide-.patch
+gooroom/0023-pruning-settings-pages-chrome-settings.patch
+gooroom/0024-enable-disable-WebSocket-according-to-policy-but-nee.patch
+gooroom/0025-change-default-path-of-policy-including-content-sett.patch
+gooroom/0026-enable-disable-WebSocket-WebWorker-according-to-poli.patch
+gooroom/0027-Web-socket-worker-IPC-Bug-fix.patch
+gooroom/0028-Add-PageSourceViewEnabled-policy-to-control-page-sou.patch
+gooroom/0029-fix-gooroom-policy-dir-bugs.patch
+gooroom/0030-Support-ppapi-flash-module.patch
+gooroom/0031-Remove-page-translation-function.patch
+gooroom/0032-Remove-Cast.patch
+gooroom/0033-Remove-Google-Help-link.patch
+gooroom/0034-Remove-reset-profile-dialog-learn-more-on-settings-p.patch
+gooroom/0035-change-chrome-to-gooroom-scheme-on-error-page-Gooroo.patch
+gooroom/0036-Remove-Incognito-mode-in-gooroom-browser.patch
+gooroom/0037-Remove-Export-to-JSON-button-on-gooroom-policy-page.patch
+gooroom/0038-BugTrackingSystem.patch
 gooroom/0039-BugTrackingSystem.patch
-gooroom/0040-BugTrackingSystem.patch
-gooroom/0041-Fix-fatal-error-on-gooroompref.patch
-gooroom/0042-BugTrackingSystem.patch
-gooroom/0043-BugTrackingSystem-1656-devtools-scheme-is-excluded-f.patch
-gooroom/0044-BugTrackingSystem-1643-Remove-route-to-enter-incogni.patch
-gooroom/0045-Hide-part-of-setting-incognito-mode.patch
-gooroom/0046-Set-maximum-length-of-the-extension-display-name.patch
-gooroom/0047-Remove-secret-mode-toggle-on-extension-page.patch
-gooroom/0048-Change-gooroom-browser-syslog.patch
-gooroom/0049-Appoint-newtab-shortcut.patch
-gooroom/0050-Change-syslog-id.patch
-gooroom/0051-reset-error-page-to-jenkins-build.patch
-gooroom/0052-Edit-security-settings-page.patch
-gooroom/0053-Change-Chromium-String-on-media.patch
-gooroom/0054-Change-strings-on-policy-page.patch
-gooroom/0055-Remove-secret-mode-on-cookies-page.patch
-gooroom/0056-Fix-wrong-highlight-on-settings-page.patch
-gooroom/0057-Change-Cookie-default-value-to-easily-use.patch
-gooroom/0058-to-jenkins-build.patch
-gooroom/0059-Revert-pruning-settings-pages-chrome-settings.patch
-gooroom/0060-BugFix-5204-5203-5202-5199.patch
-gooroom/0061-Disable-Open-as-window-on-making-shortcut-app-popup.patch
-gooroom/0062-Fix-dynamic-PageSourceViewEnabled-value.patch
-gooroom/0063-Fix-trust-untrust-changing-bug.patch
-gooroom/0064-Revert-pruning-extensions-pages-chrome-extensions.patch
+gooroom/0040-Fix-fatal-error-on-gooroompref.patch
+gooroom/0041-BugTrackingSystem.patch
+gooroom/0042-BugTrackingSystem-1656-devtools-scheme-is-excluded-f.patch
+gooroom/0043-BugTrackingSystem-1643-Remove-route-to-enter-incogni.patch
+gooroom/0044-Hide-part-of-setting-incognito-mode.patch
+gooroom/0045-Set-maximum-length-of-the-extension-display-name.patch
+gooroom/0046-Remove-secret-mode-toggle-on-extension-page.patch
+gooroom/0047-Change-gooroom-browser-syslog.patch
+gooroom/0048-Appoint-newtab-shortcut.patch
+gooroom/0049-Change-syslog-id.patch
+gooroom/0050-reset-error-page-to-jenkins-build.patch
+gooroom/0051-Edit-security-settings-page.patch
+gooroom/0052-Change-Chromium-String-on-media.patch
+gooroom/0053-Change-strings-on-policy-page.patch
+gooroom/0054-Remove-secret-mode-on-cookies-page.patch
+gooroom/0055-Fix-wrong-highlight-on-settings-page.patch
+gooroom/0056-Change-Cookie-default-value-to-easily-use.patch
+gooroom/0057-Revert-pruning-settings-pages-chrome-settings.patch
+gooroom/0058-BugFix-5204-5203-5202-5199.patch
+gooroom/0059-Disable-Open-as-window-on-making-shortcut-app-popup.patch
+gooroom/0060-Fix-dynamic-PageSourceViewEnabled-value.patch
+gooroom/0061-Fix-trust-untrust-changing-bug.patch
+gooroom/0062-Bug-5381-fix-remove-New-Incognito-Window-on-menu-but.patch
+gooroom/0063-Bug-5383-fix-bookmark-manager-crash.patch
+gooroom/0064-Bug-5384-fix-remove-secret-mode-in-bookmark-manager.patch
 gooroom/0065-Change-Chromium-strings-to-Gooroom.patch
-gooroom/Bug-5381-fix-remove-New-Incognito-Window-on-menu-but.patch
-gooroom/Bug-5383-fix-bookmark-manager-crash.patch
-gooroom/Bug-5384-fix-remove-secret-mode-in-bookmark-manager.patch
+gooroom/0066-Fix-odf-viewer.patch

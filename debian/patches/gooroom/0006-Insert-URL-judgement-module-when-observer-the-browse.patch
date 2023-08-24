@@ -1,14 +1,14 @@
-From afe69c437cf580a2e2137859a31205a26b0fa58f Mon Sep 17 00:00:00 2001
+From 7b5b5bc8f10e41922b64251966638c48b4de55fd Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:31:12 +0900
 Subject: [PATCH 06/65] Insert URL judgement module when observer the browser.
 
 ---
- .../browser/web_contents/web_contents_impl.cc | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
+ .../browser/web_contents/web_contents_impl.cc | 99 +++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index aea2d122faef0..e6037c3a9ef4a 100644
+index f36fb125659ff..f1e0e6e2a2c7d 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -4,6 +4,11 @@
@@ -23,7 +23,7 @@ index aea2d122faef0..e6037c3a9ef4a 100644
  #include <stddef.h>
  
  #include <cmath>
-@@ -5722,6 +5727,95 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
+@@ -5789,6 +5794,93 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
    }
  }
  
@@ -110,8 +110,6 @@ index aea2d122faef0..e6037c3a9ef4a 100644
 +      exit(0);
 +    }
 +  }
-+
-+  return false;
 +}
 +#endif // #if BUILDFLAG(ENABLE_GOOROOM)
 +
@@ -119,7 +117,7 @@ index aea2d122faef0..e6037c3a9ef4a 100644
  void WebContentsImpl::DidRedirectNavigation(
      NavigationHandle* navigation_handle) {
    TRACE_EVENT1("navigation", "WebContentsImpl::DidRedirectNavigation",
-@@ -5877,6 +5971,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -5935,6 +6027,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
      max_loaded_frame_count_ = GetFrameTreeSize(&primary_frame_tree_);
    }
  
@@ -134,5 +132,5 @@ index aea2d122faef0..e6037c3a9ef4a 100644
      // Update the WebPreferences for this WebContents that depends on changes
      // that might occur during navigation. This will only update the preferences
 -- 
-2.30.2
+2.39.2
 
