@@ -5,7 +5,7 @@ Subject: [PATCH 23/65] pruning settings pages(chrome://settings)
 
 ---
  .../settings/about_page/about_page.html       |  3 -
- .../settings/basic_page/basic_page.html       | 67 -------------------
+ .../settings/basic_page/basic_page.html       | 40 -------------------
  .../settings/settings_menu/settings_menu.html | 14 ----
  3 files changed, 84 deletions(-)
 
@@ -27,7 +27,7 @@ diff --git a/chrome/browser/resources/settings/basic_page/basic_page.html b/chro
 index 20f82484a9076..8700eecfc83bb 100644
 --- a/chrome/browser/resources/settings/basic_page/basic_page.html
 +++ b/chrome/browser/resources/settings/basic_page/basic_page.html
-@@ -16,73 +16,6 @@
+@@ -16,46 +16,6 @@
            <settings-reset-profile-banner on-close="onResetProfileBannerClosed_">
            </settings-reset-profile-banner>
          </template>
@@ -71,10 +71,9 @@ index 20f82484a9076..8700eecfc83bb 100644
 -            </settings-privacy-page>
 -          </settings-section>
 -        </template>
--        <template is="dom-if"
-            if="[[showPerformancePage_(pageVisibility.performance)]]"
-            restamp>
-          <settings-section page-title="$i18n{performancePageTitle}"
+         <template is="dom-if"
+             if="[[showPerformancePage_(pageVisibility.performance)]]"
+             restamp>
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 index caa9aad0400b6..e2c8ecc8838d8 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
