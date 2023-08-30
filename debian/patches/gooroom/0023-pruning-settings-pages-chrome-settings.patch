@@ -72,35 +72,9 @@ index 20f82484a9076..8700eecfc83bb 100644
 -          </settings-section>
 -        </template>
 -        <template is="dom-if"
--            if="[[showPerformancePage_(pageVisibility.performance)]]"
--            restamp>
--          <settings-section page-title="$i18n{performancePageTitle}"
--<if expr="_google_chrome">
--              show-send-feedback-button
--              on-send-feedback="onSendHighEfficiencyFeedbackClick_"
--</if>
--              section="performance" id="performanceSettingsSection">
--            <settings-performance-page prefs="{{prefs}}">
--            </settings-performance-page>
--          </settings-section>
--        </template>
--        <template is="dom-if"
--            if="[[showBatteryPage_(pageVisibility.performance)]]"
--            restamp>
--          <settings-section page-title="$i18n{batteryPageTitle}"
--              section="battery" nest-under-section="performance"
--<if expr="_google_chrome">
--              show-send-feedback-button
--              on-send-feedback="onSendBatterySaverFeedbackClick_"
--</if>
--              id="batterySettingsSection" hidden="[[!showBatterySettings_]]">
--            <settings-battery-page prefs="{{prefs}}">
--            </settings-battery-page>
--          </settings-section>
--        </template>
-         <template is="dom-if" if="[[showPage_(pageVisibility.appearance)]]"
-             restamp>
-           <settings-section page-title="$i18n{appearancePageTitle}"
+            if="[[showPerformancePage_(pageVisibility.performance)]]"
+            restamp>
+          <settings-section page-title="$i18n{performancePageTitle}"
 diff --git a/chrome/browser/resources/settings/settings_menu/settings_menu.html b/chrome/browser/resources/settings/settings_menu/settings_menu.html
 index caa9aad0400b6..e2c8ecc8838d8 100644
 --- a/chrome/browser/resources/settings/settings_menu/settings_menu.html
