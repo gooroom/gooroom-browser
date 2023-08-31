@@ -165,7 +165,7 @@ gooroom/0019-change-toolbar-s-background-color-whether-the-browse.patch
 gooroom/0020-set-gooroom-browser-using-DefaultTheme.patch
 gooroom/0021-Modify-ntp-newtab-page.patch
 gooroom/0022-disable-chrome-login-shortcut-ctrl-shift-m-and-hide-.patch
-gooroom/0023-pruning-settings-pages-chrome-settings.patch
+#gooroom/0023-pruning-settings-pages-chrome-settings.patch
 gooroom/0024-enable-disable-WebSocket-according-to-policy-but-nee.patch
 gooroom/0025-change-default-path-of-policy-including-content-sett.patch
 gooroom/0026-enable-disable-WebSocket-WebWorker-according-to-poli.patch
@@ -199,7 +199,7 @@ gooroom/0053-Change-strings-on-policy-page.patch
 gooroom/0054-Remove-secret-mode-on-cookies-page.patch
 gooroom/0055-Fix-wrong-highlight-on-settings-page.patch
 gooroom/0056-Change-Cookie-default-value-to-easily-use.patch
-gooroom/0057-Revert-pruning-settings-pages-chrome-settings.patch
+#gooroom/0057-Revert-pruning-settings-pages-chrome-settings.patch
 gooroom/0058-BugFix-5204-5203-5202-5199.patch
 gooroom/0059-Disable-Open-as-window-on-making-shortcut-app-popup.patch
 gooroom/0060-Fix-dynamic-PageSourceViewEnabled-value.patch
@@ -209,3 +209,4 @@ gooroom/0063-Bug-5383-fix-bookmark-manager-crash.patch
 gooroom/0064-Bug-5384-fix-remove-secret-mode-in-bookmark-manager.patch
 gooroom/0065-Change-Chromium-strings-to-Gooroom.patch
 gooroom/0066-Fix-odf-viewer.patch
+gooroom/0067-Change-chrome-to-gooroom-on-tab-hover-card-bubble.patch

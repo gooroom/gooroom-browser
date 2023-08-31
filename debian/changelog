@@ -1,3 +1,12 @@
+gooroom-browser (3.6.0-1+grm3u2) stretch; urgency=medium
+
+  * Update 3.6.0-1+grm3u2
+    - Fix gooroom-browser-commom install bug
+    - Change tab hover strings(chrome to gooroom)
+    - Revert performance on settings page
+
+ -- Choi J.S. <junsungc91@gmail.com>  Thu, 31 Aug 2023 13:53:00 +0900
+
 gooroom-browser (3.6.0-1+grm3u1) stretch; urgency=medium
 
   * Init 3.6.0-1+grm3u1
