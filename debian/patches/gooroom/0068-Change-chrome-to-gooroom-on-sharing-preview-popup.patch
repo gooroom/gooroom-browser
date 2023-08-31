@@ -1,0 +1,33 @@
+From f65ed46d95eb7d58d040d75dd81d0e852fad43e6 Mon Sep 17 00:00:00 2001
+From: cjs <cjs@hancom.com>
+Date: Thu, 31 Aug 2023 02:04:45 -0400
+Subject: [PATCH] Change chrome to gooroom on sharing preview popup
+
+---
+ chrome/browser/ui/views/sharing_hub/preview_view.cc | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/chrome/browser/ui/views/sharing_hub/preview_view.cc b/chrome/browser/ui/views/sharing_hub/preview_view.cc
+index 5ee431ac12fab..c08a98f2180f0 100644
+--- a/chrome/browser/ui/views/sharing_hub/preview_view.cc
++++ b/chrome/browser/ui/views/sharing_hub/preview_view.cc
+@@ -13,6 +13,7 @@
+ #include "ui/views/layout/flex_layout.h"
+ #include "ui/views/layout/flex_layout_types.h"
+ #include "ui/views/view_class_properties.h"
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
+ 
+ namespace sharing_hub {
+ 
+@@ -99,7 +100,7 @@ PreviewView::PreviewView(share::ShareAttempt attempt) {
+   title_->SetHorizontalAlignment(gfx::ALIGN_LEFT);
+ 
+   url_ = labels_container->AddChildView(std::make_unique<UrlLabel>(
+-      attempt.url, views::style::CONTEXT_DIALOG_BODY_TEXT,
++      GooroomURLRewrite::ChangeGooroomScheme(attempt.url), views::style::CONTEXT_DIALOG_BODY_TEXT,
+       views::style::STYLE_HINT));
+   url_->SetHorizontalAlignment(gfx::ALIGN_LEFT);
+ }
+-- 
+2.39.2
+
