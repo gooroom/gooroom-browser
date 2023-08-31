@@ -201,3 +201,4 @@ gooroom/0063-Bug-5383-fix-bookmark-manager-crash.patch
 gooroom/0064-Bug-5384-fix-remove-secret-mode-in-bookmark-manager.patch
 gooroom/0065-Change-Chromium-strings-to-Gooroom.patch
 gooroom/0066-Fix-odf-viewer.patch
+gooroom/0067-Change-chrome-to-gooroom-on-tab-hover-card-bubble.patch
