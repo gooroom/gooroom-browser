@@ -1,0 +1,32 @@
+From f2b874abd303a69b7836645430f820b2dd913493 Mon Sep 17 00:00:00 2001
+From: cjs <cjs@hancom.com>
+Date: Wed, 30 Aug 2023 07:37:27 -0400
+Subject: [PATCH] Change chrome to gooroom on tab hover card bubble
+
+---
+ chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc b/chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc
+index 4d3e7cfac7085..cdac27fc3433f 100644
+--- a/chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc
++++ b/chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc
+@@ -10,6 +10,7 @@
+ #include <memory>
+ #include <string>
+ 
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
+ #include "base/containers/lru_cache.h"
+ #include "base/memory/raw_ptr.h"
+ #include "base/metrics/field_trial_params.h"
+@@ -516,6 +517,7 @@ void TabHoverCardBubbleView::UpdateCardContent(const Tab* tab) {
+     is_filename = true;
+     domain = l10n_util::GetStringUTF16(IDS_HOVER_CARD_FILE_URL_SOURCE);
+   } else {
++    domain_url = GooroomURLRewrite::ChangeGooroomScheme(domain_url);
+     if (domain_url.SchemeIsBlob()) {
+       domain = l10n_util::GetStringUTF16(IDS_HOVER_CARD_BLOB_URL_SOURCE);
+     } else {
+-- 
+2.39.2
+
