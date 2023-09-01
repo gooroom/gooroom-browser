@@ -1,3 +1,10 @@
+gooroom-browser (4.0.1-1+grm4u3) stretch; urgency=medium
+
+  * Update 4.0.1-1+grm4u3
+    - Change newtab page gooroom logo
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 01 Sep 2023 15:08:00 +0900
+
 gooroom-browser (4.0.1-1+grm4u2) stretch; urgency=medium
 
   * Update 4.0.1-1+grm4u2
