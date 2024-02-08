@@ -204,3 +204,4 @@ gooroom/0066-Fix-odf-viewer.patch
 gooroom/0067-Change-chrome-to-gooroom-on-tab-hover-card-bubble.patch
 gooroom/0068-Change-chrome-to-gooroom-on-sharing-preview-popup.patch
 #gooroom/Change-newtab-gooroom-logo.patch
+gooroom/0069-Modify-defined-logic-to-fix-CPPCheck-warning.patch
