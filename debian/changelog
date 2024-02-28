@@ -1,38 +1,660 @@
-gooroom-browser (4.0.1-1+grm4u5) stretch; urgency=medium
+gooroom-browser (4.0.2-1+grm4u1) stretch; urgency=medium
 
-  * Update 4.0.1-1+grm4u5
-    - Fix CPPCheck high warning on GooroomMain.cc
+  * Init 4.0.2-1+grm4u1
 
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 08 Sep 2023 08:50:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Wed, 28 Feb 2024 10:03:00 +0900
 
-gooroom-browser (4.0.1-1+grm4u4) stretch; urgency=medium
+chromium (121.0.6167.160-1~deb12u1) bookworm-security; urgency=high
 
-  * Update 4.0.1-1+grm4u4
-    - Change newtab page gooroom logo (png > svg)
+  * New upstream security release.
+    - CVE-2024-1284: Use after free in Mojo. Reported by Anonymous.
+    - CVE-2024-1283: Heap buffer overflow in Skia.
+      Reported by Jorge Buzeti (@r3tr074).
 
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 08 Sep 2023 08:50:00 +0900
+ -- Andres Salomon <dilinger@debian.org>  Tue, 06 Feb 2024 22:41:53 -0500
 
-gooroom-browser (4.0.1-1+grm4u3) stretch; urgency=medium
+chromium (121.0.6167.139-1~deb12u1) bookworm-security; urgency=high
 
-  * Update 4.0.1-1+grm4u3
-    - Change newtab page gooroom logo
+  * New upstream security release.
+    - CVE-2024-1060: Use after free in Canvas. Reported by Anonymous.
+    - CVE-2024-1059: Use after free in WebRTC.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2024-1077: Use after free in Network.
+      Reported by Microsoft Security Research Center.
 
- -- Choi J.S. <junsungc91@gmail.com>  Fri, 01 Sep 2023 15:08:00 +0900
+ -- Andres Salomon <dilinger@debian.org>  Wed, 31 Jan 2024 11:49:10 -0500
 
-gooroom-browser (4.0.1-1+grm4u2) stretch; urgency=medium
+chromium (121.0.6167.85-1~deb12u1) bookworm-security; urgency=high
 
-  * Update 4.0.1-1+grm4u2
-    - Fix gooroom-browser-commom install bug
-    - Change tab hover & sharing strings(chrome to gooroom)
-    - Revert performance on settings page
+  * New upstream stable release.
+    - CVE-2024-0807: Use after free in WebAudio.
+      Reported by Huang Xilin of Ant Group Light-Year Security Lab.
+    - CVE-2024-0812: Inappropriate implementation in Accessibility.
+      Reported by Anonymous.
+    - CVE-2024-0808: Integer underflow in WebUI.
+      Reported by Lyra Rebane (rebane2001).
+    - CVE-2024-0810: Insufficient policy enforcement in DevTools.
+      Reported by Shaheen Fazim.
+    - CVE-2024-0814: Incorrect security UI in Payments.
+      Reported by Muneaki Nishimura (nishimunea).
+    - CVE-2024-0813: Use after free in Reading Mode. Reported by @retsew0x01.
+    - CVE-2024-0806: Use after free in Passwords.
+      Reported by 18楼梦想改造家.
+    - CVE-2024-0805: Inappropriate implementation in Downloads.
+      Reported by Om Apip.
+    - CVE-2024-0804: Insufficient policy enforcement in iOS Security UI.
+      Reported by Narendra Bhati of Suma Soft Pvt. Ltd. Pune (India) .
+    - CVE-2024-0811: Inappropriate implementation in Extensions API.
+      Reported by Jann Horn of Google Project Zero.
+    - CVE-2024-0809: Inappropriate implementation in Autofill.
+      Reported by Ahmed ElMasry.
+  * d/copyright: drop another eu-strip binary.
+  * d/patches:
+    - fixes/atspi.patch: drop, merged upstream.
+    - fixes/gcc13-headers.patch: drop portions that were merged upstream.
+    - upstream/nullptr_t.patch: drop, merged upstream.
+    - upstream/string-include.patch: drop, merged upstream.
+    - ungoogled/disable-web-environment-integrity.patch: remove, upstream
+      wisely backed off and removed WEI.
+    - disable/signin.patch: refresh for minor upstream changes.
+    - disable/catapult.patch: refresh for minor upstream changes.
+    - system/openjpeg.patch: refresh for minor upstream changes.
+    - bookworm/clang16.patch: drop portion that was merged upstream.
+    - upstream/vector.patch: missing header fix, pulled from upstream.
+    - upstream/display-header.patch: missing header fix, pulled from upstream.
+    - upstream/bitset.patch: missing header fix, pulled from upstream.
+    - upstream/once_flag.patch: missing header fix, pulled from upstream.
+    - bookworm/constexpr-equality.patch: add clang-16 workaround.
+    - bookworm/nvt.patch: revert an upstream c++-20 change that confuses
+      clang-16.
+    - fixes/libxml-parseerr.patch: revert change from a newer libxml than
+      debian's.
+    - bookworm/undo-rust-req.patch: revert change that makes rust required
+      to build (for now).
+    - bookworm/eraseif-lamba.patch: revert changes switching to std::erase_if
+      to work around libstdc++-12 bug.
 
- -- Choi J.S. <junsungc91@gmail.com>  Thu, 31 Aug 2023 13:53:00 +0900
+  [ Timothy Pearson ]
+  * d/patches:
+    - fixes/std-to-address.patch: work around incorrect template selection
+      in Mojo ConvertTo()
+    - fixes/stdint.patch: add missing stdint include to performance manager
+  * d/patches/ppc64le:
+    - fixes/fix-rust-linking.patch: allow linking C and Rust libraries in full
+      archive mode
+    - libaom/0001-Add-pregenerated-config-for-libaom-on-ppc64.patch: refresh
+      for upstream changes
+    - third_party/skia-vsx-instructions.patch: refresh for upstream changes
+    - third_party/0002-third_party-libvpx-Remove-bad-ppc64-config.patch:
+      refresh for upstream changes
+    - third_party/0003-third_party-libvpx-Add-ppc64-generated-config.patch:
+      refresh for upstream changes
 
-gooroom-browser (4.0.1-1+grm4u1) stretch; urgency=medium
+ -- Andres Salomon <dilinger@debian.org>  Tue, 23 Jan 2024 17:59:49 -0500
 
-  * Init 4.0.1-1+grm4u1
+chromium (120.0.6099.224-2) unstable; urgency=high
 
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 22 Aug 2023 15:09:00 +0900
+  * d/patches/ppc64le/fixes/fix-rustc.patch: add patch to fix ppc64le build.
+
+ -- Andres Salomon <dilinger@debian.org>  Thu, 18 Jan 2024 03:05:12 -0500
+
+chromium (120.0.6099.224-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2024-0517: Out of bounds write in V8.
+      Reported by Toan (suto) Pham of Qrious Secure.
+    - CVE-2024-0518: Type Confusion in V8.
+      Reported by Ganjiang Zhou(@refrain_areu) of ChaMd5-H1 team.
+    - CVE-2024-0519: Out of bounds memory access in V8. Reported by Anonymous.
+  * d/rules: fix search path for clang libs.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 16 Jan 2024 15:35:05 -0500
+
+chromium (120.0.6099.216-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2024-0333: Insufficient data validation in Extensions.
+      Reported by Malcolm Stagg (@malcolmst) of SODIUM-24, LLC.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 09 Jan 2024 20:54:53 -0500
+
+chromium (120.0.6099.199-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2024-0222: Use after free in ANGLE.
+      Reported by Toan (suto) Pham of Qrious Secure.
+    - CVE-2024-0223: Heap buffer overflow in ANGLE.
+      Reported by Toan (suto) Pham and Tri Dang of Qrious Secure.
+    - CVE-2024-0224: Use after free in WebAudio.
+      Reported by Huang Xilin of Ant Group Light-Year Security Lab.
+    - CVE-2024-0225: Use after free in WebGPU. Reported by Anonymous.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 03 Jan 2024 22:53:21 -0500
+
+chromium (120.0.6099.129-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-7024: Heap buffer overflow in WebRTC. Reported by
+      Clément Lecigne and Vlad Stolyarov of Google's Threat Analysis Group.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 20 Dec 2023 21:05:12 -0500
+
+chromium (120.0.6099.109-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-6702: Type Confusion in V8. Reported by
+      Zhiyi Zhang and Zhunki from Codesafe Team of Legendsec at Qi'anxin Group.
+    - CVE-2023-6703: Use after free in Blink.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2023-6704: Use after free in libavif. Reported by Fudan University.
+    - CVE-2023-6705: Use after free in WebRTC.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2023-6706: Use after free in FedCM. Reported by anonymous.
+    - CVE-2023-6707: Use after free in CSS. Reported by @ginggilBesel.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 12 Dec 2023 19:52:08 -0500
+
+chromium (120.0.6099.71-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream stable release.
+    - CVE-2023-6508: Use after free in Media Stream.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2023-6509: Use after free in Side Panel Search.
+      Reported by Khalil Zhani.
+    - CVE-2023-6510: Use after free in Media Capture. Reported by [pwn2car].
+    - CVE-2023-6511: Inappropriate implementation in Autofill.
+      Reported by Ahmed ElMasry.
+    - CVE-2023-6512: Inappropriate implementation in Web Browser UI.
+      Reported by Om Apip.
+  * d/copyright: adjust path for chai.js & mocha.js deletion.
+    - delete third_party/libsecret.
+  * d/control: new build depends on libsecret-1-dev.
+  * d/scripts/unbundle: keep bundled libhwy; it's not available in bullseye.
+    - also keep vulkan_memory_allocator and flatbuffers.
+  * d/patches:
+    - fixes/gcc13-headers.patch: refresh.
+    - fixes/blink-frags.patch: drop part of patch & refresh.
+    - disable/catapult.patch: refresh.
+    - disable/driver-chrome-path.patch: update for minor upstream changes.
+    - ungoogled/disable-privacy-sandbox.patch: update from ungoogled-chromium.
+    - ungoogled/disable-web-environment-integrity.patch: update from
+      from ungoogled-chromium.
+    - upstream/mojo.patch: update patch from upstream's git.
+    - bookworm/clang16.patch: new patch working around upstream's clang18 flags.
+    - upstream/nullptr_t.patch: more libstdc++13 build fixes.
+    - upstream/string-include.patch: add a simple header include build fix.
+    - fixes/absl-optional.patch: add a workaround for a clang bug
+      (https://github.com/llvm/llvm-project/issues/50248) by providing our
+      own 'optional' header.
+    - bookworm/constcountrycode.patch: add workaround for older libstdc++.
+
+  [ Timothy Pearson ]
+  * d/patches/ppc64le:
+    - third_party/0001-Add-PPC64-support-for-libdav1d.patch: refresh for
+      upstream changes
+    - third_party/0002-third_party-libvpx-Remove-bad-ppc64-config.patch:
+      refresh for upstream changes
+    - third_party/0003-third_party-ffmpeg-Add-ppc64-generated-config.patch:
+      regenerate
+    - third_party/skia-vsx-instructions.patch: refresh for upstream changes
+    - third_party/use-sysconf-page-size-on-ppc64.patch: refresh for upstream
+      changes
+    - Mass refresh all other patches against 120 codebase.  No functional
+      change.
+
+ -- Andres Salomon <dilinger@debian.org>  Fri, 08 Dec 2023 11:40:41 -0500
+
+chromium (119.0.6045.199-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-6348: Type Confusion in Spellcheck.
+      Reported by Mark Brand of Google Project Zero.
+    - CVE-2023-6347: Use after free in Mojo. Reported by
+      Leecraso and Guang Gong of 360 Vulnerability Research Institute.
+    - CVE-2023-6346: Use after free in WebAudio.
+      Reported by Huang Xilin of Ant Group Light-Year Security Lab.
+    - CVE-2023-6350: Out of bounds memory access in libavif.
+      Reported by Fudan University.
+    - CVE-2023-6351: Use after free in libavif. Reported by Fudan University.
+    - CVE-2023-6345: Integer overflow in Skia. Reported by
+      Benoît Sevens and Clément Lecigne of Google's Threat Analysis Group.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 28 Nov 2023 23:33:06 -0500
+
+chromium (119.0.6045.159-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-5997: Use after free in Garbage Collection.
+      Reported by Anonymous.
+    - CVE-2023-6112: Use after free in Navigation.
+      Reported by Sergei Glazunov of Google Project Zero.
+  * Don't show errors on startup if Crash Reports directory doesn't exist.
+  * Check for $DISPLAY before trying to run xmessage in chromium's wrapper
+    script. Fall back to just using echo (closes: #1055765).
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 14 Nov 2023 20:04:30 -0500
+
+chromium (119.0.6045.123-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-5996: Use after free in WebAudio. Reported by
+      Huang Xilin of Ant Group Light-Year Security Lab via Tianfu Cup 2023.
+  * Replace libgl1-mesa-dev build dependency with libgl-dev.
+  * Drop d/patches/system/convertutf.patch; license issue has been fixed.
+  * d/copyright: stop deleting convert_UTF.* and document Unicode copyright
+    (closes: #1033136).
+  * d/patches/ppc64le/fixes/fix-breakpad-compile.patch: refresh due to convertutf
+    change.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 07 Nov 2023 23:49:10 -0500
+
+chromium (119.0.6045.105-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream stable release.
+    - CVE-2023-5480: Inappropriate implementation in Payments.
+      Reported by Vsevolod Kokorin (Slonser) of Solidlab.
+    - CVE-2023-5482: Insufficient data validation in USB. Reported by DarkNavy.
+    - CVE-2023-5849: Integer overflow in USB. Reported by DarkNavy.
+    - CVE-2023-5850: Incorrect security UI in Downloads.
+      Reported by Mohit Raj (shadow2639) .
+    - CVE-2023-5851: Inappropriate implementation in Downloads.
+      Reported by Shaheen Fazim.
+    - CVE-2023-5852: Use after free in Printing. Reported by [pwn2car].
+    - CVE-2023-5853: Incorrect security UI in Downloads. Reported by Hafiizh.
+    - CVE-2023-5854: Use after free in Profiles. Reported by
+      Dohyun Lee (@l33d0hyun) of SSD-Disclosure Labs & DNSLab, Korea Univ.
+    - CVE-2023-5855: Use after free in Reading Mode. Reported by ChaobinZhang.
+    - CVE-2023-5856: Use after free in Side Panel.
+      Reported by Weipeng Jiang (@Krace) of VRI.
+    - CVE-2023-5857: Inappropriate implementation in Downloads.
+      Reported by Will Dormann.
+    - CVE-2023-5858: Inappropriate implementation in WebApp Provider.
+      Reported by Axel Chong.
+    - CVE-2023-5859: Incorrect security UI in Picture In Picture.
+      Reported by Junsung Lee
+  * d/patches:
+    - patches/bullseye/constexpr.patch: Add MiracleParameter workaround
+  * d/patches/ppc64le:
+    - Mass refresh all patches against 119 codebase.  No functional change.
+
+  [ Andres Salomon ]
+  * d/patches:
+    - fixes/gcc13-headers.patch: drop parts that have been merged upstream.
+    - fixes/perfetto.patch: drop part that was merged upstream.
+    - upstream/sensor-reading.patch: drop, merged upstream.
+    - upstream/lweight.patch: drop, merged upstream.
+    - upstream/freetype.patch: drop, merged upstream.
+    - upstream/sizet.patch: drop, merged upstream.
+    - disable/catapult.patch: drop an unused hunk.
+    - disable/widevine-cdm-cu.patch: refresh.
+    - disable/privacy-sandbox.patch: rename, sync up with ungoogled-chromium,
+      and use the full ungoogled patch. The privacy sandbox config interface
+      is now gone, with no way to enable it.
+    - ungoogled/core/ungoogled-chromium/disable-web-environment-integrity.patch:
+      sync up with ungoogled-chromium, and rename.
+    - fixes/blink-frags.patch: additional build fix for libstdc++13.
+    - fixes/gcc13-with-clang14.patch: drop, now that we've switched to clang-16.
+    - fixes/atspi.patch: fix build failure with atspi >= 2.50.
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Tue, 31 Oct 2023 23:50:00 -0500
+
+chromium (118.0.5993.117-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-5472: Use after free in Profiles.
+      Reported by @18楼梦想改造家.
+  * Switch from clang-14 to clang-16.
+  * d/patches:
+    - bookworm/clang-attribs.patch: drop, now that we've switched to clang-16.
+    - bookworm/typename.patch: drop, now that we've switched to clang-16.
+    - bookworm/struct-ctor.patch: drop, now that we've switched to clang-16.
+    - bookworm/structured-binding-scope-bug.patch: drop, now that we've
+      switched to clang-16.
+    - bookworm/stringpiece3.patch: drop, now that we've switched to clang-16.
+    - bookworm/initialize-const-ctor.patch: drop, now that we've switched to
+      clang-16.
+    - bookworm/i386-lock-free.patch: drop, now that we've switched to clang-16.
+    - bullseye/clang13.patch: drop, now that we've switched to clang-16.
+    - fixes/brandversion-construct.patch: drop, now that we've switched to
+      clang-16.
+    - fixes/SkColor4f-init.patch: drop, now that we've switched to clang-16.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 24 Oct 2023 20:00:54 -0400
+
+chromium (118.0.5993.70-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream stable release.
+    - CVE-2023-5218: Use after free in Site Isolation.
+      Reported by @18楼梦想改造家.
+    - CVE-2023-5487: Inappropriate implementation in Fullscreen.
+      Reported by Anonymous.
+    - CVE-2023-5484: Inappropriate implementation in Navigation.
+      Reported by Thomas Orlita.
+    - CVE-2023-5475: Inappropriate implementation in DevTools.
+      Reported by Axel Chong.
+    - CVE-2023-5483: Inappropriate implementation in Intents.
+      Reported by Axel Chong.
+    - CVE-2023-5481: Inappropriate implementation in Downloads.
+      Reported by Om Apip.
+    - CVE-2023-5476: Use after free in Blink History. Reported by Yunqin Sun.
+    - CVE-2023-5474: Heap buffer overflow in PDF. Reported by [pwn2car].
+    - CVE-2023-5479: Inappropriate implementation in Extensions API.
+      Reported by Axel Chong.
+    - CVE-2023-5485: Inappropriate implementation in Autofill.
+      Reported by Ahmed ElMasry.
+    - CVE-2023-5478: Inappropriate implementation in Autofill.
+      Reported by Ahmed ElMasry.
+    - CVE-2023-5477: Inappropriate implementation in Installer.
+      Reported by Bahaa Naamneh of Crosspoint Labs.
+    - CVE-2023-5486: Inappropriate implementation in Input. Reported by Hafiizh.
+    - CVE-2023-5473: Use after free in Cast. Reported by DarkNavy.
+  * d/patches/ppc64le:
+    - 0002-third_party-libvpx-Remove-bad-ppc64-config.patch: refresh for
+       upstream changes
+    - 0001-Add-PPC64-support-for-boringssl.patch: refresh for upstream changes
+    - skia-vsx-instructions.patch: refresh for upstream changes
+    - third_party/0003-third_party-libvpx-Add-ppc64-generated-config.patch:
+      regenerate configs from upstream source
+    - database/0001-Properly-detect-little-endian-PPC64-systems.patch:
+      refresh
+    - ffmpeg/0001-Add-support-for-ppc64.patch: refresh
+    - fixes/fix-breakpad-compile.patch: refresh
+    - fixes/fix-unknown-warning-option-messages.diff: refresh
+    - libaom/0001-Add-ppc64-target-to-libaom.patch: refresh
+    - sandbox/0001-sandbox-linux-Update-IsSyscallAllowed-in-broker_proc.patch:
+      refresh
+    - sandbox/0001-sandbox-linux-Update-syscall-helpers-lists-for-ppc64.patch:
+      refresh
+    - sandbox/0008-sandbox-fix-ppc64le-glibc234.patch: refresh
+    - third_party/0001-Add-PPC64-support-for-boringssl.patch: refresh
+    - third_party/0001-Force-baseline-POWER8-AltiVec-VSX-CPU-features-when-.patch:
+      refresh
+    - third_party/0001-third_party-libvpx-Properly-generate-gni-on-ppc64.patch:
+      refresh
+    - third_party/0002-third-party-boringssl-add-generated-files.patch: refresh
+    - third_party/dawn-fix-ppc64le-detection.patch: refresh
+    - third_party/dawn-fix-typos.patch: refresh
+    - third_party/skia-vsx-instructions.patch: refresh
+    - third_party/use-sysconf-page-size-on-ppc64.patch: refresh
+    - workarounds/HACK-third_party-libvpx-use-generic-gnu.patch: refresh
+
+  [ Andres Salomon]
+  * d/copyright:
+    - blanket.js is gone, no need to remove it any more.
+    - delete some khronos images marked executable.
+  * d/patches:
+    - upstream/memory.patch: drop, merged upstream.
+    - upstream/sensor-reading.patch: add, gcc13 build fix from upstream.
+    - upstream/lweight.patch: add, gcc13 build fix from upstream.
+    - upstream/freetype.patch: add, fix freetype header inclusion FTBFS.
+    - upstream/sizet.patch: add, libstdc++ build fix from upstream.
+    - disable/unrar.patch: update for minor upstream changes.
+    - bookworm/struct-ctor.patch: add various new workarounds for clang-14.
+    - bookworm/structured-binding-scope-bug.patch: drop part of the patch.
+    - bullseye/constexpr.patch: drop bullseye patch from bookworm.
+    - ungoogled/.../disable-web-environment-integrity.patch: sync with
+      ungoogled-chromium for upstream changes.
+    - bookworm/i386-lock-free.patch: refresh.
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Tue, 10 Oct 2023 22:03:00 -0500
+
+chromium (117.0.5938.149-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-5346: Type Confusion in V8. Reported by Amit Kumar.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 03 Oct 2023 19:31:26 -0400
+
+chromium (117.0.5938.132-2) unstable; urgency=high
+
+  * d/patches/fixes/v8-compressed-ptrs.patch: fix another armhf FTBFS.
+
+ -- Andres Salomon <dilinger@debian.org>  Sun, 01 Oct 2023 15:46:49 -0400
+
+chromium (117.0.5938.132-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-5217: Heap buffer overflow in vp8 encoding in libvpx.
+      Reported by Clément Lecigne of Google's Threat Analysis Group.
+    - CVE-2023-5186: Use after free in Passwords. Reported by [pwn2car].
+    - CVE-2023-5187: Use after free in Extensions. Reported by Thomas Orlita.
+  * d/patches:
+    - bookworm/i386-lock-free.patch: add to fix i386 build failure.
+    - bookworm/freetype-COLRV1.patch: disable using freetype's COLRV1
+      (closes: #1053142).
+
+ -- Andres Salomon <dilinger@debian.org>  Thu, 28 Sep 2023 00:41:20 -0400
+
+chromium (117.0.5938.92-1) unstable; urgency=high
+
+  * New upstream stable release.
+  * Enable NEON on armhf. See
+    <https://lists.debian.org/debian-devel/2023/09/msg00175.html>.
+  * Add check in d/rules & chromium wrapper to ensure we don't build or
+    run on non-NEON armhf machines.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 27 Sep 2023 01:00:07 -0400
+
+chromium (117.0.5938.62-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon]
+  * New upstream stable release.
+    - CVE-2023-4900: Inappropriate implementation in Custom Tabs.
+      Reported by Levit Nudi from Kenya.
+    - CVE-2023-4901: Inappropriate implementation in Prompts.
+      Reported by Kang Ali.
+    - CVE-2023-4902: Inappropriate implementation in Input.
+      Reported by Axel Chong.
+    - CVE-2023-4903: Inappropriate implementation in Custom Mobile Tabs.
+      Reported by Ahmed ElMasry.
+    - CVE-2023-4904: Insufficient policy enforcement in Downloads.
+      Reported by Tudor Enache @tudorhacks.
+    - CVE-2023-4905: Inappropriate implementation in Prompts.
+      Reported by Hafiizh.
+    - CVE-2023-4906: Insufficient policy enforcement in Autofill.
+      Reported by Ahmed ElMasry.
+    - CVE-2023-4907: Inappropriate implementation in Intents.
+      Reported by Mohit Raj (shadow2639) .
+    - CVE-2023-4908: Inappropriate implementation in Picture in Picture.
+      Reported by Axel Chong.
+    - CVE-2023-4909: Inappropriate implementation in Interstitials.
+      Reported by Axel Chong.
+  * d/copyright: drop rust, llvm, siso, & cargo binaries.
+  * d/patches:
+    - fixes/size.patch: drop, merged upstream.
+    - fixes/variant.patch: drop, merged upstream.
+    - fixes/vector.patch: drop, merged upstream.
+    - upstream/contains.patch: drop, merged upstream.
+    - upstream/hvec.patch: drop, merged upstream.
+    - upstream/limits.patch: drop, merged upstream.
+    - upstream/statelessV4L2.patch: drop, merged upstream.
+    - fixes/widevine-locations.patch: refresh for minor upstream changes.
+    - disable/android.patch: drop half the patch.
+    - disable/catapult.patch: refresh for minor upstream changes.
+    - disable/tests.patch: refresh for minor upstream changes.
+    - disable/unrar.patch: refresh for minor upstream changes.
+    - fixes/material-utils.patch: build fix for clang w/ libstdc++.
+    - rename fixes/null.patch to fixes/perfetto.patch.
+    - upstream/memory.patch: build fix for missing header.
+    - bookworm/struct-ctor.patch: add a bunch more build workarounds for
+      clang-14.
+    - bookworm/stringpiece3.patch: another clang-14 StringPiece to
+      std::string explicit conversion.
+    - bookworm/typename.patch: add more explicit typename declarations for
+      clang-14.
+    - bookworm/structured-binding-scope-bug.patch: add more clang-14 binding
+      scope workarounds.
+    - bookworm/initialize-const-ctor.patch: clang-14 workaround to init a
+      const member inside a struct.
+    - ppc64le/libaom/0001-Add-ppc64-target-to-libaom.patch: refresh.
+    - disable/privacy-sandbox.patch: ensure Privacy Sandbox "features" are
+      off by default.
+    - bookworm/generate-ninja.patch: fix build failure w/ bookworm's older gn.
+  * Switch to using bundled brotli, as the version in debian is too old.
+    And so we can drop d/patches/bookworm/brotli.patch, too.
+
+  [ Timothy Pearson ]
+  * d/patches/ppc64le:
+    - 0001-Implement-support-for-PPC64-on-Linux.patch: refresh for upstream
+       changes
+    - 0001-Add-PPC64-support-for-boringssl.patch: refresh for upstream changes
+    - 0002-third-party-boringssl-add-generated-files.patch: refresh for
+       upstream changes
+    - 0002-third_party-libvpx-Remove-bad-ppc64-config.patch: refresh for
+       upstream changes
+    - 0004-third_party-crashpad-port-curl-transport-ppc64.patch: refresh for
+       upstream changes
+    - skia-vsx-instructions.patch: refresh for upstream changes
+    - 0003-third_party-ffmpeg-Add-ppc64-generated-config.patch: regenerate
+    - 0001-third_party-boringssl-Properly-detect-ppc64le-in-BUI.patch: drop
+  * d/patches/ungoogled:
+    - core/ungoogled-chromium/disable-web-environment-integrity.patch: disable
+      "Web Environment Integrity" trial and remove from build (closes: #1042111)
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 13 Sep 2023 22:26:10 -0400
+
+chromium (116.0.5845.180-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon]
+  * New upstream security release.
+    - CVE-2023-4761: Out of bounds memory access in FedCM. Reported by DarkNavy.
+    - CVE-2023-4762: Type Confusion in V8. Reported by Rong Jian of VRI.
+    - CVE-2023-4763: Use after free in Networks. Reported by anonymous.
+    - CVE-2023-4764: Incorrect security UI in BFCache.
+      Reported by Irvan Kurniawan (sourc7).
+
+  [ Timothy Pearson ]
+  * d/patches/ppc64le:
+    - 0001-Add-PPC64-support-for-boringssl.patch: Fix incorrect function call
+      parameter types in gmult_func() and ghash_func() implementations
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 05 Sep 2023 19:10:10 -0400
+
+chromium (116.0.5845.140-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream security release.
+    - CVE-2023-4572: Use after free in MediaStream.
+      Reported by fwnfwn(@_fwnfwn).
+  * Drop d/chromium.conffiles; it's been a year (and major debian release)
+    since started deleting /etc/chromium/policies/recommended/duckduckgo.json
+    (closes: #1024981).
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 30 Aug 2023 04:14:41 -0400
+
+chromium (116.0.5845.110-1~deb12u1) bookworm-security; urgency=high
+
+  [ Timothy Pearson ]
+  * New upstream security release.
+    - CVE-2023-4430: Use after free in Vulkan.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2023-4429: Use after free in Loader. Reported by Anonymous.
+    - CVE-2023-4428: Out of bounds memory access in CSS.
+      Reported by Francisco Alonso (@revskills).
+    - CVE-2023-4427: Out of bounds memory access in V8.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2023-4431: Out of bounds memory access in Fonts.
+      Reported by Microsoft Security Researcher.
+
+  [ Andres Salomon ]
+  * d/patches/upstream hvec.patch: add arm* v4l2 build fix.
+  * d/rules: FTBFS if we're uploading to -security distribution w/out CVEs.
+
+ -- Timothy Pearson <tpearson@raptorengineering.com>  Wed, 23 Aug 2023 08:58:00 -0500
+
+chromium (116.0.5845.96-2) unstable; urgency=high
+
+  * d/patches/upstream/limits.patch: Add a build fix for arm64.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 16 Aug 2023 04:48:02 -0400
+
+chromium (116.0.5845.96-1~deb12u1) bookworm-security; urgency=high
+
+  * New upstream stable release.
+    - CVE-2023-2312: Use after free in Offline. Reported by avaue at S.S.L..
+    - CVE-2023-4349: Use after free in Device Trust Connectors.
+      Reported by Weipeng Jiang (@Krace) of VRI.
+    - CVE-2023-4350: Inappropriate implementation in Fullscreen.
+      Reported by Khiem Tran (@duckhiem).
+    - CVE-2023-4351: Use after free in Network.
+      Reported by Guang and Weipeng Jiang of VRI.
+    - CVE-2023-4352: Type Confusion in V8.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2023-4353: Heap buffer overflow in ANGLE.
+      Reported by Christoph Diehl / Microsoft Vulnerability Research.
+    - CVE-2023-4354: Heap buffer overflow in Skia.
+      Reported by Mark Brand of Google Project Zero.
+    - CVE-2023-4355: Out of bounds memory access in V8.
+      Reported by Sergei Glazunov of Google Project Zero.
+    - CVE-2023-4356: Use after free in Audio.
+      Reported by Zhenghang Xiao (@Kipreyyy).
+    - CVE-2023-4357: Insufficient validation of untrusted input in XML.
+      Reported by Igor Sak-Sakovskii.
+    - CVE-2023-4358: Use after free in DNS.
+      Reported by Weipeng Jiang (@Krace) of VRI.
+    - CVE-2023-4359: Inappropriate implementation in App Launcher.
+      Reported by @retsew0x01.
+    - CVE-2023-4360: Inappropriate implementation in Color.
+      Reported by Axel Chong.
+    - CVE-2023-4361: Inappropriate implementation in Autofill.
+      Reported by Thomas Orlita.
+    - CVE-2023-4362: Heap buffer overflow in Mojom IDL.
+      Reported by Zhao Hai of NanJing Cyberpeace TianYu Lab.
+    - CVE-2023-4363: Inappropriate implementation in WebShare.
+      Reported by Alesandro Ortiz.
+    - CVE-2023-4364: Inappropriate implementation in Permission Prompts.
+      Reported by Jasper Rebane.
+    - CVE-2023-4365: Inappropriate implementation in Fullscreen.
+      Reported by Hafiizh.
+    - CVE-2023-4366: Use after free in Extensions. Reported by asnine.
+    - CVE-2023-4367: Insufficient policy enforcement in Extensions API.
+      Reported by Axel Chong.
+    - CVE-2023-4368: Insufficient policy enforcement in Extensions API.
+      Reported by Axel Chong.
+  * d/patches:
+   - fixes/cmath.patch: drop, merged upstream.
+   - fixes/vector.patch: drop, merged upstream.
+   - fixes/cookieresult.patch: drop, merged upstream.
+   - upstream/feature-list-static.patch: drop, merged upstream.
+   - disable/catapult.patch: refresh.
+   - upstream/statelessV4L2.patch: refresh.
+   - ppc64le/third_party/0001-Add-PPC64-support-for-boringssl.patch: refresh.
+   - ppc64le/libaom/0001-Add-ppc64-target-to-libaom.patch: refresh.
+   - ppc64le/breakpad/0001-Implement-support-for-ppc64-on-Linux.patch: refresh.
+   - ppc64le/third_party/use-sysconf-page-size-on-ppc64.patch: refresh.
+   - fixes/rust-clanglib.patch: add patch to handle new clang deps for rust.
+   - debianization/clang-15.patch: add patch to use lld-15.
+   - bookworm/typename.patch: more typename fixes needed.
+   - fixes/variant.patch: add a missing header that libstdc++ needs.
+   - fixes/vector.patch: add a missing header that libstdc++ needs.
+   - fixes/null.patch: fix missing namespace for nullptr_t + header fix.
+   - fixes/size.patch: missing header fix.
+   - bookworm/brotli.patch: revert upstream change that requires newer brotli.
+   - bookworm/struct-ctor.patch: add a bunch of explicit struct constructors
+     to make clang-15 happy.
+   - fixes/size.patch
+   - bullseye/stringpiece.patch: drop, since we're bundling re2 now.
+  * d/rules: automatically detect rust/clang versions & add needed rust args.
+    But also disable rust for now.
+  * d/rules: drop use_gnome_keyring=false, upstream has completely removed
+    libgnome-keyring support in favor of gnome's libsecret.
+  * Use bundled re2 (for now) instead of libre2-dev due to random crashes
+    we're seeing. Adjust build-deps, Files-Excluded, d/clean,
+    and d/scripts/unbundle accordingly.
+
+  [ Timothy Pearson ]
+   * d/patches/ppc64le:
+     - database/0001-Properly-detect-little-endian-PPC64-systems.patch: refresh
+       for upstream changes
+     - third_party/0002-third_party-libvpx-Remove-bad-ppc64-config.patch:
+       refresh for upstream changes
+     - third_party/0002-third-party-boringssl-add-generated-files.patch:
+       refresh, no changes
+     - third_party/use-sysconf-page-size-on-ppc64.patch: refresh for upstream
+       changes
+     - third_party/skia-vsx-instructions.patch: refresh for upstream changes
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 15 Aug 2023 17:46:56 -0400
 
 chromium (115.0.5790.170-1~deb12u1) bookworm-security; urgency=high
 

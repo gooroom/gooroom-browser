@@ -1,26 +1,25 @@
-From a0eb8798a4043c9ad12afee161668ed8c0eed0b3 Mon Sep 17 00:00:00 2001
+From 097e5d13ac39ea5e977b6faf460caa0c33b89d24 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 24 Jul 2020 11:44:17 +0900
-Subject: [PATCH 28/65] Add PageSourceViewEnabled policy to control
+Subject: [PATCH 28/58] Add PageSourceViewEnabled policy to control
  page-source-view
 
 ---
  ...nfiguration_policy_handler_list_factory.cc | 13 ++++++
- chrome/common/pref_names.cc                   |  4 ++
- chrome/common/pref_names.h                    |  4 ++
+ chrome/common/pref_names.h                    |  1 +
  components/policy/core/browser/BUILD.gn       |  5 ++-
  .../browser/configuration_policy_handler.cc   | 45 +++++++++++++++++++
  .../browser/configuration_policy_handler.h    | 24 ++++++++++
  .../core/common/policy_loader_common.cc       |  1 +
- .../policy/resources/templates/policies.yaml  |  2 +-
+ .../policy/resources/templates/policies.yaml  |  1 +
  .../Miscellaneous/PageSourceViewEnabled.yaml  | 22 +++++++++
  content/browser/BUILD.gn                      |  1 +
  .../navigation_controller_impl.cc             | 10 +++++
- 11 files changed, 129 insertions(+), 2 deletions(-)
+ 10 files changed, 122 insertions(+), 1 deletion(-)
  create mode 100644 components/policy/resources/templates/policy_definitions/Miscellaneous/PageSourceViewEnabled.yaml
 
 diff --git a/chrome/browser/policy/configuration_policy_handler_list_factory.cc b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
-index e61ff3da11b84..613fe29dbdebb 100644
+index 1a05331f8c4af..2de17c4c353c5 100644
 --- a/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 +++ b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
 @@ -4,6 +4,10 @@
@@ -34,7 +33,7 @@ index e61ff3da11b84..613fe29dbdebb 100644
  #include <limits.h>
  #include <stddef.h>
  
-@@ -238,6 +242,11 @@ using ::ash::MagnifierType;
+@@ -263,6 +267,11 @@ using ::ash::MagnifierType;
  // clang-format off
  const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
  // Policies for all platforms - Start
@@ -46,7 +45,7 @@ index e61ff3da11b84..613fe29dbdebb 100644
    { key::kComponentUpdatesEnabled,
      prefs::kComponentUpdatesEnabled,
      base::Value::Type::BOOLEAN },
-@@ -2641,6 +2650,10 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
+@@ -2856,6 +2865,10 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
  #endif  // BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_WIN)
  #endif  // BUILDFLAG(ENABLE_SPELLCHECK)
  
@@ -57,38 +56,20 @@ index e61ff3da11b84..613fe29dbdebb 100644
  #if BUILDFLAG(IS_LINUX)
    handlers->AddHandler(std::make_unique<SimplePolicyHandler>(
        key::kAllowSystemNotifications, prefs::kAllowSystemNotifications,
-diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index b820a7c3ff41a..28e598bd3cd8e 100644
---- a/chrome/common/pref_names.cc
-+++ b/chrome/common/pref_names.cc
-@@ -25,6 +25,10 @@ namespace prefs {
- // successfully checked via ChildAccountService.
- const char kChildAccountStatusKnown[] = "child_account_status_known";
- 
-+#if defined(GOOROOM_BUILD)
-+const char kPageSourceViewEnabled[] = "page_source_view_enabled";
-+#endif
-+
- // A string property indicating whether default apps should be installed
- // in this profile.  Use the value "install" to enable defaults apps, or
- // "noinstall" to disable them.  This property is usually set in the
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index bb46eaafe55d1..0888516249387 100644
+index 33a3ac77abcb8..287cc62b0ce4a 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -24,6 +24,10 @@
+@@ -3542,6 +3542,7 @@ inline constexpr char kSitePerProcess[] = "site_isolation.site_per_process";
+ #if defined(GOOROOM_BUILD)
+ inline constexpr char kGooroomOptionWebsocketConfirm[] = "gooroom_option.websocket_confirm";
+ inline constexpr char kGooroomOptionWebworkerConfirm[] = "gooroom_option.webworker_confirm";
++inline constexpr char kPageSourceViewEnabled[] = "page_source_view_enabled";
+ #endif
  
- namespace prefs {
- 
-+#if defined(GOOROOM_BUILD)
-+extern const char kPageSourceViewEnabled[];
-+#endif
-+
- // Profile prefs. Please add Local State prefs below instead.
- extern const char kChildAccountStatusKnown[];
- extern const char kPreinstalledApps[];
+ #if !BUILDFLAG(IS_ANDROID)
 diff --git a/components/policy/core/browser/BUILD.gn b/components/policy/core/browser/BUILD.gn
-index 39cb9adff7c47..79f95a43a9eba 100644
+index d78485bd0b0da..a76a2142ff22d 100644
 --- a/components/policy/core/browser/BUILD.gn
 +++ b/components/policy/core/browser/BUILD.gn
 @@ -14,7 +14,10 @@ group("browser") {
@@ -101,10 +82,10 @@ index 39cb9adff7c47..79f95a43a9eba 100644
 +    "//content/browser:browser",
 +  ]
    sources = [
-     "browser_policy_connector.cc",
-     "browser_policy_connector.h",
+     "boolean_disabling_policy_handler.cc",
+     "boolean_disabling_policy_handler.h",
 diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
-index 864a2047f3f5a..9d77ab3be4136 100644
+index 4632d86612f47..03389475d9010 100644
 --- a/components/policy/core/browser/configuration_policy_handler.cc
 +++ b/components/policy/core/browser/configuration_policy_handler.cc
 @@ -377,6 +377,51 @@ void SimplePolicyHandler::ApplyPolicySettings(const PolicyMap& policies,
@@ -156,11 +137,11 @@ index 864a2047f3f5a..9d77ab3be4136 100644
 +                CONTENT_SETTING_ALLOW);
 +}
 +
- // SchemaValidatingPolicyHandler implementation --------------------------------
+ // PolicyWithDependencyHandler implementation ------------------------------------------
  
- SchemaValidatingPolicyHandler::SchemaValidatingPolicyHandler(
+ PolicyWithDependencyHandler::PolicyWithDependencyHandler(
 diff --git a/components/policy/core/browser/configuration_policy_handler.h b/components/policy/core/browser/configuration_policy_handler.h
-index 5d5c9bed50010..9d5b97c43772d 100644
+index 2925fb516af79..c75d6bc28e210 100644
 --- a/components/policy/core/browser/configuration_policy_handler.h
 +++ b/components/policy/core/browser/configuration_policy_handler.h
 @@ -16,6 +16,7 @@
@@ -171,7 +152,7 @@ index 5d5c9bed50010..9d5b97c43772d 100644
  
  class PrefValueMap;
  
-@@ -339,6 +340,29 @@ class POLICY_EXPORT IntPercentageToDoublePolicyHandler
+@@ -369,6 +370,29 @@ class POLICY_EXPORT IntPercentageToDoublePolicyHandler
    const char* pref_path_;
  };
  
@@ -202,30 +183,29 @@ index 5d5c9bed50010..9d5b97c43772d 100644
  // single type. |schema| is the schema used for this policy, and |strategy| is
  // the strategy used for schema validation errors.
 diff --git a/components/policy/core/common/policy_loader_common.cc b/components/policy/core/common/policy_loader_common.cc
-index 28634ef0f72b8..f7be4345a710c 100644
+index 472959d80677c..43bf166faf357 100644
 --- a/components/policy/core/common/policy_loader_common.cc
 +++ b/components/policy/core/common/policy_loader_common.cc
-@@ -44,6 +44,7 @@ const char* kSensitivePolicies[] = {
-     key::kAutoOpenFileTypes,
-     key::kCommandLineFlagSecurityWarningsEnabled,
+@@ -43,6 +43,7 @@ const char kBlockedExtensionPrefix[] = "[BLOCKED]";
+ // policy definition file.
+ // Please keep the list in alphabetical order!
+ const char* kSensitivePolicies[] = {
++    key::kPageSourceViewEnabled,
      key::kDefaultSearchProviderEnabled,
-+	key::kPageSourceViewEnabled,
-     key::kFirstPartySetsOverrides,
-     key::kHomepageIsNewTabPage,
-     key::kHomepageLocation,
+     key::kSafeBrowsingEnabled,
+ #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || \
 diff --git a/components/policy/resources/templates/policies.yaml b/components/policy/resources/templates/policies.yaml
-index b3d279b5c5fa3..7aaa6819660e1 100644
+index 5184b9c43b73b..81c98bce5f906 100644
 --- a/components/policy/resources/templates/policies.yaml
 +++ b/components/policy/resources/templates/policies.yaml
-@@ -1108,7 +1108,7 @@ policies:
-   1107: GoogleSearchSidePanelEnabled
-   1108: PdfUseSkiaRendererEnabled
-   1109: DataUrlInSvgUseEnabled
--  1110: ''
-+  1110: PageSourceViewEnabled
-   1111: ''
-   1112: ''
-   1113: ''
+@@ -1187,6 +1187,7 @@ policies:
+   1186: TabOrganizerSettings
+   1187: HelpMeWriteSettings
+   1188: CreateThemesSettings
++  1189: PageSourceViewEnabled
+ atomic_groups:
+   1: Homepage
+   2: RemoteAccess
 diff --git a/components/policy/resources/templates/policy_definitions/Miscellaneous/PageSourceViewEnabled.yaml b/components/policy/resources/templates/policy_definitions/Miscellaneous/PageSourceViewEnabled.yaml
 new file mode 100644
 index 0000000000000..e9d5031da6876
@@ -255,10 +235,10 @@ index 0000000000000..e9d5031da6876
 +type: main
 +
 diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
-index f022736924bb6..805ec677385bb 100644
+index 8a586b5c3bf69..9368bbc46552b 100644
 --- a/content/browser/BUILD.gn
 +++ b/content/browser/BUILD.gn
-@@ -295,6 +295,7 @@ source_set("browser") {
+@@ -294,6 +294,7 @@ source_set("browser") {
    ]
  
    public_deps = [
@@ -267,7 +247,7 @@ index f022736924bb6..805ec677385bb 100644
      "//components/memory_pressure",
      "//ipc",
 diff --git a/content/browser/renderer_host/navigation_controller_impl.cc b/content/browser/renderer_host/navigation_controller_impl.cc
-index 05f647b40d1c6..983733933492c 100644
+index 2e5160e2b24f9..def182c670bb1 100644
 --- a/content/browser/renderer_host/navigation_controller_impl.cc
 +++ b/content/browser/renderer_host/navigation_controller_impl.cc
 @@ -35,6 +35,10 @@
@@ -281,7 +261,7 @@ index 05f647b40d1c6..983733933492c 100644
  #include <algorithm>
  #include <utility>
  
-@@ -1032,6 +1036,12 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
+@@ -1028,6 +1032,12 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
  }
  
  bool NavigationControllerImpl::CanViewSource() {

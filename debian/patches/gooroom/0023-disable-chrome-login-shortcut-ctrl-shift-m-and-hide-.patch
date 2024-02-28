@@ -1,0 +1,28 @@
+From 6aa5fac001fba19ab81edf559c8744312966a6d1 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:23:10 +0900
+Subject: [PATCH 23/58] disable chrome login shortcut(ctrl+shift+m) and hide
+ login icon
+
+---
+ chrome/browser/ui/views/toolbar/toolbar_view.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
+index 836617ff76c51..ea13c37b14ae8 100644
+--- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
++++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
+@@ -466,6 +466,10 @@ void ToolbarView::Init() {
+        browser_->profile()->GetOTRProfileID().IsCaptivePortal());
+ #elif BUILDFLAG(IS_CHROMEOS_LACROS)
+   show_avatar_toolbar_button = !chromeos::IsManagedGuestSession();
++#endif
++#if defined(GOOROOM_BUILD)
++//Hide show_avatar_toolbar_button
++  show_avatar_toolbar_button = false;
+ #endif
+   avatar_->SetVisible(show_avatar_toolbar_button);
+ 
+-- 
+2.39.2
+

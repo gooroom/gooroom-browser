@@ -1,0 +1,115 @@
+From 5ca86e86a0a723c2cf4b61486afb674c53f82461 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 10 Mar 2022 09:04:17 +0900
+Subject: [PATCH 05/58] initialize GooroomBase and GooroomUrlFilter in the
+ messageloop of GooroomBrowserExtraPartsSecurity And Fix gooroom_pref.cc
+ setup() segfault.
+
+---
+ .../browser/gooroom_browser_extra_parts_security.cc   |  9 +++++++++
+ .../browser/gooroom_browser_extra_parts_security.h    |  4 ++--
+ gooroom/browser/gooroom_pref.cc                       | 11 +++++------
+ gooroom/browser/gooroom_pref.h                        |  6 +++---
+ 4 files changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.cc b/gooroom/browser/gooroom_browser_extra_parts_security.cc
+index 188d3b8daafba..7f4d9ce5cb0e2 100644
+--- a/gooroom/browser/gooroom_browser_extra_parts_security.cc
++++ b/gooroom/browser/gooroom_browser_extra_parts_security.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "gooroom_browser_extra_parts_security.h"
++#include "gooroom_pref.h"
+ 
+ #include "base/command_line.h"
+ #include "base/files/file_path.h"
+@@ -27,6 +28,14 @@
+ //  DLOG(INFO) << "PreMainMessageLoopStart()";
+ //}
+ 
++void GooroomBrowserExtraPartsSecurity::PostCreateMainMessageLoop() {
++  gooroom::g_gooroom->setup();
++}
++
++void GooroomBrowserExtraPartsSecurity::PreCreateMainMessageLoop() {
++}
++
++
+ void GooroomBrowserExtraPartsSecurity::PostProfileInit(Profile* profile,
+                                                      bool is_initial_profile) {
+ }
+diff --git a/gooroom/browser/gooroom_browser_extra_parts_security.h b/gooroom/browser/gooroom_browser_extra_parts_security.h
+index b53088fd8c7c7..f54c117346d76 100644
+--- a/gooroom/browser/gooroom_browser_extra_parts_security.h
++++ b/gooroom/browser/gooroom_browser_extra_parts_security.h
+@@ -12,10 +12,10 @@ class GooroomBrowserExtraPartsSecurity : public ChromeBrowserMainExtraParts
+ {
+  public:
+ 
+-//  void PostMainMessageLoopStart() override;
++ void PostCreateMainMessageLoop() override;
++ void PreCreateMainMessageLoop() override;
+ 
+   // Overridden from ChromeBrowserMainExtraParts:
+-//  void PreMainMessageLoopStart() override;
+   void PostProfileInit(Profile* profile, bool is_initial_profile) override;
+   void PostBrowserStart() override;
+ 
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 49a826bda40a6..614c283a51479 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -28,11 +28,13 @@ GooroomPref::GooroomPref() {}
+ 
+ GooroomPref::~GooroomPref() {}
+ 
++/*
+ PrefService* GooroomPref::pref() {
+   if (pref_ == nullptr)
+     setup();
+   return pref_.get();
+ }
++*/
+ 
+ void GooroomPref::setup() {
+   DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
+@@ -47,13 +49,10 @@ void GooroomPref::setup() {
+   registry->RegisterListPref(kPolicyGooroomWhiteList);
+ 
+   PrefServiceFactory prefServiceFactory;
+-  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
+-      base::ThreadPool::CreateSequencedTaskRunner({base::MayBlock()});
+-//  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
+-//      base::CreateSequencedTaskRunner({base::ThreadPool()});
+ 
+-  prefServiceFactory.SetUserPrefsFile(path, refTaskRunner.get());
+-  pref_ = prefServiceFactory.Create(registry);
++  prefServiceFactory.SetUserPrefsFile(
++      path, base::SingleThreadTaskRunner::GetCurrentDefault().get());
++  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
+ 
+   // check a whilte list and make url filter from the list ===========
+   const PrefService::Preference* p =
+diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
+index 3e94b7fb6b223..6c888d3cfedda 100644
+--- a/gooroom/browser/gooroom_pref.h
++++ b/gooroom/browser/gooroom_pref.h
+@@ -28,11 +28,11 @@ class GooroomPref {
+   GooroomPref();
+   ~GooroomPref();
+ 
+-  PrefService* pref();
++//  PrefService* pref();
+   void setup();
+ 
+- private:
+-  std::unique_ptr<PrefService> pref_;
++// private:
++//  PrefService* pref_;
+ };
+ 
+ extern gooroom::GooroomPref* g_gooroom;
+-- 
+2.39.2
+

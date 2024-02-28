@@ -1,14 +1,13 @@
-From 75f94c69c2f25ce1e21c9e3671a32218c2015d0f Mon Sep 17 00:00:00 2001
+From 76060e88a85e27ece8f1c1ebf99ee94475c9203f Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 18:11:31 +0900
-Subject: [PATCH 24/65] enable/disable WebSocket according to policy, but, need
+Subject: [PATCH 24/58] enable/disable WebSocket according to policy, but, need
  a patch to fix an error when scrolling
 
 ---
  .../browser/chrome_content_browser_client.cc  |  5 ++
  chrome/browser/ui/prefs/prefs_tab_helper.cc   |  4 ++
- chrome/common/pref_names.cc                   |  2 +
- chrome/common/pref_names.h                    |  2 +
+ chrome/common/pref_names.h                    |  5 ++
  gooroom/BUILD.gn                              |  4 ++
  gooroom/WebKit/gooroom_enabled_features.cc    |  8 +++
  gooroom/WebKit/gooroom_enabled_features.h     | 25 ++++++++
@@ -26,14 +25,14 @@ Subject: [PATCH 24/65] enable/disable WebSocket according to policy, but, need
  .../modules/websockets/dom_websocket.cc       | 43 +++++++++++++
  third_party/blink/renderer/platform/BUILD.gn  |  1 +
  .../platform/exported/web_runtime_features.cc | 14 ++++
- 21 files changed, 259 insertions(+), 8 deletions(-)
+ 20 files changed, 260 insertions(+), 8 deletions(-)
  create mode 100644 gooroom/WebKit/gooroom_enabled_features.cc
  create mode 100644 gooroom/WebKit/gooroom_enabled_features.h
  create mode 100644 gooroom/content/gooroom_safety_policy_part.cc
  create mode 100644 gooroom/content/gooroom_safety_policy_part.h
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 049920aac5f91..1d8e0a5987974 100644
+index 4ec2216ff5896..d6d8e856493e4 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
 @@ -6,6 +6,7 @@
@@ -44,7 +43,7 @@ index 049920aac5f91..1d8e0a5987974 100644
  #endif
  
  #include <iterator>
-@@ -1567,6 +1568,8 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
+@@ -1541,6 +1542,8 @@ ChromeContentBrowserClient::ChromeContentBrowserClient() {
  #if BUILDFLAG(ENABLE_GOOROOM)
    extra_parts_.push_back(
        std::make_unique<GooroomURLRewrite>());
@@ -53,7 +52,7 @@ index 049920aac5f91..1d8e0a5987974 100644
  #endif
  }
  
-@@ -3982,6 +3985,8 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
+@@ -4104,6 +4107,8 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
        prefs->GetInteger(prefs::kWebKitMinimumLogicalFontSize);
  #endif
  
@@ -63,10 +62,10 @@ index 049920aac5f91..1d8e0a5987974 100644
  
    web_prefs->dom_paste_enabled =
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index 475a46589eecb..3d6b881ed7bbf 100644
+index 0764143d59c33..5e68f2c51d400 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-@@ -339,6 +339,10 @@ void PrefsTabHelper::RegisterProfilePrefs(
+@@ -344,6 +344,10 @@ void PrefsTabHelper::RegisterProfilePrefs(
      user_prefs::PrefRegistrySyncable* registry,
      const std::string& locale) {
    WebPreferences pref_defaults;
@@ -77,34 +76,24 @@ index 475a46589eecb..3d6b881ed7bbf 100644
    registry->RegisterBooleanPref(prefs::kWebKitJavascriptEnabled,
                                  pref_defaults.javascript_enabled);
    registry->RegisterBooleanPref(prefs::kWebKitWebSecurityEnabled,
-diff --git a/chrome/common/pref_names.cc b/chrome/common/pref_names.cc
-index b297018292a7b..38322ef2a42d2 100644
---- a/chrome/common/pref_names.cc
-+++ b/chrome/common/pref_names.cc
-@@ -324,6 +324,8 @@ const char kWebKitMinimumFontSize[] = "webkit.webprefs.minimum_font_size";
- const char kWebKitMinimumLogicalFontSize[] =
-     "webkit.webprefs.minimum_logical_font_size";
- const char kWebKitJavascriptEnabled[] = "webkit.webprefs.javascript_enabled";
-+const char kWebKitWebWorkerEnabled[] = "gooroom.pref.webworker_enabled";
-+const char kWebKitWebSocketEnabled[] = "gooroom.pref.websocket_enabled";
- const char kWebKitLoadsImagesAutomatically[] =
-     "webkit.webprefs.loads_images_automatically";
- const char kWebKitPluginsEnabled[] = "webkit.webprefs.plugins_enabled";
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index c5595ddda32cc..94f1c1a9e87fd 100644
+index 4a2be63957cfc..cd00d1d629d48 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -144,6 +144,8 @@ extern const char kWebKitDefaultFixedFontSize[];
- extern const char kWebKitMinimumFontSize[];
- extern const char kWebKitMinimumLogicalFontSize[];
- extern const char kWebKitJavascriptEnabled[];
-+extern const char kWebKitWebWorkerEnabled[];
-+extern const char kWebKitWebSocketEnabled[];
- extern const char kWebKitWebSecurityEnabled[];
- extern const char kWebKitLoadsImagesAutomatically[];
- extern const char kWebKitPluginsEnabled[];
+@@ -351,6 +351,11 @@ inline constexpr char kWebKitMinimumLogicalFontSize[] =
+     "webkit.webprefs.minimum_logical_font_size";
+ inline constexpr char kWebKitJavascriptEnabled[] =
+     "webkit.webprefs.javascript_enabled";
++inline constexpr char kWebKitWebWorkerEnabled[] =
++    "webkit.webprefs.webworker_enabled";
++inline constexpr char kWebKitWebSocketEnabled[] =
++    "webkit.webprefs.websocket_enabled";
++
+ inline constexpr char kWebKitLoadsImagesAutomatically[] =
+     "webkit.webprefs.loads_images_automatically";
+ inline constexpr char kWebKitPluginsEnabled[] =
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 7c0295f2e3164..237201aa06451 100644
+index b4890517a1344..0b90d3b871ba0 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
 @@ -243,6 +243,10 @@ if (!is_android && !is_mac) {
@@ -351,7 +340,7 @@ index 0000000000000..e536dd3dc9415
 +#endif  // GOOROOM_SAFETY_POLICY_PART_H_
 +
 diff --git a/third_party/blink/common/web_preferences/web_preferences.cc b/third_party/blink/common/web_preferences/web_preferences.cc
-index 0997787979ba2..16aa70595920b 100644
+index fa46daef1d7da..df1a09bd8ff8a 100644
 --- a/third_party/blink/common/web_preferences/web_preferences.cc
 +++ b/third_party/blink/common/web_preferences/web_preferences.cc
 @@ -39,6 +39,8 @@ WebPreferences::WebPreferences()
@@ -364,7 +353,7 @@ index 0997787979ba2..16aa70595920b 100644
        context_menu_on_mouse_up(true),
  #else
 diff --git a/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc b/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
-index bd8a875818192..dbef00ec6ddde 100644
+index bd5d2f9ba30d8..f69e4ab347525 100644
 --- a/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
 +++ b/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
 @@ -50,6 +50,8 @@ bool StructTraits<blink::mojom::WebPreferencesDataView,
@@ -377,7 +366,7 @@ index bd8a875818192..dbef00ec6ddde 100644
    out->default_fixed_font_size = data.default_fixed_font_size();
    out->minimum_font_size = data.minimum_font_size();
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences.h b/third_party/blink/public/common/web_preferences/web_preferences.h
-index b957ba9c4d99a..6aaf694e0ae98 100644
+index 65cf821100554..d78c2c60d6045 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences.h
 @@ -55,6 +55,8 @@ struct BLINK_COMMON_EXPORT WebPreferences {
@@ -390,7 +379,7 @@ index b957ba9c4d99a..6aaf694e0ae98 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
-index f8285905b7ed5..762a837510540 100644
+index c5cf0543740b4..d8aa32287da42 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 @@ -75,6 +75,16 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::WebPreferencesDataView,
@@ -411,7 +400,7 @@ index f8285905b7ed5..762a837510540 100644
        const blink::web_pref::WebPreferences& r) {
      return r.context_menu_on_mouse_up;
 diff --git a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
-index 99000de33d72a..c45b319d5d36f 100644
+index d03fc2e4ccef6..202afa1907f55 100644
 --- a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 +++ b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 @@ -119,6 +119,8 @@ struct WebPreferences {
@@ -424,7 +413,7 @@ index 99000de33d72a..c45b319d5d36f 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/public/platform/web_runtime_features.h b/third_party/blink/public/platform/web_runtime_features.h
-index e282c6e36a91d..f2c462115428f 100644
+index 728246a920450..95ffe3e255b64 100644
 --- a/third_party/blink/public/platform/web_runtime_features.h
 +++ b/third_party/blink/public/platform/web_runtime_features.h
 @@ -43,6 +43,11 @@ namespace blink {
@@ -440,10 +429,10 @@ index e282c6e36a91d..f2c462115428f 100644
    // renderer/platform/runtime_enabled_features.json5.
    static void EnableExperimentalFeatures(bool);
 diff --git a/third_party/blink/renderer/core/exported/web_view_impl.cc b/third_party/blink/renderer/core/exported/web_view_impl.cc
-index a1bcdb3b7ceb5..37fd5ef979044 100644
+index adb1c7ca2fcdf..722a368ed8db2 100644
 --- a/third_party/blink/renderer/core/exported/web_view_impl.cc
 +++ b/third_party/blink/renderer/core/exported/web_view_impl.cc
-@@ -1486,6 +1486,9 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
+@@ -1515,6 +1515,9 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
    settings->SetDefaultTextEncodingName(
        WebString::FromASCII(prefs.default_encoding));
    settings->SetJavaScriptEnabled(prefs.javascript_enabled);
@@ -454,7 +443,7 @@ index a1bcdb3b7ceb5..37fd5ef979044 100644
    settings->SetLoadsImagesAutomatically(prefs.loads_images_automatically);
    settings->SetImagesEnabled(prefs.images_enabled);
 diff --git a/third_party/blink/renderer/modules/websockets/dom_websocket.cc b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
-index 556e5ae8a7408..395590f9d6e69 100644
+index 95a047b52d6d7..3dded71a332d8 100644
 --- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 +++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
 @@ -30,6 +30,19 @@
@@ -515,10 +504,10 @@ index 556e5ae8a7408..395590f9d6e69 100644
      case WebSocketCommon::ConnectResult::kSuccess:
        DCHECK(!exception_state.HadException());
 diff --git a/third_party/blink/renderer/platform/BUILD.gn b/third_party/blink/renderer/platform/BUILD.gn
-index ed90c5a69b33b..0ebf303873f79 100644
+index 130975880421a..b8fe076a0a935 100644
 --- a/third_party/blink/renderer/platform/BUILD.gn
 +++ b/third_party/blink/renderer/platform/BUILD.gn
-@@ -1564,6 +1564,7 @@ component("platform") {
+@@ -1576,6 +1576,7 @@ component("platform") {
      "widget/widget_base.h",
      "widget/widget_base_client.h",
      "windows_keyboard_codes.h",
@@ -527,7 +516,7 @@ index ed90c5a69b33b..0ebf303873f79 100644
  
    sources -= blink_platform_avx_files
 diff --git a/third_party/blink/renderer/platform/exported/web_runtime_features.cc b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-index 424852d2cdba0..7349910148d62 100644
+index 9a3bc82c664b5..ce2fb1ec82d7b 100644
 --- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 +++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 @@ -33,6 +33,10 @@
@@ -541,7 +530,7 @@ index 424852d2cdba0..7349910148d62 100644
  namespace blink {
  
  void WebRuntimeFeatures::EnableExperimentalFeatures(bool enable) {
-@@ -65,4 +69,14 @@ void WebRuntimeFeatures::EnableFluentScrollbars(bool enable) {
+@@ -65,6 +69,16 @@ void WebRuntimeFeatures::EnableFluentScrollbars(bool enable) {
    ScrollbarThemeSettings::SetFluentScrollbarsEnabled(enable);
  }
  
@@ -555,7 +544,9 @@ index 424852d2cdba0..7349910148d62 100644
 +}
 +#endif
 +
- }  // namespace blink
+ void WebRuntimeFeatures::EnableFluentOverlayScrollbars(bool enable) {
+   RuntimeEnabledFeatures::SetFluentOverlayScrollbarsEnabled(enable);
+ }
 -- 
 2.39.2
 

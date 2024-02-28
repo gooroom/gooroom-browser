@@ -20,9 +20,10 @@ Build-Depends:
  libvpx-dev (>= 1.7.0),
  debhelper (>= 11),
  devscripts,
- lld,
- clang,
- clang-format,
+ lld-16,
+ clang-16,
+ clang-format-16,
+ libclang-rt-16-dev,
  rustc,
  python3,
  pkg-config,
@@ -38,7 +39,6 @@ Build-Depends:
  wdiff,
  gperf,
  bison,
- brotli,
  nodejs,
  rollup,
  valgrind,
@@ -48,7 +48,7 @@ Build-Depends:
  xfonts-base,
  libx11-xcb-dev,
  libxshmfence-dev,
- libgl1-mesa-dev,
+ libgl-dev,
  libglu1-mesa-dev,
  libegl1-mesa-dev,
  libgles2-mesa-dev,
@@ -58,7 +58,6 @@ Build-Depends:
  rapidjson-dev,
  libva-dev,
  libxt-dev,
- libre2-dev,
  libgbm-dev,
  libpng-dev,
  libxss-dev,
@@ -82,7 +81,6 @@ Build-Depends:
  liblcms2-dev,
  libpulse-dev,
  libpam0g-dev,
- libbrotli-dev,
  libdouble-conversion-dev,
  libxnvctrl-dev,
  libwoff-dev,
@@ -90,6 +88,7 @@ Build-Depends:
  libglib2.0-dev,
  libasound2-dev,
  libjsoncpp-dev,
+ libsecret-1-dev,
  libspeechd-dev,
  libminizip-dev,
  libhunspell-dev,
@@ -175,18 +174,3 @@ Description: web browser - common resources used by the chromium packages
  .
  This package contains resources that are in common to different chromium
  packages.
-
-Package: chromium-sandbox
-Architecture: i386 amd64 arm64 armhf ppc64el
-Depends:
- ${misc:Depends},
- ${shlibs:Depends},
-Breaks:
- chromium (<< ${binary:Version}),
-Replaces:
- chromium (<< ${binary:Version}),
-Description: web browser - setuid security sandbox for chromium
- Web browser that aims to build a safer, faster, and more stable internet
- browsing experience.
- .
- This package contains the setuid chromium sandbox.

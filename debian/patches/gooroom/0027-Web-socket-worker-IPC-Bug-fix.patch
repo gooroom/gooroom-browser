@@ -1,11 +1,11 @@
-From 250953604c432a919ad560a2057922e54e5317a9 Mon Sep 17 00:00:00 2001
+From 756b81e5837525d69c3a21894e05cff64569865b Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Fri, 5 Mar 2021 09:48:26 +0900
-Subject: [PATCH 27/65] Web socket-worker IPC Bug fix
+Subject: [PATCH 27/58] Web socket-worker IPC Bug fix
 
 ---
  .../browser/chrome_content_browser_client.cc  |  2 --
- .../settings/privacy_page/privacy_page.html   | 14 +++++++++++++
+ .../settings/privacy_page/privacy_page.html   | 15 ++++++++++++++
  chrome/browser/ui/prefs/prefs_tab_helper.cc   |  4 ++--
  gooroom/content/gooroom_safety_policy_part.cc |  4 ++--
  .../common/web_preferences/web_preferences.cc |  4 ++--
@@ -13,13 +13,13 @@ Subject: [PATCH 27/65] Web socket-worker IPC Bug fix
  .../web_preferences_mojom_traits.h            |  4 ++--
  .../webpreferences/web_preferences.mojom      |  4 ++--
  .../renderer/core/exported/web_view_impl.cc   | 20 ++++++++++++++++---
- 9 files changed, 43 insertions(+), 17 deletions(-)
+ 9 files changed, 44 insertions(+), 17 deletions(-)
 
 diff --git a/chrome/browser/chrome_content_browser_client.cc b/chrome/browser/chrome_content_browser_client.cc
-index 1d8e0a5987974..2ca80e3bf780f 100644
+index d6d8e856493e4..cbdc3b3fa6852 100644
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -3985,8 +3985,6 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
+@@ -4107,8 +4107,6 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
        prefs->GetInteger(prefs::kWebKitMinimumLogicalFontSize);
  #endif
  
@@ -29,13 +29,13 @@ index 1d8e0a5987974..2ca80e3bf780f 100644
  
    web_prefs->dom_paste_enabled =
 diff --git a/chrome/browser/resources/settings/privacy_page/privacy_page.html b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-index c0771b21e90dc..05b66e6c566bb 100644
+index 744bea834ebc6..ed5ca08982791 100644
 --- a/chrome/browser/resources/settings/privacy_page/privacy_page.html
 +++ b/chrome/browser/resources/settings/privacy_page/privacy_page.html
-@@ -108,6 +108,20 @@
-           <a id="privacySandboxLink" href="privacySandbox"
-               target="_blank" tabindex="-1" aria-disabled="true"
-               role="none"></a>
+@@ -196,6 +196,21 @@
+         </settings-subpage>
+       </template>
+ 
 +                        <!-- gooroom-browser -->
 +                       <div hidden="[[!pageVisibility.websocketSettings]]">
 +                         <settings-toggle-button
@@ -50,14 +50,15 @@ index c0771b21e90dc..05b66e6c566bb 100644
 +                         </settings-toggle-button>
 +                       </div>
 +
-         </template>
-       </div>
- 
++
+       <template is="dom-if" route-path="/content/all" no-search>
+         <settings-subpage page-title="$i18n{siteSettingsAllSites}"
+             search-label="$i18n{siteSettingsAllSitesSearch}"
 diff --git a/chrome/browser/ui/prefs/prefs_tab_helper.cc b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-index a7a5c02deb4ff..5cd324b7f5cb5 100644
+index 3291ae77326c3..c4d08f3c5465d 100644
 --- a/chrome/browser/ui/prefs/prefs_tab_helper.cc
 +++ b/chrome/browser/ui/prefs/prefs_tab_helper.cc
-@@ -339,9 +339,9 @@ void PrefsTabHelper::RegisterProfilePrefs(
+@@ -344,9 +344,9 @@ void PrefsTabHelper::RegisterProfilePrefs(
      user_prefs::PrefRegistrySyncable* registry,
      const std::string& locale) {
    WebPreferences pref_defaults;
@@ -91,7 +92,7 @@ index 732944f5ddb9d..caf931fe3332b 100644
  
    return;
 diff --git a/third_party/blink/common/web_preferences/web_preferences.cc b/third_party/blink/common/web_preferences/web_preferences.cc
-index 16aa70595920b..5720e92843ef6 100644
+index df1a09bd8ff8a..fb78d58a3cd36 100644
 --- a/third_party/blink/common/web_preferences/web_preferences.cc
 +++ b/third_party/blink/common/web_preferences/web_preferences.cc
 @@ -39,8 +39,8 @@ WebPreferences::WebPreferences()
@@ -106,7 +107,7 @@ index 16aa70595920b..5720e92843ef6 100644
        context_menu_on_mouse_up(true),
  #else
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences.h b/third_party/blink/public/common/web_preferences/web_preferences.h
-index 6aaf694e0ae98..6e02be3fa943f 100644
+index d78c2c60d6045..cc6b9cda82126 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences.h
 @@ -55,8 +55,8 @@ struct BLINK_COMMON_EXPORT WebPreferences {
@@ -121,7 +122,7 @@ index 6aaf694e0ae98..6e02be3fa943f 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
-index 762a837510540..347cb05dace25 100644
+index d8aa32287da42..77b6b977d0da0 100644
 --- a/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 +++ b/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
 @@ -75,12 +75,12 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::WebPreferencesDataView,
@@ -140,7 +141,7 @@ index 762a837510540..347cb05dace25 100644
      return r.websocket_enabled;
    }
 diff --git a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
-index c45b319d5d36f..208e6dfa2afff 100644
+index 202afa1907f55..3ac541b1017b3 100644
 --- a/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 +++ b/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
 @@ -119,8 +119,8 @@ struct WebPreferences {
@@ -155,10 +156,10 @@ index c45b319d5d36f..208e6dfa2afff 100644
    bool javascript_enabled;
    bool web_security_enabled;
 diff --git a/third_party/blink/renderer/core/exported/web_view_impl.cc b/third_party/blink/renderer/core/exported/web_view_impl.cc
-index 37fd5ef979044..214cdfcd6e4aa 100644
+index 722a368ed8db2..9664fac5f27f2 100644
 --- a/third_party/blink/renderer/core/exported/web_view_impl.cc
 +++ b/third_party/blink/renderer/core/exported/web_view_impl.cc
-@@ -1486,9 +1486,6 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
+@@ -1515,9 +1515,6 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
    settings->SetDefaultTextEncodingName(
        WebString::FromASCII(prefs.default_encoding));
    settings->SetJavaScriptEnabled(prefs.javascript_enabled);
@@ -168,7 +169,7 @@ index 37fd5ef979044..214cdfcd6e4aa 100644
    settings->SetWebSecurityEnabled(prefs.web_security_enabled);
    settings->SetLoadsImagesAutomatically(prefs.loads_images_automatically);
    settings->SetImagesEnabled(prefs.images_enabled);
-@@ -1499,6 +1496,23 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
+@@ -1528,6 +1525,23 @@ void WebView::ApplyWebPreferences(const web_pref::WebPreferences& prefs,
    settings->SetDownloadableBinaryFontsEnabled(prefs.remote_fonts_enabled);
    settings->SetJavaScriptCanAccessClipboard(
        prefs.javascript_can_access_clipboard);

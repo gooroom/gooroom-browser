@@ -1,0 +1,33 @@
+From 3ae920ae7b5442f868faebe8f0bc7bf973e16e5e Mon Sep 17 00:00:00 2001
+From: hnc-cjs <cjs@hancom>
+Date: Wed, 26 Apr 2023 20:37:26 +0900
+Subject: [PATCH 52/58] Bug 5381 fix - remove 'New Incognito Window' on menu
+ button
+
+---
+ chrome/browser/ui/toolbar/app_menu_model.cc | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/chrome/browser/ui/toolbar/app_menu_model.cc b/chrome/browser/ui/toolbar/app_menu_model.cc
+index 751877c018c32..fb1c283c6ea59 100644
+--- a/chrome/browser/ui/toolbar/app_menu_model.cc
++++ b/chrome/browser/ui/toolbar/app_menu_model.cc
+@@ -1580,15 +1580,6 @@ void AppMenuModel::Build() {
+                                        : IDS_NEW_TAB);
+   AddItemWithStringId(IDC_NEW_WINDOW, IDS_NEW_WINDOW);
+ 
+-  // This menu item is not visible in Guest Mode. If incognito mode is not
+-  // available, it will be shown in disabled state. (crbug.com/1100791)
+-  if (!browser_->profile()->IsGuestSession()) {
+-    AddItemWithStringId(IDC_NEW_INCOGNITO_WINDOW, IDS_NEW_INCOGNITO_WINDOW);
+-    SetElementIdentifierAt(
+-        GetIndexOfCommandId(IDC_NEW_INCOGNITO_WINDOW).value(),
+-        kIncognitoMenuItem);
+-  }
+-
+   AddSeparator(ui::NORMAL_SEPARATOR);
+ 
+ #if !BUILDFLAG(IS_CHROMEOS_ASH)
+-- 
+2.39.2
+

@@ -1,0 +1,26 @@
+From 27011b0870b46ff5c504204e51b06d3bd5e9ab10 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 12:00:59 +0900
+Subject: [PATCH 32/58] Remove Incognito mode in gooroom-browser
+
+---
+ chrome/browser/ui/browser_command_controller.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
+index 2abd329e1ba7d..589f251d0be49 100644
+--- a/chrome/browser/ui/browser_command_controller.cc
++++ b/chrome/browser/ui/browser_command_controller.cc
+@@ -456,7 +456,9 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+       NewWindow(browser_);
+       break;
+     case IDC_NEW_INCOGNITO_WINDOW:
++#if !defined(GOOROOM_BUILD)
+       NewIncognitoWindow(profile());
++#endif
+       break;
+     case IDC_CLOSE_WINDOW:
+       base::RecordAction(base::UserMetricsAction("CloseWindowByKey"));
+-- 
+2.39.2
+
