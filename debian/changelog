@@ -1,3 +1,18 @@
+gooroom-browser (3.6.0-1+grm3u4) stretch; urgency=medium
+
+  * Update 3.6.0-1+grm3u4
+    - CVE-2023-4351.patch
+    - CVE-2023-4429.patch
+    - CVE-2023-4572.patch
+    - CVE-2023-4763.patch
+    - CVE-2023-5186.patch
+    - CVE-2023-5187.patch
+    - CVE-2023-5472.patch
+    - CVE-2023-5480.patch
+    - CVE-2023-5996.patch 
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 04 Mar 2024 13:17:00 +0900
+
 gooroom-browser (3.6.0-1+grm3u2) stretch; urgency=medium
 
   * Update 3.6.0-1+grm3u2
