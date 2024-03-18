@@ -1,3 +1,14 @@
+gooroom-browser (4.0.2-1+grm4u2) stretch; urgency=medium
+
+  * Update 4.0.2-1+grm4u2
+     - Add websocket webworker settings page (bugs 5712)
+     - Fix odf viewer open (bugs 5711)
+     - Remove Incognito mode on sidebar bookmark (bugs 5708)
+     - Remove Incognito mode at image right lick (bugs 5682)
+     - Fix package install bug (bugs 5707)
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 18 Mar 2024 10:44:00 +0900
+
 gooroom-browser (4.0.2-1+grm4u1) stretch; urgency=medium
 
   * Init 4.0.2-1+grm4u1

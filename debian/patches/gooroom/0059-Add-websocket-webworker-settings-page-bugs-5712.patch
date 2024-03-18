@@ -1,0 +1,149 @@
+From 236c48b3284e2564be5861475d8264e373015329 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Thu, 14 Mar 2024 15:11:35 +0900
+Subject: [PATCH 1/4] Add websocket webworker settings page (bugs 5712)
+
+---
+ base/threading/thread_restrictions.h          |  4 +++
+ .../settings/privacy_page/security_page.html  | 15 ++++++++
+ gooroom/browser/gooroom_pref.cc               | 35 ++++++++-----------
+ gooroom/browser/gooroom_pref.h                |  2 +-
+ 4 files changed, 34 insertions(+), 22 deletions(-)
+
+diff --git a/base/threading/thread_restrictions.h b/base/threading/thread_restrictions.h
+index 83339edeacdc7..0cfd6a64b29f1 100644
+--- a/base/threading/thread_restrictions.h
++++ b/base/threading/thread_restrictions.h
+@@ -425,6 +425,9 @@ class ContentBrowserClientImpl;
+ class ProfileImpl;
+ class WebLayerPathProvider;
+ }  // namespace weblayer
++namespace gooroom {
++class GooroomPref;
++}
+ // NOTE: Please do not append entries here. Put them in the list above and keep
+ // the list sorted.
+ 
+@@ -634,6 +637,7 @@ class BASE_EXPORT [[maybe_unused, nodiscard]] ScopedAllowBlocking {
+   friend class weblayer::ContentBrowserClientImpl;
+   friend class weblayer::ProfileImpl;
+   friend class weblayer::WebLayerPathProvider;
++  friend class gooroom::GooroomPref;
+ #if BUILDFLAG(IS_MAC)
+   friend class printing::PrintBackendServiceImpl;
+ #endif
+diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
+index b22d282486f74..ee831b591eafc 100644
+--- a/chrome/browser/resources/settings/privacy_page/security_page.html
++++ b/chrome/browser/resources/settings/privacy_page/security_page.html
+@@ -363,3 +363,18 @@
+           on-close="onDisableSafebrowsingDialogClose_">
+       </settings-simple-confirmation-dialog>
+     </template>
++          <div slot="noSelectionCollapse">
++                        <!-- gooroom-browser -->
++                       <div hidden="[[!pageVisibility.websocketSettings]]">
++                         <settings-toggle-button
++                                pref="{{prefs.gooroom_option.websocket_confirm}}"
++                                 label="$i18n{websocketEnable}" style="padding: 0 20px">
++                         </settings-toggle-button>
++                       </div>
++                       <div hidden="[[!pageVisibility.webworkerSettings]]">
++                        <settings-toggle-button
++                                 pref="{{prefs.gooroom_option.webworker_confirm}}"
++                                 label="$i18n{webworkerEnable}" style="padding: 0 20px">
++                         </settings-toggle-button>
++                       </div>
++           </div>
+diff --git a/gooroom/browser/gooroom_pref.cc b/gooroom/browser/gooroom_pref.cc
+index 8aadadc3be09f..fbc13151cef98 100644
+--- a/gooroom/browser/gooroom_pref.cc
++++ b/gooroom/browser/gooroom_pref.cc
+@@ -9,6 +9,7 @@
+ #include "base/path_service.h"
+ #include "base/syslog_logging.h"
+ #include "base/task/single_thread_task_runner.h"
++#include "base/threading/thread_restrictions.h"
+ 
+ #include "chrome/browser/browser_process.h"
+ #include "chrome/browser/profiles/profile.h"
+@@ -32,18 +33,7 @@ GooroomPref::~GooroomPref() {}
+ 
+ std::unique_ptr<PrefService> pref_;
+ 
+-/*
+-PrefService* GooroomPref::pref() {
+-  if (pref_ == nullptr)
+-    setup();
+-  return pref_.get();
+-}
+-*/
+-
+-//Separate from setup() to apply the mainpref.json dynamically
+-GooroomUrlFilterImpl* GooroomPref::setMainpref() {
+-  // read CORE policy file from ... ==================================
+-  // TODO use constant value
++std::unique_ptr<PrefService> GooroomPref::getPref() {
+   base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
+ 
+   PrefRegistrySimple* registry = new PrefRegistrySimple;
+@@ -53,17 +43,16 @@ GooroomUrlFilterImpl* GooroomPref::setMainpref() {
+ 
+   PrefServiceFactory prefServiceFactory;
+ 
+-  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
+-      base::ThreadPool::CreateSequencedTaskRunner({});
+-
+-  scoped_refptr<JsonPrefStore> json_pref_store(new JsonPrefStore(
+-        path, nullptr,
+-        base::ThreadPool::CreateSequencedTaskRunner({})));
++  scoped_refptr<JsonPrefStore> json_pref_store(new JsonPrefStore(path));
+   prefServiceFactory.set_user_prefs(json_pref_store);
+ 
+-  if(!pref_) {
+-    pref_ = prefServiceFactory.Create(registry);
+-  }
++  base::ScopedAllowBlocking allow_blocking;
++  return prefServiceFactory.Create(registry);
++}
++
++//Separate from setup() to apply the mainpref.json dynamically
++GooroomUrlFilterImpl* GooroomPref::setMainpref() {
++  std::unique_ptr<PrefService> pref_ = getPref();
+ 
+   // check a whilte list and make url filter from the list ===========
+   const PrefService::Preference* p =
+@@ -165,6 +154,8 @@ bool GooroomPref::useWebSocket() {
+     return true;
+   }
+   
++  std::unique_ptr<PrefService> pref_ = getPref();
++
+   const PrefService::Preference* p =
+       pref_->FindPreference(gooroom::kPolicyGooroomWebSocket);
+   absl::optional<bool> val = true;
+@@ -180,6 +171,8 @@ bool GooroomPref::useWebWorker() {
+     return true;
+   }
+ 
++  std::unique_ptr<PrefService> pref_ = getPref();
++
+   const PrefService::Preference* p =
+       pref_->FindPreference(gooroom::kPolicyGooroomWebWorker);
+   absl::optional<bool> val = true;
+diff --git a/gooroom/browser/gooroom_pref.h b/gooroom/browser/gooroom_pref.h
+index 02c62a9550252..3eb0d832b0a1b 100644
+--- a/gooroom/browser/gooroom_pref.h
++++ b/gooroom/browser/gooroom_pref.h
+@@ -30,7 +30,7 @@ class GooroomPref {
+   GooroomPref();
+   ~GooroomPref();
+ 
+-//  PrefService* pref();
++  std::unique_ptr<PrefService> getPref();
+   GooroomUrlFilterImpl* setMainpref();
+   void setup();
+ 
+-- 
+2.39.2
+
