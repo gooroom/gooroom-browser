@@ -1,3 +1,10 @@
+gooroom-browser (4.0.2-1+grm4u3) stretch; urgency=medium
+
+  * Update 4.0.2-1+grm4u3
+     - Fix package install bug
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 28 Mar 2024 15:30:00 +0900
+
 gooroom-browser (4.0.2-1+grm4u2) stretch; urgency=medium
 
   * Update 4.0.2-1+grm4u2
