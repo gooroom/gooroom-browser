@@ -206,3 +206,4 @@ gooroom/0059-Add-websocket-webworker-settings-page-bugs-5712.patch
 gooroom/0060-Fix-odf-viewer-open-bugs-5711.patch
 gooroom/0061-Remove-Incognito-mode-on-sidebar-bookmark-bugs-5708.patch
 gooroom/0062-Remove-Incognito-mode-at-image-right-lick-bugs-5682.patch
+gooroom/CVE-2024-3157.patch

@@ -1,3 +1,10 @@
+gooroom-browser (4.0.2-1+grm4u4) stretch; urgency=medium
+
+  * Update 4.0.2-1+grm4u4
+     - CVE-2024-3157: Out of bounds write in Compositing
+
+ -- Choi J.S. <junsungc91@gmail.com>  Mon, 22 Apr 2024 09:26:00 +0900
+
 gooroom-browser (4.0.2-1+grm4u3) stretch; urgency=medium
 
   * Update 4.0.2-1+grm4u3
