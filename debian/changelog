@@ -2,7 +2,6 @@ gooroom-browser (3.6.0-1+grm3u5) stretch; urgency=medium
 
   * Update 3.6.0-1+grm3u5
     - CVE-2023-6508.patch
-    - CVE-2023-6509.patch
     - CVE-2023-6703.patch
     - CVE-2023-7024.patch
 
