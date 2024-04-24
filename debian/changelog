@@ -1,3 +1,10 @@
+gooroom-browser (3.6.0-1+grm3u6) stretch; urgency=medium
+
+  * Update 3.6.0-1+grm3u6
+     - Fix package install bug
+
+ -- Choi J.S. <junsungc91@gmail.com>  Wed, 24 Mar 2024 14:44:00 +0900
+
 gooroom-browser (3.6.0-1+grm3u5) stretch; urgency=medium
 
   * Update 3.6.0-1+grm3u5
