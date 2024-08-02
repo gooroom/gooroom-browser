@@ -1,14 +1,14 @@
-From 6b176c16f2c6f8031a4951d36950fbf59b52bf86 Mon Sep 17 00:00:00 2001
+From 474f349a80775cc5d292aaab194891a249abe21e Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:31:12 +0900
-Subject: [PATCH 07/58] Insert URL judgement module when observer the browser.
+Subject: [PATCH 07/67] Insert URL judgement module when observer the browser.
 
 ---
  .../browser/web_contents/web_contents_impl.cc | 99 +++++++++++++++++++
  1 file changed, 99 insertions(+)
 
 diff --git a/content/browser/web_contents/web_contents_impl.cc b/content/browser/web_contents/web_contents_impl.cc
-index df5ea398bdca4..80c77d01483c3 100644
+index eb1953c745c77..dfd15b5f5d58c 100644
 --- a/content/browser/web_contents/web_contents_impl.cc
 +++ b/content/browser/web_contents/web_contents_impl.cc
 @@ -4,6 +4,11 @@
@@ -23,7 +23,7 @@ index df5ea398bdca4..80c77d01483c3 100644
  #include <stddef.h>
  
  #include <cmath>
-@@ -6173,6 +6178,93 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
+@@ -6428,6 +6433,93 @@ void WebContentsImpl::DidStartNavigation(NavigationHandle* navigation_handle) {
    }
  }
  
@@ -117,7 +117,7 @@ index df5ea398bdca4..80c77d01483c3 100644
  void WebContentsImpl::DidRedirectNavigation(
      NavigationHandle* navigation_handle) {
    TRACE_EVENT1("navigation", "WebContentsImpl::DidRedirectNavigation",
-@@ -6323,6 +6415,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
+@@ -6578,6 +6670,13 @@ void WebContentsImpl::DidFinishNavigation(NavigationHandle* navigation_handle) {
      max_loaded_frame_count_ = GetFrameTreeSize(&primary_frame_tree_);
    }
  

@@ -10,7 +10,7 @@ I'm not sure how much of them are actually needed, but it's easier to
 just copy all of them for now. Hopefully this will be fixed upstream
 shortly.
 
-This copy is from chromium 120.0.6099.62.
+This copy is from chromium 123.
 
 --- /dev/null
 +++ b/content/test/data/web_ui_test.test-mojom
@@ -261,7 +261,7 @@ This copy is from chromium 120.0.6099.62.
 +</html>
 --- /dev/null
 +++ b/content/test/data/accept-header.html
-@@ -0,0 +1,46 @@
+@@ -0,0 +1,52 @@
 +<html>
 +<head>
 +<script src="test.js"></script>
@@ -306,6 +306,12 @@ This copy is from chromium 120.0.6099.62.
 +navigator.serviceWorker.register('/service_worker.js')
 +.catch(function(error) {});
 +
++// TOOD(crbug.com/v8/13856): Use `with` once it's unflagged
++import("/test-css-module", { assert: { type: "css" } })
++.catch(function(error) {});
++
++import("/test-json-module", { assert: { type: "json" } })
++.catch(function(error) {});
 +</script>
 +</html>
 --- /dev/null
@@ -5192,7 +5198,7 @@ This copy is from chromium 120.0.6099.62.
 +<title></title>
 +
 +<body>
-+  <p>This page has the trust-token-redemption Feature Policy feature disabled (via its mock headers).</p>
++  <p>This page has the private-state-token-redemption Feature Policy feature disabled (via its mock headers).</p>
 +  <p>It also has an iframe! Yay for iframes.</p>
 +
 +  <iframe src="/cross-site/b.com/title1.html" id="test_iframe" />
@@ -7312,21 +7318,21 @@ This copy is from chromium 120.0.6099.62.
 +self.addEventListener('fetch', e => { e.respondWith(fetch(e.request)) });
 --- /dev/null
 +++ b/content/test/data/result_queue.js
-@@ -0,0 +1,44 @@
+@@ -0,0 +1,39 @@
 +// Copyright 2017 The Chromium Authors
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
 +
-+// Queue storing asynchronous results received from the Service Worker. Results
-+// are sent to the test when requested.
++// Queue storing asynchronous results. Results are available via `pop` when
++// requested.
 +function ResultQueue() {
 +  // Invariant: this.queue.length == 0 || this.pendingGets.length == 0
 +  this.queue = [];
 +  this.pendingGets = [];
 +}
 +
-+// Adds a data item to the queue. Will be sent to the test if there are
-+// pendingGets.
++// Adds a data item to the queue or sends it to the earliest pending `pop`
++// operation.
 +ResultQueue.prototype.push = function(data) {
 +  if (this.pendingGets.length > 0) {
 +    const resolve = this.pendingGets.pop();
@@ -7336,8 +7342,7 @@ This copy is from chromium 120.0.6099.62.
 +  }
 +};
 +
-+// Called by native. Sends the next data item to the test if it is available.
-+// Otherwise increments pendingGets so it will be delivered when received.
++// Returns a promise that resolves with the next data item, when available.
 +ResultQueue.prototype.pop = function() {
 +  return new Promise((resolve) => {
 +    if (this.queue.length) {
@@ -7348,15 +7353,11 @@ This copy is from chromium 120.0.6099.62.
 +  });
 +};
 +
-+// Called by native. Immediately sends the next data item to the test if it is
-+// available, otherwise sends null.
++// Immediately returns the next data item if it is available, otherwise returns
++// null.
 +ResultQueue.prototype.popImmediately = function() {
 +  return this.queue.length ? this.queue.pop() : null;
 +};
-+
-+function formatError(error) {
-+  return error.name + ' - ' + error.message;
-+}
 --- /dev/null
 +++ b/content/test/data/stale-script.js
 @@ -0,0 +1,5 @@
@@ -8227,7 +8228,7 @@ This copy is from chromium 120.0.6099.62.
 +</html>
 --- /dev/null
 +++ b/content/test/data/web_ui_managed_interface_test.test-mojom
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,32 @@
 +// Copyright 2023 The Chromium Authors
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -8248,7 +8249,6 @@ This copy is from chromium 120.0.6099.62.
 +
 +// A bridge (aka Factory) interface that is used for binding other
 +// interfaces.
-+[WebUIJsBridge]
 +interface TestWebUIJsBridge {
 +  // The WebUI calls this method to bind a Foo remote.
 +  BindFoo(pending_receiver<Foo> foo);
@@ -84879,3 +84879,38 @@ This copy is from chromium 120.0.6099.62.
 +Object.assign(
 +    window,
 +    {BarCallbackRouter, BazCallbackRouter, FooRemote, TestWebUIJsBridge});
+--- /dev/null
++++ b/content/test/data/format_error.js
+@@ -0,0 +1,7 @@
++// Copyright 2023 The Chromium Authors
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++function formatError(error) {
++  return error.name + ' - ' + error.message;
++}
+--- /dev/null
++++ b/content/test/data/pagehide_handler_force_layout.html
+@@ -0,0 +1,22 @@
++<!DOCTYPE html>
++<html>
++<body>
++  <div id="tall" style="height: 1000em">
++    This page will force a layout on pagehide
++  </div>
++</body>
++<script>
++window.addEventListener('pagehide', function(event) {
++  // Shrink the page.
++  document.getElementById('tall').style.height = '999em';
++  // Move the scroll position.
++  window.scroll(0, 100);
++  // Read the scroll position - this forces layout.
++  console.log(window.scrollY);
++  // Notify the opening window so tests can wait for this to run.
++  window.opener.postMessage('unloaded', '*');
++});
++// Notify the opening window that the page loaded, so tests can wait for it.
++window.opener.postMessage('loaded', '*');
++</script>
++</html>

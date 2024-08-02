@@ -1,10 +1,10 @@
-From 281f4610e424b5dd6ba4508d73284c9375eff1ab Mon Sep 17 00:00:00 2001
+From d06e8115a7124a098646bcf64e46d08343367148 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 15:34:42 +0900
-Subject: [PATCH 09/58] Put gooroom logo into the browser
+Subject: [PATCH 09/67] Put gooroom logo into the browser
 
 ---
- .../app/theme/chrome_unscaled_resources.grd   |  21 ++++++++----------
+ .../app/theme/chrome_unscaled_resources.grd   |  26 +++---------------
  .../gooroom/product_logo_16.png               | Bin 0 -> 50166 bytes
  .../gooroom/product_logo_22.png               | Bin 0 -> 11852 bytes
  .../gooroom/product_logo_32.png               | Bin 0 -> 13265 bytes
@@ -25,7 +25,7 @@ Subject: [PATCH 09/58] Put gooroom logo into the browser
  .../gooroom/webstore_icon_16.png              | Bin 0 -> 1097 bytes
  .../gooroom/webstore_icon_24.png              | Bin 0 -> 1628 bytes
  .../gooroom/webstore_icon_32.png              | Bin 0 -> 2289 bytes
- chrome/app/theme/gooroom/BRANDING             |   7 ++++++
+ chrome/app/theme/gooroom/BRANDING             |   7 +++++
  .../app/theme/gooroom/gooroom_newtab_logo.png | Bin 0 -> 10049 bytes
  .../app/theme/gooroom/linux/app_list_16.png   | Bin 0 -> 270 bytes
  .../app/theme/gooroom/linux/app_list_256.png  | Bin 0 -> 1986 bytes
@@ -39,16 +39,16 @@ Subject: [PATCH 09/58] Put gooroom logo into the browser
  chrome/app/theme/gooroom/product_logo_256.png | Bin 0 -> 50166 bytes
  chrome/app/theme/gooroom/product_logo_48.png  | Bin 0 -> 50167 bytes
  chrome/app/theme/gooroom/product_logo_64.png  | Bin 0 -> 50169 bytes
- chrome/app/theme/theme_resources.grd          |  12 +++++-----
+ chrome/app/theme/theme_resources.grd          |  16 +++++------
  .../icons/gooroom_newtab_logo.png             | Bin 0 -> 10049 bytes
  components/infobars/core/infobar_delegate.cc  |   2 +-
  .../gooroom/product_logo.png                  | Bin 0 -> 8711 bytes
  .../gooroom/product_logo_white.png            | Bin 0 -> 2094 bytes
  .../gooroom/product_logo.png                  | Bin 0 -> 5278 bytes
  .../gooroom/product_logo_white.png            | Bin 0 -> 4640 bytes
- .../version_ui_scaled_resources.grdp          |   4 ++--
+ .../version_ui_scaled_resources.grdp          |   4 +--
  .../version_ui/resources/about_version.css    |   2 +-
- 44 files changed, 26 insertions(+), 22 deletions(-)
+ 44 files changed, 23 insertions(+), 34 deletions(-)
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_16.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_22.png
  create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_32.png
@@ -90,10 +90,10 @@ Subject: [PATCH 09/58] Put gooroom logo into the browser
  create mode 100644 components/resources/default_200_percent/gooroom/product_logo_white.png
 
 diff --git a/chrome/app/theme/chrome_unscaled_resources.grd b/chrome/app/theme/chrome_unscaled_resources.grd
-index 035710e8395b5..052721c6e91e2 100644
+index 2b2b7bf846afe..02a23cd02034a 100644
 --- a/chrome/app/theme/chrome_unscaled_resources.grd
 +++ b/chrome/app/theme/chrome_unscaled_resources.grd
-@@ -14,18 +14,6 @@
+@@ -14,28 +14,10 @@
    </outputs>
    <release seq="1">
      <includes>
@@ -109,29 +109,23 @@ index 035710e8395b5..052721c6e91e2 100644
 -          <include name="IDR_PRODUCT_LOGO_256" file="${branding_path_component}/product_logo_256.png" type="BINDATA" />
 -        </else>
 -      </if>
-       <if expr="is_macosx">
-         <if expr="_is_chrome_for_testing_branded">
-           <then>
-@@ -63,10 +51,19 @@
-             <then>
-               <include name="IDR_PRODUCT_LOGO_SVG" file="chromium/product_logo.svg" type="BINDATA" />
-               <include name="IDR_PRODUCT_LOGO_ANIMATION_SVG" file="chromium/product_logo_animation.svg" type="BINDATA" />
-+              <include name="IDR_PRODUCT_LOGO_64" file="gooroom/product_logo_64.png" type="BINDATA" />
-+              <include name="IDR_PRODUCT_LOGO_128" file="gooroom/product_logo_128.png" type="BINDATA" />
-+              <include name="IDR_PRODUCT_LOGO_256" file="gooroom/product_logo_256.png" type="BINDATA" />
-+              <include name="IDR_STATUS_TRAY_ICON" file="gooroom/product_logo_22.png" type="BINDATA" />
-             </then>
-             <else> <!-- not _is_chrome_for_testing_branded -->
-               <include name="IDR_PRODUCT_LOGO_SVG" file="${branding_path_component}/product_logo.svg" type="BINDATA" />
-               <include name="IDR_PRODUCT_LOGO_ANIMATION_SVG" file="${branding_path_component}/product_logo_animation.svg" type="BINDATA" />
-+              <include name="IDR_PRODUCT_LOGO_64" file="gooroom/product_logo_64.png" type="BINDATA" />
-+              <include name="IDR_PRODUCT_LOGO_128" file="gooroom/product_logo_128.png" type="BINDATA" />
-+              <include name="IDR_PRODUCT_LOGO_256" file="gooroom/product_logo_256.png" type="BINDATA" />
-+              <include name="IDR_STATUS_TRAY_ICON" file="gooroom/product_logo_22.png" type="BINDATA" />
-+
-             </else>
-           </if> <!-- _is_chrome_for_testing_branded -->
-         </else>
+-      <if expr="is_macosx">
+-        <if expr="_is_chrome_for_testing_branded">
+-          <then>
+-            <include name="IDR_STATUS_TRAY_ICON" file="google_chrome/product_logo_22_mono.png" type="BINDATA" />
+-          </then>
+-          <else> <!-- not _is_chrome_for_testing_branded -->
+-            <include name="IDR_STATUS_TRAY_ICON" file="${branding_path_component}/product_logo_22_mono.png" type="BINDATA" />
+-          </else>
+-        </if> <!-- _is_chrome_for_testing_branded -->
+-      </if>
++      <include name="IDR_PRODUCT_LOGO_64" file="gooroom/product_logo_64.png" type="BINDATA" />
++      <include name="IDR_PRODUCT_LOGO_128" file="gooroom/product_logo_128.png" type="BINDATA" />
++      <include name="IDR_PRODUCT_LOGO_256" file="gooroom/product_logo_256.png" type="BINDATA" />
++      <include name="IDR_STATUS_TRAY_ICON" file="gooroom/product_logo_22.png" type="BINDATA" />
+       <if expr="_google_chrome">
+         <then>
+           <include name="IDR_PRODUCT_LOGO_SVG" file="${branding_path_component}/chrome_logo.svg" type="BINDATA" />
 diff --git a/chrome/app/theme/default_100_percent/gooroom/product_logo_16.png b/chrome/app/theme/default_100_percent/gooroom/product_logo_16.png
 new file mode 100644
 index 0000000000000000000000000000000000000000..0f1f50eae1a072c904dc28175056735b0ead3923
@@ -12139,10 +12133,32 @@ literal 0
 HcmV?d00001
 
 diff --git a/chrome/app/theme/theme_resources.grd b/chrome/app/theme/theme_resources.grd
-index ab740d8ae5521..68adf0979af71 100644
+index f686a57194a7d..0c3fb2e10a37b 100644
 --- a/chrome/app/theme/theme_resources.grd
 +++ b/chrome/app/theme/theme_resources.grd
+@@ -164,8 +164,8 @@
+         <then>
+           <if expr="is_linux">
+             <then>
+-              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="${branding_path_component}/linux/product_logo_16.png" />
+-              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32" file="${branding_path_component}/linux/product_logo_32.png" />
++              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="gooroom/product_logo_16.png" />
++              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32" file="gooroom/product_logo_32.png" />
+               <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32_BETA" file="${branding_path_component}/linux/product_logo_32_beta.png" />
+               <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32_DEV" file="${branding_path_component}/linux/product_logo_32_dev.png" />
+             </then>
 @@ -180,8 +180,8 @@
+           </if> <!-- is_linux -->
+           <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32_CANARY" file="${branding_path_component}/product_logo_32_canary.png" />
+           <if expr="not is_android">
+-            <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="${branding_path_component}/product_logo_name_22.png" />
+-            <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="${branding_path_component}/product_logo_name_22_white.png" />
++          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="gooroom/product_logo_name_22.png" />
++          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="gooroom/product_logo_name_22_white.png" />
+           </if>
+           <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_ENTERPRISE" file="${branding_path_component}/product_logo_enterprise.png" />
+           <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_ENTERPRISE_WHITE" file="${branding_path_component}/product_logo_enterprise_white.png" />
+@@ -189,8 +189,8 @@
          <else> <!-- not _google_chrome -->
            <if expr="is_linux">
              <then>
@@ -12153,7 +12169,7 @@ index ab740d8ae5521..68adf0979af71 100644
              </then>
              <else>
                <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="${branding_path_component}/product_logo_16.png" />
-@@ -190,12 +190,12 @@
+@@ -199,8 +199,8 @@
            </if> <!-- is_linux -->
            <if expr="_is_chrome_for_testing_branded">
              <then>
@@ -12163,13 +12179,7 @@ index ab740d8ae5521..68adf0979af71 100644
 +              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="gooroom/product_logo_name_22_white.png" />
              </then>
              <else> <!-- not _is_chrome_for_testing_branded -->
--              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="${branding_path_component}/product_logo_name_22.png" />
--              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="${branding_path_component}/product_logo_name_22_white.png" />
-+              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="gooroom/product_logo_name_22.png" />
-+              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="gooroom/product_logo_name_22_white.png" />
-             </else>
-           </if> <!-- _is_chrome_for_testing_branded -->
-         </else>
+               <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="${branding_path_component}/product_logo_name_22.png" />
 diff --git a/chrome/browser/resources/new_tab_page/icons/gooroom_newtab_logo.png b/chrome/browser/resources/new_tab_page/icons/gooroom_newtab_logo.png
 new file mode 100644
 index 0000000000000000000000000000000000000000..6e601e5d78b195ebe1eb8c9056471474fc9ed35d
@@ -12374,10 +12384,10 @@ literal 0
 HcmV?d00001
 
 diff --git a/components/infobars/core/infobar_delegate.cc b/components/infobars/core/infobar_delegate.cc
-index 641324c5dd8d1..9398123101c18 100644
+index 9d08ec155bd49..eb5c9cc20bf54 100644
 --- a/components/infobars/core/infobar_delegate.cc
 +++ b/components/infobars/core/infobar_delegate.cc
-@@ -38,7 +38,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
+@@ -33,7 +33,7 @@ const gfx::VectorIcon& InfoBarDelegate::GetVectorIcon() const {
  }
  
  ui::ImageModel InfoBarDelegate::GetIcon() const {

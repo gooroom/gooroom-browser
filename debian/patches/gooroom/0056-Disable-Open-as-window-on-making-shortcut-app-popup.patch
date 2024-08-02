@@ -1,0 +1,42 @@
+From bf634628c9ce9395cbc5b662cda033a61184f933 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Tue, 7 Jun 2022 14:35:43 +0900
+Subject: [PATCH 56/67] Disable 'Open as window' on making shortcut app popup
+
+---
+ .../web_apps/create_shortcut_confirmation_view.cc    | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/chrome/browser/ui/views/web_apps/create_shortcut_confirmation_view.cc b/chrome/browser/ui/views/web_apps/create_shortcut_confirmation_view.cc
+index e932393d6e6c1..f12315911ae30 100644
+--- a/chrome/browser/ui/views/web_apps/create_shortcut_confirmation_view.cc
++++ b/chrome/browser/ui/views/web_apps/create_shortcut_confirmation_view.cc
+@@ -180,12 +180,7 @@ CreateShortcutConfirmationView::CreateShortcutConfirmationView(
+     } else {
+       builder.AddChildren(
+           views::Builder<views::View>(),  // Column skip.
+-          views::Builder<views::Checkbox>()
+-              .CopyAddressTo(&open_as_window_checkbox_)
+-              .SetText(l10n_util::GetStringUTF16(
+-                  IDS_BOOKMARK_APP_BUBBLE_OPEN_AS_WINDOW))
+-              .SetChecked(display_mode !=
+-                          web_app::mojom::UserDisplayMode::kBrowser));
++               views::Builder<views::View>());
+     }
+   }
+ 
+@@ -236,10 +231,7 @@ void CreateShortcutConfirmationView::OnAccept() {
+         web_app_info_->user_display_mode =
+             web_app::mojom::UserDisplayMode::kTabbed;
+       } else {
+-        web_app_info_->user_display_mode =
+-            open_as_window_radio_->GetChecked()
+-                ? web_app::mojom::UserDisplayMode::kStandalone
+-                : web_app::mojom::UserDisplayMode::kBrowser;
++        web_app_info_->user_display_mode = web_app::mojom::UserDisplayMode::kBrowser;
+       }
+     } else {
+       web_app_info_->user_display_mode =
+-- 
+2.39.2
+

@@ -1,0 +1,25 @@
+From 1a56dfd77e1fa8e989483e29a3cb130d4b830cbe Mon Sep 17 00:00:00 2001
+From: cjs <cjs@hancom.com>
+Date: Thu, 8 Feb 2024 13:25:32 +0900
+Subject: [PATCH 66/67] Modify defined logic to fix CPPCheck warning
+
+---
+ gooroom/app/gooroom_main.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/gooroom/app/gooroom_main.cc b/gooroom/app/gooroom_main.cc
+index 06fa1755a5601..44168c9855bfe 100644
+--- a/gooroom/app/gooroom_main.cc
++++ b/gooroom/app/gooroom_main.cc
+@@ -74,6 +74,8 @@ DLLEXPORT int __cdecl GooroomMain(HINSTANCE instance,
+ #elif defined(OS_POSIX)
+ int GooroomMain(int argc, const char** argv) {
+   int64_t exe_entry_point_ticks = 0;
++#else
++#error Unknown platform.
+ #endif
+ 
+ #if defined(OS_WIN)
+-- 
+2.39.2
+

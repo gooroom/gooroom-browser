@@ -1,0 +1,283 @@
+From d65ea1e1ecb10850fa1c4f08879d5b1e586c0ddb Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 24 Jul 2020 11:44:17 +0900
+Subject: [PATCH 27/67] Add PageSourceViewEnabled policy to control
+ page-source-view
+
+---
+ ...nfiguration_policy_handler_list_factory.cc | 13 ++++++
+ chrome/common/pref_names.h                    |  5 +++
+ components/policy/core/browser/BUILD.gn       |  6 ++-
+ .../browser/configuration_policy_handler.cc   | 43 +++++++++++++++++++
+ .../browser/configuration_policy_handler.h    | 24 +++++++++++
+ .../core/common/policy_loader_common.cc       |  1 +
+ .../policy/resources/templates/policies.yaml  |  2 +-
+ .../Miscellaneous/PageSourceViewEnabled.yaml  | 22 ++++++++++
+ content/browser/BUILD.gn                      |  1 +
+ .../navigation_controller_impl.cc             | 10 +++++
+ 10 files changed, 125 insertions(+), 2 deletions(-)
+ create mode 100644 components/policy/resources/templates/policy_definitions/Miscellaneous/PageSourceViewEnabled.yaml
+
+diff --git a/chrome/browser/policy/configuration_policy_handler_list_factory.cc b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
+index def3cca8c599c..f6313ee2cc59d 100644
+--- a/chrome/browser/policy/configuration_policy_handler_list_factory.cc
++++ b/chrome/browser/policy/configuration_policy_handler_list_factory.cc
+@@ -4,6 +4,10 @@
+ 
+ #include "chrome/browser/policy/configuration_policy_handler_list_factory.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "components/policy/core/browser/configuration_policy_handler.h"
++#endif
++
+ #include <limits.h>
+ #include <stddef.h>
+ 
+@@ -283,6 +287,11 @@ using ::ash::MagnifierType;
+ // clang-format off
+ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
+ // Policies for all platforms - Start
++#if defined(GOOROOM_BUILD)
++  { key::kPageSourceViewEnabled,
++    prefs::kPageSourceViewEnabled,
++    base::Value::Type::BOOLEAN },
++#endif
+   { key::kComponentUpdatesEnabled,
+     prefs::kComponentUpdatesEnabled,
+     base::Value::Type::BOOLEAN },
+@@ -3026,6 +3035,10 @@ std::unique_ptr<ConfigurationPolicyHandlerList> BuildHandlerList(
+ #endif  // BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_WIN)
+ #endif  // BUILDFLAG(ENABLE_SPELLCHECK)
+ 
++#if defined(GOOROOM_BUILD)
++  handlers->AddHandler(std::make_unique<PageSourceViewPolicyHandler>());
++#endif
++
+ #if BUILDFLAG(IS_LINUX)
+   handlers->AddHandler(std::make_unique<SimplePolicyHandler>(
+       key::kAllowSystemNotifications, prefs::kAllowSystemNotifications,
+diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
+index 87532a110da7a..311d4d54dc33f 100644
+--- a/chrome/common/pref_names.h
++++ b/chrome/common/pref_names.h
+@@ -25,6 +25,11 @@ namespace prefs {
+ // *************** PROFILE PREFS ***************
+ // These are attached to the user profile
+ 
++#if defined(GOOROOM_BUILD)
++inline constexpr char kPageSourceViewEnabled[] = "page_source_view_enabled";
++#endif
++
++
+ // A string property indicating whether default apps should be installed
+ // in this profile.  Use the value "install" to enable defaults apps, or
+ // "noinstall" to disable them.  This property is usually set in the
+diff --git a/components/policy/core/browser/BUILD.gn b/components/policy/core/browser/BUILD.gn
+index 557b7191cc973..2b260c10c6d0b 100644
+--- a/components/policy/core/browser/BUILD.gn
++++ b/components/policy/core/browser/BUILD.gn
+@@ -14,7 +14,11 @@ group("browser") {
+ }
+ 
+ source_set("internal") {
+-  visibility = [ "//components/policy/*" ]
++  visibility = [
++    "//components/policy/*",
++    "//content/browser:browser",
++  ]
++
+   sources = [
+     "boolean_disabling_policy_handler.cc",
+     "boolean_disabling_policy_handler.h",
+diff --git a/components/policy/core/browser/configuration_policy_handler.cc b/components/policy/core/browser/configuration_policy_handler.cc
+index f7c37791f1891..3869d05ae0883 100644
+--- a/components/policy/core/browser/configuration_policy_handler.cc
++++ b/components/policy/core/browser/configuration_policy_handler.cc
+@@ -450,6 +450,49 @@ void PolicyWithDependencyHandler::ApplyPolicySettings(
+     PrefValueMap* /* prefs */) {
+   NOTREACHED();
+ }
++
++// PageSouceViewPolicyHandler implementation -----------------------------------
++
++// Retrieves a list typed policy or nullptr if not present or not a list.
++const base::Value::List* GetListPolicy(const policy::PolicyMap& policies,
++                                     const std::string& policy) {
++  const base::Value* value = policies.GetValueUnsafe(policy);
++  if (!value)
++    return nullptr;
++
++  const base::Value::List* policy_value = nullptr;
++//  value->GetList(&policy_value);
++  return policy_value;
++}
++
++bool PageSourceViewPolicyHandler::enabled = true;
++
++PageSourceViewPolicyHandler::PageSourceViewPolicyHandler() {}
++
++PageSourceViewPolicyHandler::~PageSourceViewPolicyHandler() {}
++
++bool PageSourceViewPolicyHandler::CheckPolicySettings(const policy::PolicyMap& policies,
++                                              policy::PolicyErrorMap* errors) {
++  return true;
++}
++
++void PageSourceViewPolicyHandler::ProcessPolicy(const policy::PolicyMap& policies,
++                                        PrefValueMap* prefs,
++                                        const std::string& policy,
++                                        bool disable_pdf_plugin) {
++  if(policies.GetValueUnsafe(policy::key::kPageSourceViewEnabled))
++    if(!policies.GetValueUnsafe(policy::key::kPageSourceViewEnabled)->GetBool())
++      PageSourceViewPolicyHandler::enabled = false;
++  return;
++}
++
++void PageSourceViewPolicyHandler::ApplyPolicySettings(const policy::PolicyMap& policies,
++                                              PrefValueMap* prefs) {
++  // This order makes enabled plugins take precedence as is now.
++  ProcessPolicy(policies, prefs, "", true);
++  ProcessPolicy(policies, prefs, "", false);
++}
++
+ // SchemaValidatingPolicyHandler implementation --------------------------------
+ 
+ SchemaValidatingPolicyHandler::SchemaValidatingPolicyHandler(
+diff --git a/components/policy/core/browser/configuration_policy_handler.h b/components/policy/core/browser/configuration_policy_handler.h
+index 9a9607c2f4ae9..1a978441c2436 100644
+--- a/components/policy/core/browser/configuration_policy_handler.h
++++ b/components/policy/core/browser/configuration_policy_handler.h
+@@ -17,6 +17,8 @@
+ #include "components/policy/core/common/policy_map.h"
+ #include "components/policy/core/common/schema.h"
+ #include "components/policy/policy_export.h"
++#include "third_party/abseil-cpp/absl/types/optional.h"
++
+ 
+ class PrefValueMap;
+ 
+@@ -380,6 +382,28 @@ class POLICY_EXPORT IntPercentageToDoublePolicyHandler
+   const char* pref_path_;
+ };
+ 
++class POLICY_EXPORT PageSourceViewPolicyHandler
++   : public policy::ConfigurationPolicyHandler {
++ public:
++  PageSourceViewPolicyHandler();
++  ~PageSourceViewPolicyHandler() override;
++
++ static bool getEnabled() { return enabled; }
++ protected:
++  bool CheckPolicySettings(const policy::PolicyMap& policies,
++                           policy::PolicyErrorMap* errors) override;
++  void ApplyPolicySettings(const policy::PolicyMap& policies,
++                           PrefValueMap* prefs) override;
++
++ private:
++  void ProcessPolicy(const policy::PolicyMap& policies,
++                     PrefValueMap* prefs,
++                     const std::string& policy,
++                     bool disable_pdf_plugin);
++
++  static bool enabled;
++};
++
+ // Like TypeCheckingPolicyHandler, but validates against a schema instead of a
+ // single type. |schema| is the schema used for this policy, and |strategy| is
+ // the strategy used for schema validation errors.
+diff --git a/components/policy/core/common/policy_loader_common.cc b/components/policy/core/common/policy_loader_common.cc
+index e3d326e986023..98dccbbf42fb2 100644
+--- a/components/policy/core/common/policy_loader_common.cc
++++ b/components/policy/core/common/policy_loader_common.cc
+@@ -44,6 +44,7 @@ const char kBlockedExtensionPrefix[] = "[BLOCKED]";
+ // Please keep the list in alphabetical order!
+ const char* kSensitivePolicies[] = {
+     key::kDefaultSearchProviderEnabled,
++    key::kPageSourceViewEnabled,
+     key::kSafeBrowsingEnabled,
+ #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || \
+     BUILDFLAG(IS_CHROMEOS)
+diff --git a/components/policy/resources/templates/policies.yaml b/components/policy/resources/templates/policies.yaml
+index 802d39f2a5cdc..cd82ee153ecd6 100644
+--- a/components/policy/resources/templates/policies.yaml
++++ b/components/policy/resources/templates/policies.yaml
+@@ -1215,7 +1215,7 @@ policies:
+   1214: GoogleLocationServicesEnabled
+   1215: ProvisionManagedClientCertificateForUser
+   1216: LocalUserFilesAllowed
+-  1217: ''
++  1217: PageSourceViewEnabled
+   1218: SubAppsAPIsAllowedWithoutGestureAndAuthorizationForOrigins
+   1219: DefaultWebPrintingSetting
+   1220: WebPrintingAllowedForUrls
+diff --git a/components/policy/resources/templates/policy_definitions/Miscellaneous/PageSourceViewEnabled.yaml b/components/policy/resources/templates/policy_definitions/Miscellaneous/PageSourceViewEnabled.yaml
+new file mode 100644
+index 0000000000000..e9d5031da6876
+--- /dev/null
++++ b/components/policy/resources/templates/policy_definitions/Miscellaneous/PageSourceViewEnabled.yaml
+@@ -0,0 +1,22 @@
++caption: Set page view enable/disable.
++desc: Set page view enable/disable.
++example_value: true
++features:
++  dynamic_refresh: true
++  per_profile: true
++items:
++- caption: Set page view enable
++  value: true
++- caption: Set page view disable
++  value: false
++label: et page view enable/disable.
++owners:
++- file://components/policy/OWNERS
++- junsungc91@chromium.org
++schema:
++  type: boolean
++supported_on:
++- chrome.linux:11-
++tags: []
++type: main
++
+diff --git a/content/browser/BUILD.gn b/content/browser/BUILD.gn
+index 93abd8a6e05df..7ea443d3d731f 100644
+--- a/content/browser/BUILD.gn
++++ b/content/browser/BUILD.gn
+@@ -298,6 +298,7 @@ source_set("browser") {
+   ]
+ 
+   public_deps = [
++    "//components/policy/core/browser:internal",
+     "//base",
+     "//components/memory_pressure",
+     "//content/browser/indexed_db",
+diff --git a/content/browser/renderer_host/navigation_controller_impl.cc b/content/browser/renderer_host/navigation_controller_impl.cc
+index 4c44928e07227..2d298add4e76d 100644
+--- a/content/browser/renderer_host/navigation_controller_impl.cc
++++ b/content/browser/renderer_host/navigation_controller_impl.cc
+@@ -35,6 +35,10 @@
+ 
+ #include "content/browser/renderer_host/navigation_controller_impl.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "components/policy/core/browser/configuration_policy_handler.h"
++#endif
++
+ #include <algorithm>
+ #include <utility>
+ 
+@@ -1079,6 +1083,12 @@ NavigationEntryImpl* NavigationControllerImpl::GetLastCommittedEntry() {
+ }
+ 
+ bool NavigationControllerImpl::CanViewSource() {
++#if defined(GOOROOM_BUILD)
++  if(!policy::PageSourceViewPolicyHandler::getEnabled()){
++    return false;
++  }
++#endif
++
+   const std::string& mime_type = frame_tree_->root()
+                                      ->current_frame_host()
+                                      ->GetPage()
+-- 
+2.39.2
+

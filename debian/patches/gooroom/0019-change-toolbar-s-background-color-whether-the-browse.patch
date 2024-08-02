@@ -1,0 +1,66 @@
+From 0dec722299d4b0fdc9ba12040e6fdc740417ec9c Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Tue, 30 Jul 2024 15:04:35 +0900
+Subject: [PATCH] change toolbar's background color whether the browser's type
+ is trust or untrust
+
+---
+ .../frame/browser_non_client_frame_view.cc    | 35 +++++++++++++++++--
+ 1 file changed, 32 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/browser/ui/views/frame/browser_non_client_frame_view.cc b/chrome/browser/ui/views/frame/browser_non_client_frame_view.cc
+index 6caa053d92175..1e736b2651704 100644
+--- a/chrome/browser/ui/views/frame/browser_non_client_frame_view.cc
++++ b/chrome/browser/ui/views/frame/browser_non_client_frame_view.cc
+@@ -3,6 +3,9 @@
+ // found in the LICENSE file.
+ 
+ #include "chrome/browser/ui/views/frame/browser_non_client_frame_view.h"
++#include "base/path_service.h"
++#include "base/command_line.h"
++#include "base/files/file_path.h"
+ 
+ #include "base/metrics/histogram_macros.h"
+ #include "build/build_config.h"
+@@ -160,9 +163,35 @@ SkColor BrowserNonClientFrameView::GetCaptionColor(
+ 
+ SkColor BrowserNonClientFrameView::GetFrameColor(
+     BrowserFrameActiveState active_state) const {
+-  return GetColorProvider()->GetColor(ShouldPaintAsActive(active_state)
+-                                          ? ui::kColorFrameActive
+-                                          : ui::kColorFrameInactive);
++  // if there is a url in command line, check the url is trust to determine the
++  // mode whether trust or not.
++  // ===========================================================================
++  // Test whether there is a url in command line.
++  base::CommandLine* cmd = base::CommandLine::ForCurrentProcess();
++  const base::CommandLine::StringVector argv = cmd->argv();
++
++  base::FilePath home_path_dir;
++  base::PathService::Get(base::DIR_HOME, &home_path_dir);
++  std::string trust_user_data_dir_option =
++      "--user-data-dir=" + home_path_dir.AsUTF8Unsafe() +
++      "/.config/gooroom/trust";
++  bool isTrustMode = false;
++  for (base::CommandLine::StringVector::const_iterator it = argv.begin();
++     it != argv.end(); ++it) {
++       std::string command = *it;
++       if (command.find("--user-data-dir") != std::string::npos) {
++         if(command == trust_user_data_dir_option)
++           isTrustMode = true;
++         else
++           isTrustMode = false;
++         break;
++       }
++  }
++  if (isTrustMode) {
++    return SkColorSetRGB(0x00, 0x60, 0xb5);
++  } else {
++    return SkColorSetRGB(0xb2, 0x2f, 0x00);
++  }
+ }
+ 
+ std::optional<int> BrowserNonClientFrameView::GetCustomBackgroundId(
+-- 
+2.39.2
+

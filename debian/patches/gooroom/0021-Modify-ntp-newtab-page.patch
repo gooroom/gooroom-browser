@@ -1,0 +1,58 @@
+From fa6ef71ca80aa184ba30abc694299c0b0ef800d5 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:22:30 +0900
+Subject: [PATCH 21/67] Modify ntp(newtab) page
+
+---
+ .../browser/resources/new_tab_page/icons/BUILD.gn   |  1 +
+ chrome/browser/resources/new_tab_page/logo.html     | 13 +++++++++----
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/chrome/browser/resources/new_tab_page/icons/BUILD.gn b/chrome/browser/resources/new_tab_page/icons/BUILD.gn
+index 810257433201c..3ace0328202eb 100644
+--- a/chrome/browser/resources/new_tab_page/icons/BUILD.gn
++++ b/chrome/browser/resources/new_tab_page/icons/BUILD.gn
+@@ -23,6 +23,7 @@ generate_grd("build_grdp") {
+     "facebook.svg",
+     "generic_globe.svg",
+     "google_logo.svg",
++    "gooroom_newtab_logo.png",
+     "icon_pencil.svg",
+     "info.svg",
+     "link.svg",
+diff --git a/chrome/browser/resources/new_tab_page/logo.html b/chrome/browser/resources/new_tab_page/logo.html
+index cef2c8c722f4a..85ce52561c4cf 100644
+--- a/chrome/browser/resources/new_tab_page/logo.html
++++ b/chrome/browser/resources/new_tab_page/logo.html
+@@ -18,19 +18,24 @@
+ 
+   #logo {
+     forced-color-adjust: none;
+-    height: 92px;
+-    width: 272px;
++    background-repeat: no-repeat;
++    height: 70px;
++    width: 250px;
++    position: absolute;
++    left: calc(50% - 200px/2);
+   }
+ 
+   :host([single-colored]) #logo {
+-    -webkit-mask-image: url(./icons/google_logo.svg);
++    -webkit-mask-image: url(./icons/gooroom_newtab_logo.png);
+     -webkit-mask-repeat: no-repeat;
+     -webkit-mask-size: 100%;
+     background-color: var(--ntp-logo-color);
+   }
+ 
+   :host(:not([single-colored])) #logo {
+-    background-image: url(./icons/google_logo.svg);
++    background-image: url(./icons/gooroom_newtab_logo.png);
++    -webkit-mask-repeat: no-repeat;
++    -webkit-mask-size: 100%;
+   }
+ 
+   #imageDoodle {
+-- 
+2.39.2
+

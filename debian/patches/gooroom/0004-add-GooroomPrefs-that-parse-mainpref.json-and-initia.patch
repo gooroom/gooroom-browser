@@ -1,7 +1,7 @@
-From 105b5992907f4f3d7ef455c528c86e7eba5f790c Mon Sep 17 00:00:00 2001
+From b92bdfe306724eba057fafff1272c2d4a62268b8 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:13:47 +0900
-Subject: [PATCH 04/58] add GooroomPrefs that parse mainpref.json and
+Subject: [PATCH 04/67] add GooroomPrefs that parse mainpref.json and
  initializes GooroomBase and GooroomUrlFilter based on the result
 
 ---
@@ -27,10 +27,10 @@ Subject: [PATCH 04/58] add GooroomPrefs that parse mainpref.json and
  create mode 100644 gooroom/browser/gooroom_url_filter_impl.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index c14860f69aa3d..482536cd9b0c2 100644
+index 27f719407f0c3..fcc6aa090cb20 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -229,6 +229,16 @@ if (!is_android && !is_mac) {
+@@ -231,6 +231,16 @@ if (!is_android && !is_mac) {
           # for commit #3
          "browser/gooroom_browser_extra_parts_security.cc",
          "browser/gooroom_browser_extra_parts_security.h",

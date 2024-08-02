@@ -3,6 +3,7 @@ Source: http://www.chromium.org/Home
 Upstream-Name: chromium
 Files-Excluded:
  .clang-format
+ *__pycache__
  *.mk
  *.so
  *.dll
@@ -21,6 +22,7 @@ Files-Excluded:
  *jquery*.min.js
  ios
  buildtools
+ build/linux/debian_bullseye_*
  ui/chromeos/B*
  ui/chromeos/D*
  ui/chromeos/devicetype_utils.cc
@@ -75,7 +77,11 @@ Files-Excluded:
  third_party/woff2
  third_party/angle/src/third_party/libXNVCtrl
  third_party/opus
+ third_party/dav1d
  third_party/flac
+ third_party/harfbuzz-ng/src
+ third_party/harfbuzz-ng/harfbuzz.gni
+ third_party/highway
  third_party/llvm
  third_party/libei
  third_party/webgl
@@ -85,7 +91,6 @@ Files-Excluded:
  third_party/libevent
  third_party/libsecret
  third_party/libxslt
- third_party/libwebp
  third_party/freetype
  build/config/freetype/freetype.gni
  third_party/android*
@@ -128,7 +133,7 @@ Files-Excluded:
  third_party/swiftshader
  third_party/apache-win32
  third_party/apache-portable-runtime
- third_party/instrumented_libraries
+ third_party/instrumented_lib*
  third_party/angle/third_party/glmark2
  third_party/angle/third_party/rapidjson
  third_party/angle/third_party/VK-GL-CTS

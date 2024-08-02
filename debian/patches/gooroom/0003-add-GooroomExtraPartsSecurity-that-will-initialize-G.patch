@@ -1,7 +1,7 @@
-From 8687f10b4b2acbba92c161529fdc56293f86fc57 Mon Sep 17 00:00:00 2001
+From 57b3e181ad8c0382e54ae235daa62cd1113419e1 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:07:50 +0900
-Subject: [PATCH 03/58] add GooroomExtraPartsSecurity that will initialize
+Subject: [PATCH 03/67] add GooroomExtraPartsSecurity that will initialize
  GooroomBase via GooroomPrefs
 
 ---
@@ -9,16 +9,16 @@ Subject: [PATCH 03/58] add GooroomExtraPartsSecurity that will initialize
  gooroom/browser/BUILD.gn                      |  2 ++
  .../gooroom_browser_extra_parts_security.cc   | 35 +++++++++++++++++++
  .../gooroom_browser_extra_parts_security.h    | 27 ++++++++++++++
- .../browser/gooroom_content_browser_client.cc |  4 +++
- 5 files changed, 72 insertions(+)
+ .../browser/gooroom_content_browser_client.cc |  5 ++-
+ 5 files changed, 72 insertions(+), 1 deletion(-)
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.cc
  create mode 100644 gooroom/browser/gooroom_browser_extra_parts_security.h
 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
-index 195734b6e3c17..c14860f69aa3d 100644
+index f7bbef92ae091..27f719407f0c3 100644
 --- a/gooroom/BUILD.gn
 +++ b/gooroom/BUILD.gn
-@@ -225,6 +225,10 @@ if (!is_android && !is_mac) {
+@@ -227,6 +227,10 @@ if (!is_android && !is_mac) {
          "browser/gooroom_content_browser_client.h",
          "browser/gooroom_content_client.cc",
          "browser/gooroom_content_client.h",
@@ -117,27 +117,35 @@ index 0000000000000..b53088fd8c7c7
 +
 +#endif  // GOOROOM_BROWSER_EXTRA_PARTS_SECURITY_H_
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
-index 1d5861b3ad8b2..9e2e8fea8eef4 100644
+index f3be2e9fc5c5f..76252702360f1 100644
 --- a/gooroom/browser/gooroom_content_browser_client.cc
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
-@@ -3,6 +3,7 @@
- // found in the LICENSE file.
+@@ -4,6 +4,7 @@
  
  #include "gooroom/browser/gooroom_content_browser_client.h"
+ #include "chrome/browser/chrome_content_browser_client.h"
 +#include "gooroom/browser/gooroom_browser_extra_parts_security.h"
  
  #include <iterator>
  #include <map>
-@@ -903,6 +904,9 @@ GooroomContentBrowserClient::CreateBrowserMainParts(bool is_integration_test) {
-       std::make_unique<headless::ChromeBrowserMainExtraPartsHeadless>());
- #endif
+@@ -40,7 +41,6 @@
+ #include "base/strings/string_split.h"
+ #include "base/strings/string_util.h"
+ #include "base/strings/stringprintf.h"
+-#include "base/task/sequenced_task_runner.h"
+ #include "base/types/expected.h"
+ #include "base/types/expected_macros.h"
+ #include "base/values.h"
+@@ -932,6 +932,9 @@ GooroomContentBrowserClient::CreateBrowserMainParts(bool is_integration_test) {
+   main_parts->AddParts(
+       std::make_unique<ChromeBrowserMainExtraPartsOptimizationGuide>());
  
 +  main_parts->AddParts(
 +      std::make_unique<GooroomBrowserExtraPartsSecurity>());
 +
-   // Always add ChromeBrowserMainExtraPartsGpu last to make sure
-   // GpuDataManager initialization could pick up about:flags settings.
-   main_parts->AddParts(std::make_unique<ChromeBrowserMainExtraPartsGpu>());
+   return main_parts;
+ }
+ 
 -- 
 2.39.2
 

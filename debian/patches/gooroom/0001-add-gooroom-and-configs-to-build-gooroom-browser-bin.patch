@@ -1,24 +1,28 @@
-From 70943829945fe1d68a333b819e9a259c6a7323d1 Mon Sep 17 00:00:00 2001
+From 2df5a376f8f323f66fb47cbf5cb47f5c9f2b3662 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc91@gmail.com>
 Date: Tue, 20 Apr 2021 13:26:08 +0900
-Subject: [PATCH 01/58] add /gooroom and configs to build gooroom-browser
+Subject: [PATCH 01/67] add /gooroom and configs to build gooroom-browser
  binary
 
 ---
  BUILD.gn                                      |   2 +
  build/config/compiler/BUILD.gn                |   3 +
+ chrome/app/chrome_main.cc                     |   2 -
  .../browser/chrome_content_browser_client.h   |   5 +-
- gooroom/BUILD.gn                              | 370 +++++++
+ .../scheduler/responsiveness/watcher.cc       |   3 +
+ gooroom/BUILD.gn                              | 380 +++++++
  gooroom/app/gooroom_exe_main_aura.cc          |  22 +
- gooroom/app/gooroom_main.cc                   | 193 ++++
- gooroom/app/gooroom_main_delegate.cc          | 472 +++++++++
+ gooroom/app/gooroom_main.cc                   | 130 +++
+ gooroom/app/gooroom_main_delegate.cc          | 563 +++++++++++
  gooroom/app/gooroom_main_delegate.h           |  52 +
  gooroom/browser/BUILD.gn                      |  19 +
- .../browser/gooroom_content_browser_client.cc | 926 ++++++++++++++++++
+ .../browser/gooroom_content_browser_client.cc | 942 ++++++++++++++++++
  .../browser/gooroom_content_browser_client.h  |  26 +
  gooroom/browser/gooroom_content_client.cc     |   1 +
  gooroom/browser/gooroom_content_client.h      |  13 +
- 13 files changed, 2101 insertions(+), 3 deletions(-)
+ .../blink/renderer/core/xml/xslt_processor.h  |   2 +-
+ .../core/xml/xslt_processor_libxslt.cc        |   2 +-
+ 17 files changed, 2160 insertions(+), 7 deletions(-)
  create mode 100644 gooroom/BUILD.gn
  create mode 100644 gooroom/app/gooroom_exe_main_aura.cc
  create mode 100644 gooroom/app/gooroom_main.cc
@@ -31,10 +35,10 @@ Subject: [PATCH 01/58] add /gooroom and configs to build gooroom-browser
  create mode 100644 gooroom/browser/gooroom_content_client.h
 
 diff --git a/BUILD.gn b/BUILD.gn
-index 678989ac85db1..21f2ad1545505 100644
+index f2df88e99d474..222baa16be360 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
-@@ -149,6 +149,8 @@ group("gn_all") {
+@@ -156,6 +156,8 @@ group("gn_all") {
          "//tools/polymer:polymer_tools_python_unittests",
          "//tools/privacy_budget:privacy_budget_tools",
          "//ui/accessibility/extensions:extensions",
@@ -44,10 +48,10 @@ index 678989ac85db1..21f2ad1545505 100644
      }
  
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index de1cd6efc67b4..9f89aaaf782be 100644
+index d6d35154cc694..0529f005670c0 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -295,6 +295,9 @@ config("compiler") {
+@@ -280,6 +280,9 @@ config("compiler") {
    configs = []
    rustflags = []
  
@@ -57,11 +61,25 @@ index de1cd6efc67b4..9f89aaaf782be 100644
    # System-specific flags. If your compiler flags apply to one of the
    # categories here, add it to the associated file to keep this shared config
    # smaller.
+diff --git a/chrome/app/chrome_main.cc b/chrome/app/chrome_main.cc
+index 43f57c7e6fa43..d621a0a2bf4de 100644
+--- a/chrome/app/chrome_main.cc
++++ b/chrome/app/chrome_main.cc
+@@ -32,9 +32,7 @@
+ #include "base/base_switches.h"
+ #endif
+ 
+-#if BUILDFLAG(IS_LINUX)
+ #include "chrome/app/chrome_main_linux.h"
+-#endif
+ 
+ #if BUILDFLAG(IS_WIN)
+ #include "base/dcheck_is_on.h"
 diff --git a/chrome/browser/chrome_content_browser_client.h b/chrome/browser/chrome_content_browser_client.h
-index efc041c50771c..dfd3fe6bbf41e 100644
+index 6c9208d7b7907..73b73da8869f1 100644
 --- a/chrome/browser/chrome_content_browser_client.h
 +++ b/chrome/browser/chrome_content_browser_client.h
-@@ -878,6 +878,7 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+@@ -897,6 +897,7 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
    bool HasErrorPage(int http_status_code) override;
  
    StartupData* startup_data() { return &startup_data_; }
@@ -69,15 +87,15 @@ index efc041c50771c..dfd3fe6bbf41e 100644
  
    std::unique_ptr<content::IdentityRequestDialogController>
    CreateIdentityRequestDialogController(
-@@ -999,6 +1000,7 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+@@ -1054,6 +1055,7 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
    // their own extra part objects.
    // TODO: This should receive unique_ptr<ChromeContentBrowserClientParts>.
    void AddExtraPart(ChromeContentBrowserClientParts* part);
 +  void InitOnUIThread();
  
-  private:
-   friend class DisableWebRtcEncryptionFlagTest;
-@@ -1009,7 +1011,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+   // Exposed for tests to perform dependency injection.
+   virtual std::unique_ptr<HttpAuthCoordinator> CreateHttpAuthCoordinator();
+@@ -1067,7 +1069,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
  
    // Initializes `network_contexts_parent_directory_` and
    // `safe_browsing_service_` on the UI thread.
@@ -85,7 +103,7 @@ index efc041c50771c..dfd3fe6bbf41e 100644
  
    // Copies disable WebRTC encryption switch depending on the channel.
    static void MaybeCopyDisableWebRtcEncryptionSwitch(
-@@ -1122,8 +1123,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
+@@ -1183,8 +1184,6 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
    scoped_refptr<safe_browsing::UrlCheckerDelegate>
        safe_browsing_url_checker_delegate_;
  
@@ -94,12 +112,26 @@ index efc041c50771c..dfd3fe6bbf41e 100644
  #if !BUILDFLAG(IS_ANDROID)
    std::unique_ptr<ChromeSerialDelegate> serial_delegate_;
    std::unique_ptr<ChromeHidDelegate> hid_delegate_;
+diff --git a/content/browser/scheduler/responsiveness/watcher.cc b/content/browser/scheduler/responsiveness/watcher.cc
+index cc3334eeb6e40..31e87e989d4fb 100644
+--- a/content/browser/scheduler/responsiveness/watcher.cc
++++ b/content/browser/scheduler/responsiveness/watcher.cc
+@@ -135,6 +135,9 @@ void Watcher::DidRunTask(const base::PendingTask* task,
+   DCHECK(!queue_time.is_null());
+   DCHECK(!metadata.execution_start_time.is_null());
+   DCHECK(!execution_finish_time.is_null());
++  if(queue_time > metadata.execution_start_time){
++  printf("%s, %s, %d, %d\n", task->posted_from.file_name(), task->posted_from.function_name(), queue_time <= metadata.execution_start_time, task->posted_from.line_number() );
++  }
+   DCHECK_LE(queue_time, metadata.execution_start_time);
+   DCHECK_LE(metadata.execution_start_time, execution_finish_time);
+ 
 diff --git a/gooroom/BUILD.gn b/gooroom/BUILD.gn
 new file mode 100644
-index 0000000000000..195734b6e3c17
+index 0000000000000..f7bbef92ae091
 --- /dev/null
 +++ b/gooroom/BUILD.gn
-@@ -0,0 +1,370 @@
+@@ -0,0 +1,380 @@
 +# Copyright 2014 The Chromium Authors. All rights reserved.
 +# Use of this source code is governed by a BSD-style license that can be
 +# found in the LICENSE file.
@@ -245,17 +277,15 @@ index 0000000000000..195734b6e3c17
 +        deps += [
 +          # On Linux, link the dependencies (libraries) that make up actual
 +          # Chromium functionality directly into the executable.
-+          #"//chrome:browser_dependencies",
-+          #"//chrome:child_dependencies",
 +          ":dependencies",
-+
++          "//chrome/common:version_header",
++    
 +          # For the sampling profiler.
 +          "//chrome/common/profiler",
-+
++    
 +          # Needed to use the master_preferences functions
 +          "//chrome/installer/util:with_no_strings",
 +          "//content/public/app",
-+          "//components/memory_system",
 +
 +          # For headless mode.
 +          "//headless:headless_shell_lib",
@@ -265,12 +295,16 @@ index 0000000000000..195734b6e3c17
 +        ]
 +
 +        public_deps = [
-+          #":xdg_mime",  # Needs to be public for installer to consume files.
-+          "//chrome:xdg_mime",  # Needs to be public for installer to consume files.
 +          "//chrome/common:buildflags",
 +        ]
 +
 +        ldflags = []
++
++        # Chrome OS debug builds for arm need to pass --long-plt to the linker.
++        # See https://bugs.chromium.org/p/chromium/issues/detail?id=583532
++        if (is_chromeos_ash && is_debug && target_cpu == "arm") {
++          ldflags += [ "-Wl,--long-plt" ]
++        }
 +
 +        # Chrome OS debug builds for arm need to pass --long-plt to the linker.
 +        # See https://bugs.chromium.org/p/chromium/issues/detail?id=583532
@@ -337,16 +371,18 @@ index 0000000000000..195734b6e3c17
 +    "//build:branding_buildflags",
 +    "//build:chromeos_buildflags",
 +    "//chrome/browser",
++    "//chrome/browser:buildflags",
 +    "//chrome/browser/policy:path_parser",
-+    "//chrome/child",
++    "//chrome/child", 
 +    "//chrome/common",
 +    "//chrome/gpu",
 +    "//chrome/renderer",
 +    "//chrome/utility",
 +    "//components/about_ui",
-+    "//components/gwp_asan/buildflags",
-+    "//components/heap_profiling/in_process",
-+    "//components/services/heap_profiling",
++    "//components/crash/core/app",
++    "//components/devtools/devtools_pipe",
++    "//components/memory_system",
++    "//components/startup_metric_utils", 
 +    "//components/sync",
 +    "//components/upload_list:upload_list",
 +    "//content/public/child",
@@ -357,7 +393,11 @@ index 0000000000000..195734b6e3c17
 +    "//v8:v8_headers",
 +  ]
 +
-+  if (enable_basic_printing) {
++  if (enable_ppapi) {
++    public_deps += [ "//ppapi/host" ]
++  }
++
++  if (enable_printing) {
 +    public_deps += [ "//printing" ]
 +  }
 +
@@ -456,10 +496,12 @@ index 0000000000000..195734b6e3c17
 +
 +group("strings") {
 +  public_deps = [
++    "//chrome/app:branded_strings",
 +    "//chrome/app:generated_resources",
 +    "//chrome/app/resources:locale_settings",
 +  ]
 +}
++
 +
 +if (enable_resource_allowlist_generation) {
 +  generate_resource_allowlist("resource_allowlist") {
@@ -500,10 +542,10 @@ index 0000000000000..50053010c3112
 +}
 diff --git a/gooroom/app/gooroom_main.cc b/gooroom/app/gooroom_main.cc
 new file mode 100644
-index 0000000000000..23bf4c4b25c38
+index 0000000000000..06fa1755a5601
 --- /dev/null
 +++ b/gooroom/app/gooroom_main.cc
-@@ -0,0 +1,193 @@
+@@ -0,0 +1,130 @@
 +// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -512,12 +554,18 @@ index 0000000000000..23bf4c4b25c38
 +
 +#include "gooroom_main_delegate.h"
 +
++#include <stdint.h>
++
++#include <memory>
++
++#include "base/allocator/partition_allocator/src/partition_alloc/partition_alloc_buildflags.h"
 +#include "base/command_line.h"
 +#include "base/functional/bind.h"
 +#include "base/functional/callback_helpers.h"
 +#include "base/sampling_heap_profiler/poisson_allocation_sampler.h"
 +#include "base/time/time.h"
 +#include "build/build_config.h"
++#include "chrome/app/chrome_main_delegate.h"
 +#include "chrome/browser/headless/headless_mode_util.h"
 +#include "chrome/common/buildflags.h"
 +#include "chrome/common/chrome_result_codes.h"
@@ -530,16 +578,13 @@ index 0000000000000..23bf4c4b25c38
 +
 +#if BUILDFLAG(IS_MAC)
 +#include "chrome/app/chrome_main_mac.h"
-+#include "chrome/app/notification_metrics.h"
 +#endif
 +
 +#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_LINUX)
 +#include "base/base_switches.h"
 +#endif
 +
-+#if BUILDFLAG(IS_LINUX)
 +#include "chrome/app/chrome_main_linux.h"
-+#endif
 +
 +#if BUILDFLAG(IS_WIN)
 +#include "base/dcheck_is_on.h"
@@ -577,84 +622,26 @@ index 0000000000000..23bf4c4b25c38
 +#elif defined(OS_POSIX)
 +int GooroomMain(int argc, const char** argv) {
 +  int64_t exe_entry_point_ticks = 0;
-+#else
-+#error Unknown platform.
 +#endif
 +
-+#if BUILDFLAG(IS_LINUX)
-+  PossiblyDetermineFallbackChromeChannel(argv[0]);
-+#endif
-+
-+#if BUILDFLAG(IS_WIN)
++#if defined(OS_WIN)
 +  install_static::InitializeFromPrimaryModule();
-+#if !defined(COMPONENT_BUILD) && DCHECK_IS_ON()
-+  // Patch the main EXE on non-component builds when DCHECKs are enabled.
-+  // This allows detection of third party code that might attempt to meddle with
-+  // Chrome's handles. This must be done when single-threaded to avoid other
-+  // threads attempting to make calls through the hooks while they are being
-+  // emplaced.
-+  // Note: The EXE is patched separately, in chrome/app/chrome_exe_main_win.cc.
-+  base::debug::HandleHooks::AddIATPatch(CURRENT_MODULE());
-+#endif  // !defined(COMPONENT_BUILD) && DCHECK_IS_ON()
-+#endif  // BUILDFLAG(IS_WIN)
++#endif
 +
 +  GooroomMainDelegate gooroom_main_delegate(
 +      base::TimeTicks::FromInternalValue(exe_entry_point_ticks));
++
 +  content::ContentMainParams params(&gooroom_main_delegate);
 +
-+#if BUILDFLAG(IS_WIN)
-+  // The process should crash when going through abnormal termination, but we
-+  // must be sure to reset this setting when ChromeMain returns normally.
-+  auto crash_on_detach_resetter = base::ScopedClosureRunner(
-+     base::BindOnce(&base::win::SetShouldCrashOnProcessDetach,
-+                     base::win::ShouldCrashOnProcessDetach()));
-+  base::win::SetShouldCrashOnProcessDetach(true);
-+  base::win::SetAbortBehaviorForCrashReporting();
-+  params.instance = instance;
-+  params.sandbox_info = sandbox_info;
-+
-+  // Pass chrome_elf's copy of DumpProcessWithoutCrash resolved via load-time
-+  // dynamic linking.
-+  base::debug::SetDumpWithoutCrashingFunction(&DumpProcessWithoutCrash);
-+
-+  // Verify that chrome_elf and this module (chrome.dll and chrome_child.dll)
-+  // have the same version.
-+  if (install_static::InstallDetails::Get().VersionMismatch())
-+    base::debug::DumpWithoutCrashing();
-+#else
 +  params.argc = argc;
 +  params.argv = argv;
 +  base::CommandLine::Init(params.argc, params.argv);
-+#endif  // BUILDFLAG(IS_WIN)
 +  base::CommandLine::Init(0, nullptr);
 +  [[maybe_unused]] base::CommandLine* command_line(
 +      base::CommandLine::ForCurrentProcess());
 +
-+#if BUILDFLAG(IS_WIN)
-+  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
-+         ::switches::kRaiseTimerFrequency)) {
-+    // Raise the timer interrupt frequency and leave it raised.
-+    timeBeginPeriod(1);
-+  }
-+#endif
-+
-+#if BUILDFLAG(IS_MAC)
-+  SetUpBundleOverrides();
-+#endif
-+
-+#if BUILDFLAG(IS_LINUX)
 +  AppendExtraArgumentsToCommandLine(command_line);
-+#endif
-+
-+  // PoissonAllocationSampler's TLS slots need to be set up before
-+  // MainThreadStackSamplingProfiler, which can allocate TLS slots of its own.
-+  // On some platforms pthreads can malloc internally to access higher-numbered
-+  // TLS slots, which can cause reentry in the heap profiler. (See the comment
-+  // on ReentryGuard::InitTLSSlot().)
-+  // TODO(https://crbug.com/1411454): Clean up other paths that call this Init()
-+  // function, which are now redundant.
 +  base::PoissonAllocationSampler::Init();
-+
 +  // Start the sampling profiler as early as possible - namely, once the command
 +  // line data is available. Allocated as an object on the stack to ensure that
 +  // the destructor runs on shutdown, which is important to avoid the profiler
@@ -682,14 +669,6 @@ index 0000000000000..23bf4c4b25c38
 +        // BUILDFLAG(IS_WIN)
 +  }
 +
-+#if BUILDFLAG(IS_MAC)
-+  // Gracefully exit if the system tried to launch the macOS notification helper
-+  // app when a user clicked on a notification.
-+  if (IsAlertsHelperLaunchedViaNotificationAction()) {
-+    LogLaunchedViaNotificationAction(NotificationActionSource::kHelperApp);
-+    return 0;
-+  }
-+#endif
 +
 +  int rv = content::ContentMain(std::move(params));
 +
@@ -699,10 +678,10 @@ index 0000000000000..23bf4c4b25c38
 +}
 diff --git a/gooroom/app/gooroom_main_delegate.cc b/gooroom/app/gooroom_main_delegate.cc
 new file mode 100644
-index 0000000000000..0592239431f9f
+index 0000000000000..1e8b94593e722
 --- /dev/null
 +++ b/gooroom/app/gooroom_main_delegate.cc
-@@ -0,0 +1,472 @@
+@@ -0,0 +1,563 @@
 +// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -710,6 +689,7 @@ index 0000000000000..0592239431f9f
 +#include "gooroom/app/gooroom_main_delegate.h"
 +#include "gooroom/browser/gooroom_content_browser_client.h"
 +
++#include "chrome/app/chrome_main_delegate.h"
 +
 +#include <stddef.h>
 +
@@ -719,11 +699,12 @@ index 0000000000000..0592239431f9f
 +#include "base/check.h"
 +#include "base/command_line.h"
 +#include "base/cpu.h"
-+#include "base/cpu_reduction_experiment.h"
 +#include "base/dcheck_is_on.h"
++#include "base/features.h"
 +#include "base/files/file_path.h"
 +#include "base/files/file_util.h"
 +#include "base/functional/bind.h"
++#include "base/functional/overloaded.h"
 +#include "base/i18n/rtl.h"
 +#include "base/immediate_crash.h"
 +#include "base/lazy_instance.h"
@@ -736,12 +717,8 @@ index 0000000000000..0592239431f9f
 +#include "base/strings/string_util.h"
 +#include "base/strings/sys_string_conversions.h"
 +#include "base/strings/utf_string_conversions.h"
-+#include "base/task/sequence_manager/sequence_manager_impl.h"
-+#include "base/task/sequence_manager/thread_controller.h"
-+#include "base/task/sequence_manager/thread_controller_power_monitor.h"
 +#include "base/task/thread_pool/thread_pool_instance.h"
 +#include "base/threading/hang_watcher.h"
-+#include "base/threading/platform_thread.h"
 +#include "base/time/time.h"
 +#include "base/timer/timer.h"
 +#include "base/trace_event/trace_event_impl.h"
@@ -782,7 +759,7 @@ index 0000000000000..0592239431f9f
 +#include "components/memory_system/parameters.h"
 +#include "components/metrics/persistent_histograms.h"
 +#include "components/nacl/common/buildflags.h"
-+#include "components/startup_metric_utils/browser/startup_metric_utils.h"
++#include "components/startup_metric_utils/common/startup_metric_utils.h"
 +#include "components/version_info/channel.h"
 +#include "components/version_info/version_info.h"
 +#include "content/public/app/initialize_mojo_core.h"
@@ -812,22 +789,24 @@ index 0000000000000..0592239431f9f
 +
 +#include <algorithm>
 +
++#include "base/base_switches.h"
 +#include "base/files/important_file_writer_cleaner.h"
-+#include "base/threading/platform_thread_win.h"
 +#include "base/win/atl.h"
++#include "base/win/dark_mode_support.h"
++#include "base/win/resource_exhaustion.h"
++#include "chrome/browser/chrome_browser_main_win.h"
++#include "chrome/browser/win/browser_util.h"
 +#include "chrome/child/v8_crashpad_support_win.h"
 +#include "chrome/chrome_elf/chrome_elf_main.h"
 +#include "chrome/common/child_process_logging.h"
++#include "chrome/common/chrome_version.h"
 +#include "sandbox/win/src/sandbox.h"
 +#include "sandbox/win/src/sandbox_factory.h"
 +#include "ui/base/resource/resource_bundle_win.h"
 +#endif
 +
 +#if BUILDFLAG(IS_MAC)
-+#include "base/mac/foundation_util.h"
-+#include "base/message_loop/message_pump_default.h"
-+#include "base/message_loop/message_pump_kqueue.h"
-+#include "base/message_loop/message_pump_mac.h"
++#include "base/apple/foundation_util.h"
 +#include "chrome/app/chrome_main_mac.h"
 +#include "chrome/browser/chrome_browser_application_mac.h"
 +#include "chrome/browser/headless/headless_mode_util.h"
@@ -852,7 +831,6 @@ index 0000000000000..0592239431f9f
 +
 +#if BUILDFLAG(IS_CHROMEOS)
 +#include "chromeos/dbus/constants/dbus_paths.h"
-+#include "components/crash/core/app/breakpad_linux.h"
 +#endif
 +
 +#if BUILDFLAG(IS_CHROMEOS_ASH)
@@ -862,19 +840,18 @@ index 0000000000000..0592239431f9f
 +#include "base/system/sys_info.h"
 +#include "chrome/browser/ash/boot_times_recorder.h"
 +#include "chrome/browser/ash/dbus/ash_dbus_helper.h"
++#include "chrome/browser/ash/dbus_schedqos_state_handler.h"
 +#include "chrome/browser/ash/startup_settings_cache.h"
-+#include "chromeos/ash/components/memory/kstaled.h"
-+#include "chromeos/ash/components/memory/memory.h"
-+#include "chromeos/ash/components/memory/swap_configuration.h"
-+#include "chromeos/hugepage_text/hugepage_text.h"
++#include "chromeos/ash/components/memory/mglru.h"
++#include "content/public/common/content_features.h"
 +#include "ui/lottie/resource.h"  // nogncheck
 +#endif
 +
 +#if BUILDFLAG(IS_ANDROID)
 +#include "base/android/java_exception_reporter.h"
 +#include "base/android/library_loader/library_loader_hooks.h"
++#include "chrome/browser/android/flags/chrome_cached_flags.h"
 +#include "chrome/browser/android/metrics/uma_session_stats.h"
-+#include "chrome/browser/flags/android/cached_feature_flags.h"
 +#include "chrome/browser/flags/android/chrome_feature_list.h"
 +#include "chrome/common/chrome_descriptors.h"
 +#include "components/crash/android/pure_java_exception_handler.h"
@@ -892,6 +869,11 @@ index 0000000000000..0592239431f9f
 +
 +#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
 +#include "base/environment.h"
++#endif
++
++#if BUILDFLAG(IS_LINUX)
++#include "base/nix/scoped_xdg_activation_token_injector.h"
++#include "ui/linux/display_server_utils.h"
 +#endif
 +
 +#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_ANDROID)
@@ -934,21 +916,26 @@ index 0000000000000..0592239431f9f
 +#include "chromeos/startup/browser_postlogin_params.h"  // nogncheck
 +#include "chromeos/startup/startup.h"                   // nogncheck
 +#include "chromeos/startup/startup_switches.h"          // nogncheck
++#include "components/crash/core/app/client_upload_info.h"
 +#include "content/public/browser/zygote_host/zygote_host_linux.h"
 +#include "media/base/media_switches.h"
++#include "ui/accessibility/accessibility_features.h"
 +#include "ui/base/resource/data_pack_with_resource_sharing_lacros.h"
 +#include "ui/gfx/switches.h"
 +#endif
 +
-+
-+
-+#if !defined(CHROME_MULTIPLE_DLL_CHILD)
-+base::LazyInstance<GooroomContentBrowserClient>::DestructorAtExit
-+    g_gooroom_content_browser_client = LAZY_INSTANCE_INITIALIZER;
++#if BUILDFLAG(IS_OZONE)
++#include "base/scoped_add_feature_flags.h"
++#include "ui/base/ui_base_features.h"
++#include "ui/ozone/public/ozone_platform.h"
++#if BUILDFLAG(IS_LINUX)
++#include "chrome/browser/chrome_browser_main_extra_parts_linux.h"
 +#endif
++#endif  // BUILDFLAG(IS_OZONE)
++
 +
 +#if BUILDFLAG(ENABLE_PROCESS_SINGLETON)
-+absl::optional<int> AcquireProcessSingleton(
++std::optional<int> AcquireProcessSingleton(
 +    const base::FilePath& user_data_dir) {
 +  // Take the Chrome process singleton lock. The process can become the
 +  // Browser process if it succeed to take the lock. Otherwise, the
@@ -956,15 +943,26 @@ index 0000000000000..0592239431f9f
 +  // process can be exited.
 +  ChromeProcessSingleton::CreateInstance(user_data_dir);
 +
++#if BUILDFLAG(IS_LINUX)
++  // Read the xdg-activation token and set it in the command line for the
++  // duration of the notification in order to ensure this is propagated to an
++  // already running browser process if it exists.
++  // If this is the only browser process the global token will be available for
++  // use after this as well.
++  // The activation token received from the launching app is used later when
++  // activating an existing browser window.
++  base::nix::ScopedXdgActivationTokenInjector activation_token_injector(
++      *base::CommandLine::ForCurrentProcess(), *base::Environment::Create());
++#endif
 +  ProcessSingleton::NotifyResult notify_result =
 +      ChromeProcessSingleton::GetInstance()->NotifyOtherProcessOrCreate();
 +  UMA_HISTOGRAM_ENUMERATION("Chrome.ProcessSingleton.NotifyResult",
 +                            notify_result, ProcessSingleton::kNumNotifyResults);
-+     
++
 +  switch (notify_result) {
 +    case ProcessSingleton::PROCESS_NONE:
 +      break;
-+      
++
 +    case ProcessSingleton::PROCESS_NOTIFIED: {
 +      // Ensure there is an instance of ResourceBundle that is initialized for
 +      // localized string resource accesses.
@@ -988,10 +986,15 @@ index 0000000000000..0592239431f9f
 +      return chrome::RESULT_CODE_PROFILE_IN_USE;
 +  }
 +
-+  return absl::nullopt;
++  return std::nullopt;
 +}
 +#endif
 +
++
++#if !defined(CHROME_MULTIPLE_DLL_CHILD)
++base::LazyInstance<GooroomContentBrowserClient>::DestructorAtExit
++    g_gooroom_content_browser_client = LAZY_INSTANCE_INITIALIZER;
++#endif
 +
 +GooroomMainDelegate::GooroomMainDelegate()
 +    : GooroomMainDelegate(base::TimeTicks()) {}
@@ -1012,14 +1015,14 @@ index 0000000000000..0592239431f9f
 +      absl::get_if<InvokedInBrowserProcess>(&invoked_in);
 +  if (!invoked_in_browser) {
 +    CommonEarlyInitialization(invoked_in);
-+    return absl::nullopt;
-+  }
++    return std::nullopt;
++  }   
 +
-+#if BUILDFLAG(ENABLE_PROCESS_SINGLETON)
++#if BUILDFLAG(ENABLE_PROCESS_SINGLETON) 
 +  // The User Data dir is guaranteed to be valid as per InitializeUserDataDir.
 +  base::FilePath user_data_dir =
 +      base::PathService::CheckedGet(chrome::DIR_USER_DATA);
-+
++                         
 +  // On platforms that support the process rendezvous, acquire the process
 +  // singleton. In case of failure, it means there is already a running browser
 +  // instance that handled the command-line.
@@ -1047,7 +1050,6 @@ index 0000000000000..0592239431f9f
 +  }
 +#endif
 +
-+#if !BUILDFLAG(IS_FUCHSIA)
 +  // Schedule the cleanup of persistent histogram files. These tasks must only
 +  // be scheduled in the main browser after taking the process singleton. They
 +  // cannot be scheduled immediately after InstantiatePersistentHistograms()
@@ -1064,15 +1066,11 @@ index 0000000000000..0592239431f9f
 +      base::PathService::Get(chrome::DIR_USER_DATA, &metrics_dir)) {
 +    PersistentHistogramsCleanup(metrics_dir);
 +  }
-+#endif  // !BUILDFLAG(IS_FUCHSIA)
-+
-+
 +
 +  // Chrome disallows cookies by default. All code paths that want to use
 +  // cookies need to go through one of Chrome's URLRequestContexts which have
 +  // a ChromeNetworkDelegate attached that selectively allows cookies again.
 +  net::URLRequest::SetDefaultCookiePolicyToBlock();
-+
 +
 +  // On Chrome OS, IPC (D-Bus, Crosapi) is required to create the FeatureList,
 +  // which depends on policy from an OS service. So, initialize it at this
@@ -1087,12 +1085,57 @@ index 0000000000000..0592239431f9f
 +  chromeos::LacrosInitializeDBus();
 +#endif
 +
++
++#if BUILDFLAG(IS_CHROMEOS_LACROS)
++  // If prelaunched at login screen, block waiting for the user to login.
++  MaybeBlockAtLoginScreen(/*after_zygotes_fork=*/true);
++#endif
++
++#if BUILDFLAG(IS_CHROMEOS_LACROS)
++  // Set Lacros's default paths.
++  const auto& init_params = *chromeos::BrowserParamsProxy::Get();
++  chrome::SetLacrosDefaultPathsFromInitParams(init_params.DefaultPaths().get());
++#endif  // BUILDFLAG(IS_CHROMEOS_LACROS)
++
++#if BUILDFLAG(IS_CHROMEOS_LACROS)
++  AddFeatureFlagsToCommandLine();
++#endif
++
++  // The DBus initialization above is needed for FeatureList creation here;
++  // features are needed for Mojo initialization; and Mojo initialization is
++  // needed for LacrosService initialization below.
 +  ChromeFeatureListCreator* chrome_feature_list_creator =
 +      chrome_content_browser_client_->startup_data()
 +          ->chrome_feature_list_creator();
 +  chrome_feature_list_creator->CreateFeatureList();
 +
++#if BUILDFLAG(IS_OZONE)
++  // Initialize Ozone platform and add required feature flags as per platform's
++  // properties.
++#if BUILDFLAG(IS_LINUX)
++  ui::SetOzonePlatformForLinuxIfNeeded(*base::CommandLine::ForCurrentProcess());
++#endif
++  ui::OzonePlatform::PreEarlyInitialization();
++
++  // Disable currently unsupported web features per platform properties.
++  if (!ui::OzonePlatform::GetInstance()
++           ->GetPlatformProperties()
++
++           .supports_color_picker_dialog) {
++    base::CommandLine::ForCurrentProcess()->AppendSwitch(
++        features::kEyeDropperNotSupported);
++  }
++#endif  // BUILDFLAG(IS_OZONE)
++
 +  content::InitializeMojoCore();
++
++#if BUILDFLAG(IS_CHROMEOS_ASH)
++  if (base::FeatureList::IsEnabled(features::kSchedQoSOnResourcedForChrome)) {
++    ash::DBusSchedQOSStateHandler::Create(
++        base::SequencedTaskRunner::GetCurrentDefault());
++    base::Process::Current().InitializePriority();
++  }
++#endif  // BUILDFLAG(IS_CHROMEOS)
 +
 +#if BUILDFLAG(IS_CHROMEOS_LACROS)
 +  // LacrosService instance needs the sequence of the main thread,
@@ -1108,7 +1151,7 @@ index 0000000000000..0592239431f9f
 +      homedir = homedir.Append(init_params.CrosUserIdHash().value());
 +      base::PathService::OverrideAndCreateIfNeeded(
 +          base::DIR_HOME, homedir, /*is_absolute=*/true, /*create=*/false);
-+    }    
++    }
 +
 +    // This lives here rather than in ChromeBrowserMainExtraPartsLacros due to
 +    // timing constraints. If we relocate it, then the flags aren't propagated
@@ -1137,7 +1180,7 @@ index 0000000000000..0592239431f9f
 +                switches::kLacrosUseChromeosProtectedAv1);
 +            break;
 +        }
-+      }    
++      }
 +    }
 +
 +    if (init_params.EnableCpuMappableNativeGpuMemoryBuffers()) {
@@ -1155,19 +1198,46 @@ index 0000000000000..0592239431f9f
 +  chrome_feature_list_creator->SetApplicationLocale(actual_locale);
 +  chrome_feature_list_creator->OverrideCachedUIStrings();
 +
++  // On Chrome OS, initialize D-Bus clients that depend on feature list.
++#if BUILDFLAG(IS_CHROMEOS_ASH)
++  ash::InitializeFeatureListDependentDBus();
++#elif BUILDFLAG(IS_CHROMEOS_LACROS)
++  chromeos::LacrosInitializeFeatureListDependentDBus();
++#endif
++
++#if BUILDFLAG(IS_ANDROID)
++  chrome_content_browser_client_->startup_data()->InitProfileKey();
++  net::NetworkChangeNotifier::SetFactory(
++      new net::NetworkChangeNotifierFactoryAndroid());
++#endif
++
 +  if (base::FeatureList::IsEnabled(
 +          features::kWriteBasicSystemProfileToPersistentHistogramsFile)) {
 +    bool record = true;
++#if BUILDFLAG(IS_ANDROID)
++    record =
++        base::FeatureList::IsEnabled(chrome::android::kUmaBackgroundSessions);
++#endif
 +    if (record)
 +      chrome_content_browser_client_->startup_data()->RecordCoreSystemProfile();
 +  }
 +
-+  // TODO(https://crbug.com/1360376): Consider deferring this to run after
++#if BUILDFLAG(IS_ANDROID)
++  UmaSessionStats::OnStartup();
++#endif
++
++#if BUILDFLAG(IS_MAC)
++  chrome::CacheChannelInfo();
++#endif
++
++  // TODO(crbug.com/40237627): Consider deferring this to run after
 +  // startup.
 +  RequestUnwindPrerequisitesInstallation(chrome::GetChannel());
 +
-+  return absl::nullopt;
++  return std::nullopt;
 +}
++
++
 +
 +content::ContentBrowserClient*
 +GooroomMainDelegate::CreateContentBrowserClient() {
@@ -1260,15 +1330,16 @@ index 0000000000000..811fdd7c1d891
 +}
 diff --git a/gooroom/browser/gooroom_content_browser_client.cc b/gooroom/browser/gooroom_content_browser_client.cc
 new file mode 100644
-index 0000000000000..1d5861b3ad8b2
+index 0000000000000..f3be2e9fc5c5f
 --- /dev/null
 +++ b/gooroom/browser/gooroom_content_browser_client.cc
-@@ -0,0 +1,926 @@
+@@ -0,0 +1,942 @@
 +// Copyright 2012 The Chromium Authors
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
 +
 +#include "gooroom/browser/gooroom_content_browser_client.h"
++#include "chrome/browser/chrome_content_browser_client.h"
 +
 +#include <iterator>
 +#include <map>
@@ -1281,6 +1352,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include <vector>
 +
 +#include "base/base_switches.h"
++#include "base/check_deref.h"
 +#include "base/command_line.h"
 +#include "base/containers/contains.h"
 +#include "base/containers/fixed_flat_set.h"
@@ -1301,7 +1373,6 @@ index 0000000000000..1d5861b3ad8b2
 +#include "base/stl_util.h"
 +#include "base/strings/strcat.h"
 +#include "base/strings/string_number_conversions.h"
-+#include "base/strings/string_piece.h"
 +#include "base/strings/string_split.h"
 +#include "base/strings/string_util.h"
 +#include "base/strings/stringprintf.h"
@@ -1312,8 +1383,6 @@ index 0000000000000..1d5861b3ad8b2
 +#include "build/build_config.h"
 +#include "build/chromeos_buildflags.h"
 +#include "build/config/chromebox_for_meetings/buildflags.h"  // PLATFORM_CFM
-+#include "chrome/browser/accessibility/accessibility_labels_service.h"
-+#include "chrome/browser/accessibility/accessibility_labels_service_factory.h"
 +#include "chrome/browser/after_startup_task_utils.h"
 +#include "chrome/browser/app_mode/app_mode_utils.h"
 +#include "chrome/browser/bluetooth/chrome_bluetooth_delegate_impl_client.h"
@@ -1331,13 +1400,14 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
 +#include "chrome/browser/custom_handlers/protocol_handler_registry_factory.h"
 +#include "chrome/browser/data_saver/data_saver.h"
++#include "chrome/browser/data_sharing/data_sharing_navigation_throttle.h"
 +#include "chrome/browser/defaults.h"
 +#include "chrome/browser/device_api/device_service_impl.h"
 +#include "chrome/browser/device_api/managed_configuration_service.h"
++#include "chrome/browser/dips/chrome_dips_delegate.h"
 +#include "chrome/browser/download/chrome_download_manager_delegate.h"
 +#include "chrome/browser/download/download_prefs.h"
 +#include "chrome/browser/enterprise/browser_management/management_service_factory.h"
-+#include "chrome/browser/enterprise/connectors/connectors_service.h"
 +#include "chrome/browser/enterprise/reporting/legacy_tech/legacy_tech_service.h"
 +#include "chrome/browser/enterprise/reporting/prefs.h"
 +#include "chrome/browser/enterprise/util/managed_browser_utils.h"
@@ -1348,6 +1418,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/font_family_cache.h"
 +#include "chrome/browser/gpu/chrome_browser_main_extra_parts_gpu.h"
 +#include "chrome/browser/hid/chrome_hid_delegate.h"
++#include "chrome/browser/history/history_service_factory.h"
 +#include "chrome/browser/interstitials/enterprise_util.h"
 +#include "chrome/browser/lifetime/browser_shutdown.h"
 +#include "chrome/browser/lookalikes/lookalike_url_navigation_throttle.h"
@@ -1363,6 +1434,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/memory/chrome_browser_main_extra_parts_memory.h"
 +#include "chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.h"
 +#include "chrome/browser/metrics/chrome_feature_list_creator.h"
++#include "chrome/browser/model_execution/model_manager_impl.h"
 +#include "chrome/browser/navigation_predictor/anchor_element_preloader.h"
 +#include "chrome/browser/net/chrome_network_delegate.h"
 +#include "chrome/browser/net/profile_network_context_service.h"
@@ -1377,6 +1449,8 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/plugins/plugin_utils.h"
 +#include "chrome/browser/policy/policy_util.h"
 +#include "chrome/browser/policy/profile_policy_connector.h"
++#include "chrome/browser/predictors/loading_predictor.h"
++#include "chrome/browser/predictors/loading_predictor_factory.h"
 +#include "chrome/browser/preloading/navigation_ablation_throttle.h"
 +#include "chrome/browser/preloading/prefetch/no_state_prefetch/chrome_no_state_prefetch_contents_delegate.h"
 +#include "chrome/browser/preloading/prefetch/no_state_prefetch/chrome_speculation_host_delegate.h"
@@ -1389,6 +1463,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/preloading/preloading_features.h"
 +#include "chrome/browser/preloading/preloading_prefs.h"
 +#include "chrome/browser/preloading/prerender/prerender_web_contents_delegate.h"
++#include "chrome/browser/privacy_budget/identifiability_study_state.h"
 +#include "chrome/browser/privacy_sandbox/privacy_sandbox_settings_factory.h"
 +#include "chrome/browser/privacy_sandbox/tracking_protection_settings_factory.h"
 +#include "chrome/browser/private_network_access/chrome_private_network_device_delegate.h"
@@ -1402,8 +1477,6 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/profiling_host/chrome_browser_main_extra_parts_profiling.h"
 +#include "chrome/browser/renderer_host/chrome_navigation_ui_data.h"
 +#include "chrome/browser/renderer_preferences_util.h"
-+#include "chrome/browser/safe_browsing/certificate_reporting_service.h"
-+#include "chrome/browser/safe_browsing/certificate_reporting_service_factory.h"
 +#include "chrome/browser/safe_browsing/chrome_ping_manager_factory.h"
 +#include "chrome/browser/safe_browsing/cloud_content_scanning/deep_scanning_utils.h"
 +#include "chrome/browser/safe_browsing/delayed_warning_navigation_throttle.h"
@@ -1423,10 +1496,13 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/ssl/https_upgrades_navigation_throttle.h"
 +#include "chrome/browser/ssl/sct_reporting_service.h"
 +#include "chrome/browser/ssl/security_state_tab_helper.h"
-+#include "chrome/browser/ssl/ssl_client_auth_metrics.h"
 +#include "chrome/browser/ssl/ssl_client_certificate_selector.h"
 +#include "chrome/browser/ssl/typed_navigation_upgrade_throttle.h"
++#include "chrome/browser/supervised_user/supervised_user_google_auth_navigation_throttle.h"
++#include "chrome/browser/supervised_user/supervised_user_navigation_throttle.h"
 +#include "chrome/browser/task_manager/sampling/task_manager_impl.h"
++#include "chrome/browser/themes/theme_service.h"
++#include "chrome/browser/themes/theme_service_factory.h"
 +#include "chrome/browser/tracing/chrome_tracing_delegate.h"
 +#include "chrome/browser/translate/translate_service.h"
 +#include "chrome/browser/ui/blocked_content/blocked_window_params.h"
@@ -1435,9 +1511,9 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/ui/browser_navigator.h"
 +#include "chrome/browser/ui/browser_navigator_params.h"
 +#include "chrome/browser/ui/chrome_select_file_policy.h"
-+#include "chrome/browser/ui/login/login_handler.h"
++#include "chrome/browser/ui/lens/lens_overlay_side_panel_navigation_throttle.h"
++#include "chrome/browser/ui/login/http_auth_coordinator.h"
 +#include "chrome/browser/ui/login/login_navigation_throttle.h"
-+#include "chrome/browser/ui/login/login_tab_helper.h"
 +#include "chrome/browser/ui/passwords/password_manager_navigation_throttle.h"
 +#include "chrome/browser/ui/passwords/well_known_change_password_navigation_throttle.h"
 +#include "chrome/browser/ui/prefs/pref_watcher.h"
@@ -1446,10 +1522,12 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/ui/webid/identity_dialog_controller.h"
 +#include "chrome/browser/ui/webui/chrome_web_ui_controller_factory.h"
 +#include "chrome/browser/ui/webui/log_web_ui_url.h"
++#include "chrome/browser/ui/webui/top_chrome/webui_url_utils.h"
 +#include "chrome/browser/universal_web_contents_observers.h"
 +#include "chrome/browser/usb/chrome_usb_delegate.h"
 +#include "chrome/browser/vr/vr_tab_helper.h"
 +#include "chrome/browser/web_applications/isolated_web_apps/isolated_web_app_url_info.h"
++#include "chrome/browser/web_applications/isolated_web_apps/pending_install_info.h"
 +#include "chrome/browser/webapps/web_app_offline.h"
 +#include "chrome/browser/webauthn/webauthn_pref_names.h"
 +#include "chrome/common/buildflags.h"
@@ -1463,9 +1541,9 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/common/env_vars.h"
 +#include "chrome/common/google_url_loader_throttle.h"
 +#include "chrome/common/logging_chrome.h"
-+#include "chrome/common/pdf_util.h"
 +#include "chrome/common/ppapi_utils.h"
 +#include "chrome/common/pref_names.h"
++#include "chrome/common/profiler/process_type.h"
 +#include "chrome/common/profiler/thread_profiler_configuration.h"
 +#include "chrome/common/renderer_configuration.mojom.h"
 +#include "chrome/common/secure_origin_allowlist.h"
@@ -1478,6 +1556,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "components/browsing_topics/browsing_topics_service.h"
 +#include "components/captive_portal/core/buildflags.h"
 +#include "components/content_settings/browser/page_specific_content_settings.h"
++#include "components/content_settings/core/browser/content_settings_utils.h"
 +#include "components/content_settings/core/browser/cookie_settings.h"
 +#include "components/content_settings/core/browser/host_content_settings_map.h"
 +#include "components/content_settings/core/browser/private_network_settings.h"
@@ -1491,6 +1570,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "components/embedder_support/origin_trials/origin_trials_settings_storage.h"
 +#include "components/embedder_support/switches.h"
 +#include "components/embedder_support/user_agent_utils.h"
++#include "components/enterprise/buildflags/buildflags.h"
 +#include "components/enterprise/common/proto/connectors.pb.h"
 +#include "components/enterprise/content/clipboard_restriction_service.h"
 +#include "components/enterprise/content/pref_names.h"
@@ -1499,6 +1579,8 @@ index 0000000000000..1d5861b3ad8b2
 +#include "components/error_page/common/localized_error.h"
 +#include "components/error_page/content/browser/net_error_auto_reloader.h"
 +#include "components/google/core/common/google_switches.h"
++#include "components/heap_profiling/in_process/heap_profiler_controller.h"
++#include "components/history/content/browser/visited_link_navigation_throttle.h"
 +#include "components/keep_alive_registry/keep_alive_types.h"
 +#include "components/keep_alive_registry/scoped_keep_alive.h"
 +#include "components/language/core/browser/pref_names.h"
@@ -1518,8 +1600,10 @@ index 0000000000000..1d5861b3ad8b2
 +#include "components/omnibox/common/omnibox_features.h"
 +#include "components/page_load_metrics/browser/metrics_navigation_throttle.h"
 +#include "components/page_load_metrics/browser/metrics_web_contents_observer.h"
++#include "components/payments/content/payment_credential_factory.h"
 +#include "components/payments/content/payment_handler_navigation_throttle.h"
 +#include "components/payments/content/payment_request_display_manager.h"
++#include "components/pdf/common/pdf_util.h"
 +#include "components/performance_manager/embedder/performance_manager_registry.h"
 +#include "components/permissions/bluetooth_delegate_impl.h"
 +#include "components/permissions/permission_context_base.h"
@@ -1542,24 +1626,20 @@ index 0000000000000..1d5861b3ad8b2
 +#include "components/safe_browsing/content/browser/safe_browsing_navigation_throttle.h"
 +#include "components/safe_browsing/content/browser/ui_manager.h"
 +#include "components/safe_browsing/core/browser/hashprefix_realtime/hash_realtime_service.h"
-+#include "components/safe_browsing/core/browser/hashprefix_realtime/hash_realtime_utils.h"
-+#include "components/safe_browsing/core/browser/ping_manager.h"
 +#include "components/safe_browsing/core/browser/realtime/policy_engine.h"
 +#include "components/safe_browsing/core/browser/realtime/url_lookup_service.h"
 +#include "components/safe_browsing/core/browser/url_checker_delegate.h"
 +#include "components/safe_browsing/core/common/features.h"
++#include "components/safe_browsing/core/common/hashprefix_realtime/hash_realtime_utils.h"
 +#include "components/safe_browsing/core/common/safe_browsing_prefs.h"
 +#include "components/security_interstitials/content/insecure_form_navigation_throttle.h"
-+#include "components/security_interstitials/content/ssl_cert_reporter.h"
 +#include "components/security_interstitials/content/ssl_error_handler.h"
 +#include "components/security_interstitials/content/ssl_error_navigation_throttle.h"
 +#include "components/security_state/core/security_state.h"
-+#include "components/services/storage/public/cpp/storage_prefs.h"
 +#include "components/site_isolation/pref_names.h"
 +#include "components/site_isolation/preloaded_isolated_origins.h"
 +#include "components/site_isolation/site_isolation_policy.h"
 +#include "components/subresource_filter/content/browser/content_subresource_filter_throttle_manager.h"
-+#include "components/supervised_user/core/common/buildflags.h"
 +#include "components/translate/core/common/translate_switches.h"
 +#include "components/user_prefs/user_prefs.h"
 +#include "components/variations/variations_associated_data.h"
@@ -1579,6 +1659,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "content/public/browser/child_process_data.h"
 +#include "content/public/browser/child_process_security_policy.h"
 +#include "content/public/browser/client_certificate_delegate.h"
++#include "content/public/browser/digital_identity_provider.h"
 +#include "content/public/browser/file_url_loader.h"
 +#include "content/public/browser/isolated_web_apps_policy.h"
 +#include "content/public/browser/legacy_tech_cookie_issue_details.h"
@@ -1625,7 +1706,6 @@ index 0000000000000..1d5861b3ad8b2
 +#include "sandbox/policy/features.h"
 +#include "sandbox/policy/mojom/sandbox.mojom.h"
 +#include "sandbox/policy/switches.h"
-+#include "services/device/public/cpp/geolocation/geolocation_manager.h"
 +#include "services/metrics/public/cpp/ukm_source_id.h"
 +#include "services/network/public/cpp/features.h"
 +#include "services/network/public/cpp/is_potentially_trustworthy.h"
@@ -1635,6 +1715,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "services/network/public/cpp/web_sandbox_flags.h"
 +#include "services/network/public/mojom/network_service.mojom.h"
 +#include "services/network/public/mojom/web_transport.mojom.h"
++#include "services/video_effects/public/mojom/video_effects_processor.mojom-forward.h"
 +#include "third_party/blink/public/common/features.h"
 +#include "third_party/blink/public/common/loader/url_loader_throttle.h"
 +#include "third_party/blink/public/common/navigation/navigation_policy.h"
@@ -1696,6 +1777,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/ash/fileapi/external_file_url_loader_factory.h"
 +#include "chrome/browser/ash/fileapi/file_system_backend.h"
 +#include "chrome/browser/ash/fileapi/mtp_file_system_backend_delegate.h"
++#include "chrome/browser/ash/http_auth_dialog.h"
 +#include "chrome/browser/ash/login/signin/merge_session_navigation_throttle.h"
 +#include "chrome/browser/ash/login/signin/merge_session_throttling_utils.h"
 +#include "chrome/browser/ash/login/signin_partition_manager.h"
@@ -1705,8 +1787,6 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/ash/profiles/profile_helper.h"
 +#include "chrome/browser/ash/smb_client/fileapi/smbfs_file_system_backend_delegate.h"
 +#include "chrome/browser/ash/system/input_device_settings.h"
-+#include "chrome/browser/ash/system_extensions/system_extensions_profile_utils.h"
-+#include "chrome/browser/ash/system_extensions/system_extensions_provider.h"
 +#include "chrome/browser/ash/url_handler.h"
 +#include "chrome/browser/chromeos/app_mode/kiosk_settings_navigation_throttle.h"
 +#include "chrome/browser/speech/tts_chromeos.h"
@@ -1717,13 +1797,13 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/ui/webui/ash/kerberos/kerberos_in_browser_dialog.h"
 +#include "chrome/common/webui_url_constants.h"
 +#include "chromeos/ash/components/browser_context_helper/browser_context_types.h"
++#include "chromeos/ash/components/settings/cros_settings.h"
 +#include "chromeos/ash/services/network_health/public/cpp/network_health_helper.h"
-+#include "components/crash/core/app/breakpad_linux.h"
 +#include "components/user_manager/user.h"
 +#include "components/user_manager/user_manager.h"
 +#include "services/service_manager/public/mojom/interface_provider_spec.mojom.h"
 +#include "storage/browser/file_system/external_mount_points.h"
-+// TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
++// TODO(crbug.com/40118868): Revisit the macro expression once build flag switch
 +// of lacros-chrome is complete.
 +#elif BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
 +#include "chrome/browser/chrome_browser_main_linux.h"
@@ -1744,6 +1824,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/download/android/intercept_oma_download_navigation_throttle.h"
 +#include "chrome/browser/flags/android/chrome_feature_list.h"
 +#include "chrome/browser/ui/android/tab_model/tab_model_list.h"
++#include "chrome/browser/ui/webid/digital_identity_safety_interstitial_bridge_android.h"
 +#include "chrome/common/chrome_descriptors.h"
 +#include "components/browser_ui/accessibility/android/font_size_prefs_android.h"
 +#include "components/crash/content/browser/child_exit_observer_android.h"
@@ -1761,9 +1842,12 @@ index 0000000000000..1d5861b3ad8b2
 +#endif  // BUILDFLAG(DFMIFY_DEV_UI)
 +#elif BUILDFLAG(IS_POSIX)
 +#include "chrome/browser/chrome_browser_main_posix.h"
-+#elif BUILDFLAG(IS_FUCHSIA)
-+#include "chrome/browser/fuchsia/chrome_browser_main_parts_fuchsia.h"
 +#endif
++
++#if !BUILDFLAG(IS_ANDROID)
++#include "chrome/browser/preloading/preview/preview_navigation_throttle.h"
++#include "chrome/browser/web_applications/isolated_web_apps/chrome_content_browser_client_isolated_web_apps_part.h"
++#endif  // !BUILDFLAG(IS_ANDROID)
 +
 +#if BUILDFLAG(IS_CHROMEOS)
 +#include "base/debug/leak_annotations.h"
@@ -1779,10 +1863,11 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/policy/networking/policy_cert_service_factory.h"
 +#include "chrome/browser/policy/system_features_disable_list_policy_handler.h"
 +#include "chrome/browser/smart_card/chromeos_smart_card_delegate.h"
++#include "chrome/browser/web_applications/web_app_tab_helper.h"
 +#include "chrome/common/chromeos/extensions/chromeos_system_extension_info.h"
 +#include "chromeos/components/kiosk/kiosk_utils.h"
 +#include "chromeos/constants/chromeos_features.h"
-+#include "components/crash/core/app/breakpad_linux.h"
++#include "content/public/browser/chromeos/multi_capture_service.h"
 +#include "third_party/cros_system_api/switches/chrome_switches.h"
 +#endif
 +
@@ -1793,7 +1878,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/direct_sockets/chrome_direct_sockets_delegate.h"
 +#include "chrome/browser/headless/chrome_browser_main_extra_parts_headless.h"
 +#include "chrome/browser/media/unified_autoplay_config.h"
-+#include "chrome/browser/metrics/chrome_responsiveness_calculator_delegate.h"
++#include "chrome/browser/metrics/usage_scenario/chrome_responsiveness_calculator_delegate.h"
 +#include "chrome/browser/new_tab_page/new_tab_page_util.h"
 +#include "chrome/browser/page_info/about_this_site_side_panel_throttle.h"
 +#include "chrome/browser/search/instant_service.h"
@@ -1820,13 +1905,15 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/webauthn/chrome_authenticator_request_delegate.h"
 +#include "chrome/grit/chrome_unscaled_resources.h"  // nogncheck crbug.com/1125897
 +#include "components/commerce/core/commerce_feature_list.h"
++#include "components/lens/lens_features.h"
 +#include "components/media_effects/media_effects_manager_binder.h"
 +#include "components/password_manager/content/common/web_ui_constants.h"
 +#include "components/password_manager/core/common/password_manager_features.h"
++#include "chrome/browser/enterprise/connectors/connectors_service.h"
 +#include "third_party/blink/public/mojom/permissions_policy/permissions_policy_feature.mojom.h"
 +#endif  //  !BUILDFLAG(IS_ANDROID)
 +
-+// TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
++// TODO(crbug.com/40118868): Revisit the macro expression once build flag switch
 +// of lacros-chrome is complete.
 +#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || \
 +    (BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS))
@@ -1838,7 +1925,7 @@ index 0000000000000..1d5861b3ad8b2
 +#include "components/crash/core/app/crashpad.h"
 +#endif
 +
-+#if BUILDFLAG(IS_ANDROID) || BUILDFLAG(IS_CHROMEOS)
++#if BUILDFLAG(IS_ANDROID)
 +#include "components/crash/content/browser/crash_handler_host_linux.h"
 +#else
 +#include "chrome/browser/apps/link_capturing/web_app_link_capturing_delegate.h"
@@ -1846,6 +1933,7 @@ index 0000000000000..1d5861b3ad8b2
 +
 +#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_WIN)
 +#include "chrome/browser/enterprise/chrome_browser_main_extra_parts_enterprise.h"
++#include "chrome/browser/enterprise/profile_management/oidc_auth_response_capture_navigation_throttle.h"
 +#include "chrome/browser/enterprise/profile_management/profile_management_navigation_throttle.h"
 +#include "chrome/browser/ui/webui/app_settings/web_app_settings_navigation_throttle.h"
 +#endif
@@ -1864,7 +1952,6 @@ index 0000000000000..1d5861b3ad8b2
 +
 +#if BUILDFLAG(ENABLE_LENS_DESKTOP_GOOGLE_BRANDED_FEATURES)
 +#include "chrome/browser/ui/lens/lens_side_panel_navigation_helper.h"
-+#include "components/lens/lens_features.h"
 +#endif
 +
 +#if BUILDFLAG(IS_LINUX)
@@ -1924,19 +2011,12 @@ index 0000000000000..1d5861b3ad8b2
 +#include "chrome/browser/pdf/chrome_pdf_stream_delegate.h"
 +#include "components/pdf/browser/pdf_navigation_throttle.h"
 +#include "components/pdf/browser/pdf_url_loader_request_interceptor.h"
-+#include "components/pdf/common/internal_plugin_helpers.h"
++#include "components/pdf/common/constants.h"
 +#endif  // BUILDFLAG(ENABLE_PDF)
 +
-+#if BUILDFLAG(ENABLE_SUPERVISED_USERS)
-+#include "chrome/browser/supervised_user/supervised_user_google_auth_navigation_throttle.h"
-+#endif
 +
 +#if BUILDFLAG(ENABLE_MEDIA_REMOTING)
 +#include "chrome/browser/media/cast_remoting_connector.h"
-+#endif
-+
-+#if BUILDFLAG(ENABLE_SUPERVISED_USERS)
-+#include "chrome/browser/supervised_user/supervised_user_navigation_throttle.h"
 +#endif
 +
 +#if BUILDFLAG(SAFE_BROWSING_AVAILABLE)
@@ -1992,10 +2072,7 @@ index 0000000000000..1d5861b3ad8b2
 +#endif  // defined(_WINDOWS_)
 +
 +#if BUILDFLAG(ENABLE_SCREEN_AI_SERVICE)
-+#include "chrome/browser/accessibility/accessibility_state_utils.h"
-+#include "chrome/browser/accessibility/pdf_ocr_controller.h"
-+#include "chrome/browser/accessibility/pdf_ocr_controller_factory.h"
-+#include "components/services/screen_ai/public/cpp/utilities.h"
++#include "chrome/browser/screen_ai/screen_ai_install_state.h"
 +#endif
 +
 +#if BUILDFLAG(ENABLE_SCREEN_AI_SERVICE) || !BUILDFLAG(IS_CHROMEOS_ASH)
@@ -2012,6 +2089,16 @@ index 0000000000000..1d5861b3ad8b2
 +#if BUILDFLAG(IS_CHROMEOS)
 +#include "chromeos/components/kiosk/kiosk_utils.h"
 +#endif  // BUILDFLAG(IS_CHROMEOS)
++
++#if BUILDFLAG(ENTERPRISE_DATA_CONTROLS)
++#include "chrome/browser/enterprise/data_protection/data_protection_clipboard_utils.h"
++#include "chrome/browser/enterprise/data_protection/paste_allowed_request.h"
++#endif  // BUILDFLAG(ENTERPRISE_DATA_CONTROLS)
++
++#if BUILDFLAG(OS_LEVEL_GEOLOCATION_PERMISSION_SUPPORTED)
++#include "services/device/public/cpp/geolocation/geolocation_system_permission_manager.h"
++#endif  // BUILDFLAG(OS_LEVEL_GEOLOCATION_PERMISSION_SUPPORTED)
++
 +
 +using blink::mojom::EffectiveConnectionType;
 +using blink::web_pref::WebPreferences;
@@ -2094,7 +2181,9 @@ index 0000000000000..1d5861b3ad8b2
 +  main_parts = std::make_unique<ChromeBrowserMainPartsFuchsia>(
 +      is_integration_test, &startup_data_);
 +#else
-+#error "Unimplemented platform"
++  NOTREACHED();
++  main_parts = std::make_unique<ChromeBrowserMainParts>(is_integration_test,
++                                                        &startup_data_);
 +#endif
 +
 +  main_parts->AddParts(
@@ -2141,7 +2230,7 @@ index 0000000000000..1d5861b3ad8b2
 +
 +#if BUILDFLAG(IS_LINUX)
 +  main_parts->AddParts(std::make_unique<ChromeBrowserMainExtraPartsLinux>());
-+#elif BUILDFLAG(IS_OZONE)
++#elif defined(USE_OZONE)
 +  main_parts->AddParts(std::make_unique<ChromeBrowserMainExtraPartsOzone>());
 +#endif
 +
@@ -2178,9 +2267,6 @@ index 0000000000000..1d5861b3ad8b2
 +
 +  main_parts->AddParts(
 +      std::make_unique<ChromeBrowserMainExtraPartsOptimizationGuide>());
-+
-+  main_parts->AddParts(
-+      std::make_unique<ChromeBrowserMainExtraPartsNaclDeprecation>());
 +
 +  return main_parts;
 +}
@@ -2248,6 +2334,3 @@ index 0000000000000..242ba77e419e5
 +};
 +
 +#endif  // CHROME_COMMON_CHROME_CONTENT_CLIENT_H_
--- 
-2.39.2
-

@@ -1,7 +1,7 @@
-From a91ba90be036201db20bf5c530661d7eea19f5ee Mon Sep 17 00:00:00 2001
+From 15a211cdfa714a32bdd9d3368a16c861518d69eb Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 17:05:46 +0900
-Subject: [PATCH 15/58] Add odf viewer
+Subject: [PATCH 15/67] Add odf viewer
 
 ---
  chrome/browser/browser_resources.grd          |   1 +
@@ -13,14 +13,15 @@ Subject: [PATCH 15/58] Add odf viewer
  chrome/browser/resources/odf/main.js          |  54 +
  chrome/browser/resources/odf/manifest.json    |  24 +
  chrome/browser/resources/odf/webodf.js        | 920 ++++++++++++++++++
- extensions/common/constants.h                 |   1 +
+ extensions/common/constants.cc                |   1 +
+ extensions/common/constants.h                 |   2 +
  .../manifest_handlers/mime_types_handler.cc   |   3 +-
  gooroom/browser/BUILD.gn                      |   2 +
  gooroom/browser/dgw/disable_google_warning.cc |   2 +-
  gooroom/browser/odf/odf_extension_util.cc     |  37 +
  gooroom/browser/odf/odf_extension_util.h      |  22 +
  net/base/mime_util.cc                         |   3 +
- 16 files changed, 1297 insertions(+), 2 deletions(-)
+ 17 files changed, 1299 insertions(+), 2 deletions(-)
  create mode 100644 chrome/browser/resources/odf/browser_api.js
  create mode 100644 chrome/browser/resources/odf/index.html
  create mode 100644 chrome/browser/resources/odf/main.js
@@ -30,10 +31,10 @@ Subject: [PATCH 15/58] Add odf viewer
  create mode 100644 gooroom/browser/odf/odf_extension_util.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index 2702ee02f9d5d..d71eb5d81d2d2 100644
+index 1f0d9097b63e2..7792a0a293315 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -224,6 +224,7 @@
+@@ -228,6 +228,7 @@
        <if expr="enable_pdf">
          <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
          <include name="IDR_DGW_MANIFEST" file="resources\dgw\manifest.json" type="BINDATA" />
@@ -42,7 +43,7 @@ index 2702ee02f9d5d..d71eb5d81d2d2 100644
        <include name="IDR_WEBSTORE_MANIFEST" file="resources\webstore_app\manifest.json" type="BINDATA" />
        <if expr="is_chromeos">
 diff --git a/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc b/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
-index fd03b01795247..91c8308e0bc03 100644
+index a24f8adff53bb..5a20a8616bd99 100644
 --- a/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
 +++ b/chrome/browser/extensions/component_extensions_allowlist/allowlist.cc
 @@ -33,6 +33,7 @@ bool IsComponentExtensionAllowlisted(const std::string& extension_id) {
@@ -54,10 +55,10 @@ index fd03b01795247..91c8308e0bc03 100644
      extension_misc::kAssessmentAssistantExtensionId,
  #endif
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index 1e37b517e76f8..7ba25963ad686 100644
+index 4182b0b9754ea..cf36a669e7edb 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
-@@ -86,6 +86,7 @@
+@@ -88,6 +88,7 @@
  #endif
  
  #if defined(GOOROOM_BUILD)
@@ -65,7 +66,7 @@ index 1e37b517e76f8..7ba25963ad686 100644
  #include "gooroom/browser/dgw/disable_google_warning.h"
  #endif
  
-@@ -486,6 +487,10 @@ void ComponentLoader::AddDefaultComponentExtensions(
+@@ -502,6 +503,10 @@ void ComponentLoader::AddDefaultComponentExtensions(
  #if BUILDFLAG(ENABLE_PDF)
      Add(pdf_extension_util::GetManifest(),
          base::FilePath(FILE_PATH_LITERAL("pdf")));
@@ -76,7 +77,7 @@ index 1e37b517e76f8..7ba25963ad686 100644
  #endif  // BUILDFLAG(ENABLE_PDF)
    }
  
-@@ -513,6 +518,8 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+@@ -529,6 +534,8 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
    Add(pdf_extension_util::GetManifest(),
        base::FilePath(FILE_PATH_LITERAL("pdf")));
  #if defined(GOOROOM_BUILD)
@@ -86,7 +87,7 @@ index 1e37b517e76f8..7ba25963ad686 100644
        base::FilePath(FILE_PATH_LITERAL("dgw")));
  #endif
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index eedce6001daf9..77377edc64344 100644
+index eeeb750a449e7..0aa82380ade58 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
 @@ -69,6 +69,10 @@
@@ -1347,20 +1348,33 @@ index 0000000000000..d85372a4c2027
 +detect_data_type(s);build_tree(s,s.l_desc);build_tree(s,s.d_desc);max_blindex=build_bl_tree(s);opt_lenb=s.opt_len+3+7>>>3;static_lenb=s.static_len+3+7>>>3;if(static_lenb<=opt_lenb)opt_lenb=static_lenb}else opt_lenb=static_lenb=stored_len+5;if(stored_len+4<=opt_lenb&&buf!==-1)_tr_stored_block(s,buf,stored_len,last);else if(s.strategy===Z_FIXED||static_lenb===opt_lenb){send_bits(s,(STATIC_TREES<<1)+(last?1:0),3);compress_block(s,static_ltree,static_dtree)}else{send_bits(s,(DYN_TREES<<1)+(last?1:0),
 +3);send_all_trees(s,s.l_desc.max_code+1,s.d_desc.max_code+1,max_blindex+1);compress_block(s,s.dyn_ltree,s.dyn_dtree)}init_block(s);if(last)bi_windup(s)}function _tr_tally(s,dist,lc){s.pending_buf[s.d_buf+s.last_lit*2]=dist>>>8&255;s.pending_buf[s.d_buf+s.last_lit*2+1]=dist&255;s.pending_buf[s.l_buf+s.last_lit]=lc&255;s.last_lit++;if(dist===0)s.dyn_ltree[lc*2]++;else{s.matches++;dist--;s.dyn_ltree[(_length_code[lc]+LITERALS+1)*2]++;s.dyn_dtree[d_code(dist)*2]++}return s.last_lit===s.lit_bufsize-1}
 +exports._tr_init=_tr_init;exports._tr_stored_block=_tr_stored_block;exports._tr_flush_block=_tr_flush_block;exports._tr_tally=_tr_tally;exports._tr_align=_tr_align},{"../utils/common":27}],39:[function(_dereq_,module,exports){function ZStream(){this.input=null;this.next_in=0;this.avail_in=0;this.total_in=0;this.output=null;this.next_out=0;this.avail_out=0;this.total_out=0;this.msg="";this.state=null;this.data_type=2;this.adler=0}module.exports=ZStream},{}]},{},[9])(9)});
+diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
+index cadac5956b382..7b82992c14d27 100644
+--- a/extensions/common/constants.cc
++++ b/extensions/common/constants.cc
+@@ -82,6 +82,7 @@ bool IsSystemUIApp(std::string_view extension_id) {
+       kChromeVoxExtensionId,
+       kFilesManagerAppId,
+       kDgwExtensionId,
++      kOdfExtensionId,
+       kHighlightsAppId,
+       kScreensaverAppId,
+       // clang-format on
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index 99a77790d3c9d..0f94b21805ad6 100644
+index af78d5f38d4e4..fd467662f01c2 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
-@@ -267,6 +267,7 @@ inline constexpr char kPdfExtensionId[] = "mhjfbmdgcfjbbpaeojofohoefgiehjai";
- 
- #if defined(GOOROOM_BUILD)
+@@ -266,6 +266,8 @@ inline constexpr char kChromeVoxExtensionId[] =
+ // The extension id of the PDF extension.
+ inline constexpr char kPdfExtensionId[] = "mhjfbmdgcfjbbpaeojofohoefgiehjai";
  inline constexpr char kDgwExtensionId[] = "ppjhjgbbllkfebjommlcojifooeihdoh";
 +inline constexpr char kOdfExtensionId[] = "ghoimckhmmpipdjmddpfckjmooiokomo";
- #endif
++
  
  // The extension id of the Office Viewer component extension.
+ inline constexpr char kQuickOfficeComponentExtensionId[] =
 diff --git a/extensions/common/manifest_handlers/mime_types_handler.cc b/extensions/common/manifest_handlers/mime_types_handler.cc
-index 0f6f6423b2bbc..323e4a5dedd2f 100644
+index 017ff2199d100..077d413bb2ac1 100644
 --- a/extensions/common/manifest_handlers/mime_types_handler.cc
 +++ b/extensions/common/manifest_handlers/mime_types_handler.cc
 @@ -29,6 +29,7 @@ namespace {
@@ -1478,7 +1492,7 @@ index 0000000000000..26b585dabd6bf
 +
 +#endif  // CHROME_BROWSER_ODF_ODF_EXTENSION_UTIL_H_
 diff --git a/net/base/mime_util.cc b/net/base/mime_util.cc
-index 0f20772307bdd..74f49a843d9a5 100644
+index 1ff099763b722..5dbb2be1a9e9c 100644
 --- a/net/base/mime_util.cc
 +++ b/net/base/mime_util.cc
 @@ -196,6 +196,9 @@ static const MimeInfo kSecondaryMappings[] = {

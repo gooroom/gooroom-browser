@@ -8,4 +8,3 @@ if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ] ; then
 fi
 
 #DEBHELPER#
-

@@ -1,7 +1,7 @@
-From ed13864d0dedf35e940278b59ed0fa7c204cb3a6 Mon Sep 17 00:00:00 2001
+From 32b6d96cbbe06da7ac50a46047ffb75f3219561b Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Thu, 23 Jul 2020 16:40:08 +0900
-Subject: [PATCH 14/58] add extension for disable google.com's browser version
+Subject: [PATCH 14/67] add extension for disable google.com's browser version
  warning
 
 ---
@@ -10,21 +10,22 @@ Subject: [PATCH 14/58] add extension for disable google.com's browser version
  .../component_extension_resources.grd         |  1 +
  chrome/browser/resources/dgw/inject.css       |  6 ++++
  chrome/browser/resources/dgw/manifest.json    | 14 +++++++++
- extensions/common/constants.h                 |  4 +++
+ extensions/common/constants.cc                |  1 +
+ extensions/common/constants.h                 |  1 +
  gooroom/browser/BUILD.gn                      |  2 ++
  gooroom/browser/dgw/disable_google_warning.cc | 29 +++++++++++++++++++
  gooroom/browser/dgw/disable_google_warning.h  | 19 ++++++++++++
- 9 files changed, 84 insertions(+)
+ 10 files changed, 82 insertions(+)
  create mode 100644 chrome/browser/resources/dgw/inject.css
  create mode 100644 chrome/browser/resources/dgw/manifest.json
  create mode 100644 gooroom/browser/dgw/disable_google_warning.cc
  create mode 100644 gooroom/browser/dgw/disable_google_warning.h
 
 diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
-index 5d67549e29422..2702ee02f9d5d 100644
+index 6fa87969dc693..1f0d9097b63e2 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -223,6 +223,7 @@
+@@ -227,6 +227,7 @@
  
        <if expr="enable_pdf">
          <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
@@ -33,10 +34,10 @@ index 5d67549e29422..2702ee02f9d5d 100644
        <include name="IDR_WEBSTORE_MANIFEST" file="resources\webstore_app\manifest.json" type="BINDATA" />
        <if expr="is_chromeos">
 diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
-index 7bec51e00363a..1e37b517e76f8 100644
+index d401778c81a17..4182b0b9754ea 100644
 --- a/chrome/browser/extensions/component_loader.cc
 +++ b/chrome/browser/extensions/component_loader.cc
-@@ -85,6 +85,10 @@
+@@ -87,6 +87,10 @@
  #include "chrome/browser/defaults.h"
  #endif
  
@@ -47,7 +48,7 @@ index 7bec51e00363a..1e37b517e76f8 100644
  using content::BrowserThread;
  
  namespace extensions {
-@@ -508,6 +512,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+@@ -524,6 +528,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
  #if BUILDFLAG(ENABLE_PDF)
    Add(pdf_extension_util::GetManifest(),
        base::FilePath(FILE_PATH_LITERAL("pdf")));
@@ -59,7 +60,7 @@ index 7bec51e00363a..1e37b517e76f8 100644
  }
  
 diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
-index dbd0667d5b75d..eedce6001daf9 100644
+index c0b9725484862..eeeb750a449e7 100644
 --- a/chrome/browser/resources/component_extension_resources.grd
 +++ b/chrome/browser/resources/component_extension_resources.grd
 @@ -68,6 +68,7 @@
@@ -103,21 +104,30 @@ index 0000000000000..0f4b1e5044963
 +  ]
 +}
 +
+diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
+index 2f05c9c2c0190..cadac5956b382 100644
+--- a/extensions/common/constants.cc
++++ b/extensions/common/constants.cc
+@@ -81,6 +81,7 @@ bool IsSystemUIApp(std::string_view extension_id) {
+       // clang-format off
+       kChromeVoxExtensionId,
+       kFilesManagerAppId,
++      kDgwExtensionId,
+       kHighlightsAppId,
+       kScreensaverAppId,
+       // clang-format on
 diff --git a/extensions/common/constants.h b/extensions/common/constants.h
-index 9aab221ce59ab..99a77790d3c9d 100644
+index b2448ae4f4d85..af78d5f38d4e4 100644
 --- a/extensions/common/constants.h
 +++ b/extensions/common/constants.h
-@@ -265,6 +265,10 @@ inline constexpr char kChromeVoxExtensionId[] =
+@@ -265,6 +265,7 @@ inline constexpr char kChromeVoxExtensionId[] =
+ 
  // The extension id of the PDF extension.
  inline constexpr char kPdfExtensionId[] = "mhjfbmdgcfjbbpaeojofohoefgiehjai";
- 
-+#if defined(GOOROOM_BUILD)
 +inline constexpr char kDgwExtensionId[] = "ppjhjgbbllkfebjommlcojifooeihdoh";
-+#endif
-+
+ 
  // The extension id of the Office Viewer component extension.
  inline constexpr char kQuickOfficeComponentExtensionId[] =
-     "bpmcpldpdmajfigpchkicefoigmkfalc";
 diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
 index 57f5f21afd23e..920dfedf3d21f 100644
 --- a/gooroom/browser/BUILD.gn

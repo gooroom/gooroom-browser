@@ -1,7 +1,7 @@
-From 65a0936a8a5cc9141f740d16be8f47aeb33bb7ff Mon Sep 17 00:00:00 2001
+From 76948396aee7634a5ee57f1ea43e9aa206ef6fa4 Mon Sep 17 00:00:00 2001
 From: junsungc <junsungc@gooroom.kr>
 Date: Wed, 22 Jul 2020 14:14:47 +0900
-Subject: [PATCH 06/58] add guard for the whitelist based browser separation
+Subject: [PATCH 06/67] add guard for the whitelist based browser separation
 
 ---
  build/config/chrome_build.gni   | 1 +
@@ -10,7 +10,7 @@ Subject: [PATCH 06/58] add guard for the whitelist based browser separation
  3 files changed, 3 insertions(+)
 
 diff --git a/build/config/chrome_build.gni b/build/config/chrome_build.gni
-index e44aeaa5715d9..279a5e3f17fd7 100644
+index cd12d2f976e80..65f543bc407f2 100644
 --- a/build/config/chrome_build.gni
 +++ b/build/config/chrome_build.gni
 @@ -7,6 +7,7 @@ declare_args() {

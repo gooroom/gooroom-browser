@@ -1,0 +1,24 @@
+From 0c848378ed61bb462c55675e1fb23d3758c217f6 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:11:39 +0900
+Subject: [PATCH 54/67] Change Cookie default value to easily use
+
+---
+ components/content_settings/core/browser/cookie_settings.cc | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/components/content_settings/core/browser/cookie_settings.cc b/components/content_settings/core/browser/cookie_settings.cc
+index b16f3596de8cc..d967c35229a2a 100644
+--- a/components/content_settings/core/browser/cookie_settings.cc
++++ b/components/content_settings/core/browser/cookie_settings.cc
+@@ -379,7 +379,6 @@ bool CookieSettings::ShouldBlockThirdPartyCookiesInternal() {
+ 
+   switch (mode) {
+     case CookieControlsMode::kBlockThirdParty:
+-      return true;
+     case CookieControlsMode::kIncognitoOnly:
+       return is_incognito_;
+     case CookieControlsMode::kOff:
+-- 
+2.39.2
+
