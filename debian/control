@@ -11,6 +11,12 @@ Homepage: http://www.chromium.org/Home
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Build-Depends:
+ git,
+ libssl-dev,
+ libavutil-dev,
+ libavcodec-dev (>= 7:3.0),
+ libavformat-dev,
+ libvpx-dev (>= 1.7.0),
  fonts-noto,
  debhelper (>= 11),
  devscripts,
