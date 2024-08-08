@@ -2,6 +2,7 @@ gooroom-browser (4.0.3-1+grm4u2) stretch; urgency=medium
 
   * Update 4.0.3-1+grm4u2
     - Edit gooroom-browser.desktop
+    - Bugs 5783 Fix : shortcut as window bug
 
  -- Choi J.S. <junsungc91@gmail.com>  Wed, 07 Aug 2024 10:04:00 +0900
 
