@@ -1,0 +1,45 @@
+From f95d3369252ef027efd49a1e33bb0a620577db97 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:23:10 +0900
+Subject: [PATCH 19/63] disable chrome login shortcut(ctrl+shift+m) and hide
+ login icon
+
+---
+ chrome/browser/ui/browser_command_controller.cc | 3 +++
+ chrome/browser/ui/views/toolbar/toolbar_view.cc | 4 ++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/chrome/browser/ui/browser_command_controller.cc b/chrome/browser/ui/browser_command_controller.cc
+index 1ee39659a3..ac7a9114e4 100644
+--- a/chrome/browser/ui/browser_command_controller.cc
++++ b/chrome/browser/ui/browser_command_controller.cc
+@@ -658,8 +658,11 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
+           signin_metrics::AccessPoint::ACCESS_POINT_MENU);
+       break;
+     case IDC_SHOW_SIGNIN_WHEN_PAUSED:
++#if !defined(GOOROOM_BUILD)
++//Disable chrome login shortcut (ctrl + shift + m) on gooroom-browser
+       signin_ui_util::ShowReauthForPrimaryAccountWithAuthError(
+           browser_->profile(), signin_metrics::AccessPoint::ACCESS_POINT_MENU);
++#endif
+       break;
+     case IDC_SHOW_PASSWORD_MANAGER:
+       ShowPasswordManager(browser_);
+diff --git a/chrome/browser/ui/views/toolbar/toolbar_view.cc b/chrome/browser/ui/views/toolbar/toolbar_view.cc
+index 577215577d..92318e7475 100644
+--- a/chrome/browser/ui/views/toolbar/toolbar_view.cc
++++ b/chrome/browser/ui/views/toolbar/toolbar_view.cc
+@@ -488,6 +488,10 @@ void ToolbarView::Init() {
+        browser_->profile()->GetOTRProfileID().IsCaptivePortal());
+ #elif BUILDFLAG(IS_CHROMEOS_LACROS)
+   show_avatar_toolbar_button = !chromeos::IsManagedGuestSession();
++#endif
++#if defined(GOOROOM_BUILD)
++//Hide show_avatar_toolbar_button
++  show_avatar_toolbar_button = false;
+ #else
+   // DevTools profiles are OffTheRecord, so hide it there.
+   show_avatar_toolbar_button = browser_->profile()->IsIncognitoProfile() ||
+-- 
+2.39.2
+

@@ -1,0 +1,207 @@
+From 508e641765d02982f9e96230e5a56b62cb1df5d7 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 16:40:08 +0900
+Subject: [PATCH 13/63] add extension for disable google.com's browser version
+ warning
+
+---
+ chrome/browser/browser_resources.grd          |  1 +
+ chrome/browser/extensions/component_loader.cc |  8 +++++
+ .../component_extension_resources.grd         |  1 +
+ chrome/browser/resources/dgw/inject.css       |  6 ++++
+ chrome/browser/resources/dgw/manifest.json    | 14 +++++++++
+ extensions/common/constants.cc                |  1 +
+ extensions/common/constants.h                 |  1 +
+ gooroom/browser/BUILD.gn                      |  2 ++
+ gooroom/browser/dgw/disable_google_warning.cc | 29 +++++++++++++++++++
+ gooroom/browser/dgw/disable_google_warning.h  | 19 ++++++++++++
+ 10 files changed, 82 insertions(+)
+ create mode 100644 chrome/browser/resources/dgw/inject.css
+ create mode 100644 chrome/browser/resources/dgw/manifest.json
+ create mode 100644 gooroom/browser/dgw/disable_google_warning.cc
+ create mode 100644 gooroom/browser/dgw/disable_google_warning.h
+
+diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
+index 5d2347fa11..cf9dea0788 100644
+--- a/chrome/browser/browser_resources.grd
++++ b/chrome/browser/browser_resources.grd
+@@ -230,6 +230,7 @@
+ 
+       <if expr="enable_pdf">
+         <include name="IDR_PDF_MANIFEST" file="resources\pdf\manifest.json" type="BINDATA" />
++        <include name="IDR_DGW_MANIFEST" file="resources\dgw\manifest.json" type="BINDATA" />
+       </if>
+       <include name="IDR_WEBSTORE_MANIFEST" file="resources\webstore_app\manifest.json" type="BINDATA" />
+       <if expr="is_chromeos">
+diff --git a/chrome/browser/extensions/component_loader.cc b/chrome/browser/extensions/component_loader.cc
+index d401778c81..4182b0b975 100644
+--- a/chrome/browser/extensions/component_loader.cc
++++ b/chrome/browser/extensions/component_loader.cc
+@@ -87,6 +87,10 @@
+ #include "chrome/browser/defaults.h"
+ #endif
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/browser/dgw/disable_google_warning.h"
++#endif
++
+ using content::BrowserThread;
+ 
+ namespace extensions {
+@@ -524,6 +528,10 @@ void ComponentLoader::AddDefaultComponentExtensionsForKioskMode(
+ #if BUILDFLAG(ENABLE_PDF)
+   Add(pdf_extension_util::GetManifest(),
+       base::FilePath(FILE_PATH_LITERAL("pdf")));
++#if defined(GOOROOM_BUILD)
++  Add(disable_google_warning::GetManifest(),
++      base::FilePath(FILE_PATH_LITERAL("dgw")));
++#endif
+ #endif
+ }
+ 
+diff --git a/chrome/browser/resources/component_extension_resources.grd b/chrome/browser/resources/component_extension_resources.grd
+index 48e4457330..35456d3623 100644
+--- a/chrome/browser/resources/component_extension_resources.grd
++++ b/chrome/browser/resources/component_extension_resources.grd
+@@ -70,6 +70,7 @@
+         <include name="IDR_ARC_SUPPORT_ICON_ERROER_IMAGE" file="chromeos/arc_support/images/error_image.png" type="BINDATA" />
+         <include name="IDR_ARC_SUPPORT_ICON_HEADER" file="chromeos/arc_support/images/header.png" type="BINDATA" />
+         <include name="IDR_ARC_SUPPORT_UI_JS" file="chromeos/arc_support/ui.js" type="chrome_html" />
++        <include name="IDR_DGW_INJECT_CSS" file="dgw/inject.css" allowexternalscript="true" type="BINDATA" />
+       </if>
+       <include name="IDS_READING_MODE_DEFAULT_PNG" file="side_panel/read_anything/images/read_anything_default.png" type="BINDATA" />
+       <include name="IDS_READING_MODE_LIGHT_PNG" file="side_panel/read_anything/images/read_anything_light.png" type="BINDATA" />
+diff --git a/chrome/browser/resources/dgw/inject.css b/chrome/browser/resources/dgw/inject.css
+new file mode 100644
+index 0000000000..10894976cc
+--- /dev/null
++++ b/chrome/browser/resources/dgw/inject.css
+@@ -0,0 +1,6 @@
++.og-pdp, .gb_Xc.gb_g {
++  display: none;
++  visibility: hidden;
++  opacity: 0;
++  user-select: none;
++}
+\ No newline at end of file
+diff --git a/chrome/browser/resources/dgw/manifest.json b/chrome/browser/resources/dgw/manifest.json
+new file mode 100644
+index 0000000000..0f4b1e5044
+--- /dev/null
++++ b/chrome/browser/resources/dgw/manifest.json
+@@ -0,0 +1,14 @@
++{
++  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAod2RzIEs9MCMNZ71j0JJKQ2jX3u5YhmkjMzlvvRnAKrpT5KTdpSs7XtqgM88KExQsMPPw0RoyoEBQL9fOPdiajZGYKMimcGFHdYNCB2BNASgkkD+5c6EefLrG2M/+//uL8HcBQ2pftRaAz3gkbeZUgu5xZp3ZTnl3YhYgUTrXvC1Ny3mWVDopWfR39ftYpLNkdGvtMlR/at6mi/qvS93b1ptnVMjqUBHTyW+jSNCsUk2YdGCpi3QsVFkJbqml9qX18uIqNyH2Ti3V3bI109rbd2i6fHrBaKYHWsfTZAQ0v3ijLDhDC+KvDN34R2NP83IwfFaUlVbzqsMQHzYlcvGpwIDAQAB",
++  "name": "<NAME>",
++  "description" : "",
++  "version" : "1.0",
++  "manifest_version" : 2,
++  "content_scripts" : [
++    {
++      "matches" : [ "https://*.google.com/*" ],
++      "css" : [ "inject.css" ]
++    }
++  ]
++}
++
+diff --git a/extensions/common/constants.cc b/extensions/common/constants.cc
+index 2f05c9c2c0..cadac5956b 100644
+--- a/extensions/common/constants.cc
++++ b/extensions/common/constants.cc
+@@ -81,6 +81,7 @@ bool IsSystemUIApp(std::string_view extension_id) {
+       // clang-format off
+       kChromeVoxExtensionId,
+       kFilesManagerAppId,
++      kDgwExtensionId,
+       kHighlightsAppId,
+       kScreensaverAppId,
+       // clang-format on
+diff --git a/extensions/common/constants.h b/extensions/common/constants.h
+index 63af22b657..44226ae1d8 100644
+--- a/extensions/common/constants.h
++++ b/extensions/common/constants.h
+@@ -270,6 +270,7 @@ inline constexpr char kChromeVoxExtensionId[] =
+ 
+ // The extension id of the PDF extension.
+ inline constexpr char kPdfExtensionId[] = "mhjfbmdgcfjbbpaeojofohoefgiehjai";
++inline constexpr char kDgwExtensionId[] = "ppjhjgbbllkfebjommlcojifooeihdoh";
+ 
+ // The extension id of the Office Viewer component extension.
+ inline constexpr char kQuickOfficeComponentExtensionId[] =
+diff --git a/gooroom/browser/BUILD.gn b/gooroom/browser/BUILD.gn
+index 57f5f21afd..920dfedf3d 100644
+--- a/gooroom/browser/BUILD.gn
++++ b/gooroom/browser/BUILD.gn
+@@ -17,6 +17,8 @@ static_library("gooroom_browser") {
+     "gooroom_pref.h",
+     "gooroom_url_filter_impl.cc",
+     "gooroom_url_filter_impl.h",
++    "dgw/disable_google_warning.cc",
++    "dgw/disable_google_warning.h",
+   ]
+ 
+   deps = [
+diff --git a/gooroom/browser/dgw/disable_google_warning.cc b/gooroom/browser/dgw/disable_google_warning.cc
+new file mode 100644
+index 0000000000..8f2f87082d
+--- /dev/null
++++ b/gooroom/browser/dgw/disable_google_warning.cc
+@@ -0,0 +1,29 @@
++// Copyright 2015 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include "gooroom/browser/dgw/disable_google_warning.h"
++
++#include "base/strings/string_util.h"
++#include "chrome/grit/browser_resources.h"
++#include "ui/base/resource/resource_bundle.h"
++
++namespace disable_google_warning {
++
++namespace {
++
++// Tags in the manifest to be replaced.
++const char kNameTag[] = "<NAME>";
++
++}  // namespace
++
++std::string GetManifest() {
++  std::string manifest_contents(ui::ResourceBundle::GetSharedInstance()
++                                      .GetRawDataResource(IDR_DGW_MANIFEST));
++
++  DCHECK(manifest_contents.find(kNameTag) != std::string::npos);
++
++  return manifest_contents;
++}
++
++}  // namespace disable_google_warning
+diff --git a/gooroom/browser/dgw/disable_google_warning.h b/gooroom/browser/dgw/disable_google_warning.h
+new file mode 100644
+index 0000000000..b10a3fee18
+--- /dev/null
++++ b/gooroom/browser/dgw/disable_google_warning.h
+@@ -0,0 +1,19 @@
++// Copyright 2015 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef CHROME_BROWSER_DGW_DISABLE_GOOGLE_WARNING_H_
++#define CHROME_BROWSER_DGW_DISABLE_GOOGLE_WARNING_H_
++
++#include <string>
++
++namespace disable_google_warning {
++
++// Return the extensions manifest for DGW. The manifest is loaded from
++// browser_resources.grd and certain fields are replaced based on what chrome
++// flags are enabled.
++std::string GetManifest();
++
++}  // namespace disable_google_warning
++
++#endif  // CHROME_BROWSER_DGW_DISABLE_GOOGLE_WARNING_H_
+\ No newline at end of file
+-- 
+2.39.2
+

@@ -1,0 +1,100 @@
+From 38c369d13ec2f120295ffacd922763559ffec093 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 11:59:22 +0900
+Subject: [PATCH 31/63] change chrome to gooroom scheme on error page [Gooroom
+ Bug Tracking System - 0000400] change chrome to gooroom scheme on
+ content-settings bubble model
+
+---
+ .../settings/reset_page/reset_profile_dialog.html      |  2 --
+ .../content_settings/content_setting_bubble_model.cc   |  6 +++++-
+ components/error_page/common/localized_error.cc        | 10 ++++++++++
+ tools/metrics/histograms/enums.xml                     |  1 +
+ 4 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+index ed34e753d1..5513730aa2 100644
+--- a/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
++++ b/chrome/browser/resources/settings/reset_page/reset_profile_dialog.html
+@@ -18,11 +18,9 @@
+               isTriggered_, triggeredResetToolName_)]]">
+         </span>
+ <!--
+-<if expr="not _gooroom">
+         <a href="$i18nRaw{resetPageLearnMoreUrl}"
+             aria-label="$i18n{resetLearnMoreAccessibilityText}"
+             target="_blank">$i18n{learnMore}</a>
+-</if>
+ -->
+       </div>
+       <div slot="button-container">
+diff --git a/chrome/browser/ui/content_settings/content_setting_bubble_model.cc b/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
+index 8b76c3b13e..15b8f187c0 100644
+--- a/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
++++ b/chrome/browser/ui/content_settings/content_setting_bubble_model.cc
+@@ -8,6 +8,7 @@
+ #endif
+ 
+ #include "chrome/browser/ui/content_settings/content_setting_bubble_model.h"
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
+ 
+ #include <stddef.h>
+ 
+@@ -1121,7 +1122,10 @@ void ContentSettingMediaStreamBubbleModel::SetRadioGroup() {
+   GURL url = content_settings->media_stream_access_origin();
+   RadioGroup radio_group;
+   radio_group.url = url;
+-  const std::u16string& display_url = GetUrlForDisplay(GetProfile(), url);
++  GURL changed_url = GooroomURLRewrite::ChangeGooroomScheme(url);
++  std::u16string display_url = url_formatter::FormatUrlForSecurityDisplay(changed_url);
++  if (display_url.empty())
++    display_url = base::ASCIIToUTF16(changed_url.spec());
+ 
+   CHECK(CameraAccessed() || MicrophoneAccessed());
+   int radio_allow_label_id = 0;
+diff --git a/components/error_page/common/localized_error.cc b/components/error_page/common/localized_error.cc
+index 5059508f3c..3ca6c1ad43 100644
+--- a/components/error_page/common/localized_error.cc
++++ b/components/error_page/common/localized_error.cc
+@@ -46,6 +46,8 @@
+ #include "base/win/windows_version.h"
+ #endif
+ 
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++
+ namespace error_page {
+ 
+ namespace {
+@@ -1017,9 +1019,17 @@ LocalizedError::PageState LocalizedError::GetPageState(
+     options.suggestions &= ~SUGGEST_CONTACT_ADMINISTRATOR;
+   }
+ 
++#if defined(GOOROOM_BUILD)
++//Change chrome:// to gooroom:// on error pages
++  GURL changed_failed_url = GooroomURLRewrite::ChangeGooroomScheme(failed_url);
++  std::u16string failed_url_string(url_formatter::FormatUrl(
++      changed_failed_url, url_formatter::kFormatUrlOmitNothing,
++      base::UnescapeRule::NORMAL, nullptr, nullptr, nullptr));
++#else
+   std::u16string failed_url_string(url_formatter::FormatUrl(
+       failed_url, url_formatter::kFormatUrlOmitNothing,
+       base::UnescapeRule::NORMAL, nullptr, nullptr, nullptr));
++#endif
+   // URLs are always LTR.
+   if (base::i18n::IsRTL())
+     base::i18n::WrapStringWithLTRFormatting(&failed_url_string);
+diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
+index 7dc92cf164..651706e8d1 100644
+--- a/tools/metrics/histograms/enums.xml
++++ b/tools/metrics/histograms/enums.xml
+@@ -10814,6 +10814,7 @@ Called by update_use_counter_feature_enum.py.-->
+   <int value="5069" label="V8AIRewriter_Rewrite_Method"/>
+   <int value="5070" label="V8AIRewriter_RewriteStreaming_Method"/>
+   <int value="5071" label="V8AIRewriter_Destroy_Method"/>
++  <int value="5072" label="PageSourceViewEnabled"/>
+ </enum>
+ 
+ <enum name="FeaturePolicyFeature">
+-- 
+2.39.2
+

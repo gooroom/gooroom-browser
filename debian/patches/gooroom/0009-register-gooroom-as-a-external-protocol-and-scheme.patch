@@ -1,0 +1,56 @@
+From 0f1e854ce36275348e7e2c862560870db5ef7cc4 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 14:59:35 +0900
+Subject: [PATCH 09/63] register /gooroom/ as a external protocol and scheme
+
+---
+ chrome/browser/profiles/profile_io_data.cc | 4 ++++
+ content/common/url_schemes.cc              | 4 ++++
+ content/public/common/url_constants.h      | 1 +
+ 3 files changed, 9 insertions(+)
+
+diff --git a/chrome/browser/profiles/profile_io_data.cc b/chrome/browser/profiles/profile_io_data.cc
+index 6373b14b72..cab022efa1 100644
+--- a/chrome/browser/profiles/profile_io_data.cc
++++ b/chrome/browser/profiles/profile_io_data.cc
+@@ -39,6 +39,10 @@ bool ProfileIOData::IsHandledProtocol(const std::string& scheme) {
+       extensions::kExtensionScheme,
+ #endif
+       content::kChromeUIScheme,
++#if defined(GOOROOM_BUILD)
++      // Treat "gooroom://" as a external protocol
++      content::kGooroomUIScheme,
++#endif
+       content::kChromeUIUntrustedScheme,
+       url::kDataScheme,
+ #if BUILDFLAG(IS_CHROMEOS_ASH)
+diff --git a/content/common/url_schemes.cc b/content/common/url_schemes.cc
+index ce9644d33f..0c6414a76f 100644
+--- a/content/common/url_schemes.cc
++++ b/content/common/url_schemes.cc
+@@ -60,6 +60,10 @@ void RegisterContentSchemes(bool should_lock_registry) {
+ 
+   url::AddStandardScheme(kChromeDevToolsScheme, url::SCHEME_WITH_HOST);
+   url::AddStandardScheme(kChromeUIScheme, url::SCHEME_WITH_HOST);
++  // Slightly tint string "gooroom://" viewed in location bar.
++#if defined(GOOROOM_BUILD)
++  url::AddStandardScheme(kGooroomUIScheme, url::SCHEME_WITH_HOST);
++#endif
+   url::AddStandardScheme(kChromeUIUntrustedScheme, url::SCHEME_WITH_HOST);
+   url::AddStandardScheme(kChromeErrorScheme, url::SCHEME_WITH_HOST);
+   for (auto& scheme : schemes.standard_schemes)
+diff --git a/content/public/common/url_constants.h b/content/public/common/url_constants.h
+index da2232684a..ba32915b5c 100644
+--- a/content/public/common/url_constants.h
++++ b/content/public/common/url_constants.h
+@@ -19,6 +19,7 @@ namespace content {
+ // from there.
+ inline constexpr char kChromeDevToolsScheme[] = "devtools";
+ inline constexpr char kChromeErrorScheme[] = "chrome-error";
++inline constexpr char kGooroomUIScheme[] = "gooroom"; // Used for WebUIs.
+ inline constexpr char kChromeUIScheme[] = "chrome";  // Used for WebUIs.
+ inline constexpr char kChromeUIUntrustedScheme[] = "chrome-untrusted";
+ inline constexpr char kViewSourceScheme[] = "view-source";
+-- 
+2.39.2
+

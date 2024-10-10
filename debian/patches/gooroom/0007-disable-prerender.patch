@@ -1,0 +1,29 @@
+From 46dfec94c6e1c267da2b0411168a3755ec6f20e9 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 22 Jul 2020 15:33:29 +0900
+Subject: [PATCH 07/63] disable prerender
+
+---
+ chrome/browser/ui/omnibox/chrome_omnibox_client.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
+index 0afa324321..62491bf5aa 100644
+--- a/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
++++ b/chrome/browser/ui/omnibox/chrome_omnibox_client.cc
+@@ -413,10 +413,12 @@ void ChromeOmniboxClient::OnTextChanged(const AutocompleteMatch& current_match,
+       // (http://crbug.com/105689)
+       if (!CurrentPageExists())
+         break;
++#if !defined(GOOROOM_BUILD)
+       // Ask for prerendering if the destination URL is different than the
+       // current URL.
+       if (current_match.destination_url != GetURL())
+         DoPrerender(current_match);
++#endif
+       break;
+     case AutocompleteActionPredictor::ACTION_PRECONNECT:
+       DoPreconnect(current_match);
+-- 
+2.39.2
+

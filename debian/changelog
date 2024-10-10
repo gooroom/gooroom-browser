@@ -1,16 +1,401 @@
-gooroom-browser (4.0.3-1+grm4u2) stretch; urgency=medium
+gooroom-browser (4.0.4-1+grm4u2) stretch; urgency=medium
 
-  * Update 4.0.3-1+grm4u2
-    - Edit gooroom-browser.desktop
-    - Bugs 5783 Fix : shortcut as window bug
+  * Init 4.0.4-1+grm4u1
 
- -- Choi J.S. <junsungc91@gmail.com>  Wed, 07 Aug 2024 10:04:00 +0900
+ -- Choi J.S. <junsungc91@gmail.com>  Thu, 10 Oct 2024 09:54:00 +0900
 
-gooroom-browser (4.0.3-1+grm4u1) stretch; urgency=medium
+chromium (129.0.6668.70-1~deb12u1) bookworm-security; urgency=high
 
-  * Init 4.0.3-1+grm4u1
+  [ Andres Salomon ]
+  * New upstream security release.
+    - CVE-2024-9120: Use after free in Dawn. Reported by Anonymous.
+    - CVE-2024-9121: Inappropriate implementation in V8.
+      Reported by Tashita Software Security.
+    - CVE-2024-9122: Type Confusion in V8.
+      Reported by Seunghyun Lee (@0x10n).
+    - CVE-2024-9123: Integer overflow in Skia.
+      Reported by raven at KunLun lab.
+  * d/copyright: delete more upstream .clang, .git, and android residue.
 
- -- Choi J.S. <junsungc91@gmail.com>  Tue, 30 Jul 2024 15:36:00 +0900
+  [ Timothy Pearson ]
+  * d/patches:
+    - fixes/predictor-denial-of-service.patch: Work around upstream
+      issue #368562245, which can cause denial of service of the entire
+      browser process on specific types of Web sites.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 25 Sep 2024 15:23:27 -0400
+
+chromium (129.0.6668.58-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream stable release.
+    - CVE-2024-8904: Type Confusion in V8. Reported by Popax21.
+    - CVE-2024-8905: Inappropriate implementation in V8.
+      Reported by Ganjiang Zhou(@refrain_areu) of ChaMd5-H1 team.
+    - CVE-2024-8906: Incorrect security UI in Downloads.
+      Reported by @retsew0x01.
+    - CVE-2024-8907: Insufficient data validation in Omnibox.
+      Reported by Muhammad Zaid Ghifari.
+    - CVE-2024-8908: Inappropriate implementation in Autofill.
+      Reported by Levit Nudi from Kenya.
+    - CVE-2024-8909: Inappropriate implementation in UI.
+      Reported by Shaheen Fazim.
+  * d/patches:
+    - debianization/sandbox.patch: refresh for upstream changes. Since we
+      have some downstream users of this package, retain the Ubuntu wording.
+    - disable/tests.patch: refresh.
+    - disable/catapult.patch: refresh.
+    - bookworm/clang16.patch: refresh, delete -Wno-dangling-assignment-gsl
+    - ppc64le/crashpad/0001-Implement-support-for-PPC64-on-Linux.patch:
+      refresh.
+    - ppc64le/sandbox/Sandbox-linux-services-credentials.cc-PPC.patch:
+      refresh.
+    - ppc64le/third_party/dawn-fix-ppc64le-detection.patch: refresh.
+    - bookworm/more-spaceships.patch: yet another clang-17 header
+      backport for clang-16 inadequecies.
+    - bookworm/signer-lambda.patch: clang-16 lambda bug workaround.
+    - bookworm/bubble-contents.patch: refresh.
+
+  [ Timothy Pearson ]
+  * d/patches/ppc64le:
+    - third_party/dawn-fix-typos.patch: drop, applied upstream
+    - third_party/0003-third_party-ffmpeg-Add-ppc64-generated-config.patch:
+      refresh for upstream changes
+    - libaom/0001-Add-pregenerated-config-for-libaom-on-ppc64.patch: refresh
+      for upstream changes
+    - core/cargo-add-ppc64.diff: Add ppc64 to cargo architecture definitions
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 18 Sep 2024 20:47:23 -0400
+
+chromium (128.0.6613.137-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream security release.
+    - CVE-2024-8636: Heap buffer overflow in Skia.
+      Reported by Renan Rios (@hyhy_100).
+    - CVE-2024-8637: Use after free in Media Router. Reported by
+      lime(@limeSec_) from TIANGONG Team of Legendsec at QI-ANXIN Group.
+    - CVE-2024-8638: Type Confusion in V8.
+      Reported by Zhenghang Xiao (@Kipreyyy).
+    - CVE-2024-8639: Use after free in Autofill. Reported by
+      lime(@limeSec_) from TIANGONG Team of Legendsec at QI-ANXIN Group.
+
+  [ Timothy Pearson ]
+  * d/patches/ppc64le:
+    - core/add-ppc64-architecture-string.patch
+    - fixes/fix-study-crash.patch
+
+  [ Daniel Richard G. ]
+  * d/copyright: Add some more Files-Excluded: entries.
+  * d/rules: Ensure all files in orig source tarball are user-writable.
+  * d/patches/disable:
+    - tests.patch: Break out SwiftShader tests deletion to...
+    - tests-swiftshader.patch: ...a separate file, to simplify resolving
+      conflicts with the ungoogled-chromium patch series.
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 10 Sep 2024 21:56:02 -0400
+
+chromium (128.0.6613.119-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream security release.
+    - CVE-2024-8362: Use after free in WebAudio.
+      Reported by Cassidy Kim(@cassidy6564).
+    - CVE-2024-7970: Out of bounds write in V8.
+      Reported by Cassidy Kim(@cassidy6564).
+  * Enable swiftshader support; thanks to Charles Samuels for helping out
+    on this (closes: #1064465).
+  * d/patches:
+    - disable/swiftshader.patch: drop.
+    - disable/swiftshader-2.patch: drop.
+    - disable/tests.patch: some swiftshader tests deletion needed.
+
+  [ Timothy Pearson ]
+  * d/patches:
+    - fixes/gpu-crash.patch: Fix GPU process crash (upstream issue #364568422)
+    - ppc64le/third_party/0001-swiftshader-fix-build.patch: Fix SwiftShader
+      build on ppc64el systems
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 04 Sep 2024 15:05:06 -0400
+
+chromium (128.0.6613.113-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream security release.
+    - CVE-2024-7969: Type Confusion in V8.
+      Reported by CFF of Topsec Alpha Team.
+    - CVE-2024-8193: Heap buffer overflow in Skia.
+      Reported by Renan Rios (@hyhy_100).
+    - CVE-2024-8194: Type Confusion in V8. Reported by Seunghyun Lee (@0x10n).
+    - CVE-2024-8198: Heap buffer overflow in Skia.
+      Reported by Renan Rios (@hyhy_100).
+  * d/control:
+    - Bump rustc-web build-dep up to >= 1.74.
+  * d/patches:
+    - bookworm/rust-downgrade-osstr-users.patch: drop, now that we have a
+      newer rust in bookworm.
+    - bookworm/crabbyav1f.patch: drop, no longer needed w/ new rust.
+    - bookworm/rust-no-thin-lto.patch: drop, we can now enable thinlto w/
+      new rust.
+    - fixes/clang-rust-target.patch: add, needed for thinlto in rust.
+    - ppc64le/fixes/fix-different-data-layouts.patch: add, needed for
+      mismatch between newer rust and older clang.
+
+ -- Andres Salomon <dilinger@debian.org>  Thu, 29 Aug 2024 01:10:43 -0400
+
+chromium (128.0.6613.84-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream stable release.
+    - CVE-2024-7964: Use after free in Passwords. Reported by Anonymous.
+    - CVE-2024-7965: Inappropriate implementation in V8. Reported by TheDog.
+    - CVE-2024-7966: Out of bounds memory access in Skia.
+      Reported by Renan Rios (@HyHy100).
+    - CVE-2024-7967: Heap buffer overflow in Fonts.
+      Reported by Tashita Software Security.
+    - CVE-2024-7968: Use after free in Autofill.
+      Reported by Han Zheng (HexHive).
+    - CVE-2024-7969: Type Confusion in V8.
+      Reported by CFF of Topsec Alpha Team.
+    - CVE-2024-7971: Type confusion in V8. Reported by Microsoft Threat
+      Intelligence Center (MSTIC), Microsoft Security Response Center (MSRC).
+    - CVE-2024-7972: Inappropriate implementation in V8.
+      Reported by Simon Gerst (intrigus-lgtm).
+    - CVE-2024-7973: Heap buffer overflow in PDFium. Reported by soiax.
+    - CVE-2024-7974: Insufficient data validation in V8 API.
+      Reported by bowu(@gocrashed).
+    - CVE-2024-7975: Inappropriate implementation in Permissions.
+      Reported by Thomas Orlita.
+    - CVE-2024-7976: Inappropriate implementation in FedCM.
+      Reported by Alesandro Ortiz.
+    - CVE-2024-7977: Insufficient data validation in Installer.
+      Reported by Kim Dong-uk (@justlikebono).
+    - CVE-2024-7978: Insufficient policy enforcement in Data Transfer.
+      Reported by NDevTK.
+    - CVE-2024-7979: Insufficient data validation in Installer.
+      Reported by VulnNoob.
+    - CVE-2024-7980: Insufficient data validation in Installer.
+      Reported by VulnNoob.
+    - CVE-2024-7981: Inappropriate implementation in Views.
+      Reported by Thomas Orlita.
+    - CVE-2024-8033: Inappropriate implementation in WebApp Installs.
+      Reported by Lijo A.T.
+    - CVE-2024-8034: Inappropriate implementation in Custom Tabs.
+      Reported by Bharat (mrnoob).
+    - CVE-2024-8035: Inappropriate implementation in Extensions.
+      Reported by Microsoft.
+  * d/copyright: delete third_party/siso/ which contains binaries.
+  * d/rules: set safe_browsing_use_unrar=false to disable unrar.
+  * d/patches:
+    - fixes/blink-frags.patch: drop, merged upstream.
+    - fixes/stats-collector.patch: drop, upstream deleted broken code.
+    - fixes/chromium-browser-ui-missing-deps.patch: drop, fixed upstream.
+    - upstream/armhf-ftbfs.patch: drop, merged upstream.
+    - upstream/containers-header.patch: drop, merged upstream.
+    - upstream/crabbyav1f.patch: drop, merged upstream.
+    - upstream/lock-impl.patch: drop, merged upstream.
+    - upstream/paint-layer-header.patch: drop, merged upstream.
+    - disable/unrar.patch: drop, merged upstream w/ build arg.
+    - bookworm/nvt.patch: drop, no longer needed.
+    - fixes/ps-print.patch: refresh.
+    - system/openjpeg.patch: refresh.
+    - bookworm/clang16.patch: refresh & remove another unsupported option.
+    - bookworm/constexpr.patch: refresh & add more fixes.
+    - bookworm/lex-3way.patch: pull in another STL function from clang-17.
+    - bookworm/blink-attrib.patch: add build fix to reorder __attribute__.
+    - fixes/highway-include-path.patch: upstream fixed the original issue
+      in a broken way, making this worse. Add more to this patch to work
+      around that.
+    - bookworm/bubble-contents.patch: refresh.
+    - bookworm/crabbyav1f.patch: refresh.
+    - bookworm/gn-absl.patch: refresh.
+
+  [ Daniel Richard G. ]
+  * d/rules: Parameterize Rust sysroot to simplify using a different one.
+  * d/patches:
+    - bookworm/highway-blink.patch: Avoid armhf/arm64 FTBFS by disabling
+      Blink feature that requires newer libhwy-dev version.
+
+  [ Timothy Pearson ]
+  * d/patches/ppc64le:
+    - third_party/dawn-fix-typos.patch: Refresh for upstream changes
+    - third_party/use-sysconf-page-size-on-ppc64.patch: Refresh for upstream
+      changes
+    - third_party/0002-Add-PPC64-generated-files-for-boringssl.patch:
+      Refresh for upstream changes
+    - workarounds/HACK-debian-clang-disable-base-musttail.patch: Disable
+      musttail on ppc64el platforms
+
+ -- Andres Salomon <dilinger@debian.org>  Thu, 22 Aug 2024 14:06:28 -0400
+
+chromium (127.0.6533.119-1) unstable; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream stable release.
+  * d/patches/upstream/armhf-ftbfs.patch: armhf FTBFS fix from upstream.
+
+  [ Daniel Richard G. ]
+  * d/patches:
+    - ppc64le/crashpad/0002-Include-cstddef-to-fix-build.patch: Drop, as
+      the original FTBFS that this fixed is no longer reproducible.
+  * d/rules: Add to ppc64el CXXFLAGS to quash copious AltiVec warnings.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 14 Aug 2024 13:11:25 -0400
+
+chromium (127.0.6533.99-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream security release.
+    - CVE-2024-7532: Out of bounds memory access in ANGLE.
+      Reported by wgslfuzz.
+    - CVE-2024-7533: Use after free in Sharing. Reported by
+      lime(@limeSec_) from TIANGONG Team of Legendsec at QI-ANXIN Group.
+    - CVE-2024-7550: Type Confusion in V8.
+      Reported by Zhenghang Xiao (@Kipreyyy).
+    - CVE-2024-7534: Heap buffer overflow in Layout.
+      Reported by Tashita Software Security.
+    - CVE-2024-7535: Inappropriate implementation in V8.
+      Reported by Tashita Software Security.
+    - CVE-2024-7536: Use after free in WebAudio.
+      Reported by Cassidy Kim(@cassidy6564).
+
+  [ Timothy Pearson ]
+  * d/patches/ppc64le:
+    - core/add-ppc64-architecture-to-extensions.diff: Fix runtime assertion
+      trap on ppc64el systems
+
+  [ Daniel Richard G. ]
+  * Enable ThinLTO (slower linking, faster runtime) on archs that can
+    support it (closes: #1033305).
+  * Avoid some hard-coded Debian references to simplify package builds for
+    other distributions, e.g. Ubuntu.
+  * d/patches:
+    - bookworm/constexpr.patch: Add no_destroy attributes to quash many
+      "declaration requires an exit-time destructor" warnings.
+    - fixes/highway-include-path.patch: New patch to fix highway.h path.
+
+  [ Grzegorz Szymaszek ]
+  * Use https instead of http in initial_bookmarks.html.
+
+ -- Andres Salomon <dilinger@debian.org>  Wed, 07 Aug 2024 00:18:54 -0400
+
+chromium (127.0.6533.88-1~deb12u1) bookworm-security; urgency=high
+
+  [ Andres Salomon ]
+  * New upstream stable release.
+    - CVE-2024-6988: Use after free in Downloads. Reported by
+      lime(@limeSec_) from TIANGONG Team of Legendsec at QI-ANXIN Group.
+    - CVE-2024-6989: Use after free in Loader. Reported by Anonymous.
+    - CVE-2024-6991: Use after free in Dawn. Reported by wgslfuzz.
+    - CVE-2024-6992: Out of bounds memory access in ANGLE.
+      Reported by Xiantong Hou of Wuheng Lab and Pisanbao.
+    - CVE-2024-6993: Inappropriate implementation in Canvas.
+      Reported by Anonymous.
+    - CVE-2024-6994: Heap buffer overflow in Layout.
+      Reported by Huang Xilin of Ant Group Light-Year Security Lab.
+    - CVE-2024-6995: Inappropriate implementation in Fullscreen.
+      Reported by Alesandro Ortiz.
+    - CVE-2024-6996: Race in Frames.
+      Reported by Louis Jannett (Ruhr University Bochum).
+    - CVE-2024-6997: Use after free in Tabs.
+      Reported by Sven Dysthe (@svn-dys).
+    - CVE-2024-6998: Use after free in User Education.
+      Reported by Sven Dysthe (@svn-dys).
+    - CVE-2024-6999: Inappropriate implementation in FedCM.
+      Reported by Alesandro Ortiz.
+    - CVE-2024-7000: Use after free in CSS. Reported by Anonymous.
+    - CVE-2024-7001: Inappropriate implementation in HTML.
+      Reported by Jake Archibald.
+    - CVE-2024-7003: Inappropriate implementation in FedCM.
+      Reported by Alesandro Ortiz.
+    - CVE-2024-7004: Insufficient validation of untrusted input in Safe
+      Browsing. Reported by Anonymous.
+    - CVE-2024-7005: Insufficient validation of untrusted input in Safe
+      Browsing. Reported by Umar Farooq.
+    - CVE-2024-6990: Uninitialized Use in Dawn. Reported by gelatin dessert.
+    - CVE-2024-7255: Out of bounds read in WebTransport.
+      Reported by Marten Richter.
+    - CVE-2024-7256: Insufficient data validation in Dawn.
+      Reported by gelatin dessert.
+  * Switch from building against (gcc's) libstdc++ to (clang's) libc++.
+    Upstream is playing fast and loose with memory in ways that results
+    in crashes with gcc's stricter libstdc++, but not with clang's libc++
+    (which allows accessing deleting memory apparently). We can't maintain
+    workarounds any more, and upstream really doesn't care (see, for
+    example, https://crbug.com/346174906 , where they add workarounds only
+    for their ASAN memory checker).
+  * d/copyright:
+    - delete new rust, cargo, llvm, and node binaries.
+    - delete third_party/zstd so we can link against system zstd.
+    - stop deleting the bundled woff, snappy, and jsoncpp; those can't be
+      dynamically linked against with clang's libc++.
+  * d/control:
+    - build-dep against libzstd-dev and bindgen.
+    - drop build-dep on libwoff-dev, libsnappy-dev, libjsoncpp-dev, and
+      add build-deps on libc++-16-dev / libc++abi-16-dev.
+  * d/rules:
+    - drop use_goma=false (upstream switched to rbe).
+    - set rust_bindgen_root.
+    - rework get-orig-source to not use mk-origtargz, which is
+    incredibly slow (total run 45 mins for the current 6.2G upstream
+    release). Instead, use d/scripts/get-exludes.pl and tar's
+    --exclude-from to drastically speed things up (total run now takes
+    8 mins).
+    - include bindgen 0.66.1-3 packages from snapshot.debian.org, as
+      bookworm's bindgen 0.60.1 is too old. The packages are
+      unpacked during build.
+  * d/patches:
+    - upstream/tabstrip-include.patch: drop, merged upstream.
+    - upstream/quiche-deque.patch: drop, merged upstream.
+    - upstream/gpu-header.patch: drop, merged upstream.
+    - upstream/blink-header.patch: drop, merged upstream.
+    - upstream/blink-header2.patch: drop, merged upstream.
+    - upstream/blink-header3.patch: drop, merged upstream.
+    - upstream/realtime-reporting.patch: drop, merged upstream.
+    - upstream/urlvisit-header.patch: drop, merged upstream.
+    - upstream/accessibility-format.patch: drop, merged upstream.
+    - upstream/observer.patch: drop, merged upstream.
+    - bookworm/clang16.patch: refresh.
+    - bookworm/rust-downgrade-osstr-users.patch: refresh w/ minor changes.
+    - ungoogled/disable-privacy-sandbox.patch: refresh.
+    - disable/signin.patch: upstream dropped prefs::kAutologinEnabled.
+    - upstream/crabbyav1f.patch: add build fix pulled from upstream.
+    - upstream/lock-impl.patch: add build fix pulled from upstream.
+    - upstream/containers-header.patch: add build fix pulled from upstream.
+    - upstream/paint-layer-header.patch: add build fix pulled from upstream
+    - fixes/bindgen.patch: work around bindgen-related things (hopefully
+      correctly?)
+    - bookworm/lex-3way.patch: add patch to support
+      std::lexicographical_compare_three_way, which was added in clang-17.
+    - bookworm/traitors.patch: another clang-16 hack; backport
+      pointer_traits.h from libc++-18-dev to work around clang
+      std::to_address() issue.
+    - bookworm/constexpr.patch: add more of the usual constexpr
+      workarounds; only needed for clang-16.
+    - bookworm/constcountrycode.patch, bookworm/omnibox-constexpr.patch:
+      remove, now part of bookworm/constexpr.patch.
+    - fixes/absl-optional.patch: drop, only needed for libstdc++-dev.
+    - fixes/bad-font-gc*: drop, only needed for libstdc++-dev.
+    - fixes/chromium-browser-ui-missing-deps.patch: add a bunch of
+      mojo-related dependency build fixes.
+    - bookworm/bubble-contents.patch: refresh.
+    - bookworm/gn-funcs.patch: add workarounds for missing functions in
+      bookworm's older generate-ninja.
+    - bookworm/gn-absl.patch: add workarounds for absl changes that rely
+      on newer gn.
+    - bookworm/crabbyav1f.patch: add experimental feature toggle, needed
+      for older rustc.
+
+  [ Timothy Pearson ]
+  * d/patches:
+    - fixes/fixes/memory-allocator-dcheck-assert-fix.patch: Fix assert on
+      64k page systems such as aarch64 and ppc64el
+  * d/patches/ppc64le:
+    - ffmpeg/0001-Add-support-for-ppc64.patch: Drop, no longer needed
+    - third_party/use-sysconf-page-size-on-ppc64.patch: Refresh for upstream
+      changes
+
+ -- Andres Salomon <dilinger@debian.org>  Tue, 30 Jul 2024 23:50:29 -0400
 
 chromium (126.0.6478.182-1~deb12u1) bookworm-security; urgency=high
 

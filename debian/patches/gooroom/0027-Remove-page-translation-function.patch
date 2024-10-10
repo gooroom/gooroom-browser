@@ -1,0 +1,28 @@
+From bdef97be87ee60eee759e1b1fe7323d4ac44629d Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 24 Jul 2020 13:43:23 +0900
+Subject: [PATCH 27/63] * Remove page-translation function.
+
+---
+ .../renderer_context_menu/render_view_context_menu.cc        | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+index aad2abb0c2..79074a004f 100644
+--- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
++++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
+@@ -1242,11 +1242,6 @@ void RenderViewContextMenu::InitMenu() {
+     // uses a different backend that supports a subset of translation
+     // languages, so the current full page target language may not be
+     // supported.
+-    if (CanPartiallyTranslateTargetLanguage()) {
+-      AppendPartialTranslateItem();
+-    } else {
+-      AppendTranslateItem();
+-    }
+   }
+ #endif  // !BUILDFLAG(IS_CHROMEOS)
+ 
+-- 
+2.39.2
+

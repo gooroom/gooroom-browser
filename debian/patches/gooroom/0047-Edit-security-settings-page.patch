@@ -1,0 +1,45 @@
+From 8df2bcc3c2f282540ea71e2f59a771320536a69a Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 10:18:35 +0900
+Subject: [PATCH 47/63] Edit security settings page
+
+---
+ .../settings/privacy_page/security_page.html      | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/chrome/browser/resources/settings/privacy_page/security_page.html b/chrome/browser/resources/settings/privacy_page/security_page.html
+index 354af4a6a0..b99b818d51 100644
+--- a/chrome/browser/resources/settings/privacy_page/security_page.html
++++ b/chrome/browser/resources/settings/privacy_page/security_page.html
+@@ -296,15 +296,6 @@
+         sub-label="$i18n{securityV8LinkDescription}"
+         role-description="$i18n{subpageArrowRoleDescription}">
+     </cr-link-row>
+-    <template is="dom-if" if="[[enableSecurityKeysSubpage_]]">
+-        <cr-link-row id="security-keys-subpage-trigger" class="hr"
+-            label="$i18n{securityKeysTitle}"
+-            sub-label="$i18n{securityKeysDesc}"
+-            on-click="onSecurityKeysClick_"
+-            role-description="$i18n{subpageArrowRoleDescription}">
+-        </cr-link-row>
+-    </template>
+-
+ <if expr="is_win">
+     <template is="dom-if" if="[[enableSecurityKeysPhonesSubpage_]]">
+         <cr-link-row id="security-keys-phones-subpage-trigger"
+@@ -372,12 +363,6 @@
+       </cr-link-row>
+ </if>
+ 
+-    <cr-link-row id="advanced-protection-program-link" class="hr"
+-        label="$i18n{advancedProtectionProgramTitle}"
+-        sub-label="$i18n{advancedProtectionProgramDesc}"
+-        on-click="onAdvancedProtectionProgramLinkClick_"
+-        external>
+-    </cr-link-row>
+     <template is="dom-if" if="[[showDisableSafebrowsingDialog_]]" restamp>
+       <settings-simple-confirmation-dialog
+           title-text="$i18n{safeBrowsingDisableDialog}"
+-- 
+2.39.2
+
