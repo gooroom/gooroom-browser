@@ -1,6 +1,14 @@
 gooroom-browser (3.6.0-1+grm3u8) stretch; urgency=medium
 
   * Update 3.6.0-1+grm3u8
+    - CVE-2024-6772.patch
+    - CVE-2024-6777.patch
+
+ -- Choi J.S. <junsungc91@gmail.com>  Fri, 11 Oct 2024 10:18:00 +0900
+
+gooroom-browser (3.6.0-1+grm3u8) stretch; urgency=medium
+
+  * Update 3.6.0-1+grm3u8
     - Edit gooroom-browser.desktop
 
  -- Choi J.S. <junsungc91@gmail.com>  Mon, 5 Aug 2024 10:58:00 +0900
