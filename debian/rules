@@ -177,6 +177,7 @@ override_dh_auto_configure: test_armhf_neon set_up_bindgen
 override_dh_auto_build-arch:
 	git apply debian/patches/gooroom/0008-Put-gooroom-logo-into-the-browser.patch
 	git apply debian/patches/gooroom/0062-Change-newtab-gooroom-logo.patch
+	git apply debian/patches/gooroom/0064-Change-gooroom-logo-png-file.patch
 	gn gen out/Release --args="$(defines)"
 	ninja -j$(njobs) -C out/Release gooroom-browser chrome_sandbox chromedriver
 	cp out/Release/chrome_sandbox out/Release/chrome-sandbox
