@@ -1,0 +1,16 @@
+out/Release/*.bin usr/lib/gooroom-browser
+out/Release/libEGL.so usr/lib/gooroom-browser
+out/Release/libGLESv2.so usr/lib/gooroom-browser
+out/Release/*swiftshader*.so usr/lib/gooroom-browser
+out/Release/libvulkan* usr/lib/gooroom-browser
+out/Release/libVk* usr/lib/gooroom-browser
+out/Release/vk_swiftshader_icd.json usr/lib/gooroom-browser
+
+out/Release/chrome_*.pak usr/lib/gooroom-browser
+out/Release/resources.pak usr/lib/gooroom-browser
+out/Release/resources/en-US.pak usr/lib/gooroom-browser/locales
+
+out/Release/chrome_crashpad_handler usr/lib/gooroom-browser
+
+# only if building against bundled ICU
+out/Release/icudtl.dat usr/lib/gooroom-browser

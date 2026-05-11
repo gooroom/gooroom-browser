@@ -1,0 +1,22 @@
+From 9f856ae6f4e171e4826901ac1bbb3a294b5f8128 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 10:16:19 +0900
+Subject: [PATCH 45/63] Change syslog id
+
+---
+ base/syslog_logging.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: gooroom-browser-debian.git/base/syslog_logging.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/base/syslog_logging.cc
++++ gooroom-browser-debian.git/base/syslog_logging.cc
+@@ -152,7 +152,7 @@ EventLogMessage::~EventLogMessage() {
+     ::LocalFree(user_sid);
+   }
+ #elif BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+-  const char kEventSource[] = "chrome";
++  const char kEventSource[] = "gooroom-browser";
+   openlog(kEventSource, LOG_NOWAIT | LOG_PID, LOG_USER);
+   // We can't use the defined names for the logging severity from syslog.h
+   // because they collide with the names of our own severity levels. Therefore

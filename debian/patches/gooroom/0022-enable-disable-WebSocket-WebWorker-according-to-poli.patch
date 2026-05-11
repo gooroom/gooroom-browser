@@ -1,0 +1,340 @@
+From 6e393c8be4313e0fe915899ee9ddc9a401dd677d Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 24 Jul 2020 11:43:14 +0900
+Subject: [PATCH 22/63] enable/disable WebSocket & WebWorker according to
+ policy and settings page
+
+---
+ chrome/app/settings_strings.grdp              | 14 +++++++++
+ .../api/settings_private/prefs_util.cc        |  7 +++++
+ chrome/browser/ui/prefs/pref_watcher.cc       |  5 +++
+ chrome/browser/ui/prefs/prefs_tab_helper.cc   |  7 +++++
+ .../settings_localized_strings_provider.cc    |  2 ++
+ .../browser/ui/webui/settings/settings_ui.cc  |  9 ++++++
+ chrome/common/chrome_paths.cc                 |  2 --
+ chrome/common/pref_names.h                    |  6 ++++
+ gooroom/WebKit/gooroom_enabled_features.cc    |  2 ++
+ gooroom/WebKit/gooroom_enabled_features.h     |  9 ++++++
+ gooroom/browser/gooroom_pref.cc               |  4 +--
+ gooroom/browser/gooroom_pref.h                |  5 +++
+ .../public/platform/web_runtime_features.h    |  2 ++
+ .../renderer/core/workers/dedicated_worker.cc | 31 +++++++++++++++++++
+ .../modules/websockets/dom_websocket.cc       |  5 +--
+ .../platform/exported/web_runtime_features.cc |  9 ++++++
+ 16 files changed, 113 insertions(+), 6 deletions(-)
+
+Index: gooroom-browser-debian.git/chrome/app/settings_strings.grdp
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/app/settings_strings.grdp
++++ gooroom-browser-debian.git/chrome/app/settings_strings.grdp
+@@ -1836,6 +1836,20 @@
+   <message name="IDS_SETTINGS_NETWORK_PREDICTION_ENABLED_DESC" desc="In the advanced options tab, the secondary text next to the checkbox that enables prediction of network actions.">
+     Uses cookies to remember your preferences, even if you don’t visit those pages
+   </message>
++  <!-- by Gooroom TODO:need to use if-clause-->
++  <message name="IDS_OPTIONS_WEBSOCKET_ENABLE" desc="Websocket confirm enable.">
++    Enable Websocket
++  </message>
++  <message name="IDS_OPTIONS_WEBWORKER_ENABLE" desc="Webworker confirm enable">
++    Enable Webworker
++  </message>
++  <message name="IDS_OPTIONS_WEBSOCKET_CONFIRM_MESSAGE" desc="Websocket confirm">
++    Allow Websocket
++  </message>
++  <message name="IDS_OPTIONS_WEBWORKER_CONFIRM_MESSAGE" desc="Webworker confirm">
++    Allow Webworker
++  </message>
++  <!-- end of ... by Gooroom TODO:need to use if-clause-->
+   <message name="IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION" desc="The section title of 'Protects you and your device from dangerous sites'">
+     Safe Browsing (protects you and your device from dangerous sites)
+   </message>
+Index: gooroom-browser-debian.git/chrome/browser/extensions/api/settings_private/prefs_util.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/extensions/api/settings_private/prefs_util.cc
++++ gooroom-browser-debian.git/chrome/browser/extensions/api/settings_private/prefs_util.cc
+@@ -1262,6 +1262,13 @@ const PrefsUtil::TypedPrefMap& PrefsUtil
+       settings_api::PrefType::kBoolean;
+ #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+ 
++#if defined(GOOROOM_BUILD)
++  (*s_allowlist)[::prefs::kGooroomOptionWebsocketConfirm] =
++      settings_api::PrefType::kBoolean;
++  (*s_allowlist)[::prefs::kGooroomOptionWebworkerConfirm] =
++      settings_api::PrefType::kBoolean;
++#endif
++
+   // Media Remoting settings.
+   (*s_allowlist)[media_router::prefs::kMediaRouterMediaRemotingEnabled] =
+       settings_api::PrefType::kBoolean;
+Index: gooroom-browser-debian.git/chrome/browser/ui/prefs/pref_watcher.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/prefs/pref_watcher.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/prefs/pref_watcher.cc
+@@ -87,6 +87,11 @@ const char* const kWebPrefsToObserve[] =
+     prefs::kAccessibilityFocusHighlightEnabled,
+ #endif
+     prefs::kPageColorsBlockList,
++#if defined(GOOROOM_BUILD)
++    prefs::kGooroomOptionWebsocketConfirm,
++    prefs::kGooroomOptionWebworkerConfirm,
++#endif
++
+ };
+ 
+ }  // namespace
+Index: gooroom-browser-debian.git/chrome/browser/ui/prefs/prefs_tab_helper.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/prefs/prefs_tab_helper.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/prefs/prefs_tab_helper.cc
+@@ -468,6 +468,13 @@ void PrefsTabHelper::RegisterProfilePref
+   RegisterLocalizedFontPref(registry, prefs::kWebKitMinimumLogicalFontSize,
+                             IDS_MINIMUM_LOGICAL_FONT_SIZE);
+ #endif
++#if defined(GOOROOM_BUILD)
++  registry->RegisterBooleanPref(prefs::kGooroomOptionWebsocketConfirm,
++                                pref_defaults.websocket_enabled == 1);
++  registry->RegisterBooleanPref(prefs::kGooroomOptionWebworkerConfirm,
++                                pref_defaults.webworker_enabled == 1);
++
++#endif
+ }
+ 
+ // static
+Index: gooroom-browser-debian.git/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/webui/settings/settings_localized_strings_provider.cc
+@@ -2365,6 +2365,8 @@ void AddPrivacyStrings(content::WebUIDat
+        IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION},
+       {"safeBrowsingEnableProtectionDesc",
+        IDS_SETTINGS_SAFEBROWSING_ENABLEPROTECTION_DESC},
++      {"websocketEnable", IDS_OPTIONS_WEBSOCKET_ENABLE},
++      {"webworkerEnable", IDS_OPTIONS_WEBWORKER_ENABLE},
+       {"safeBrowsingSectionLabel", IDS_SETTINGS_SAFEBROWSING_SECTION_LABEL},
+       {"syncAndGoogleServicesPrivacyDescription",
+        IDS_SETTINGS_SYNC_AND_GOOGLE_SERVICES_PRIVACY_DESC_UNIFIED_CONSENT},
+Index: gooroom-browser-debian.git/chrome/browser/ui/webui/settings/settings_ui.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/webui/settings/settings_ui.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/webui/settings/settings_ui.cc
+@@ -4,6 +4,10 @@
+ 
+ #include "chrome/browser/ui/webui/settings/settings_ui.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/browser/gooroom_pref.h"
++#endif
++
+ #include <stddef.h>
+ 
+ #include <memory>
+@@ -499,6 +503,11 @@ SettingsUI::SettingsUI(content::WebUI* w
+   AddLocalizedStrings(html_source, profile, web_ui->GetWebContents());
+   AddSecurityData(html_source);
+ 
++#if defined(GOOROOM_BUILD)
++  html_source->AddBoolean("enableGooroomWebsocketSettings", gooroom::g_gooroom->useWebSocket());
++  html_source->AddBoolean("enableGooroomWebworkerSettings", gooroom::g_gooroom->useWebWorker());
++#endif
++
+   ManagedUIHandler::Initialize(web_ui, html_source);
+ 
+   content::URLDataSource::Add(
+Index: gooroom-browser-debian.git/chrome/common/chrome_paths.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/common/chrome_paths.cc
++++ gooroom-browser-debian.git/chrome/common/chrome_paths.cc
+@@ -415,8 +415,6 @@ bool PathProvider(int key, base::FilePat
+ #endif
+ #if BUILDFLAG(IS_POSIX) && !BUILDFLAG(IS_MAC) && !BUILDFLAG(IS_OPENBSD)
+     case chrome::DIR_POLICY_FILES: {
+-      cur = base::FilePath(policy::kPolicyPath);
+-#elif defined(GOOROOM_BUILD)
+ //change gooroom policies path
+       base::FilePath home_path_dir;
+       base::PathService::Get(base::DIR_HOME, &home_path_dir);
+Index: gooroom-browser-debian.git/chrome/common/pref_names.h
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/common/pref_names.h
++++ gooroom-browser-debian.git/chrome/common/pref_names.h
+@@ -3508,6 +3508,12 @@ inline constexpr char kIsolateOrigins[]
+ // Boolean that specifies opting into --site-per-process (full Site Isolation).
+ inline constexpr char kSitePerProcess[] = "site_isolation.site_per_process";
+ 
++#if defined(GOOROOM_BUILD)
++inline constexpr char kGooroomOptionWebsocketConfirm[] = "gooroom_option.websocket_confirm";
++inline constexpr char kGooroomOptionWebworkerConfirm[] = "gooroom_option.webworker_confirm";
++#endif
++
++
+ #if !BUILDFLAG(IS_ANDROID)
+ // Boolean to allow SharedArrayBuffer in non-crossOriginIsolated contexts.
+ // TODO(crbug.com/40155376) Remove when migration to COOP+COEP is complete.
+Index: gooroom-browser-debian.git/gooroom/WebKit/gooroom_enabled_features.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/WebKit/gooroom_enabled_features.cc
++++ gooroom-browser-debian.git/gooroom/WebKit/gooroom_enabled_features.cc
+@@ -4,5 +4,7 @@ namespace blink {
+ 
+ bool GooroomEnabledFeatures::isWebSocketEnabled = true;
+ bool GooroomEnabledFeatures::isWebWorkerEnabled = true;
++bool GooroomEnabledFeatures::isWebSocketConfirmEnabled = true;
++bool GooroomEnabledFeatures::isWebWorkerConfirmEnabled = true;
+ 
+ } // end of content namespace
+Index: gooroom-browser-debian.git/gooroom/WebKit/gooroom_enabled_features.h
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/WebKit/gooroom_enabled_features.h
++++ gooroom-browser-debian.git/gooroom/WebKit/gooroom_enabled_features.h
+@@ -15,9 +15,18 @@ class PLATFORM_EXPORT GooroomEnabledFeat
+   static void SetWebWorkerEnabled(bool isEnabled) { isWebWorkerEnabled = isEnabled; }
+   static bool WebWorkerEnabled() { return isWebWorkerEnabled; }
+ 
++  static void SetWebSocketConfirmEnabled(bool isEnabled) { isWebSocketConfirmEnabled = isEnabled; }
++  static bool WebSocketConfirmEnabled() { return isWebSocketConfirmEnabled; }
++
++  static void SetWebWorkerConfirmEnabled(bool isEnabled) { isWebWorkerConfirmEnabled = isEnabled; }
++  static bool WebWorkerConfirmEnabled() { return isWebWorkerConfirmEnabled; }
++
+  private:
+   static bool isWebSocketEnabled;
+   static bool isWebWorkerEnabled;
++  static bool isWebSocketConfirmEnabled;
++  static bool isWebWorkerConfirmEnabled;
++
+ };
+ 
+ } // end of blink namespace
+Index: gooroom-browser-debian.git/gooroom/browser/gooroom_pref.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/browser/gooroom_pref.cc
++++ gooroom-browser-debian.git/gooroom/browser/gooroom_pref.cc
+@@ -162,7 +162,7 @@ bool GooroomPref::useWebSocket() {
+ 
+   const PrefService::Preference* p =
+       pref_->FindPreference(gooroom::kPolicyGooroomWebSocket);
+-  absl::optional<bool> val = true;
++  std::optional<bool> val = true;
+   if (p != nullptr)
+     val = p->GetValue()->GetIfBool();
+ 
+@@ -191,7 +191,7 @@ bool GooroomPref::useWebWorker() {
+ 
+   const PrefService::Preference* p =
+       pref_->FindPreference(gooroom::kPolicyGooroomWebWorker);
+-  absl::optional<bool> val = true;
++  std::optional<bool> val = true;
+   if (p != nullptr)
+     val = p->GetValue()->GetIfBool();
+ 
+Index: gooroom-browser-debian.git/gooroom/browser/gooroom_pref.h
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/browser/gooroom_pref.h
++++ gooroom-browser-debian.git/gooroom/browser/gooroom_pref.h
+@@ -19,6 +19,11 @@ const char kPolicyGooroomWebSocket[] = "
+ /** webworker confirm policy */
+ const char kPolicyGooroomWebWorker[] = "gooroom.policy.webworker";
+ 
++/** websocket confirm enable/disable */
++const char kGooroomWebSocketConfirm[] = "gooroom.websocket.confirm";
++/** webwork confirm enable/disable */
++const char kGooroomWebWorkerConfirm[] = "gooroom.webworker.confirm";
++
+ class GooroomPref {
+  public:
+   GooroomPref();
+Index: gooroom-browser-debian.git/third_party/blink/public/platform/web_runtime_features.h
+===================================================================
+--- gooroom-browser-debian.git.orig/third_party/blink/public/platform/web_runtime_features.h
++++ gooroom-browser-debian.git/third_party/blink/public/platform/web_runtime_features.h
+@@ -46,6 +46,8 @@ class BLINK_PLATFORM_EXPORT WebRuntimeFe
+ #if defined(GOOROOM_BUILD)
+   BLINK_PLATFORM_EXPORT static void EnableWebSocket(bool);
+   BLINK_PLATFORM_EXPORT static void EnableWebWorker(bool);
++  BLINK_PLATFORM_EXPORT static void EnableWebSocketConfirm(bool);
++  BLINK_PLATFORM_EXPORT static void EnableWebWorkerConfirm(bool);
+ #endif
+ 
+   // Enable or disable features with status=experimental listed in
+Index: gooroom-browser-debian.git/third_party/blink/renderer/core/workers/dedicated_worker.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/third_party/blink/renderer/core/workers/dedicated_worker.cc
++++ gooroom-browser-debian.git/third_party/blink/renderer/core/workers/dedicated_worker.cc
+@@ -4,6 +4,19 @@
+ 
+ #include "third_party/blink/renderer/core/workers/dedicated_worker.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "base/syslog_logging.h"
++#include "chrome/grit/generated_resources.h"
++#include "third_party/blink/renderer/core/page/chrome_client.h"
++#include "third_party/blink/renderer/core/page/page.h"
++#include "third_party/blink/renderer/core/frame/local_dom_window.h"
++#include "ui/base/l10n/l10n_util.h"
++#include "url/gurl.h"
++
++#include "gooroom/WebKit/gooroom_enabled_features.h"
++#include "gooroom/base/gooroom_base.h"
++#endif
++
+ #include <optional>
+ #include <utility>
+ 
+@@ -72,6 +85,24 @@ DedicatedWorker* DedicatedWorker::Create
+     const WorkerOptions* options,
+     ExceptionState& exception_state) {
+   DCHECK(context->IsContextThread());
++
++#if defined(GOOROOM_BUILD)
++  if (!GooroomEnabledFeatures::WebWorkerEnabled() || !GooroomEnabledFeatures::WebWorkerConfirmEnabled()) {
++    SYSLOG(INFO) << "Using WebSocket is not permitted";
++    exception_state.ThrowDOMException(DOMExceptionCode::kInvalidAccessError,
++                                      "Using WebSocket is not permitted");
++
++//    LocalFrame* frm = context->ExecutingWindow()->GetFrame();
++    LocalFrame* frm = DynamicTo<LocalDOMWindow>(context)->GetFrame();
++
++    Page* page = frm->GetPage();
++    // FIXME : care character encoding
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, String::FromUTF8("梨 몃 곌껐 媛 李⑤⑤듬 뱀而ㅼ 명댁＜몄."));
++
++    return nullptr;
++  }
++#endif
++
+   UseCounter::Count(context, WebFeature::kWorkerStart);
+   if (context->IsContextDestroyed()) {
+     exception_state.ThrowDOMException(DOMExceptionCode::kInvalidAccessError,
+Index: gooroom-browser-debian.git/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/third_party/blink/renderer/modules/websockets/dom_websocket.cc
++++ gooroom-browser-debian.git/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+@@ -276,7 +276,7 @@ void DOMWebSocket::Connect(const String&
+   // url has scheme "wss://" (e.g., wss://echo.websocket.org?encoding=text)
+   // printf("Requested WebSocket : %s \n", gurl_.spec().data());
+ 
+-  if (!GooroomEnabledFeatures::WebSocketEnabled()) {
++  if (!GooroomEnabledFeatures::WebSocketEnabled() || !GooroomEnabledFeatures::WebSocketConfirmEnabled()) {
+     SYSLOG(INFO) << "Using WebSocket is not permitted";
+     exception_state.ThrowDOMException(DOMExceptionCode::kInvalidAccessError,
+                                       "Using WebSocket is not permitted");
+Index: gooroom-browser-debian.git/third_party/blink/renderer/platform/exported/web_runtime_features.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/third_party/blink/renderer/platform/exported/web_runtime_features.cc
++++ gooroom-browser-debian.git/third_party/blink/renderer/platform/exported/web_runtime_features.cc
+@@ -81,6 +81,15 @@ void WebRuntimeFeatures::EnableLocalNetw
+ void WebRuntimeFeatures::EnableWebSocket(bool enable) {
+   GooroomEnabledFeatures::SetWebSocketEnabled(enable);
+ }
++void WebRuntimeFeatures::EnableWebWorker(bool enable) {
++  GooroomEnabledFeatures::SetWebWorkerEnabled(enable);
++}
++void WebRuntimeFeatures::EnableWebSocketConfirm(bool enable) {
++  GooroomEnabledFeatures::SetWebSocketConfirmEnabled(enable);
++}
++void WebRuntimeFeatures::EnableWebWorkerConfirm(bool enable) {
++  GooroomEnabledFeatures::SetWebWorkerConfirmEnabled(enable);
++}
+ #endif
+ 
+ }  // namespace blink

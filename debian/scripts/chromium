@@ -1,0 +1,159 @@
+#!/bin/sh
+
+# Chromium launcher
+
+# Authors:
+#  Fabien Tassin <fta@sofaraway.org>
+# License: GPLv2 or later
+
+APPNAME=chromium
+
+GDB=/usr/bin/gdb
+LIBDIR=/usr/lib/$APPNAME
+CHROMIUM_FLAGS=""
+
+usage () {
+  echo "$APPNAME [-h|--help] [-g|--debug] [--temp-profile] [options] [URL]"
+  echo
+  echo "        -g or --debug              Start within $GDB"
+  echo "        -h or --help               This help screen"
+  echo "        --temp-profile             Start with a new and temporary profile"
+  echo "        --enable-remote-extensions Allow extensions from remote sites"
+  echo
+  echo " Other supported options are:"
+  MANWIDTH=80 man chromium | sed -e '1,/OPTIONS/d; /ENVIRONMENT/,$d'
+  echo " See 'man chromium' for more details"
+}
+
+display_msg() {
+  if [ -z "$DISPLAY" ]; then
+    echo "$@" 1>&2
+  else
+    xmessage "$@"
+  fi
+}
+
+nosse3="\
+The hardware on this system lacks support for the sse3 instruction set.
+The upstream chromium project no longer supports this configuration.
+For more information, please read and possibly provide input to their
+bug tracking system at http://crbug.com/1123353"
+
+noneon="\
+The hardware on this system lacks support for NEON SIMD extensions.
+We now require NEON or equivalent architecture extensions on ARM-based
+machines. See https://lists.debian.org/debian-devel/2023/09/msg00175.html
+for more information."
+
+case `uname -m` in
+    i386|i586|i686|x86_64)
+        # Check whether this system supports SSE3 (aka PNI)
+        if ! grep -q 'sse3\|pni' /proc/cpuinfo; then
+            display_msg "$nosse3"
+            exit 1
+        fi
+        ;;
+    armv7l)
+        # Check whether this system supports NEON or ASIMD. Even though there
+        # could be ARMv8 systems without ASIMD, we're far more likely to hit
+        # v8 hardware emulating v7 systems with buggy VMs; so don't even
+        # bother checking armv8l for now. If we do check in the future, they
+        # advertise 'asimd' instead of 'neon'.
+        if ! grep -q 'neon\|asimd' /proc/cpuinfo; then
+            display_msg "$noneon"
+            exit 1
+        fi
+        ;;
+esac
+
+# Clean up old crash reports (see https://bugs.debian.org/1015931)
+# after 30 days.
+test -d "$HOME/.config/chromium/Crash Reports/pending/" && \
+  find "$HOME/.config/chromium/Crash Reports/pending/" -mtime +30 \
+  \( -name "*.meta" -o -name "*.dmp" \) -exec rm \{\} \;
+
+# Source additional settings
+for file in /etc/chromium.d/*; do
+  test $file = /etc/chromium.d/README || expr $file : .*\.dpkg > /dev/null || . $file
+done
+
+# Use the /usr/bin helper script for generated launchers
+if test -z "$CHROME_WRAPPER"; then
+    export CHROME_WRAPPER="/usr/bin/$APPNAME"
+fi
+
+# Set the correct file name for the desktop file
+export CHROME_DESKTOP="chromium.desktop"
+
+# Set CHROME_VERSION_EXTRA text, which is displayed in the About dialog
+export CHROME_VERSION_EXTRA="built on @BUILD_DIST@"
+
+want_debug=0
+want_temp_profile=0
+extra_args=0
+while [ $# -gt 0 -a $# -ne $extra_args ]; do
+  case "$1" in
+    -h | --help | -help )
+      usage
+      exit 0 ;;
+    -g | --debug )
+      want_debug=1
+      shift ;;
+    --temp-profile )
+      want_temp_profile=1
+      shift ;;
+    --enable-remote-extensions )
+      CHROMIUM_FLAGS="$CHROMIUM_FLAGS --enable-remote-extensions"
+      shift ;;
+    -- ) # Stop option processing
+      shift
+      break ;;
+    --* ) # Preserve (unknown to us) chromium flags at the end of the stack
+      set -- "$@" "$1"
+      extra_args=$((extra_args+1))
+      shift ;;
+    * )
+      break ;;
+  esac
+done
+
+# Whitelist installed extensions that are specified via --load-extension
+if [ -z "$(echo $CHROMIUM_FLAGS | grep \\-\\-enable-remote-extensions)" ]; then
+  export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disable-background-networking"
+  export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disable-extensions-except=$(echo $CHROMIUM_FLAGS | tr ' ' \\n | grep \\-\\-load-extension | cut -d= -f2 | tr \\n ,)"
+fi
+
+if [ $want_temp_profile -eq 1 ] ; then
+  TEMP_PROFILE=`mktemp -d`
+  echo "Using temporary profile: $TEMP_PROFILE"
+  CHROMIUM_FLAGS="$CHROMIUM_FLAGS --user-data-dir=$TEMP_PROFILE"
+fi
+
+if [ $want_debug -eq 1 ] ; then
+  if [ ! -x $GDB ] ; then
+    echo "Sorry, can't find usable $GDB. Please install it."
+    exit 1
+  fi
+  tmpfile=`mktemp /tmp/chromiumargs.XXXXXX` || { echo "Cannot create temporary file" >&2; exit 1; }
+  trap " [ -f \"$tmpfile\" ] && /bin/rm -f -- \"$tmpfile\"" 0 1 2 3 13 15
+  echo "set args $CHROMIUM_FLAGS --single-process ${1+"$@"}" > $tmpfile
+  echo "# Env:"
+  echo "#     LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+  echo "#                PATH=$PATH"
+  echo "#            GTK_PATH=$GTK_PATH"
+  echo "#      CHROMIUM_FLAGS=$CHROMIUM_FLAGS"
+  echo "$GDB $LIBDIR/$APPNAME -x $tmpfile"
+  $GDB "$LIBDIR/$APPNAME" -x $tmpfile
+  if [ $want_temp_profile -eq 1 ] ; then
+    rm -rf $TEMP_PROFILE
+  fi
+  exit $?
+else
+  if [ $want_temp_profile -eq 0 ] ; then
+    exec $LIBDIR/$APPNAME $CHROMIUM_FLAGS "$@"
+  else
+    # we can't exec here as we need to clean-up the temporary profile
+    $LIBDIR/$APPNAME $CHROMIUM_FLAGS "$@"
+    rm -rf $TEMP_PROFILE
+  fi
+fi

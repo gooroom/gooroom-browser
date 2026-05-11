@@ -1,0 +1,100 @@
+From ff3fadc1d6557bac309fc177d152c51bb932de0c Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 15:03:53 +0900
+Subject: [PATCH 11/63] Add 'GooroomURLRewrite::ChangeGooroomScheme' static
+ function
+
+---
+ chrome/browser/chrome_content_browser_client.cc        | 12 ++++++++++++
+ .../ui/toolbar/chrome_location_bar_model_delegate.cc   |  9 +++++++++
+ gooroom/URLRewrite/gooroom_url_rewrite.cc              | 10 ++++++++++
+ gooroom/URLRewrite/gooroom_url_rewrite.h               |  2 ++
+ 4 files changed, 33 insertions(+)
+
+Index: gooroom-browser-debian.git/chrome/browser/chrome_content_browser_client.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/chrome_content_browser_client.cc
++++ gooroom-browser-debian.git/chrome/browser/chrome_content_browser_client.cc
+@@ -4,6 +4,10 @@
+ 
+ #include "chrome/browser/chrome_content_browser_client.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++#endif
++
+ #include <algorithm>
+ #include <iterator>
+ #include <map>
+@@ -1464,6 +1468,10 @@ ChromeContentBrowserClient::ChromeConten
+ 
+   extra_parts_.push_back(
+       std::make_unique<ChromeContentBrowserClientPerformanceManagerPart>());
++#if defined(GOOROOM_BUILD)
++  extra_parts_.push_back(
++      std::make_unique<GooroomURLRewrite>());
++#endif
+ }
+ 
+ ChromeContentBrowserClient::~ChromeContentBrowserClient() {
+Index: gooroom-browser-debian.git/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
+@@ -4,6 +4,10 @@
+ 
+ #include "chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++#endif
++
+ #include "base/check.h"
+ #include "base/feature_list.h"
+ #include "base/metrics/histogram_macros.h"
+@@ -76,6 +80,11 @@ bool ChromeLocationBarModelDelegate::Get
+   }
+ 
+   *url = entry->GetVirtualURL();
++#if defined(GOOROOM_BUILD)
++  // Change "chrome://" to "gooroom://"
++  *url = GooroomURLRewrite::ChangeGooroomScheme(*url);
++#endif
++
+   return true;
+ }
+ 
+Index: gooroom-browser-debian.git/gooroom/URLRewrite/gooroom_url_rewrite.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/URLRewrite/gooroom_url_rewrite.cc
++++ gooroom-browser-debian.git/gooroom/URLRewrite/gooroom_url_rewrite.cc
+@@ -8,6 +8,16 @@
+ #include "content/public/common/url_constants.h"
+ #include "ui/base/l10n/l10n_util.h"
+ 
++GURL GooroomURLRewrite::ChangeGooroomScheme(GURL url){
++  // Change "chrome://" to "gooroom://"
++  if(url.scheme() == "chrome"){
++    std::string new_url = "gooroom://" + url.GetContent();
++    GURL changed_url = GURL(new_url);
++    return changed_url;
++  }
++  return url;
++}
++
+ bool HandleGooroomURLRewrite(GURL* url,
+                              content::BrowserContext* browser_context) {
+   // change "gooroom://*" to "chrome://*"
+Index: gooroom-browser-debian.git/gooroom/URLRewrite/gooroom_url_rewrite.h
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/URLRewrite/gooroom_url_rewrite.h
++++ gooroom-browser-debian.git/gooroom/URLRewrite/gooroom_url_rewrite.h
+@@ -34,6 +34,8 @@ class GooroomURLRewrite : public ChromeC
+  public:
+   ~GooroomURLRewrite() override {}
+ 
++  static GURL ChangeGooroomScheme(GURL url);
++
+   void BrowserURLHandlerCreated(content::BrowserURLHandler* handler) override;
+   // ChromeContentBrowserClientParts:
+   void OverrideWebPreferences(content::WebContents* web_contents,

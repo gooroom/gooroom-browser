@@ -1,0 +1,187 @@
+From 05e6d811a096f7c8b9364266b3d4eb9e71b98cf1 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 24 Feb 2021 18:11:50 +0900
+Subject: [PATCH 44/63] Appoint newtab shortcut
+
+---
+ chrome/browser/history/top_sites_factory.cc   | 48 ++++++++++++
+ chrome/browser/history/top_sites_factory.h    |  5 ++
+ chrome/browser/ui/webui/favicon_source.cc     | 76 +++++++++++++++++--
+ .../history/core/browser/top_sites_impl.cc    |  6 ++
+ 4 files changed, 129 insertions(+), 6 deletions(-)
+
+Index: gooroom-browser-debian.git/chrome/browser/history/top_sites_factory.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/history/top_sites_factory.cc
++++ gooroom-browser-debian.git/chrome/browser/history/top_sites_factory.cc
+@@ -8,6 +8,9 @@
+ 
+ #include <array>
+ #include <memory>
++#include "base/json/json_reader.h"
++#include "base/files/file_util.h"
++#include "base/strings/utf_string_conversions.h"
+ 
+ #include "base/command_line.h"
+ #include "base/feature_list.h"
+@@ -122,6 +125,8 @@ scoped_refptr<history::TopSites> TopSite
+   return top_sites;
+ }
+ 
++bool TopSitesFactory::existDir = false;
++
+ TopSitesFactory::TopSitesFactory()
+     : RefcountedProfileKeyedServiceFactory(
+           "TopSites",
+@@ -139,13 +144,56 @@ TopSitesFactory::TopSitesFactory()
+   // This dependency is only used when the experimental
+   // kTopSitesFromSiteEngagement feature is active.
+   DependsOn(site_engagement::SiteEngagementServiceFactory::GetInstance());
++#if defined(GOOROOM_BUILD)
++  base::FilePath path("/usr/share/gooroom/browser/policies/shortcut/shortcut.json");
++  TopSitesFactory::existDir = base::PathExists(path);
++#endif
+ }
+ 
+ TopSitesFactory::~TopSitesFactory() = default;
+ 
++
++#if defined(GOOROOM_BUILD)
++//static
++bool TopSitesFactory::IsGooroomShortCut() {
++  return existDir;
++}
++#endif
++
+ scoped_refptr<RefcountedKeyedService> TopSitesFactory::BuildServiceInstanceFor(
+     content::BrowserContext* context) const {
+   history::PrepopulatedPageList prepopulated_pages;
++
++#if defined(GOOROOM_BUILD)
++  base::FilePath path("/usr/share/gooroom/browser/policies/shortcut/shortcut.json");
++  std::string input;
++  ReadFileToString(path, &input);
++  absl::optional<base::Value> root = base::JSONReader::Read(input, base::JSON_PARSE_RFC);
++
++  base::Value* url=nullptr;
++  base::Value* name=nullptr;
++
++  if (root) {
++//    url = root->FindList();
++//     name = root->FindList();
++  }
++  if (url && name) // exist URL KEY
++  {
++    for (int i=0; i < (int) url->GetList().size(); i++) {
++      printf("url : %s\n", GURL(url->GetList()[i].GetString()).spec().c_str());
++      std::string none = "";
++      prepopulated_pages.push_back(history::PrepopulatedPage(
++          GURL(url->GetList()[i].GetString()),
++          i < (int) name->GetList().size() ?
++          base::UTF8ToUTF16(name->GetList()[i].GetString()) : base::UTF8ToUTF16(none),
++          -1, 0));
++       }
++  }
++
++  if (base::PathExists(path))
++    return BuildTopSites(context, prepopulated_pages);
++#endif
++
+   InitializePrepopulatedPageList(Profile::FromBrowserContext(context),
+                                  &prepopulated_pages);
+   return BuildTopSites(context, prepopulated_pages);
+Index: gooroom-browser-debian.git/chrome/browser/history/top_sites_factory.h
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/history/top_sites_factory.h
++++ gooroom-browser-debian.git/chrome/browser/history/top_sites_factory.h
+@@ -39,10 +39,15 @@ class TopSitesFactory : public Refcounte
+       content::BrowserContext* context,
+       const std::vector<history::PrepopulatedPage>& prepopulated_page_list);
+ 
++#if defined(GOOROOM_BUILD)
++  static bool IsGooroomShortCut();
++#endif
++
+   TopSitesFactory(const TopSitesFactory&) = delete;
+   TopSitesFactory& operator=(const TopSitesFactory&) = delete;
+ 
+  private:
++  static bool existDir;
+   friend base::NoDestructor<TopSitesFactory>;
+ 
+   TopSitesFactory();
+Index: gooroom-browser-debian.git/chrome/browser/ui/webui/favicon_source.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/webui/favicon_source.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/webui/favicon_source.cc
+@@ -3,6 +3,11 @@
+ // found in the LICENSE file.
+ 
+ #include "chrome/browser/ui/webui/favicon_source.h"
++#include "base/json/json_reader.h"
++#include "third_party/skia/include/core/SkBitmap.h"
++#include "third_party/skia/tools/Resources.h"
++#include "base/files/file_util.h"
++#include "ui/gfx/codec/png_codec.h"
+ 
+ #include <cmath>
+ 
+@@ -103,6 +108,34 @@ std::string FaviconSource::GetSource() {
+   NOTREACHED();
+ }
+ 
++bool ReadPNGFile(const base::FilePath& file_path, SkBitmap* bitmap) {
++  DCHECK(bitmap);
++  std::string png_data;
++  if (!base::ReadFileToString(file_path, &png_data))
++    return false;
++  *bitmap = gfx::PNGCodec::Decode(base::as_byte_span(png_data));
++  return !bitmap->isNull();
++}
++
++int GetFaviconOrder(GURL page_url, base::FilePath shortcut_dir) {
++  base::FilePath shortcut_json = shortcut_dir.AppendASCII("shortcut.json");
++  std::string input;
++  ReadFileToString(shortcut_json, &input);
++  absl::optional<base::Value> root = base::JSONReader::Read(input, base::JSON_PARSE_RFC);
++  base::Value* url=nullptr;
++
++  if (root) {
++//    url = root.Find("URL");
++  }
++  if (url) {
++    for (int i = 0; i < (int)url->GetList().size(); i++) {
++      if(page_url.spec().find(url->GetList()[i].GetString()) != std::string::npos)
++        return i+1;
++    }
++  }
++  return 0;
++}
++
+ void FaviconSource::StartDataRequest(
+     const GURL& url,
+     const content::WebContents::Getter& wc_getter,
+Index: gooroom-browser-debian.git/components/history/core/browser/top_sites_impl.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/components/history/core/browser/top_sites_impl.cc
++++ gooroom-browser-debian.git/components/history/core/browser/top_sites_impl.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "components/history/core/browser/top_sites_impl.h"
++#include "chrome/browser/history/top_sites_factory.h"
+ 
+ #include <stdint.h>
+ 
+@@ -280,6 +281,11 @@ void TopSitesImpl::RegisterPrefs(PrefReg
+ TopSitesImpl::~TopSitesImpl() = default;
+ 
+ void TopSitesImpl::StartQueryForMostVisited() {
++#if defined(GOOROOM_BUILD)
++  if (TopSitesFactory::IsGooroomShortCut())
++    return;
++#endif
++
+   DCHECK(loaded_);
+   timer_.Stop();
+ 

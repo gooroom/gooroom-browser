@@ -1,0 +1,163 @@
+From 19ca2cd4fafff8113aa19217437da90cc897e80d Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 14:09:39 +0900
+Subject: [PATCH 36/63] Fix fatal error on gooroompref
+
+---
+ .../browser/web_contents/web_contents_impl.cc |  3 +
+ gooroom/browser/gooroom_pref.cc               | 58 ++++++++-----------
+ gooroom/browser/gooroom_pref.h                |  2 +
+ 3 files changed, 28 insertions(+), 35 deletions(-)
+
+Index: gooroom-browser-debian.git/content/browser/web_contents/web_contents_impl.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/content/browser/web_contents/web_contents_impl.cc
++++ gooroom-browser-debian.git/content/browser/web_contents/web_contents_impl.cc
+@@ -7,6 +7,7 @@
+ #if defined(GOOROOM_BUILD)
+ #include "base/path_service.h"
+ #include "gooroom/base/gooroom_base.h"
++#include "gooroom/browser/gooroom_pref.h"
+ #include "chrome/common/chrome_switches.h"
+ #endif
+ 
+@@ -7384,6 +7385,8 @@ const char kUserDataDir[] = "user-data-d
+ // It is a function that determines whether it is trusted mode or untrusted mode.
+ // and exec if necessary (browser switching).
+ bool RequestCurrentUserDataDir(GURL url) {
++  //set whitelist mainpref.json again
++  gooroom::g_gooroom->setMainpref();
+   base::GooroomUrlFilter* pFilter = base::GetGooroomBase()->getUrlFilter();
+ 
+   if (!pFilter) return false;
+Index: gooroom-browser-debian.git/gooroom/browser/gooroom_pref.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/browser/gooroom_pref.cc
++++ gooroom-browser-debian.git/gooroom/browser/gooroom_pref.cc
+@@ -21,6 +21,7 @@
+ #include "components/prefs/pref_service.h"
+ #include "components/prefs/pref_service_factory.h"
+ 
++
+ namespace gooroom {
+ 
+ GooroomPref* g_gooroom = NULL;
+@@ -29,6 +30,8 @@ GooroomPref::GooroomPref() {}
+ 
+ GooroomPref::~GooroomPref() {}
+ 
++std::unique_ptr<PrefService> pref_;
++
+ /*
+ PrefService* GooroomPref::pref() {
+   if (pref_ == nullptr)
+@@ -37,9 +40,8 @@ PrefService* GooroomPref::pref() {
+ }
+ */
+ 
+-void GooroomPref::setup() {
+-  DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
+-
++//Separate from setup() to apply the mainpref.json dynamically
++GooroomUrlFilterImpl* GooroomPref::setMainpref() {
+   // read CORE policy file from ... ==================================
+   // TODO use constant value
+   base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
+@@ -51,9 +53,17 @@ void GooroomPref::setup() {
+ 
+   PrefServiceFactory prefServiceFactory;
+ 
+-  prefServiceFactory.SetUserPrefsFile(
+-      path, base::SingleThreadTaskRunner::GetCurrentDefault().get());
+-  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
++  scoped_refptr<base::SequencedTaskRunner> refTaskRunner =
++      base::ThreadPool::CreateSequencedTaskRunner({});
++
++  scoped_refptr<JsonPrefStore> json_pref_store(new JsonPrefStore(
++        path, nullptr,
++        base::ThreadPool::CreateSequencedTaskRunner({})));
++  prefServiceFactory.set_user_prefs(json_pref_store);
++
++  if(!pref_) {
++    pref_ = prefServiceFactory.Create(registry);
++  }
+ 
+   // check a whilte list and make url filter from the list ===========
+   const PrefService::Preference* p =
+@@ -62,6 +72,13 @@ void GooroomPref::setup() {
+   if (p != nullptr)
+     pfilterImpl->setWhiteList(p->GetValue());
+   base::GetGooroomBase()->setUrlFilter(pfilterImpl);
++  return pfilterImpl;
++}
++
++void GooroomPref::setup() {
++  DLOG(INFO) << "GooroomPref::setup() : init gooroom state";
++
++  GooroomUrlFilterImpl* pfilterImpl = setMainpref();
+ 
+   // if there is a url in command line, check the url is trust to determine the
+   // mode whether trust or not.
+@@ -145,21 +162,6 @@ bool GooroomPref::useWebSocket() {
+     return true;
+   }
+   
+-  // read CORE policy file from ... ==================================
+-  // TODO use constant value
+-  base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
+-
+-  PrefRegistrySimple* registry = new PrefRegistrySimple;
+-  registry->RegisterBooleanPref(kPolicyGooroomWebSocket, false);
+-  registry->RegisterBooleanPref(kPolicyGooroomWebWorker, false);
+-  registry->RegisterListPref(kPolicyGooroomWhiteList);
+-
+-  PrefServiceFactory prefServiceFactory;
+-
+-  prefServiceFactory.SetUserPrefsFile(
+-      path, base::SingleThreadTaskRunner::GetCurrentDefault().get());
+-  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
+-
+   const PrefService::Preference* p =
+       pref_->FindPreference(gooroom::kPolicyGooroomWebSocket);
+   std::optional<bool> val = true;
+@@ -174,20 +176,6 @@ bool GooroomPref::useWebWorker() {
+   if(base::GetGooroomBase()->isTrustMode()) {
+     return true;
+   }
+-  // read CORE policy file from ... ==================================
+-  // TODO use constant value
+-  base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
+-
+-  PrefRegistrySimple* registry = new PrefRegistrySimple;
+-  registry->RegisterBooleanPref(kPolicyGooroomWebSocket, false);
+-  registry->RegisterBooleanPref(kPolicyGooroomWebWorker, false);
+-  registry->RegisterListPref(kPolicyGooroomWhiteList);
+-
+-  PrefServiceFactory prefServiceFactory;
+-
+-  prefServiceFactory.SetUserPrefsFile(
+-      path, base::SingleThreadTaskRunner::GetCurrentDefault().get());
+-  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
+ 
+   const PrefService::Preference* p =
+       pref_->FindPreference(gooroom::kPolicyGooroomWebWorker);
+Index: gooroom-browser-debian.git/gooroom/browser/gooroom_pref.h
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/browser/gooroom_pref.h
++++ gooroom-browser-debian.git/gooroom/browser/gooroom_pref.h
+@@ -9,6 +9,7 @@
+ #define GOOROOM_BROWSER_GOOROOM_PREF_H_
+ 
+ #include "components/prefs/pref_service.h"
++#include "gooroom/browser/gooroom_url_filter_impl.h"
+ 
+ namespace gooroom {
+ 
+@@ -30,6 +31,7 @@ class GooroomPref {
+   ~GooroomPref();
+ 
+ //  PrefService* pref();
++  GooroomUrlFilterImpl* setMainpref();
+   void setup();
+ 
+   bool useWebSocket();

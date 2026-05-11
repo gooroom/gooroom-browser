@@ -1,0 +1,22 @@
+From e5c15fd957de1016149f6d104c8fea74d23dfc58 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 15:41:14 +0900
+Subject: [PATCH 40/63] Hide part of setting incognito mode
+
+---
+ chrome/browser/resources/extensions/detail_view.html.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: gooroom-browser/chrome/browser/resources/extensions/detail_view.html.ts
+===================================================================
+--- chromium-143.0.7499.169.orig/chrome/browser/resources/extensions/detail_view.html.ts
++++ gooroom-browser/chrome/browser/resources/extensions/detail_view.html.ts
+@@ -359,7 +359,7 @@ this text can be found by Ctrl + F becau
+           <extensions-toggle-row id="allow-incognito"
+               ?checked="${this.data.incognitoAccess.isActive}" class="hr"
+               @change="${this.onAllowIncognitoChange_}">
+-            <div>
++            <div hidden>
+               <div>$i18n{itemAllowIncognito}</div>
+               <div class="section-content">$i18n{incognitoInfoWarning}</div>
+               <div class="section-content" id="allow-incognito-warning"
