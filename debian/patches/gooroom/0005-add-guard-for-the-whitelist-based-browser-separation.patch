@@ -1,0 +1,21 @@
+From c5298302942f0b5e203d109fcf7adfdc29de44fc Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 22 Jul 2020 14:14:47 +0900
+Subject: [PATCH 05/63] add guard for the whitelist based browser separation
+
+---
+ build/config/chrome_build.gni | 1 +
+ 1 file changed, 1 insertion(+)
+
+Index: gooroom-browser-debian.git/build/config/chrome_build.gni
+===================================================================
+--- gooroom-browser-debian.git.orig/build/config/chrome_build.gni
++++ gooroom-browser-debian.git/build/config/chrome_build.gni
+@@ -10,6 +10,7 @@ declare_args() {
+   # true means official Google Chrome branding (requires extra Google-internal
+   # resources).
+   is_chrome_branded = false
++  is_gooroom = true
+ 
+   # Whether to enable Google internal-only sources.
+   enable_src_internal =

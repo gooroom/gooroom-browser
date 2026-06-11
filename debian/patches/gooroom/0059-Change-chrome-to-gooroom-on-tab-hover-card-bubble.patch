@@ -1,0 +1,21 @@
+From 4a2dd87f59813301f52fcf2d30ee7b469c9125f8 Mon Sep 17 00:00:00 2001
+From: cjs <cjs@hancom.com>
+Date: Wed, 30 Aug 2023 07:37:27 -0400
+Subject: [PATCH 59/63] Change chrome to gooroom on tab hover card bubble
+
+---
+ chrome/browser/ui/views/tabs/tab_hover_card_bubble_view.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+Index: chromium-149-deb12/chrome/browser/ui/views/tabs/hovercard/tab_hover_card_bubble_view.cc
+===================================================================
+--- chromium-149-deb12.orig/chrome/browser/ui/views/tabs/hovercard/tab_hover_card_bubble_view.cc
++++ chromium-149-deb12/chrome/browser/ui/views/tabs/hovercard/tab_hover_card_bubble_view.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "chrome/browser/ui/views/tabs/hovercard/tab_hover_card_bubble_view.h"
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
+ 
+ #include <algorithm>
+ #include <ios>

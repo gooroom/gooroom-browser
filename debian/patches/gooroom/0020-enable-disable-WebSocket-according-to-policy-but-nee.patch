@@ -1,0 +1,531 @@
+From 1f2aee180101d56faf08135f5dccddd7b57319e4 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 18:11:31 +0900
+Subject: [PATCH 20/63] enable/disable WebSocket according to policy, but, need
+ a patch to fix an error when scrolling
+
+---
+ .../browser/chrome_content_browser_client.cc  |  6 +++
+ chrome/browser/ui/prefs/prefs_tab_helper.cc   |  4 ++
+ chrome/common/pref_names.h                    |  4 ++
+ gooroom/BUILD.gn                              |  4 ++
+ gooroom/WebKit/gooroom_enabled_features.cc    |  8 +++
+ gooroom/WebKit/gooroom_enabled_features.h     | 25 ++++++++
+ gooroom/browser/gooroom_pref.cc               | 64 ++++++++++++++++++-
+ gooroom/browser/gooroom_pref.h                | 11 ++--
+ gooroom/content/gooroom_safety_policy_part.cc | 34 ++++++++++
+ gooroom/content/gooroom_safety_policy_part.h  | 24 +++++++
+ .../web_preferences_mojom_traits.cc           |  2 +
+ .../common/web_preferences/web_preferences.h  |  2 +
+ .../web_preferences_mojom_traits.h            | 10 +++
+ .../webpreferences/web_preferences.mojom      |  2 +
+ .../public/platform/web_runtime_features.h    |  5 ++
+ .../renderer/core/exported/web_view_impl.cc   |  3 +
+ .../modules/websockets/dom_websocket.cc       | 43 +++++++++++++
+ third_party/blink/renderer/platform/BUILD.gn  |  1 +
+ .../platform/exported/web_runtime_features.cc | 14 ++++
+ 19 files changed, 258 insertions(+), 8 deletions(-)
+ create mode 100644 gooroom/WebKit/gooroom_enabled_features.cc
+ create mode 100644 gooroom/WebKit/gooroom_enabled_features.h
+ create mode 100644 gooroom/content/gooroom_safety_policy_part.cc
+ create mode 100644 gooroom/content/gooroom_safety_policy_part.h
+
+Index: chromium-149-deb12/chrome/browser/chrome_content_browser_client.cc
+===================================================================
+--- chromium-149-deb12.orig/chrome/browser/chrome_content_browser_client.cc
++++ chromium-149-deb12/chrome/browser/chrome_content_browser_client.cc
+@@ -6,6 +6,7 @@
+ 
+ #if defined(GOOROOM_BUILD)
+ #include "gooroom/URLRewrite/gooroom_url_rewrite.h"
++#include "gooroom/content/gooroom_safety_policy_part.h"
+ #endif
+ 
+ #include <algorithm>
+@@ -1504,6 +1505,8 @@ ChromeContentBrowserClient::ChromeConten
+ #if defined(GOOROOM_BUILD)
+   extra_parts_.push_back(
+       std::make_unique<GooroomURLRewrite>());
++  extra_parts_.push_back(
++      std::make_unique<content::GooroomSafetyPolicyPart>());
+ #endif
+ }
+ 
+@@ -4702,6 +4705,8 @@ void ChromeContentBrowserClient::Overrid
+       prefs->GetInteger(prefs::kWebKitMinimumLogicalFontSize);
+ #endif
+ 
++  web_prefs->websocket_enabled = true;
++  web_prefs->webworker_enabled = true;
+   web_prefs->default_encoding = prefs->GetString(prefs::kDefaultCharset);
+ 
+   web_prefs->dom_paste_enabled =
+Index: chromium-149-deb12/chrome/browser/ui/prefs/prefs_tab_helper.cc
+===================================================================
+--- chromium-149-deb12.orig/chrome/browser/ui/prefs/prefs_tab_helper.cc
++++ chromium-149-deb12/chrome/browser/ui/prefs/prefs_tab_helper.cc
+@@ -366,6 +366,10 @@ void PrefsTabHelper::RegisterProfilePref
+     user_prefs::PrefRegistrySyncable* registry,
+     const std::string& locale) {
+   WebPreferences pref_defaults;
++  registry->RegisterBooleanPref(prefs::kWebKitWebSocketEnabled,
++                                pref_defaults.websocket_enabled);
++  registry->RegisterBooleanPref(prefs::kWebKitWebWorkerEnabled,
++                                pref_defaults.webworker_enabled);
+   registry->RegisterBooleanPref(prefs::kWebKitJavascriptEnabled,
+                                 pref_defaults.javascript_enabled);
+   registry->RegisterBooleanPref(prefs::kWebKitWebSecurityEnabled,
+Index: chromium-149-deb12/chrome/common/pref_names.h
+===================================================================
+--- chromium-149-deb12.orig/chrome/common/pref_names.h
++++ chromium-149-deb12/chrome/common/pref_names.h
+@@ -320,6 +320,10 @@ inline constexpr char kWebKitMinimumLogi
+     "webkit.webprefs.minimum_logical_font_size";
+ inline constexpr char kWebKitJavascriptEnabled[] =
+     "webkit.webprefs.javascript_enabled";
++inline constexpr char kWebKitWebWorkerEnabled[] =
++    "webkit.webprefs.webworker_enabled";
++inline constexpr char kWebKitWebSocketEnabled[] =
++    "webkit.webprefs.websocket_enabled";
+ inline constexpr char kWebKitLoadsImagesAutomatically[] =
+     "webkit.webprefs.loads_images_automatically";
+ inline constexpr char kWebKitPluginsEnabled[] =
+Index: chromium-149-deb12/gooroom/BUILD.gn
+===================================================================
+--- chromium-149-deb12.orig/gooroom/BUILD.gn
++++ chromium-149-deb12/gooroom/BUILD.gn
+@@ -234,6 +234,10 @@ if (!is_android && !is_mac) {
+         # for commit #14
+         "URLRewrite/gooroom_url_rewrite.cc",
+         "URLRewrite/gooroom_url_rewrite.h",
++
++        # for commit #18
++        "content/gooroom_safety_policy_part.cc",
++        "content/gooroom_safety_policy_part.h",
+       ]
+     }
+   }
+Index: chromium-149-deb12/gooroom/WebKit/gooroom_enabled_features.cc
+===================================================================
+--- /dev/null
++++ chromium-149-deb12/gooroom/WebKit/gooroom_enabled_features.cc
+@@ -0,0 +1,8 @@
++#include "../WebKit/gooroom_enabled_features.h"
++
++namespace blink {
++
++bool GooroomEnabledFeatures::isWebSocketEnabled = true;
++bool GooroomEnabledFeatures::isWebWorkerEnabled = true;
++
++} // end of content namespace
+Index: chromium-149-deb12/gooroom/WebKit/gooroom_enabled_features.h
+===================================================================
+--- /dev/null
++++ chromium-149-deb12/gooroom/WebKit/gooroom_enabled_features.h
+@@ -0,0 +1,25 @@
++#ifndef GOOROOM_ENABLED_FEATURES_H_
++#define GOOROOM_ENABLED_FEATURES_H_
++
++#include "third_party/blink/renderer/platform/platform_export.h"
++#include "third_party/blink/renderer/platform/wtf/allocator/allocator.h"
++
++namespace blink {
++
++class PLATFORM_EXPORT GooroomEnabledFeatures {
++  STATIC_ONLY(GooroomEnabledFeatures);
++ public:
++  static void SetWebSocketEnabled(bool isEnabled) { isWebSocketEnabled = isEnabled; }
++  static bool WebSocketEnabled() { return isWebSocketEnabled; }
++
++  static void SetWebWorkerEnabled(bool isEnabled) { isWebWorkerEnabled = isEnabled; }
++  static bool WebWorkerEnabled() { return isWebWorkerEnabled; }
++
++ private:
++  static bool isWebSocketEnabled;
++  static bool isWebWorkerEnabled;
++};
++
++} // end of blink namespace
++
++#endif /* GOOROOM_ENABLED_FEATURES_H_ */
+Index: chromium-149-deb12/gooroom/browser/gooroom_pref.cc
+===================================================================
+--- chromium-149-deb12.orig/gooroom/browser/gooroom_pref.cc
++++ chromium-149-deb12/gooroom/browser/gooroom_pref.cc
+@@ -8,6 +8,7 @@
+ #include "base/command_line.h"
+ #include "base/path_service.h"
+ #include "base/syslog_logging.h"
++#include "base/task/single_thread_task_runner.h"
+ 
+ #include "chrome/browser/browser_process.h"
+ #include "chrome/browser/profiles/profile.h"
+@@ -44,8 +45,8 @@ void GooroomPref::setup() {
+   base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
+ 
+   PrefRegistrySimple* registry = new PrefRegistrySimple;
+-  registry->RegisterBooleanPref(kPolicyGooroomWebsocket, false);
+-  registry->RegisterBooleanPref(kPolicyGooroomWebworker, false);
++  registry->RegisterBooleanPref(kPolicyGooroomWebSocket, false);
++  registry->RegisterBooleanPref(kPolicyGooroomWebWorker, false);
+   registry->RegisterListPref(kPolicyGooroomWhiteList);
+ 
+   PrefServiceFactory prefServiceFactory;
+@@ -139,4 +140,63 @@ void GooroomPref::setup() {
+   // test args
+ }
+ 
++bool GooroomPref::useWebSocket() {
++  if(base::GetGooroomBase()->isTrustMode()) {
++    return true;
++  }
++  
++  // read CORE policy file from ... ==================================
++  // TODO use constant value
++  base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
++
++  PrefRegistrySimple* registry = new PrefRegistrySimple;
++  registry->RegisterBooleanPref(kPolicyGooroomWebSocket, false);
++  registry->RegisterBooleanPref(kPolicyGooroomWebWorker, false);
++  registry->RegisterListPref(kPolicyGooroomWhiteList);
++
++  PrefServiceFactory prefServiceFactory;
++
++  prefServiceFactory.SetUserPrefsFile(
++      path, base::SingleThreadTaskRunner::GetCurrentDefault().get());
++  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
++
++  const PrefService::Preference* p =
++      pref_->FindPreference(gooroom::kPolicyGooroomWebSocket);
++  absl::optional<bool> val = true;
++  if (p != nullptr)
++    val = p->GetValue()->GetIfBool();
++
++  DLOG(INFO) << "GooroomPref::useWebSocket() : " << *val;
++  return *val;
++}
++
++bool GooroomPref::useWebWorker() {
++  if(base::GetGooroomBase()->isTrustMode()) {
++    return true;
++  }
++  // read CORE policy file from ... ==================================
++  // TODO use constant value
++  base::FilePath path("/usr/share/gooroom/browser/policies/mainpref.json");
++
++  PrefRegistrySimple* registry = new PrefRegistrySimple;
++  registry->RegisterBooleanPref(kPolicyGooroomWebSocket, false);
++  registry->RegisterBooleanPref(kPolicyGooroomWebWorker, false);
++  registry->RegisterListPref(kPolicyGooroomWhiteList);
++
++  PrefServiceFactory prefServiceFactory;
++
++  prefServiceFactory.SetUserPrefsFile(
++      path, base::SingleThreadTaskRunner::GetCurrentDefault().get());
++  std::unique_ptr<PrefService> pref_(prefServiceFactory.Create(registry));
++
++  const PrefService::Preference* p =
++      pref_->FindPreference(gooroom::kPolicyGooroomWebWorker);
++  absl::optional<bool> val = true;
++  if (p != nullptr)
++    val = p->GetValue()->GetIfBool();
++
++  DLOG(INFO) << "GooroomPref::useWebWorker() : " << *val;
++  return *val;
++}
++
+ }  // namespace gooroom
+Index: chromium-149-deb12/gooroom/browser/gooroom_pref.h
+===================================================================
+--- chromium-149-deb12.orig/gooroom/browser/gooroom_pref.h
++++ chromium-149-deb12/gooroom/browser/gooroom_pref.h
+@@ -15,13 +15,9 @@ namespace gooroom {
+ /** whitelist policy */
+ const char kPolicyGooroomWhiteList[] = "gooroom.policy.whitelist";
+ /** websocket confirm policy */
+-const char kPolicyGooroomWebsocket[] = "gooroom.policy.websocket";
++const char kPolicyGooroomWebSocket[] = "gooroom.policy.websocket";
+ /** webworker confirm policy */
+-const char kPolicyGooroomWebworker[] = "gooroom.policy.webworker";
+-/** websocket confirm enable/disable */
+-const char kGooroomWebsocketConfirm[] = "gooroom.websocket.confirm";
+-/** webwork confirm enable/disable */
+-const char kGooroomWebworkerConfirm[] = "gooroom.webworker.confirm";
++const char kPolicyGooroomWebWorker[] = "gooroom.policy.webworker";
+ 
+ class GooroomPref {
+  public:
+@@ -31,6 +27,9 @@ class GooroomPref {
+ //  PrefService* pref();
+   void setup();
+ 
++  bool useWebSocket();
++  bool useWebWorker();
++
+ // private:
+ //  PrefService* pref_;
+ };
+Index: chromium-149-deb12/gooroom/content/gooroom_safety_policy_part.cc
+===================================================================
+--- /dev/null
++++ chromium-149-deb12/gooroom/content/gooroom_safety_policy_part.cc
+@@ -0,0 +1,39 @@
++#include "gooroom_safety_policy_part.h"
++
++#include "chrome/browser/browser_process.h"
++#include "chrome/browser/profiles/profile.h"
++#include "chrome/browser/profiles/profile_manager.h"
++#include "components/prefs/pref_service.h"
++#include "third_party/blink/public/common/web_preferences/web_preferences.h"
++#include "gooroom/browser/gooroom_pref.h"
++
++namespace content {
++
++GooroomSafetyPolicyPart::GooroomSafetyPolicyPart() {}
++GooroomSafetyPolicyPart::~GooroomSafetyPolicyPart() {}
++
++void GooroomSafetyPolicyPart::OverrideWebPreferences(
++    content::WebContents* web_contents,
++    content::SiteInstance& main_frame_site,
++    blink::web_pref::WebPreferences* web_prefs) {
++  Profile* profile = g_browser_process->profile_manager()->GetLastUsedProfile();
++  PrefService* ps = profile->GetPrefs();
++
++  if (gooroom::g_gooroom->useWebSocket()) {
++    bool confirm = ps->GetBoolean("gooroom_option.websocket_confirm");
++    web_prefs->websocket_enabled = confirm;
++  } else {
++    web_prefs->websocket_enabled = false;
++  }
++
++  if (gooroom::g_gooroom->useWebWorker()) {
++    bool confirm = ps->GetBoolean("gooroom_option.webworker_confirm");
++    web_prefs->webworker_enabled = confirm;
++  } else {
++    web_prefs->webworker_enabled = false;
++  }
++
++  return;
++}
++
++}  // namespace content
+Index: chromium-149-deb12/gooroom/content/gooroom_safety_policy_part.h
+===================================================================
+--- /dev/null
++++ chromium-149-deb12/gooroom/content/gooroom_safety_policy_part.h
+@@ -0,0 +1,25 @@
++#ifndef GOOROOM_SAFETY_POLICY_PART_H_
++#define GOOROOM_SAFETY_POLICY_PART_H_
++
++#include "chrome/browser/chrome_content_browser_client_parts.h"
++
++namespace content {
++
++class RenderViewHost;
++struct WebPreferences;
++
++// Implements a Gooroom specific part of ChromeContentBrowserClient.
++class GooroomSafetyPolicyPart : public ChromeContentBrowserClientParts {
++ public:
++	GooroomSafetyPolicyPart();
++  ~GooroomSafetyPolicyPart() override;
++
++  void OverrideWebPreferences(content::WebContents* web_contents,
++                           content::SiteInstance& main_frame_site,
++                           blink::web_pref::WebPreferences* web_prefs) override;
++};
++
++} // end of content namespace
++
++#endif  // GOOROOM_SAFETY_POLICY_PART_H_
++
+Index: chromium-149-deb12/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
++++ chromium-149-deb12/third_party/blink/common/web_preferences/web_preferences_mojom_traits.cc
+@@ -52,6 +52,8 @@ bool StructTraits<blink::mojom::WebPrefe
+   )
+     return false;
+ 
++  out->webworker_enabled = data.webworker_enabled(); 
++  out->websocket_enabled = data.websocket_enabled(); 
+   out->default_font_size = data.default_font_size();
+   out->default_fixed_font_size = data.default_fixed_font_size();
+   out->minimum_font_size = data.minimum_font_size();
+Index: chromium-149-deb12/third_party/blink/public/common/web_preferences/web_preferences.h
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/public/common/web_preferences/web_preferences.h
++++ chromium-149-deb12/third_party/blink/public/common/web_preferences/web_preferences.h
+@@ -61,6 +61,8 @@ struct BLINK_COMMON_EXPORT WebPreference
+   int minimum_font_size = 0;
+   int minimum_logical_font_size = 6;
+   std::string default_encoding = "ISO-8859-1";
++  bool websocket_enabled = true;
++  bool webworker_enabled = true;
+   bool context_menu_on_mouse_up = BUILDFLAG(IS_WIN);
+   bool javascript_enabled = true;
+   bool web_security_enabled = true;
+Index: chromium-149-deb12/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
++++ chromium-149-deb12/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
+@@ -78,6 +78,16 @@ struct BLINK_COMMON_EXPORT StructTraits<
+     return r.default_encoding;
+   }
+ 
++  static bool webworker_enabled(
++      const blink::web_pref::WebPreferences& r) {
++    return r.webworker_enabled;
++  }
++
++  static bool websocket_enabled(
++      const blink::web_pref::WebPreferences& r) {
++    return r.websocket_enabled;
++  }
++
+   static bool context_menu_on_mouse_up(
+       const blink::web_pref::WebPreferences& r) {
+     return r.context_menu_on_mouse_up;
+Index: chromium-149-deb12/third_party/blink/public/platform/web_runtime_features.h
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/public/platform/web_runtime_features.h
++++ chromium-149-deb12/third_party/blink/public/platform/web_runtime_features.h
+@@ -43,6 +43,11 @@ namespace blink {
+ // Stable features are enabled by default.
+ class BLINK_PLATFORM_EXPORT WebRuntimeFeatures : public WebRuntimeFeaturesBase {
+  public:
++#if defined(GOOROOM_BUILD)
++  BLINK_PLATFORM_EXPORT static void EnableWebSocket(bool);
++  BLINK_PLATFORM_EXPORT static void EnableWebWorker(bool);
++#endif
++
+   // Enable or disable features with status=experimental listed in
+   // renderer/platform/runtime_enabled_features.json5.
+   static void EnableExperimentalFeatures(bool);
+Index: chromium-149-deb12/third_party/blink/renderer/core/exported/web_view_impl.cc
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/renderer/core/exported/web_view_impl.cc
++++ chromium-149-deb12/third_party/blink/renderer/core/exported/web_view_impl.cc
+@@ -1564,6 +1564,9 @@ void WebView::ApplyWebPreferences(const
+   settings->SetDefaultTextEncodingName(
+       WebString::FromAscii(prefs.default_encoding));
+   settings->SetJavaScriptEnabled(prefs.javascript_enabled);
++  settings->SetJavaScriptEnabled(prefs.websocket_enabled);
++  settings->SetJavaScriptEnabled(prefs.webworker_enabled);
++  settings->SetJavaScriptEnabled(prefs.javascript_enabled);
+   settings->SetWebSecurityEnabled(prefs.web_security_enabled);
+   settings->SetLoadsImagesAutomatically(prefs.loads_images_automatically);
+   settings->SetImagesEnabled(prefs.images_enabled);
+Index: chromium-149-deb12/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/renderer/modules/websockets/dom_websocket.cc
++++ chromium-149-deb12/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+@@ -30,6 +30,19 @@
+ 
+ #include "third_party/blink/renderer/modules/websockets/dom_websocket.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "base/syslog_logging.h"
++#include "chrome/grit/generated_resources.h"
++#include "third_party/blink/renderer/core/page/chrome_client.h"
++#include "third_party/blink/renderer/core/page/page.h"
++#include "third_party/blink/renderer/core/frame/local_dom_window.h"
++#include "ui/base/l10n/l10n_util.h"
++#include "url/gurl.h"
++
++#include "gooroom/WebKit/gooroom_enabled_features.h"
++#include "gooroom/base/gooroom_base.h"
++#endif
++
+ #include <optional>
+ #include <string>
+ #include <utility>
+@@ -259,6 +272,36 @@ void DOMWebSocket::Connect(const String&
+   auto result = common_.Connect(GetExecutionContext(), url, protocols, channel_,
+                                 exception_state);
+ 
++#if defined(GOOROOM_BUILD)
++  /*
++    // FIXME : errors, find another route to access or create WebSocket
++    whitelist base::GooroomUrlFilter* pFilter =
++    base::GetGooroomBase()->getUrlFilter(); GURL gurl_(url.Utf8().data()); bool
++    trusted = pFilter->isTrustUrl(gurl_.spec());
++  */
++
++  // url has scheme "wss://" (e.g., wss://echo.websocket.org?encoding=text)
++  // printf("Requested WebSocket : %s \n", gurl_.spec().data());
++
++  if (!GooroomEnabledFeatures::WebSocketEnabled()) {
++    SYSLOG(INFO) << "Using WebSocket is not permitted";
++    exception_state.ThrowDOMException(DOMExceptionCode::kInvalidAccessError,
++                                      "Using WebSocket is not permitted");
++
++    //LocalFrame* frm = GetExecutionContext()->ExecutingWindow()->GetFrame();
++    LocalFrame* frm = DynamicTo<LocalDOMWindow>(GetExecutionContext())->GetFrame();
++    Page* page = frm->GetPage();
++    // FIXME : care character encoding
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, String::FromUtf8("梨 몃 곌껐 媛 李⑤⑤듬"));
++    //page->GetChromeClient().OpenJavaScriptAlert(
++    //    frm, "External connection attempts were blocked by policy.");
++ 
++
++    ReleaseChannel();
++    return;
++  }
++#endif
++
+   switch (result) {
+     case WebSocketCommon::ConnectResult::kSuccess:
+       DCHECK(!exception_state.HadException());
+Index: chromium-149-deb12/third_party/blink/renderer/platform/BUILD.gn
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/renderer/platform/BUILD.gn
++++ chromium-149-deb12/third_party/blink/renderer/platform/BUILD.gn
+@@ -1676,6 +1676,7 @@ component("platform") {
+     "widget/widget_base.h",
+     "widget/widget_base_client.h",
+     "windows_keyboard_codes.h",
++    "//gooroom/WebKit/gooroom_enabled_features.cc",
+   ]
+ 
+   sources -= blink_platform_avx_files
+Index: chromium-149-deb12/third_party/blink/renderer/platform/exported/web_runtime_features.cc
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/renderer/platform/exported/web_runtime_features.cc
++++ chromium-149-deb12/third_party/blink/renderer/platform/exported/web_runtime_features.cc
+@@ -33,6 +33,10 @@
+ #include "third_party/blink/renderer/platform/graphics/scrollbar_theme_settings.h"
+ #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
+ 
++#if defined(GOOROOM_BUILD)
++#include "gooroom/WebKit/gooroom_enabled_features.h"
++#endif
++
+ namespace blink {
+ 
+ void WebRuntimeFeatures::EnableExperimentalFeatures(bool enable) {
+@@ -72,4 +76,11 @@ void WebRuntimeFeatures::EnableLocalNetw
+   RuntimeEnabledFeatures::SetLocalNetworkAccessWebRTCEnabled(enable);
+ }
+ 
++
++#if defined(GOOROOM_BUILD)
++void WebRuntimeFeatures::EnableWebSocket(bool enable) {
++  GooroomEnabledFeatures::SetWebSocketEnabled(enable);
++}
++#endif
++
+ }  // namespace blink
+Index: chromium-149-deb12/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
++++ chromium-149-deb12/third_party/blink/public/mojom/webpreferences/web_preferences.mojom
+@@ -120,6 +120,8 @@ struct WebPreferences {
+   map<string, mojo_base.mojom.String16> serif_font_family_map;
+   map<string, mojo_base.mojom.String16> sans_serif_font_family_map;
+   map<string, mojo_base.mojom.String16> cursive_font_family_map;
++  bool websocket_enabled;
++  bool webworker_enabled;
+   map<string, mojo_base.mojom.String16> fantasy_font_family_map;
+   map<string, mojo_base.mojom.String16> math_font_family_map;
+   int32 default_font_size;

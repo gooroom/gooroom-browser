@@ -1,0 +1,12 @@
+# upstream provides no good way to watch for upstream changes
+debian-watch-file-is-missing
+
+# Chromium source tree contains thousands of minified/pre-built web resources
+source-is-missing
+
+# third_party license warnings (upstream, not gooroom patches)
+license-problem-convert-utf-code
+license-problem-non-free-RFC-BCP78
+
+# gooroom-browser replaces chromium, substvar references are intentional
+version-substvar-for-external-package

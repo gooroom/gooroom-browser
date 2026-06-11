@@ -1,0 +1,336 @@
+#!/usr/bin/make -f
+
+# enable verbose build messages
+export DH_VERBOSE=1
+
+# indicate that binary targets do not require root
+export DEB_RULES_REQUIRES_ROOT=no
+
+-include /usr/share/dpkg/architecture.mk
+
+ifeq (armhf,$(DEB_HOST_ARCH))
+# avoid "argument unused during compilation" warnings on armhf
+arg_hardening = +all,-stackclash
+else
+# enable all build hardening flags
+arg_hardening = +all
+endif
+export DEB_BUILD_MAINT_OPTIONS=hardening=$(arg_hardening)
+
+# disable lto flags, go with use_thin_lto instead
+export DEB_BUILD_MAINT_OPTIONS+=optimize=-lto
+
+# cross-build support
+ifneq ($(DEB_BUILD_ARCH),$(DEB_HOST_ARCH))
+ifeq ($(filter cross,$(DEB_BUILD_PROFILES)),)
+$(error Please specify the "cross" build profile)
+endif
+export DEB_BUILD_OPTIONS+=crossbuildcanrunhostbinaries
+export HOST_EXEC_WRAPPER=$(DEB_HOST_GNU_TYPE)-cross-exe-wrapper
+cross_pkg_config=$(DEB_HOST_GNU_TYPE)-pkgconf
+endif
+
+# compile with clang (gcc is currently not supported)
+export AR=ar
+export NM=nm
+export CC=clang-19
+export CXX=clang++-19
+
+# initial flags from dpkg-buildflags
+export DEB_CXXFLAGS_MAINT_STRIP=-g
+export CXXFLAGS:=$(shell dpkg-buildflags --get CXXFLAGS) -stdlib=libc++
+export LDFLAGS:=$(shell dpkg-buildflags --get LDFLAGS) -stdlib=libc++ -static-libstdc++
+
+# more verbose linker output
+export LDFLAGS+=-Wl,--stats
+
+# extra flags to reduce warnings that aren't very useful
+export CXXFLAGS+=-Wno-conversion \
+                 -Wno-unused-function \
+                 -Wno-unused-variable \
+                 -Wno-unused-private-field \
+                 -Wno-deprecated-declarations \
+                 -Wno-unknown-pragmas \
+
+# do not optimize away null pointer safety checks
+export CXXFLAGS+=-fno-delete-null-pointer-checks
+
+ifeq (ppc64el,$(DEB_HOST_ARCH))
+# avoid altivec incompatibilities / deprecation warnings
+export CXXFLAGS+=-faltivec-src-compat=mixed -Wno-deprecated-altivec-src-compat
+endif
+
+# disable clang plugins
+defines:=clang_use_chrome_plugins=false
+
+# use system rust
+export CLANG_MVERS:=$(shell $(CC) --version 2>/dev/null | sed -n 's/.* clang version //p' | cut -d. -f1)
+rust_sysroot=/usr
+defines+=rust_sysroot_absolute=\"$(rust_sysroot)\"
+defines+=rust_bindgen_root=\"$(CURDIR)/debian/bindgen/root/usr\"
+defines+=rustc_version=\"$(shell $(rust_sysroot)/bin/rustc --version 2>/dev/null | awk -v OFS='-' '{print $$1,$$2}' )\"
+defines+=clang_base_path=\"/usr/lib/llvm-$(CLANG_MVERS)\"
+defines+=clang_version=\"$(CLANG_MVERS)\"
+
+# build using system toolchain
+defines+=host_toolchain=\"//build/toolchain/linux/unbundle:default\"
+defines+=custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
+
+# set the appropriate cpu architecture
+DEB_HOST_ARCH_value := $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_ARCH ?= $(DEB_HOST_ARCH_value)
+ifeq (i386,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"x86\" use_vaapi=true
+endif
+ifeq (amd64,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"x64\" use_vaapi=true
+endif
+ifeq (arm64,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"arm64\" use_v4l2_codec=true use_vaapi=false
+endif
+ifeq (armhf,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"arm\" use_v4l2_codec=true use_vaapi=false arm_use_neon=true
+endif
+ifeq (ppc64el,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"ppc64\" use_vaapi=true
+endif
+
+ifdef cross_pkg_config
+defines+=pkg_config=\"$(cross_pkg_config)\"
+endif
+
+# thin lto requires >4 GB RAM, so avoid it on 32-bit build hosts
+ifeq (32,$(DEB_BUILD_ARCH_BITS))
+defines+=use_thin_lto=false \
+         concurrent_links=1
+else
+defines+=use_thin_lto=false
+endif
+
+# disabled features
+defines+=is_debug=false \
+         use_sysroot=false \
+         use_libjpeg_turbo=true \
+         use_custom_libcxx=false \
+         optimize_webui=false \
+         webnn_use_tflite=false \
+         webnn_use_litert=false \
+         use_unofficial_version_number=false \
+         rtc_video_psnr=false \
+         safe_browsing_use_unrar=false \
+         enable_vr=false \
+         enable_enterprise_companion=false \
+         build_dawn_tests=false \
+         enable_iterator_debugging=false \
+         enable_hangout_services_extension=false \
+         angle_has_histograms=false \
+         angle_build_tests=false \
+         build_angle_perftests=false \
+         enable_perfetto_unittests=false \
+         skia_enable_skshaper_tests=false \
+         tint_build_unittests=false \
+         enable_nocompile_tests=false \
+         enable_screen_ai_browsertests=false \
+         treat_warnings_as_errors=false \
+         clang_warning_suppression_file=\"\" \
+         use_qt5=false use_qt6=false \
+         is_cfi=false \
+         chrome_pgo_phase=0 \
+
+# enabled features
+defines+=use_gio=true \
+         is_official_build=true \
+         symbol_level=0 \
+         use_pulseaudio=true \
+         link_pulseaudio=true \
+         rtc_use_pipewire=true \
+         icu_use_data_file=true \
+         enable_widevine=true \
+         v8_enable_backtrace=true \
+         use_system_zlib=true \
+         use_system_lcms2=true \
+         use_system_libjpeg=true \
+         use_system_libpng=true \
+         use_system_libtiff=false \
+         use_system_freetype=true \
+         use_system_harfbuzz=true \
+         use_system_libopenjpeg2=true \
+         proprietary_codecs=true \
+         ffmpeg_branding=\"Chrome\" \
+         disable_fieldtrial_testing_config=true \
+         is_gooroom=true \
+
+# handle parallel build options
+njobs=1
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+njobs=$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+endif
+
+# whether to use ninja -v or not
+CR_VERBOSE=-v
+ifneq (,$(filter terse,$(DEB_BUILD_OPTIONS)))
+	CR_VERBOSE=
+endif
+
+DIST := $(shell dpkg-parsechangelog -l debian/changelog  | sed -n 's/^Distribution: //p')
+
+%:
+	dh $@
+
+
+# don't build armhf on build systems that lack NEON
+test_armhf_neon:
+	uname -m
+	if [ `uname -m` = "armv7l" ]; then \
+		grep -q 'neon\|asimd' /proc/cpuinfo || { \
+			echo "No NEON extension detected on armhf, refusing to build" 1>&2; \
+			false; \
+		}; \
+	fi
+
+set_up_bindgen:
+	# Bookworm's bindgen is too old. This is a workaround using the
+	# packages from
+	# <https://snapshot.debian.org/package/rust-bindgen-cli/0.66.1-3/>, which
+	# are new enough to build chromium but old enough to not be linked against
+	# Trixie's libc6 2.38
+	mkdir -p debian/bindgen/root
+	ar --output debian/bindgen/root vx debian/bindgen/bindgen_0.66.1-3_$(DEB_HOST_ARCH).deb
+	tar -C debian/bindgen/root -Jxvf debian/bindgen/root/data.tar.xz
+
+# unused for sid
+ESVERS=0.25.1-1
+set_up_esbuild:
+	# Esbuild binary version should match the libs in chromium. This uses
+	# esbuild packages from
+	# https://snapshot.debian.org/package/golang-github-evanw-esbuild/$(ESVERS)/
+	mkdir -p debian/esbuild/root
+	ar --output debian/esbuild/root vx debian/esbuild/esbuild_$(ESVERS)_$(DEB_HOST_ARCH).deb
+	tar -C debian/esbuild/root -Jxvf debian/esbuild/root/data.tar.xz
+
+override_dh_auto_configure: test_armhf_neon set_up_bindgen
+	# use system node w/out patching source; upstream hardcodes x64 in path
+	mkdir -p third_party/node/linux/node-linux-x64/bin
+	cp /usr/bin/node third_party/node/linux/node-linux-x64/bin
+	# use system rollup
+	cp -ra /usr/share/nodejs/rollup third_party/node/node_modules/
+	- test -L third_party/devtools-frontend/src/node_modules/rollup3 || ln -s /usr/share/nodejs/rollup third_party/devtools-frontend/src/node_modules/rollup3
+	# use debian's esbuild
+	cp -ra /usr/lib/$(DEB_BUILD_MULTIARCH)/nodejs/esbuild third_party/devtools-frontend/src/node_modules/
+	#cp debian/esbuild/root/usr/bin/esbuild third_party/devtools-frontend/src/third_party/esbuild/esbuild
+	mkdir -p third_party/devtools-frontend/src/third_party/esbuild
+	cp /usr/bin/esbuild third_party/devtools-frontend/src/third_party/esbuild/
+	mkdir -p third_party/gperf/cipd/bin/
+	cp /usr/bin/gperf third_party/gperf/cipd/bin/
+	# output compiler information
+	$(CXX) --version
+	# prefer unbundled (system) libraries
+	./debian/scripts/unbundle
+
+override_dh_auto_build-arch:
+	# copy gooroom branding binaries (quilt cannot handle git binary diffs)
+	cp -rp debian/branding/theme/chrome/* chrome/
+	cp -rp debian/branding/theme/components/* components/
+	cp debian/branding/gooroom_product_logo_24.png chrome/app/theme/chromium/linux/product_logo_24.png
+	cp debian/branding/gooroom_product_logo_24.png chrome/app/theme/chromium/product_logo_24.png
+	gn gen out/Release --args="$(defines)"
+	ninja $(CR_VERBOSE) -j$(njobs) -C out/Release gooroom-browser chrome_sandbox
+	cp out/Release/chrome_sandbox out/Release/chrome-sandbox
+	cp out/Release/locales/en-US.pak out/Release/resources
+	chmod 4755 out/Release/chrome-sandbox # suid sandbox
+	sed -e s/@@PACKAGE@@/gooroom-browser/g -e s/@@MENUNAME@@/gooroom-browser/g \
+	    < chrome/app/resources/manpage.1.in > out/Release/gooroom-browser.1
+
+override_dh_auto_build-indep:
+	gn gen out/Release --args="$(defines)"
+	ninja $(CR_VERBOSE) -j$(njobs) -C out/Release packed_resources
+	rm -f out/Release/locales/en-US.pak
+
+override_dh_auto_install-arch:
+	dh_auto_install
+	# update launcher script with build information
+	mkdir -p debian/gooroom-browser/usr/bin
+	sed 's|@BUILD_DIST@|$(shell . /etc/os-release && echo "$$PRETTY_NAME")|' \
+	    < debian/scripts/gooroom-browser > debian/gooroom-browser/usr/bin/gooroom-browser
+	# move icons into /usr/share
+	./debian/scripts/icons
+
+override_dh_fixperms:
+	dh_fixperms --exclude chrome-sandbox
+
+override_dh_auto_clean:
+	rm -rf debian/bindgen/root
+	rm -rf debian/esbuild/root
+	rm -rf third_party/devtools-frontend/src/third_party/esbuild
+	rm -rf third_party/devtools-frontend/src/node_modules/esbuild
+	rm -rf third_party/gperf
+	rm -rf third_party/node/linux/node-linux-x64
+	rm -rf out
+	rm -rf third_party/node/node_modules/rollup
+	rm -f third_party/devtools-frontend/src/node_modules/rollup3
+	# bullseye workarounds; delete this post-bullseye
+	rm -rf third_party/node/node_modules/acorn
+	rm -rf third_party/node/node_modules/walk
+	find . -name \*.pyc -execdir rm -f {} \;
+	dh_auto_clean
+
+###################### upstream source downloading ############################
+
+ifdef FROM_GOOGLE
+# official distribution server
+url=https://commondatastorage.googleapis.com/chromium-browser-official
+tarfile=$(extract)-lite.tar
+else
+url=https://github.com/chromium-linux-tarballs/chromium-tarballs/releases/download/$(version)
+tarfile=$(extract)-linux.tar
+endif
+version:=$(shell dpkg-parsechangelog -S Version | sed s/-.*//)
+extract=chromium-$(version)
+tarball=$(tarfile).xz
+debvers=../chromium_$(version)
+seconds=$(debvers).seconds
+origtxz=$(debvers).orig.tar.xz
+removed=$(debvers).files-removed
+options=--sort=name --owner=0 --group=0 --numeric-owner --mtime="@$$(cat $(extract)/build/util/LASTCHANGE.committime)" --clamp-mtime
+print_elapsed=echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+
+get-orig-source:
+	wget -nv --show-progress -c $(url)/$(tarball) -O ../$(tarball)
+	@date +%s > $(seconds)
+	top="$$(tar tf ../$(tarball) | head -n1)" \
+	&& test -n "$$top" \
+	&& grep-dctrl -n -F Files-Excluded -s Files-Excluded '' debian/copyright \
+	| sed -r 's/^ +//; /^$$/d' \
+	| awk -v top="$$top" '/^\*/{print; next} {print top $$0}' \
+	> $(debvers).excludes
+	rm -rf $(extract)
+	@$(print_elapsed); echo
+	tar --exclude-from=$(debvers).excludes -xf ../$(tarball)
+	rm -f $(debvers).excludes
+	find $(extract) -depth -type d -empty -delete
+	@$(print_elapsed); echo
+	cd $(extract) && ../debian/scripts/check-upstream
+	chmod -R u+w $(extract)
+	@$(print_elapsed); echo
+	rm -f $(origtxz)
+	tar $(options) -cf - $(extract) | xz -6 -T0 - > $(origtxz)
+	@$(print_elapsed); echo
+	rm -rf $(extract)
+	@$(print_elapsed) | tee seconds
+	@mv -f seconds $(seconds)
+
+version_api_url='https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/all/versions?filter=channel%3C=beta&order_by=version%20desc'
+
+check-version:
+	wget -q -O tmp.versions.json $(version_api_url)
+	@echo; echo 'Recent versions of Chromium for Linux:'
+	@jq -r '.versions[].name' tmp.versions.json \
+	 | head -n 10 | tr / '\t' | cut -f5,7 \
+	 | awk -v ver=$(version) '$$2 == ver {print $$0 "  <--- d/changelog"; next} {print $$0}'
+	@echo
+	@jq -r '.versions[].version' tmp.versions.json > tmp.versions.txt
+	@if ! grep -Fqx '$(version)' tmp.versions.txt; then \
+		echo 'Version "$(version)" in d/changelog not found!'; \
+		exit 1; \
+	fi
+	rm tmp.versions.*

@@ -1,0 +1,16 @@
+author: Andres Salomon <dilinger@debian.org>
+
+Newer gn added a synonym for whitelist; but our older gn doesn't support
+it.
+
+--- a/.gn
++++ b/.gn
+@@ -146,7 +146,7 @@ no_check_targets = [
+ #      this situation much easier to create. if the build always lists the
+ #      files and passes them to a script, it will always be correct.
+ 
+-exec_script_allowlist =
++exec_script_whitelist =
+     build_dotfile_settings.exec_script_allowlist +
+     angle_dotfile_settings.exec_script_allowlist +
+     [

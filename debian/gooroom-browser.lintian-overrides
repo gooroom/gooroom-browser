@@ -1,0 +1,12 @@
+# currently unavoidable embedded libraries (chromium upstream)
+embedded-library freetype [usr/lib/gooroom-browser/gooroom-browser]
+embedded-library libjsoncpp [usr/lib/gooroom-browser/gooroom-browser]
+embedded-library srtp [usr/lib/gooroom-browser/gooroom-browser]
+embedded-library sqlite [usr/lib/gooroom-browser/gooroom-browser]
+embedded-library tiff [usr/lib/gooroom-browser/gooroom-browser]
+
+# too many upstream spelling mistakes
+spelling-error-in-binary
+
+# 24x24 dir contains 256x256 file — chromium upstream icon convention
+icon-size-and-directory-name-mismatch [usr/share/icons/hicolor/24x24/apps/gooroom-browser.png]

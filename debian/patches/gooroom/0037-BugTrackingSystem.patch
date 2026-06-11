@@ -1,0 +1,25 @@
+From 4ce3c148318e4dd7accc23ffc18aff5e43dd12ce Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 14:10:06 +0900
+Subject: [PATCH 37/63] BugTrackingSystem
+
+650 - Client redirection URL does not apply Trust/Untrust judgement module.
+---
+ content/browser/web_contents/web_contents_impl.cc | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+Index: gooroom-browser-debian.git/content/browser/web_contents/web_contents_impl.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/content/browser/web_contents/web_contents_impl.cc
++++ gooroom-browser-debian.git/content/browser/web_contents/web_contents_impl.cc
+@@ -7627,7 +7627,9 @@ void WebContentsImpl::DidFinishNavigatio
+ 
+ #if defined(GOOROOM_BUILD)
+ //If browser is switched, the current page is closed.
+-  if (navigation_handle->IsInMainFrame() && RequestCurrentUserDataDir(navigation_handle->GetURL())) {
++  if (navigation_handle->IsInMainFrame()
++      && (navigation_handle->GetPageTransition() & ui::PAGE_TRANSITION_CLIENT_REDIRECT) == 0
++      && RequestCurrentUserDataDir(navigation_handle->GetURL())) {
+     ClosePage();
+   }
+ #endif

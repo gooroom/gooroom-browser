@@ -1,0 +1,31 @@
+From 79b87eaf6d58d13bce809d7a7a30848dbc99ab3c Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 15:41:46 +0900
+Subject: [PATCH 41/63] Set maximum length of the extension display name
+
+---
+ extensions/common/extension.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+Index: gooroom-browser-debian.git/extensions/common/extension.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/extensions/common/extension.cc
++++ gooroom-browser-debian.git/extensions/common/extension.cc
+@@ -673,6 +673,7 @@ bool Extension::LoadRequiredFeatures(
+ bool Extension::LoadName(std::u16string* error) {
+   const std::string* non_localized_name_ptr =
+       manifest_->FindStringPath(keys::kName);
++  size_t display_max_len_ = 512;
+   if (non_localized_name_ptr == nullptr || *non_localized_name_ptr == "") {
+     *error = errors::kInvalidName16;
+     return false;
+@@ -683,6 +684,9 @@ bool Extension::LoadName(std::u16string*
+       base::CollapseWhitespace(base::UTF8ToUTF16(non_localized_name_), true);
+   base::i18n::SanitizeUserSuppliedString(&sanitized_name);
+   display_name_ = base::UTF16ToUTF8(sanitized_name);
++  if (display_name_.length() > display_max_len_)
++    display_name_.resize(display_max_len_);
++
+   return true;
+ }
+ 
