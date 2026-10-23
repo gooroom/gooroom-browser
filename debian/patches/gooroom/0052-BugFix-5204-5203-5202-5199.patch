@@ -1,0 +1,75 @@
+From 65d7b3dd0504261129ec90de5f7575874e764580 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 20 Apr 2022 11:39:49 +0900
+Subject: [PATCH 52/63] BugFix - 5204, 5203, 5202, 5199
+
+---
+ chrome/app/resources/generated_resources_ko.xtb               | 4 +++-
+ .../browser/ui/webui/print_preview/print_preview_handler.cc   | 4 +++-
+ third_party/blink/renderer/core/workers/dedicated_worker.cc   | 2 +-
+ .../blink/renderer/modules/websockets/dom_websocket.cc        | 2 +-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
+
+Index: gooroom-browser-debian.git/chrome/app/resources/generated_resources_ko.xtb
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/app/resources/generated_resources_ko.xtb
++++ gooroom-browser-debian.git/chrome/app/resources/generated_resources_ko.xtb
+@@ -1,6 +1,8 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE translationbundle>
+ <translationbundle lang="ko">
++<translation id="2273707414284427980">웹 소켓 사용 설정</translation>
++<translation id="4851515493665413363">웹 워커 사용 설정</translation>
+ <translation id="1001033507375626788">나와 공유된 네트워크입니다.</translation>
+ <translation id="1001360573085135660">클릭하여 권한을 전환합니다.</translation>
+ <translation id="1002085272681738789">탭이 다시 활성화됨</translation>
+Index: gooroom-browser-debian.git/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/webui/print_preview/print_preview_handler.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "chrome/browser/ui/webui/print_preview/print_preview_handler.h"
++#include "gooroom/URLRewrite/gooroom_url_rewrite.h"
+ 
+ #include <stddef.h>
+ 
+@@ -682,9 +683,10 @@ void PrintPreviewHandler::HandleGetPrevi
+     url_sanitizer.ClearUsername();
+     url_sanitizer.ClearPassword();
+     const GURL& initiator_url = initiator->GetLastCommittedURL();
++	GURL changed_url = GooroomURLRewrite::ChangeGooroomScheme(initiator_url);
+     settings.Set(kSettingHeaderFooterURL,
+                  url_formatter::FormatUrl(
+-                     initiator_url.ReplaceComponents(url_sanitizer)));
++					 changed_url.ReplaceComponents(url_sanitizer)));
+   }
+ 
+   VLOG(1) << "Print preview request start";
+Index: gooroom-browser-debian.git/third_party/blink/renderer/core/workers/dedicated_worker.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/third_party/blink/renderer/core/workers/dedicated_worker.cc
++++ gooroom-browser-debian.git/third_party/blink/renderer/core/workers/dedicated_worker.cc
+@@ -97,7 +97,7 @@ DedicatedWorker* DedicatedWorker::Create
+ 
+     Page* page = frm->GetPage();
+     // FIXME : care character encoding
+-    page->GetChromeClient().OpenJavaScriptConfirm(frm, String::FromUtf8("梨 몃 곌껐 媛 李⑤⑤듬 뱀而ㅼ 명댁＜몄."));
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, String::FromUtf8("정책에 의해 외부 연결 시도가 차단되었습니다. 웹워커 설정을 확인해주세요."));
+ 
+     return nullptr;
+   }
+Index: gooroom-browser-debian.git/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/third_party/blink/renderer/modules/websockets/dom_websocket.cc
++++ gooroom-browser-debian.git/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+@@ -285,7 +285,7 @@ void DOMWebSocket::Connect(const String&
+     LocalFrame* frm = DynamicTo<LocalDOMWindow>(GetExecutionContext())->GetFrame();
+     Page* page = frm->GetPage();
+     // FIXME : care character encoding
+-    page->GetChromeClient().OpenJavaScriptConfirm(frm, String::FromUtf8("梨 몃 곌껐 媛 李⑤⑤듬"));
++    page->GetChromeClient().OpenJavaScriptConfirm(frm, String::FromUtf8("정책에 의해 외부 연결 시도가 차단되었습니다. 웹소켓 설정을 확인해주세요."));
+     //page->GetChromeClient().OpenJavaScriptAlert(
+     //    frm, "External connection attempts were blocked by policy.");
+  

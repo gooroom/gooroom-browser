@@ -1,0 +1,6 @@
+# unavoidable embed
+embedded-library freetype [usr/lib/chromium/chromium-shell]
+embedded-library srtp     [usr/lib/chromium/chromium-shell]
+
+# too many upstream spelling mistakes
+spelling-error-in-binary

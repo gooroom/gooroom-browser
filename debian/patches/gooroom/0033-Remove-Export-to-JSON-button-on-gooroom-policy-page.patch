@@ -1,0 +1,22 @@
+From 0d7d392d99a6c2a4e506949b87521897b86ba8a2 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 12:23:32 +0900
+Subject: [PATCH 33/63] Remove 'Export to JSON' button on gooroom://policy page
+
+---
+ components/policy/resources/webui/policy.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: gooroom-browser-debian.git/components/policy/resources/webui/policy_app.html.ts
+===================================================================
+--- gooroom-browser-debian.git.orig/components/policy/resources/webui/policy_app.html.ts
++++ gooroom-browser-debian.git/components/policy/resources/webui/policy_app.html.ts
+@@ -29,7 +29,7 @@ export function getHtml(this: PolicyAppE
+         </cr-button>
+         <cr-action-menu id="actionMenu" role-description="menu">
+           ${!this.hideExportButton_ ? html`
+-            <button id="export-policies" class="dropdown-item"
++            <button id="export-policies" class="dropdown-item" hidden
+                 @click="${this.onExportPoliciesClick_}">
+               $i18n{exportPoliciesJSON}
+             </button>

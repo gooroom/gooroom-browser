@@ -1,0 +1,37 @@
+From 1ca58c01dba8835fe9d94021a8768e731a272e7b Mon Sep 17 00:00:00 2001
+From: hnc-cjs <cjs@hancom>
+Date: Wed, 26 Apr 2023 20:23:33 +0900
+Subject: [PATCH 56/63] Bug 5383 fix - bookmark manager crash
+
+---
+ .../ui/webui/side_panel/bookmarks/bookmarks_page_handler.cc      | 1 -
+ 1 file changed, 1 deletion(-)
+
+Index: gooroom-browser-debian.git/chrome/browser/ui/webui/side_panel/bookmarks/bookmarks_page_handler.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/webui/side_panel/bookmarks/bookmarks_page_handler.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/webui/side_panel/bookmarks/bookmarks_page_handler.cc
+@@ -104,11 +104,6 @@ class BookmarksPageHandler::BookmarkCont
+       DCHECK(shopping_list_controller_);
+       AddItem(IDC_BOOKMARK_BAR_OPEN_ALL);
+       AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_NEW_WINDOW);
+-      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO);
+-      if (enterprise_isolated_mode::IsolatedModeReplacesIncognito(
+-              browser_window->GetProfile())) {
+-        AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED);
+-      }
+       if (bookmarks.size() == 1 && bookmarks.front()->is_url()) {
+         AddItem(IDC_BOOKMARK_BAR_OPEN_SPLIT_VIEW);
+       }
+@@ -122,11 +117,6 @@ class BookmarksPageHandler::BookmarkCont
+ 
+     AddItem(IDC_BOOKMARK_BAR_OPEN_ALL);
+     AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_NEW_WINDOW);
+-    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO);
+-    if (enterprise_isolated_mode::IsolatedModeReplacesIncognito(
+-            browser_window->GetProfile())) {
+-      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED);
+-    }
+     if (bookmarks.size() == 1 && bookmarks.front()->is_url()) {
+       AddItem(IDC_BOOKMARK_BAR_OPEN_SPLIT_VIEW);
+     }

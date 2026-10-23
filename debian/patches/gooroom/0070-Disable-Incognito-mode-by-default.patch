@@ -1,0 +1,34 @@
+Subject: disable Incognito mode by default
+
+Patches 0032, 0034, 0055, 0056, 0057 and 0069 close Incognito one entry point
+at a time: the command, the app menu, the bookmark menus, the bookmark manager
+and the --incognito switch. Upstream keeps adding doors - 153 introduced the
+Isolated window and 154 put it into three more menus - and every door we have
+not seen yet stays open. The side panel bookmarks menu is one of them: it asks
+BookmarksSidePanelUI::IsIncognitoModeAvailable(), which reads the
+IncognitoModeAvailability pref directly, and "Open in Incognito window" goes on
+to BookmarkContextMenuController with an OFF_THE_RECORD disposition.
+
+Upstream already has one switch for all of these, the IncognitoModeAvailability
+policy. Make kDisabled its default in GOOROOM_BUILD so every reader of the pref
+- IncognitoModePrefs::GetAvailability(), IsIncognitoAllowed(), CanOpenBrowser(),
+ShouldLaunchIncognito() and the direct pref reads - sees Incognito as disabled
+without a policy being deployed. The per-door patches stay; this is the net
+under them.
+
+Index: gooroom-browser-debian.git/chrome/browser/prefs/incognito_mode_prefs.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/prefs/incognito_mode_prefs.cc
++++ gooroom-browser-debian.git/chrome/browser/prefs/incognito_mode_prefs.cc
+@@ -31,7 +31,11 @@
+ 
+ // static
+ const IncognitoModeAvailability IncognitoModePrefs::kDefaultAvailability =
++#if defined(GOOROOM_BUILD)
++    policy::IncognitoModeAvailability::kDisabled;
++#else
+     policy::IncognitoModeAvailability::kEnabled;
++#endif
+ 
+ // static
+ bool IncognitoModePrefs::IntToAvailability(

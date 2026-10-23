@@ -1,0 +1,53 @@
+From: jongkyung.woo <jkwoo@gooroom.kr>
+Date: Mon, 18 May 2026 09:00:00 +0900
+Subject: [PATCH] 0067: blink renderer GOOROOM_BUILD 영역의 unused chrome/grit include 제거
+
+dedicated_worker.cc + dom_websocket.cc 두 파일 모두 GOOROOM_BUILD 영역에서
+`#include "chrome/grit/generated_resources.h"` + `#include "ui/base/l10n/l10n_util.h"`
+을 가져오지만, 실제 코드는 `String::FromUTF8(...)` hardcoded string 만 사용
+(IDS_* resource id 또는 l10n_util::GetStringUTF* 호출 없음). dead include.
+
+4.0(bookworm) 빌드는 clang 의 dead include 검증이 느슨해서 통과. 5.0(trixie)
+clang-19 + ninja 의 엄격 dependency 검증에서 fail:
+  fatal error: 'chrome/grit/generated_resources.h' file not found
+
+이전 1차 시도 (BUILD.gn deps `//chrome/app:generated_resources_grit` 추가) 는
+chromium 의 `//components:components_browsertests` assert_no_deps 정책 위반
+(`//chrome/*` 체인 금지). 정공법 = unused include 자체 제거.
+
+dead include 정리 (2 파일):
+  - third_party/blink/renderer/core/workers/dedicated_worker.cc
+  - third_party/blink/renderer/modules/websockets/dom_websocket.cc
+---
+ third_party/blink/renderer/core/workers/dedicated_worker.cc | 2 --
+ third_party/blink/renderer/modules/websockets/dom_websocket.cc | 2 --
+ 2 files changed, 4 deletions(-)
+
+--- a/third_party/blink/renderer/core/workers/dedicated_worker.cc
++++ b/third_party/blink/renderer/core/workers/dedicated_worker.cc
+@@ -6,11 +6,9 @@
+
+ #if defined(GOOROOM_BUILD)
+ #include "base/syslog_logging.h"
+-#include "chrome/grit/generated_resources.h"
+ #include "third_party/blink/renderer/core/page/chrome_client.h"
+ #include "third_party/blink/renderer/core/page/page.h"
+ #include "third_party/blink/renderer/core/frame/local_dom_window.h"
+-#include "ui/base/l10n/l10n_util.h"
+ #include "url/gurl.h"
+
+ #include "gooroom/WebKit/gooroom_enabled_features.h"
+--- a/third_party/blink/renderer/modules/websockets/dom_websocket.cc
++++ b/third_party/blink/renderer/modules/websockets/dom_websocket.cc
+@@ -32,11 +32,9 @@
+
+ #if defined(GOOROOM_BUILD)
+ #include "base/syslog_logging.h"
+-#include "chrome/grit/generated_resources.h"
+ #include "third_party/blink/renderer/core/page/chrome_client.h"
+ #include "third_party/blink/renderer/core/page/page.h"
+ #include "third_party/blink/renderer/core/frame/local_dom_window.h"
+-#include "ui/base/l10n/l10n_util.h"
+ #include "url/gurl.h"
+
+ #include "gooroom/WebKit/gooroom_enabled_features.h"

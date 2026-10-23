@@ -1,0 +1,2 @@
+# sandbox is intentionally suid
+elevated-privileges 4755 root/root [usr/lib/chromium/chrome-sandbox]

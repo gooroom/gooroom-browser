@@ -1,0 +1,80 @@
+Subject: store the initial browser command line in GooroomMain
+
+Upstream ChromeMain() captures an unpolluted snapshot of the browser command
+line right after CommandLine::Init() and before any programmatic mutation:
+
+    if (!command_line->HasSwitch(switches::kProcessType))
+      GetInitialCommandLineStorage() = *command_line;
+
+GooroomMain() replaces ChromeMain() as the entry point but never had that
+block, so the storage stays empty. GetInitialBrowserCommandLine() dereferences
+it with .value() and aborts with
+
+    bad_optional_access was thrown in -fno-exceptions mode
+
+The defect was latent until 153: chrome/browser/ui/webui/policy/policy_ui.cc
+started calling GetInitialBrowserCommandLine() to render the command line
+section, so opening chrome://policy now kills the browser process. 152 is
+missing the same block but has no consumer.
+
+The storage lives in an anonymous namespace in chrome_main.cc, so expose a
+minimal setter and call it from GooroomMain at the same point upstream does,
+before AppendExtraArgumentsToCommandLine(), keeping the snapshot unpolluted
+as the upstream comment requires.
+
+Index: gooroom-browser-debian.git/chrome/app/chrome_main.h
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/app/chrome_main.h
++++ gooroom-browser-debian.git/chrome/app/chrome_main.h
+@@ -15,4 +15,10 @@
+ // This function is only available in the browser process.
+ const base::CommandLine& GetInitialBrowserCommandLine();
+ 
++// Stores the snapshot returned by GetInitialBrowserCommandLine(). Gooroom
++// replaces ChromeMain() with GooroomMain(), which must call this at the same
++// point upstream assigns the storage: right after CommandLine::Init() and
++// before any flag is appended.
++void SetInitialBrowserCommandLine(const base::CommandLine& command_line);
++
+ #endif  // CHROME_APP_CHROME_MAIN_H_
+Index: gooroom-browser-debian.git/chrome/app/chrome_main.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/app/chrome_main.cc
++++ gooroom-browser-debian.git/chrome/app/chrome_main.cc
+@@ -77,6 +77,10 @@
+   return GetInitialCommandLineStorage().value();
+ }
+ 
++void SetInitialBrowserCommandLine(const base::CommandLine& command_line) {
++  GetInitialCommandLineStorage() = command_line;
++}
++
+ #if BUILDFLAG(IS_WIN)
+ // We use extern C for the prototype DLLEXPORT to avoid C++ name mangling.
+ extern "C" {
+Index: gooroom-browser-debian.git/gooroom/app/gooroom_main.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/gooroom/app/gooroom_main.cc
++++ gooroom-browser-debian.git/gooroom/app/gooroom_main.cc
+@@ -19,6 +19,7 @@
+ #include "base/sampling_heap_profiler/poisson_allocation_sampler.h"
+ #include "base/time/time.h"
+ #include "build/build_config.h"
++#include "chrome/app/chrome_main.h"
+ #include "chrome/app/chrome_main_delegate.h"
+ #include "chrome/browser/headless/headless_mode_init.h"
+ #include "chrome/browser/headless/headless_mode_util.h"
+@@ -95,6 +96,13 @@
+   [[maybe_unused]] base::CommandLine* command_line(
+       base::CommandLine::ForCurrentProcess());
+ 
++  // Capture the unpolluted command line snapshot, exactly where upstream
++  // ChromeMain() does. chrome://policy reads it through
++  // GetInitialBrowserCommandLine(); without this the optional stays empty and
++  // the browser aborts with bad_optional_access when that page is opened.
++  if (!command_line->HasSwitch(switches::kProcessType))
++    SetInitialBrowserCommandLine(*command_line);
++
+   AppendExtraArgumentsToCommandLine(command_line);
+   base::PoissonAllocationSampler::Init();
+   // line data is available. Allocated as an object on the stack to ensure that

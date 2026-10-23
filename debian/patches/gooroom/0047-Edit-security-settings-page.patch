@@ -1,0 +1,41 @@
+From 8df2bcc3c2f282540ea71e2f59a771320536a69a Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 10:18:35 +0900
+Subject: [PATCH 47/63] Edit security settings page
+
+---
+ .../privacy_page/security/security_page.html  | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+Index: gooroom-browser/chrome/browser/resources/settings/privacy_page/security/security_page.html
+===================================================================
+--- chromium-143.0.7499.169.orig/chrome/browser/resources/settings/privacy_page/security/security_page.html
++++ gooroom-browser/chrome/browser/resources/settings/privacy_page/security/security_page.html
+@@ -276,14 +276,6 @@
+         sub-label="[[javascriptOptimizerSubLabel_]]"
+         role-description="$i18n{subpageArrowRoleDescription}">
+     </cr-link-row>
+-    <template is="dom-if" if="[[enableSecurityKeysSubpage_]]">
+-        <cr-link-row id="securityKeysSubpageTrigger" class="hr"
+-            label="$i18n{securityKeysTitle}"
+-            sub-label="$i18n{securityKeysDesc}"
+-            on-click="onSecurityKeysClick_"
+-            role-description="$i18n{subpageArrowRoleDescription}">
+-        </cr-link-row>
+-    </template>
+ 
+     <cr-link-row id="manageCertificatesLinkRow" class="hr"
+         role-description="$i18n{subpageArrowRoleDescription}"
+@@ -292,12 +284,6 @@
+         on-click="onManageCertificatesClick_" external>
+     </cr-link-row>
+ 
+-    <cr-link-row id="advancedProtectionProgramLink" class="hr"
+-        label="$i18n{advancedProtectionProgramTitle}"
+-        sub-label="$i18n{advancedProtectionProgramDesc}"
+-        on-click="onAdvancedProtectionProgramLinkClick_"
+-        external>
+-    </cr-link-row>
+     <template is="dom-if" if="[[showDisableSafebrowsingDialog_]]" restamp>
+       <settings-simple-confirmation-dialog
+           title-text="$i18n{safeBrowsingDisableDialog}"

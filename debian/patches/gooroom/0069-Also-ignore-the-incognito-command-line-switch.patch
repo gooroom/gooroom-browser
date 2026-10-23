@@ -1,0 +1,40 @@
+Subject: also ignore the --incognito command line switch
+
+Patch 0032 ("Remove Incognito mode in gooroom-browser") strips the UI entry
+points: the keyboard shortcut and command, the app menu item, the bookmark
+context menu, the extension detail view and the bookmark manager. What it never
+covered is chrome/browser/ui/startup/, so `gooroom-browser --incognito` still
+reached IncognitoModePrefs::ShouldLaunchIncognitoInternal() and opened a real
+off-the-record session. The removal had a hole that only the command line could
+walk through.
+
+Measured on 153 (+grm5u3/u4) with the same file opened twice, once without the
+switch and once with it: the visit is recorded in History in the first run and
+missing in the second, i.e. the second run really is off the record. 152 behaves
+the same way, so this is not a 153 regression but a gap that has been open since
+the UI was removed.
+
+Drop the switch inside the GOOROOM_BUILD guard, next to the other Incognito
+removals. The assignment is kept separate from the initializer so that
+`command_line` stays used and `forced_by_switch` stays assignable below.
+
+Index: gooroom-browser-debian.git/chrome/browser/prefs/incognito_mode_prefs.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/prefs/incognito_mode_prefs.cc
++++ gooroom-browser-debian.git/chrome/browser/prefs/incognito_mode_prefs.cc
+@@ -156,6 +156,15 @@
+   // the parental controls check (which can be quite slow) can be avoided
+   // most of the time.
+   bool forced_by_switch = command_line.HasSwitch(switches::kIncognito);
++#if defined(GOOROOM_BUILD)
++  // Gooroom removes Incognito mode entirely (see 0032). The UI entry points are
++  // gone, but the --incognito command line switch still reached this function
++  // and opened a real OTR session, so the removal had a hole that only the
++  // command line could walk through. Drop the switch here as well.
++  // Assign instead of replacing the initializer so that `command_line` stays
++  // used and `forced_by_switch` stays assignable below.
++  forced_by_switch = false;
++#endif
+   if (for_subsequent_browsers) {
+     forced_by_switch =
+         forced_by_switch &&

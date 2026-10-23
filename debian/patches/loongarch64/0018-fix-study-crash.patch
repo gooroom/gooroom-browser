@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jianfeng Liu <liujianfeng1994@gmail.com>
+Date: Thu, 15 May 2025 16:52:07 +0800
+Subject: fix study crash
+
+---
+ components/variations/proto/study.proto                        | 2 ++
+ .../variations/service/variations_field_trial_creator.cc       | 3 +++
+ 2 files changed, 5 insertions(+)
+
+--- a/components/variations/proto/study.proto
++++ b/components/variations/proto/study.proto
+@@ -297,6 +297,8 @@ message Study {
+ 
+     // A POSIX-only value, indicating an OpenPOWER host
+     PPC64 = 5;
++
++    LOONGARCH64 = 6;
+   }
+ 
+   // Possible states of the policy restriction filter.
+--- a/components/variations/service/variations_field_trial_creator.cc
++++ b/components/variations/service/variations_field_trial_creator.cc
+@@ -104,6 +104,9 @@ Study::CpuArchitecture GetCurrentCpuArch
+   if (process_arch == "ARM") {
+     return Study::ARM32;
+   }
++  if (process_arch == "LOONGARCH_64") {
++    return Study::LOONGARCH64;
++  }
+   if (process_arch == "x86") {
+     return Study::X86_32;
+   }

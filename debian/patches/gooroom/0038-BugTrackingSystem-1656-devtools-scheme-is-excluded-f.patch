@@ -1,0 +1,23 @@
+From bd799b2f8e6a979d2b3250262315fa8bfc8b19cc Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 14:20:10 +0900
+Subject: [PATCH 38/63] BugTrackingSystem 1656 : 'devtools://' scheme is
+ excluded from trust/untrust judgment
+
+---
+ content/browser/web_contents/web_contents_impl.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: gooroom-browser-debian.git/content/browser/web_contents/web_contents_impl.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/content/browser/web_contents/web_contents_impl.cc
++++ gooroom-browser-debian.git/content/browser/web_contents/web_contents_impl.cc
+@@ -7394,7 +7394,7 @@ bool RequestCurrentUserDataDir(GURL url)
+   //Chrome pages are excluded from trust/untrust judgment.
+   if (url.scheme() == "chrome" || url.scheme() == "chrome-extension" ||
+       url.scheme() == "chrome-search" || url.scheme() == "chrome-devtools" ||
+-      url.scheme() == "about")
++      url.scheme() == "about" || url.scheme() == "devtools")
+     return false;
+ 
+   if (url.spec().find("chrome/newtab") != std::string::npos)

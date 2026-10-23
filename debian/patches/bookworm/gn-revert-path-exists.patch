@@ -1,0 +1,90 @@
+This is a mix of commit fd011815c455976b15e31966f826628b4f9f61d4
+("don't keep use_reclient=true with .reproxy_tmp") pulled from upstream
+plus a revert of upstream's 49b23faa16ad14e96601aea8772c7279fcbd6b44
+("sysroot.gni: Use path_exists() rather than exec_script("dir_exists.py")
+in order to work on older gn that lacks path_exists().
+
+--- a/build/config/sysroot.gni
++++ b/build/config/sysroot.gni
+@@ -58,7 +58,9 @@ if (sysroot == "") {
+         _script_arch = "amd64"
+       }
+       assert(
+-          path_exists(sysroot),
++          exec_script("//build/dir_exists.py",
++                      [ rebase_path(sysroot) ],
++                      "string") == "True",
+           "Missing sysroot ($sysroot). To fix, run: build/linux/sysroot_scripts/install-sysroot.py --arch=$_script_arch")
+     }
+   } else if (is_mac) {
+--- /dev/null
++++ b/build/dir_exists.py
+@@ -0,0 +1,23 @@
++#!/usr/bin/env python3
++# Copyright 2011 The Chromium Authors
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++"""Writes True if the argument is a directory."""
++
++import os.path
++import sys
++
++def main():
++  sys.stdout.write(_is_dir(sys.argv[1]))
++  return 0
++
++def _is_dir(dir_name):
++  return str(os.path.isdir(dir_name))
++
++def DoMain(args):
++  """Hook to be called from gyp without starting a separate python
++  interpreter."""
++  return _is_dir(args[0])
++
++if __name__ == '__main__':
++  sys.exit(main())
+--- a/build/dotfile_settings.gni
++++ b/build/dotfile_settings.gni
+@@ -26,6 +26,7 @@ build_dotfile_settings = {
+     "//build/config/mac/mac_sdk.gni",
+     "//build/config/mac/rules.gni",
+     "//build/config/posix/BUILD.gn",
++    "//build/config/sysroot.gni",
+     "//build/config/win/BUILD.gn",
+     "//build/config/win/visual_studio_version.gni",
+     "//build/rust/analyze.gni",
+--- a/build/toolchain/siso.gni
++++ b/build/toolchain/siso.gni
+@@ -6,12 +6,6 @@ import("//build/config/gclient_args.gni"
+ # need to match with autoninja's logic.
+ use_siso_default = false
+ 
+-_is_ninja_used = path_exists(rebase_path(".ninja_deps", root_build_dir))
+-
+-if (path_exists("//build/config/siso/.sisoenv") &&
+-    defined(build_with_chromium) && build_with_chromium && !_is_ninja_used) {
+-  use_siso_default = true
+-}
+ 
+ declare_args() {
+   # Placeholder to allow having use_siso in args.gn file.
+--- a/tools/metrics/BUILD.gn
++++ b/tools/metrics/BUILD.gn
+@@ -11,7 +11,7 @@ import("//tools/metrics/histograms/histo
+ # dirmd doesn't work in non-git checkout.
+ # TODO(crbug.com/329080012): Remove this once dirmd works in non-git
+ # checkouts.
+-if (path_exists("//.git")) {
++if (false) {
+   action("histograms_xml") {
+     script = "histograms/merge_xml.py"
+     output = "$root_out_dir/histograms.xml"
+@@ -45,7 +45,7 @@ group("metrics_metadata") {
+   # for non-git checkouts, as dirmd doesn't work on non-git checkout.
+   # TODO(crbug.com/329080012): Remove this condition once dirmd works
+   # in non-git checkouts.
+-  if (path_exists("//.git")) {
++  if (false) {
+     deps += [ ":histograms_xml" ]
+   }
+ }

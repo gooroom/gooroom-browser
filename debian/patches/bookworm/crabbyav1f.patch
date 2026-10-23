@@ -1,0 +1,31 @@
+error[E0658]: use of unstable library feature 'generic_nonzero'
+  --> ../../third_party/crabbyavif/src/src/internal_utils/mod.rs:22:5
+   |
+22 | use std::num::NonZero;
+   |     ^^^^^^^^^^^^^^^^^
+   |
+   = note: see issue #120257 <https://github.com/rust-lang/rust/issues/120257> for more information
+   = help: add `#![feature(generic_nonzero)]` to the crate attributes to enable
+
+
+--- a/third_party/crabbyavif/src/src/lib.rs
++++ b/third_party/crabbyavif/src/src/lib.rs
+@@ -12,6 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
++#![feature(generic_nonzero)]
+ #![deny(unsafe_op_in_unsafe_fn)]
+ #![cfg_attr(feature = "disable_cfi", feature(no_sanitize))]
+ 
+--- a/third_party/crabbyavif/BUILD.gn
++++ b/third_party/crabbyavif/BUILD.gn
+@@ -175,7 +175,7 @@ rust_static_library("crabbyavif") {
+ 
+   # Required for disable_cfi feature.
+   configs -= [ "//build/config/compiler:disallow_unstable_features" ]
+-  rustflags = [ "-Zallow-features=no_sanitize" ]
++  rustflags = [ "-Zallow-features=no_sanitize,generic_nonzero" ]
+ 
+   public_deps = [ ":header_files" ]
+   deps = [

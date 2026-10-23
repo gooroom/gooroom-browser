@@ -1,0 +1,34 @@
+author: Andres Salomon <dilinger@debian.org>
+description: fix bindgen-related stuff
+
+Crabbyav1f is calling bindgen features which are not currently in
+bookworm or sid; --allowlist-item was added in bindgen 0.68. As far
+as I can tell the build.rs stuff calls allowlist_item from there as
+well, so these arguments may just be redundant? Hopefully I'm not
+breaking stuff..  Drop this for sid once bindgen gets upgraded.
+
+
+--- a/third_party/crabbyavif/BUILD.gn
++++ b/third_party/crabbyavif/BUILD.gn
+@@ -13,6 +13,10 @@ rust_bindgen_generator("crabbyavif_dav1d
+   bindgen_flags = [
+     "no-doc-comments",
+     "generate=functions,types,vars,methods,constructors,destructors",
++  ]
++  junk = []
++  not_needed(["junk"])
++  junk = [
+     "allowlist-item=DAV1D_MAX_THREADS",
+     "allowlist-item=dav1d_close",
+     "allowlist-item=dav1d_data_create",
+@@ -46,6 +50,10 @@ rust_bindgen_generator("crabbyavif_libyu
+   bindgen_flags = [
+     "no-doc-comments",
+     "generate=functions,types,vars,methods,constructors,destructors",
++  ]
++  junk = []
++  not_needed(["junk"])
++  junk = [
+     "allowlist-item=ABGRToI420",
+     "allowlist-item=ABGRToJ400",
+     "allowlist-item=ABGRToJ420",

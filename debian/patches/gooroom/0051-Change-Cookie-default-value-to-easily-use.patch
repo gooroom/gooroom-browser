@@ -1,0 +1,21 @@
+From 2f7fd46e8ba034671792ea97d504b1ae8837dc4b Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:11:39 +0900
+Subject: [PATCH 51/63] Change Cookie default value to easily use
+
+---
+ components/content_settings/core/browser/cookie_settings.cc | 1 -
+ 1 file changed, 1 deletion(-)
+
+Index: gooroom-browser-debian.git/components/content_settings/core/browser/cookie_settings.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/components/content_settings/core/browser/cookie_settings.cc
++++ gooroom-browser-debian.git/components/content_settings/core/browser/cookie_settings.cc
+@@ -344,7 +344,6 @@ bool CookieSettings::ShouldBlockThirdPar
+ 
+   switch (mode) {
+     case CookieControlsMode::kBlockThirdParty:
+-      return true;
+     case CookieControlsMode::kIncognitoOnly:
+     case CookieControlsMode::kOff:
+       return is_incognito_;

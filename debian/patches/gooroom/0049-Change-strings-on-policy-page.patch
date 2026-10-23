@@ -1,0 +1,22 @@
+From 1a2da6ec9ab1bf9e9e91f56202047166d971de53 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:09:42 +0900
+Subject: [PATCH 49/63] Change strings on policy page
+
+---
+ components/policy/core/browser/policy_conversions.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: gooroom-browser-debian.git/components/policy/core/browser/policy_conversions.h
+===================================================================
+--- gooroom-browser-debian.git.orig/components/policy/core/browser/policy_conversions.h
++++ gooroom-browser-debian.git/components/policy/core/browser/policy_conversions.h
+@@ -47,7 +47,7 @@ inline constexpr char kNameKey[] = "name
+ inline constexpr char kPoliciesKey[] = "policies";
+ inline constexpr char kPolicyNamesKey[] = "policyNames";
+ inline constexpr char kChromePoliciesId[] = "chrome";
+-inline constexpr char kChromePoliciesName[] = "Chrome Policies";
++inline constexpr char kChromePoliciesName[] = "Gooroom Policies";
+ inline constexpr char kExtensionInstallPoliciesId[] = "extensionInstall";
+ inline constexpr char kExtensionInstallPoliciesName[] =
+     "Extension Install Policies";
