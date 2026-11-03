@@ -1,0 +1,137 @@
+From 27ee74371759a23392094caa22c11de2ca378f37 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Fri, 5 Mar 2021 09:48:26 +0900
+Subject: [PATCH 23/63] Web socket-worker IPC Bug fix
+
+---
+ .../browser/chrome_content_browser_client.cc  |  2 --
+ chrome/browser/ui/prefs/prefs_tab_helper.cc   |  4 ++--
+ gooroom/content/gooroom_safety_policy_part.cc |  4 ++--
+ .../common/web_preferences/web_preferences.h  |  4 ++--
+ .../web_preferences_mojom_traits.h            |  4 ++--
+ .../webpreferences/web_preferences.mojom      |  4 ++--
+ .../renderer/core/exported/web_view_impl.cc   | 20 ++++++++++++++++---
+ 7 files changed, 27 insertions(+), 15 deletions(-)
+
+Index: chromium-149-deb12/chrome/browser/chrome_content_browser_client.cc
+===================================================================
+--- chromium-149-deb12.orig/chrome/browser/chrome_content_browser_client.cc
++++ chromium-149-deb12/chrome/browser/chrome_content_browser_client.cc
+@@ -4705,8 +4705,6 @@ void ChromeContentBrowserClient::Overrid
+       prefs->GetInteger(prefs::kWebKitMinimumLogicalFontSize);
+ #endif
+ 
+-  web_prefs->websocket_enabled = true;
+-  web_prefs->webworker_enabled = true;
+   web_prefs->default_encoding = prefs->GetString(prefs::kDefaultCharset);
+ 
+   web_prefs->dom_paste_enabled =
+Index: chromium-149-deb12/chrome/browser/ui/prefs/prefs_tab_helper.cc
+===================================================================
+--- chromium-149-deb12.orig/chrome/browser/ui/prefs/prefs_tab_helper.cc
++++ chromium-149-deb12/chrome/browser/ui/prefs/prefs_tab_helper.cc
+@@ -366,9 +366,9 @@ void PrefsTabHelper::RegisterProfilePref
+     user_prefs::PrefRegistrySyncable* registry,
+     const std::string& locale) {
+   WebPreferences pref_defaults;
+-  registry->RegisterBooleanPref(prefs::kWebKitWebSocketEnabled,
++  registry->RegisterIntegerPref(prefs::kWebKitWebSocketEnabled,
+                                 pref_defaults.websocket_enabled);
+-  registry->RegisterBooleanPref(prefs::kWebKitWebWorkerEnabled,
++  registry->RegisterIntegerPref(prefs::kWebKitWebWorkerEnabled,
+                                 pref_defaults.webworker_enabled);
+   registry->RegisterBooleanPref(prefs::kWebKitJavascriptEnabled,
+                                 pref_defaults.javascript_enabled);
+Index: chromium-149-deb12/gooroom/content/gooroom_safety_policy_part.cc
+===================================================================
+--- chromium-149-deb12.orig/gooroom/content/gooroom_safety_policy_part.cc
++++ chromium-149-deb12/gooroom/content/gooroom_safety_policy_part.cc
+@@ -23,14 +23,14 @@ void GooroomSafetyPolicyPart::OverrideWe
+     bool confirm = ps->GetBoolean("gooroom_option.websocket_confirm");
+     web_prefs->websocket_enabled = confirm;
+   } else {
+-    web_prefs->websocket_enabled = false;
++    web_prefs->websocket_enabled = 0;
+   }
+ 
+   if (gooroom::g_gooroom->useWebWorker()) {
+     bool confirm = ps->GetBoolean("gooroom_option.webworker_confirm");
+     web_prefs->webworker_enabled = confirm;
+   } else {
+-    web_prefs->webworker_enabled = false;
++    web_prefs->webworker_enabled = 0;
+   }
+ 
+   return;
+Index: chromium-149-deb12/third_party/blink/public/common/web_preferences/web_preferences.h
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/public/common/web_preferences/web_preferences.h
++++ chromium-149-deb12/third_party/blink/public/common/web_preferences/web_preferences.h
+@@ -61,8 +61,8 @@ struct BLINK_COMMON_EXPORT WebPreference
+   int minimum_font_size = 0;
+   int minimum_logical_font_size = 6;
+   std::string default_encoding = "ISO-8859-1";
+-  bool websocket_enabled = true;
+-  bool webworker_enabled = true;
++  int websocket_enabled = 1;
++  int webworker_enabled = 1;
+   bool context_menu_on_mouse_up = BUILDFLAG(IS_WIN);
+   bool javascript_enabled = true;
+   bool web_security_enabled = true;
+Index: chromium-149-deb12/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
++++ chromium-149-deb12/third_party/blink/public/common/web_preferences/web_preferences_mojom_traits.h
+@@ -78,12 +78,12 @@ struct BLINK_COMMON_EXPORT StructTraits<
+     return r.default_encoding;
+   }
+ 
+-  static bool webworker_enabled(
++  static uint32_t webworker_enabled(
+       const blink::web_pref::WebPreferences& r) {
+     return r.webworker_enabled;
+   }
+ 
+-  static bool websocket_enabled(
++  static uint32_t websocket_enabled(
+       const blink::web_pref::WebPreferences& r) {
+     return r.websocket_enabled;
+   }
+Index: chromium-149-deb12/third_party/blink/renderer/core/exported/web_view_impl.cc
+===================================================================
+--- chromium-149-deb12.orig/third_party/blink/renderer/core/exported/web_view_impl.cc
++++ chromium-149-deb12/third_party/blink/renderer/core/exported/web_view_impl.cc
+@@ -1573,9 +1573,6 @@
+   settings->SetDefaultTextEncodingName(
+       WebString::FromAscii(prefs.default_encoding));
+   settings->SetJavaScriptEnabled(prefs.javascript_enabled);
+-  settings->SetJavaScriptEnabled(prefs.websocket_enabled);
+-  settings->SetJavaScriptEnabled(prefs.webworker_enabled);
+-  settings->SetJavaScriptEnabled(prefs.javascript_enabled);
+   settings->SetWebSecurityEnabled(prefs.web_security_enabled);
+   settings->SetLoadsImagesAutomatically(prefs.loads_images_automatically);
+   settings->SetImagesEnabled(prefs.images_enabled);
+@@ -1588,6 +1585,23 @@
+   settings->SetDownloadableBinaryFontsEnabled(prefs.remote_fonts_enabled);
+   settings->SetJavaScriptCanAccessClipboard(
+       prefs.javascript_can_access_clipboard);
++#if defined(GOOROOM_BUILD)
++  if (prefs.websocket_enabled) {
++    WebRuntimeFeatures::EnableWebSocket(true);
++    WebRuntimeFeatures::EnableWebSocketConfirm(prefs.websocket_enabled == 1);
++  } else {
++    WebRuntimeFeatures::EnableWebSocket(false);
++    WebRuntimeFeatures::EnableWebSocketConfirm(false);
++  }
++
++  if (prefs.webworker_enabled) {
++    WebRuntimeFeatures::EnableWebWorker(true);
++    WebRuntimeFeatures::EnableWebWorkerConfirm(prefs.webworker_enabled == 1);
++  } else {
++    WebRuntimeFeatures::EnableWebWorker(false);
++    WebRuntimeFeatures::EnableWebWorkerConfirm(false);
++  }
++#endif
+   settings->SetDNSPrefetchingEnabled(prefs.dns_prefetching_enabled);
+   blink::WebNetworkStateNotifier::SetSaveDataEnabled(prefs.data_saver_enabled);
+   settings->SetBatterySaverEnabled(prefs.battery_saver_enabled);

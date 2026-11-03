@@ -1,0 +1,42 @@
+author: Andres Salomon <dilinger@debian.org>
+description: include debian node libs (needed for rollup)
+
+This is strictly just needed for bullseye's rollup , but may be useful
+later on when we drop more nodejs stuff.
+
+--- a/third_party/chromium-bidi/tools/build/scripts/rollup.py
++++ b/third_party/chromium-bidi/tools/build/scripts/rollup.py
+@@ -32,7 +32,7 @@ def main():
+     script_dir = os.path.dirname(os.path.abspath(__file__))
+     repo_root = os.path.abspath(os.path.join(script_dir, "../../.."))
+     rollup_path = os.path.join(
+-        repo_root, "node_modules/@rollup/wasm-node/dist/bin/rollup"
++        repo_root, "../node/node_modules/rollup/dist/bin/rollup"
+     )
+ 
+     env_vars = [f"GEN_DIR:{os.path.abspath(args.gen_dir)}"]
+--- a/third_party/node/node_modules.py
++++ b/third_party/node/node_modules.py
+@@ -4,10 +4,13 @@
+ # found in the LICENSE file.
+ 
+ from os import path as os_path
++import os
+ 
+ 
+ NODE_MODULES = os_path.join(os_path.dirname(__file__), 'node_modules')
+ 
++os.environ['NODE_PATH'] = '/usr/share/nodejs'
++
+ 
+ def _path_in_node_modules(*args):
+   return os_path.join(NODE_MODULES, *args)
+@@ -18,7 +21,7 @@ def PathToEsLint():
+ 
+ 
+ def PathToRollup():
+-  return _path_in_node_modules('@rollup', 'wasm-node', 'dist', 'bin', 'rollup')
++  return _path_in_node_modules('rollup', 'dist', 'bin', 'rollup')
+ 
+ 
+ def PathToStylelint():

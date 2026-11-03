@@ -1,0 +1,42 @@
+From f95d3369252ef027efd49a1e33bb0a620577db97 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Thu, 23 Jul 2020 17:23:10 +0900
+Subject: [PATCH 19/63] disable chrome login shortcut(ctrl+shift+m) and hide
+ login icon
+
+---
+ chrome/browser/ui/browser_command_controller.cc | 3 +++
+ chrome/browser/ui/views/toolbar/toolbar_view.cc | 4 ++++
+ 2 files changed, 7 insertions(+)
+
+Index: gooroom-browser-debian.git/chrome/browser/ui/browser_command_controller.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/browser_command_controller.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/browser_command_controller.cc
+@@ -976,9 +976,11 @@ void BrowserCommandController::HandleCom
+           signin_metrics::AccessPoint::kMenu);
+       break;
+     case IDC_SHOW_SIGNIN_WHEN_PAUSED:
++#if !defined(GOOROOM_BUILD)
+       signin_ui_util::ShowReauthForPrimaryAccountWithAuthError(
+           browser_->GetProfile(), signin_metrics::AccessPoint::kMenu);
+       break;
++#endif
+     case IDC_SHOW_PASSWORD_MANAGER:
+       ShowPasswordManager(browser_);
+       break;
+Index: gooroom-browser-debian.git/chrome/browser/ui/views/toolbar/toolbar_view.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/views/toolbar/toolbar_view.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/views/toolbar/toolbar_view.cc
+@@ -576,6 +576,10 @@ void ToolbarView::Init() {
+     avatar_ = AddChildView(std::make_unique<AvatarToolbarButton>(browser_));
+     bool show_avatar_toolbar_button =
+         AvatarToolbarButtonInterface::CanShowForProfile(browser_->GetProfile());
++#if defined(GOOROOM_BUILD)
++    //Hide show_avatar_toolbar_button
++    show_avatar_toolbar_button = false;
++#endif
+     avatar_->SetVisible(show_avatar_toolbar_button);
+   }
+ 

@@ -1,0 +1,53 @@
+Description: Support for the pre-generated source framework
+Author: Daniel Richard G. <skunk@iSKUNK.ORG>
+
+Also see:
+  debian/deb_pre_gen.py
+  debian/scripts/init-pre-gen.sh
+
+--- a/build/rust/gni_impl/filter_clang_args.py
++++ b/build/rust/gni_impl/filter_clang_args.py
+@@ -28,6 +28,9 @@ options (e.g. linker inputs or `/TP` in
+ unknown synthesized arguments.
+ """
+ 
++import os
++deb_clang_target = os.environ.get('DEB_CR_PRE_GEN_CLANG')
++
+ 
+ def filter_clang_args(clangargs):
+ 
+@@ -58,6 +61,21 @@ def filter_clang_args(clangargs):
+                 i += 1
+                 continue
+ 
++            # Debian pre-gen filtering
++            if deb_clang_target:
++                if arg.startswith('--target='):
++                    i += 1
++                    yield f'--target={deb_clang_target}'
++                    continue
++                if arg.startswith('-f') and arg != '-fparse-all-comments':
++                    i += 1
++                    continue
++                if arg.startswith('-m'):
++                    i += 1
++                    if arg == '-mllvm':
++                        i += 1  # skip an extra arg
++                    continue
++
+             # Filter all warning flags (Clang/GCC -W*, clang-cl /W*, /wd*,
+             # /clang:-W*) and warning-as-error flags (-Werror, /WX).
+             if (
+--- a/third_party/devtools-frontend/src/scripts/build/generate_devtools_json.mjs
++++ b/third_party/devtools-frontend/src/scripts/build/generate_devtools_json.mjs
+@@ -15,7 +15,8 @@ const root = join(dirname(dirname(import
+ const NAMESPACE = '2ba62548-f4e9-11ef-9cd2-0242ac120002';
+ 
+ // Generate a v5 UUID with the root path as name.
+-const uuid = v5(root, NAMESPACE);
++// (Debian: Use a fixed name instead, for pre-gen reproducibility)
++const uuid = v5('debian-chromium', NAMESPACE);
+ 
+ // Construct and write the `devtools.json`.
+ const devtools = {

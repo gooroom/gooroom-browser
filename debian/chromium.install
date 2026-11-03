@@ -1,0 +1,16 @@
+out/Release/chromium usr/lib/chromium
+
+debian/presubj usr/share/bug/chromium
+
+debian/initial_bookmarks.html usr/share/chromium
+
+debian/chromium.xml usr/share/gnome-control-center/default-apps
+
+debian/chromium.desktop usr/share/applications
+
+debian/etc/README etc/chromium.d
+debian/etc/apikeys etc/chromium.d
+debian/etc/default-flags etc/chromium.d
+debian/etc/dev-shm etc/chromium.d
+debian/etc/extensions etc/chromium.d
+debian/etc/master_preferences etc/chromium

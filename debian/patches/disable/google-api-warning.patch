@@ -1,0 +1,14 @@
+description: disable the google api key warning when those aren't found
+author: Michael Gilbert <mgilbert@debian.org>
+
+--- a/chrome/browser/ui/startup/infobar_utils.cc
++++ b/chrome/browser/ui/startup/infobar_utils.cc
+@@ -194,7 +194,7 @@ void AddInfoBarsIfNecessary(BrowserWindo
+   infobars::ContentInfoBarManager* infobar_manager =
+       infobars::ContentInfoBarManager::FromWebContents(web_contents);
+ 
+-  if (!google_apis::HasAPIKeyConfigured()) {
++  if (false) {
+     if (infobars::IsInfoBarMigrated(
+             infobars::InfoBarDelegate::GOOGLE_API_KEYS_INFOBAR_DELEGATE)) {
+       if (auto* manager =

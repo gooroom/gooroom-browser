@@ -1,0 +1,24 @@
+Patch taken from OpenSuse. Since we're not building with -fsanitize=address,
+we shouldn't be calling __sanitizer_set_death_callback or we get undefined
+symbols.
+
+--- a/v8/src/sandbox/testing.cc
++++ b/v8/src/sandbox/testing.cc
+@@ -1118,7 +1118,7 @@ void UninstallCrashFilter() {
+   // We should also uninstall the sanitizer death callback as our crash filter
+   // may hand a crash over to sanitizers, which should then not print the
+   // sandbox violation message a second time.
+-#ifdef V8_USE_ANY_SANITIZER
++#ifdef V8_USE_ADDRESS_SANITIZER
+   __sanitizer_set_death_callback(nullptr);
+ #endif  // V8_USE_ANY_SANITIZER
+ }
+@@ -1498,7 +1498,7 @@ void InstallCrashFilter() {
+   }
+   CHECK(success);
+ 
+-#ifdef V8_USE_ANY_SANITIZER
++#ifdef V8_USE_ADDRESS_SANITIZER
+   // We install a sanitizer death callback. For ASan, this will check the flag
+   // set by __asan_on_error to determine if the fault was harmless.
+   //

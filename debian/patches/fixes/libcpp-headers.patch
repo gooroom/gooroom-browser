@@ -1,0 +1,54 @@
+ERROR at //build/config/BUILDCONFIG.gn:700:11: Unable to load "/chromium-141.0.7390.37/buildtools/third_party/libc++/BUILD.gn".
+          "//buildtools/third_party/libc++:libcxx_headers",
+          ^-----------------------------------------------
+
+--- a/build/config/BUILDCONFIG.gn
++++ b/build/config/BUILDCONFIG.gn
+@@ -630,7 +630,7 @@ foreach(_target_type,
+ 
+       if (use_libcxx_modules) {
+         # Add a dependency needed for Clang modules builds.
+-        deps += [ "//buildtools/third_party/libc++:all_modules" ]
++        deps += [ ]
+       }
+ 
+       # Consumed by the unsafe-buffers plugin during compile.
+@@ -760,7 +760,7 @@ foreach(_target_type,
+ 
+       if (use_libcxx_modules) {
+         # Add a dependency needed for Clang modules builds.
+-        deps += [ "//buildtools/third_party/libc++:all_modules" ]
++        deps += [ ]
+       }
+ 
+       # On Android, write shared library output file to metadata. We will use
+--- a/build/modules/BUILD.gn
++++ b/build/modules/BUILD.gn
+@@ -5,8 +5,6 @@
+ import("//build/config/c++/c++.gni")
+ import("//build/config/clang/clang.gni")
+ import("//build/config/sysroot.gni")
+-import("//buildtools/third_party/libc++/libcxx_headers.gni")
+-import("//buildtools/third_party/libc++/modules.gni")
+ if (is_win) {
+   import("//build/toolchain/win/win_toolchain_data.gni")
+ }
+@@ -86,9 +84,7 @@ if (use_unified_system_module) {
+     }
+   }
+ 
+-  system_headers = libcxx_headers + [
+-                     "//buildtools/third_party/libc++/__config_site",
+-                     "//buildtools/third_party/libc++/__assertion_handler",
++  system_headers = [
+                    ]
+   root_include_dir = ""
+   extra_headers = []
+@@ -110,7 +106,6 @@ if (use_unified_system_module) {
+   }
+ 
+   if (root_include_dir != "") {
+-    system_headers += expand_directory("${sysroot}/${root_include_dir}", true)
+   }
+ 
+   modulemap = "${target_gen_dir}/module.modulemap"

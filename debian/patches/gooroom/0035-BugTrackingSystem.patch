@@ -1,0 +1,88 @@
+From c4544cb4c3ba6f1f9fe679cfc1239ce8ef5697cc Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 13:47:13 +0900
+Subject: [PATCH 35/63] BugTrackingSystem
+
+697 : Change strings 'chrome&google' to gooroom on gooroom:// pages
+697-6 : Change default ntp (google webstore -> gooroom.kr)
+---
+ chrome/app/generated_resources.grd                        | 3 +++
+ chrome/app/resources/locale_settings.grd                  | 3 +++
+ .../system_logs/log_sources/chrome_internal_log_source.cc | 2 +-
+ chrome/browser/history/top_sites_factory.cc               | 8 ++++----
+ chrome/browser/resources/inspect/inspect.html             | 2 +-
+ .../resources/service_worker/serviceworker_internals.html | 2 +-
+ 6 files changed, 13 insertions(+), 7 deletions(-)
+
+Index: gooroom-browser-debian.git/chrome/app/generated_resources.grd
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/app/generated_resources.grd
++++ gooroom-browser-debian.git/chrome/app/generated_resources.grd
+@@ -6409,6 +6409,9 @@ Keep your key file in a safe place. You
+       <message name="IDS_EXTENSION_WEB_STORE_TITLE_SHORT" desc="Shortened version of text for the Chrome Web Store">
+         Web Store
+       </message>
++      <message name="IDS_GOOROOM_TITLE_SHORT" desc="Shortened version of text for the Gooroom.kr">
++        Gooroom Flatform
++      </message>
+       <message name="IDS_EXTENSIONS_SHOW_DETAILS" desc="Tooltip for the button next to an extension that shows more details">
+         Show Details
+       </message>
+Index: gooroom-browser-debian.git/chrome/app/resources/locale_settings.grd
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/app/resources/locale_settings.grd
++++ gooroom-browser-debian.git/chrome/app/resources/locale_settings.grd
+@@ -170,6 +170,9 @@
+       <message name="IDS_WEBSTORE_URL" translateable="false">
+         https://chrome.google.com/webstore?hl=[GRITLANGCODE]
+       </message>
++      <message name="IDS_GOOROOM_URL" translateable="false">
++        https://www.gooroom.kr
++      </message>
+ 
+       <!-- The width of the media galleries configuration dialog in characters. -->
+       <message name="IDS_MEDIA_GALLERIES_DIALOG_CONTENT_WIDTH_CHARS" use_name_for_id="true">
+Index: gooroom-browser-debian.git/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
++++ gooroom-browser-debian.git/chrome/browser/feedback/system_logs/log_sources/chrome_internal_log_source.cc
+@@ -91,7 +91,7 @@ namespace {
+ constexpr char kSyncDataKey[] = "about_sync_data";
+ constexpr char kExtensionsListKey[] = "extensions";
+ constexpr char kPowerApiListKey[] = "chrome.power extensions";
+-constexpr char kChromeVersionTag[] = "CHROME VERSION";
++constexpr char kChromeVersionTag[] = "GOOROOM VERSION";
+ constexpr char kSkiaGraphiteStatusKey[] = "skia_graphite_status";
+ 
+ #if BUILDFLAG(IS_CHROMEOS)
+Index: gooroom-browser-debian.git/chrome/browser/history/top_sites_factory.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/history/top_sites_factory.cc
++++ gooroom-browser-debian.git/chrome/browser/history/top_sites_factory.cc
+@@ -58,10 +58,10 @@ struct RawPrepopulatedPage {
+ // Android does not use prepopulated pages.
+ constexpr auto kRawPrepopulatedPages = std::to_array<RawPrepopulatedPage>({
+     {
+-        IDS_WEBSTORE_URL,
+-        IDS_EXTENSION_WEB_STORE_TITLE_SHORT,
++        IDS_GOOROOM_URL,
++        IDS_GOOROOM_TITLE_SHORT,
+         IDR_WEBSTORE_ICON_32,
+-        SkColorSetRGB(63, 132, 197),
++        SkColorSetRGB(52, 132, 197),
+     },
+ });
+ #endif
+Index: gooroom-browser-debian.git/chrome/browser/resources/inspect/inspect.html
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/resources/inspect/inspect.html
++++ gooroom-browser-debian.git/chrome/browser/resources/inspect/inspect.html
+@@ -7,7 +7,7 @@ found in the LICENSE file.
+ -->
+ <head>
+ <meta charset="utf-8">
+-<title>Inspect with Chrome Developer Tools</title>
++<title>Inspect with Gooroom Developer Tools</title>
+ <link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
+ <link rel="stylesheet" href="inspect.css">
+ <script type="module" src="inspect.js"></script>

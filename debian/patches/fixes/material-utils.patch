@@ -1,0 +1,19 @@
+./../third_party/material_color_utilities/src/cpp/palettes/tones.cc:59:27: note: use function 'std::abs' instead
+  double smallest_delta = abs(smallest_delta_hct.get_chroma() - chroma);
+                          ^~~
+                          std::abs
+../../third_party/material_color_utilities/src/cpp/palettes/tones.cc:70:9: error: use of undeclared identifier 'round'
+    if (round(chroma) == round(smallest_delta_hct.get_chroma())) {
+        ^
+
+--- a/third_party/material_color_utilities/src/cpp/palettes/tones.cc
++++ b/third_party/material_color_utilities/src/cpp/palettes/tones.cc
+@@ -79,7 +79,7 @@ Hct KeyColor::create() {
+     if (sufficient_chroma) {
+       // Either range [lower_tone, mid_tone] or [mid_tone, upper_tone] has
+       // the answer, so search in the range that is closer the pivot tone.
+-      if (abs(lower_tone - pivot_tone) < abs(upper_tone - pivot_tone)) {
++      if (std::abs(lower_tone - pivot_tone) < std::abs(upper_tone - pivot_tone)) {
+         upper_tone = mid_tone;
+       } else {
+         if (lower_tone == mid_tone) {

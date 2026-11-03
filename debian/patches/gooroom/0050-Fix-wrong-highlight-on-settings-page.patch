@@ -1,0 +1,20 @@
+From 11f3aaa49356331d014a363d9469a9bbbc5dc000 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc91@gmail.com>
+Date: Fri, 23 Apr 2021 11:10:53 +0900
+Subject: [PATCH 50/63] Fix wrong highlight on settings page
+
+---
+ ui/webui/resources/js/search_highlight_utils.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: gooroom-browser-debian.git/ui/webui/resources/js/search_highlight_utils.ts
+===================================================================
+--- gooroom-browser-debian.git.orig/ui/webui/resources/js/search_highlight_utils.ts
++++ gooroom-browser-debian.git/ui/webui/resources/js/search_highlight_utils.ts
+@@ -169,5 +169,5 @@ export function createEmptySearchBubble(
+ }
+ 
+ export function stripDiacritics(text: string): string {
+-  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
++  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC');
+ }

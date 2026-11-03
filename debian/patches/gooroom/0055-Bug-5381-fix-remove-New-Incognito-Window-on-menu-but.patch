@@ -1,0 +1,45 @@
+From fe8c105c9f07a60786ed858ceca16c375649f967 Mon Sep 17 00:00:00 2001
+From: hnc-cjs <cjs@hancom>
+Date: Wed, 26 Apr 2023 20:37:26 +0900
+Subject: [PATCH 55/63] Bug 5381 fix - remove 'New Incognito Window' on menu
+ button
+
+---
+ chrome/browser/ui/toolbar/app_menu_model.cc | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+Index: gooroom-browser-debian.git/chrome/browser/ui/toolbar/app_menu_model.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/toolbar/app_menu_model.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/toolbar/app_menu_model.cc
+@@ -2242,30 +2242,6 @@ void AppMenuModel::Build() {
+       this, IDC_NEW_WINDOW, IDS_NEW_WINDOW,
+       features::IsRoundedIconsEnabled() ? kNewWindowIcon : kNewWindowOldIcon);
+ 
+-  // This menu item is not visible in Guest Mode. If incognito mode is not
+-  // available, it will be shown in disabled state. (crbug.com/40703208)
+-  if (!browser_->GetProfile()->IsGuestSession()) {
+-    AddItemWithStringIdAndVectorIcon(
+-        this, IDC_NEW_INCOGNITO_WINDOW, IDS_NEW_INCOGNITO_WINDOW,
+-        features::IsRoundedIconsEnabled() ? kIncognitoIcon
+-                                          : kIncognitoRefreshMenuOldIcon);
+-    SetElementIdentifierAt(
+-        GetIndexOfCommandId(IDC_NEW_INCOGNITO_WINDOW).value(),
+-        kIncognitoMenuItem);
+-
+-    bool isolated_mode_enabled =
+-        enterprise_isolated_mode::IsolatedModeReplacesIncognito(
+-            browser_->GetProfile());
+-
+-    if (isolated_mode_enabled) {
+-      AddItemWithStringIdAndVectorIcon(
+-          this, IDC_NEW_ISOLATED_WINDOW, IDS_NEW_ISOLATED_WINDOW,
+-          features::IsRoundedIconsEnabled()
+-              ? vector_icons::kDomainIcon
+-              : vector_icons::kBusinessChromeRefreshOldIcon);
+-    }
+-  }
+-
+   AddSeparator(ui::NORMAL_SEPARATOR);
+ 
+ #if !BUILDFLAG(IS_CHROMEOS)

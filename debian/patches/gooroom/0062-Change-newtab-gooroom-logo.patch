@@ -1,0 +1,92 @@
+From 6c40e8bc698b9e4c0b07d02327845bd73e3a8a3f Mon Sep 17 00:00:00 2001
+From: cjs <cjs@hancom.com>
+Date: Fri, 1 Sep 2023 02:04:35 -0400
+Subject: [PATCH 62/63] Change newtab gooroom logo
+
+---
+ chrome/browser/history/top_sites_factory.cc   |   2 +-
+ .../resources/new_tab_page/icons/BUILD.gn     |   1 +
+ .../icons/gooroom_newtab_logo.png             | Bin 10049 -> 3094 bytes
+ .../icons/gooroom_newtab_logo.svg             |  10 ++++++++++
+ .../browser/resources/new_tab_page/logo.css   |  12 ++++++++----
+ chrome/browser/ui/webui/favicon_source.cc     |   2 +-
+ 6 files changed, 21 insertions(+), 6 deletions(-)
+ create mode 100644 chrome/browser/resources/new_tab_page/icons/gooroom_newtab_logo.svg
+
+Index: gooroom-browser-debian.git/chrome/browser/history/top_sites_factory.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/history/top_sites_factory.cc
++++ gooroom-browser-debian.git/chrome/browser/history/top_sites_factory.cc
+@@ -162,7 +162,7 @@ scoped_refptr<RefcountedKeyedService> To
+   base::FilePath path("/usr/share/gooroom/browser/policies/shortcut/shortcut.json");
+   std::string input;
+   ReadFileToString(path, &input);
+-  absl::optional<base::Value> root = base::JSONReader::Read(input, base::JSON_PARSE_RFC);
++  std::optional<base::Value> root = base::JSONReader::Read(input, base::JSON_PARSE_RFC);
+ 
+   base::Value* url=nullptr;
+   base::Value* name=nullptr;
+Index: gooroom-browser-debian.git/chrome/browser/resources/new_tab_page/icons/gooroom_newtab_logo.svg
+===================================================================
+--- /dev/null
++++ gooroom-browser-debian.git/chrome/browser/resources/new_tab_page/icons/gooroom_newtab_logo.svg
+@@ -0,0 +1,10 @@
++<svg width="200" height="32" viewBox="0 0 200 32" fill="none" xmlns="http://www.w3.org/2000/svg">
++<path d="M13.4752 15.5869V18.5036H19.4009C18.2547 21.9437 15.082 24.4167 11.3475 24.4167C6.64722 24.4167 2.83688 20.4992 2.83688 15.6667C2.83688 10.8342 6.64722 6.91667 11.3475 6.91667C14.8103 6.91667 17.79 9.04289 19.1191 12.0948L21.5806 10.6185C19.7499 6.70289 15.8557 4 11.3475 4C5.08046 4 0 9.22335 0 15.6667C0 22.11 5.08046 27.3333 11.3475 27.3333C17.6146 27.3333 22.695 22.11 22.695 15.6667C22.695 15.6401 22.695 15.6135 22.6948 15.5869H13.4752Z" fill="#33363F"/>
++<path fill-rule="evenodd" clip-rule="evenodd" d="M41.1349 24.4167C45.8352 24.4167 49.6455 20.4992 49.6455 15.6667C49.6455 10.8342 45.8352 6.91667 41.1349 6.91667C36.4346 6.91667 32.6242 10.8342 32.6242 15.6667C32.6242 20.4992 36.4346 24.4167 41.1349 24.4167ZM41.1349 27.3333C47.4019 27.3333 52.4824 22.11 52.4824 15.6667C52.4824 9.22335 47.4019 4 41.1349 4C34.8678 4 29.7874 9.22335 29.7874 15.6667C29.7874 22.11 34.8678 27.3333 41.1349 27.3333Z" fill="#33363F"/>
++<path fill-rule="evenodd" clip-rule="evenodd" d="M70.922 24.4167C75.6223 24.4167 79.4326 20.4992 79.4326 15.6667C79.4326 10.8342 75.6223 6.91667 70.922 6.91667C66.2217 6.91667 62.4113 10.8342 62.4113 15.6667C62.4113 20.4992 66.2217 24.4167 70.922 24.4167ZM70.922 27.3333C77.189 27.3333 82.2695 22.11 82.2695 15.6667C82.2695 9.22335 77.189 4 70.922 4C64.6549 4 59.5745 9.22335 59.5745 15.6667C59.5745 22.11 64.6549 27.3333 70.922 27.3333Z" fill="#33363F"/>
++<path d="M109.22 10.9271C109.22 13.4408 107.845 15.6245 105.827 16.7267C104.935 17.2137 103.917 17.4896 102.837 17.4896L109.22 26.2396H105.674L97.1632 14.5729H102.837C104.795 14.5729 106.383 12.9406 106.383 10.9271C106.383 8.91353 104.795 7.28123 102.837 7.28123H92.1987V26.2396H89.3618V4.36456H102.837C106.362 4.36456 109.22 7.30269 109.22 10.9271Z" fill="#33363F"/>
++<path fill-rule="evenodd" clip-rule="evenodd" d="M127.66 24.4167C132.36 24.4167 136.17 20.4992 136.17 15.6667C136.17 10.8342 132.36 6.91667 127.66 6.91667C122.959 6.91667 119.149 10.8342 119.149 15.6667C119.149 20.4992 122.959 24.4167 127.66 24.4167ZM127.66 27.3333C133.927 27.3333 139.007 22.11 139.007 15.6667C139.007 9.22335 133.927 4 127.66 4C121.392 4 116.312 9.22335 116.312 15.6667C116.312 22.11 121.392 27.3333 127.66 27.3333Z" fill="#33363F"/>
++<path fill-rule="evenodd" clip-rule="evenodd" d="M157.447 24.4167C162.147 24.4167 165.958 20.4992 165.958 15.6667C165.958 10.8342 162.147 6.91667 157.447 6.91667C152.747 6.91667 148.936 10.8342 148.936 15.6667C148.936 20.4992 152.747 24.4167 157.447 24.4167ZM157.447 27.3333C163.714 27.3333 168.794 22.11 168.794 15.6667C168.794 9.22335 163.714 4 157.447 4C151.18 4 146.099 9.22335 146.099 15.6667C146.099 22.11 151.18 27.3333 157.447 27.3333Z" fill="#33363F"/>
++<path d="M200 4L187.943 14.2083L175.886 4V26.2396H178.723V10.1804L187.943 17.9867L197.163 10.1804V10.1871L200 7.78511V4Z" fill="#33363F"/>
++<path d="M200 14.4802L197.163 16.8821V26.2396H200V14.4802Z" fill="#33363F"/>
++</svg>
+Index: gooroom-browser-debian.git/chrome/browser/resources/new_tab_page/logo.css
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/resources/new_tab_page/logo.css
++++ gooroom-browser-debian.git/chrome/browser/resources/new_tab_page/logo.css
+@@ -32,8 +32,12 @@
+ 
+ #logo {
+   forced-color-adjust: none;
+-  height: 92px;
+-  width: 272px;
++  background-repeat: no-repeat;
++  height: 70px;
++  width: 250px;
++  position: absolute;
++  left: calc(50% - 200px/2);
++
+ }
+ 
+ :host([use-google-logo26_]) #logo {
+@@ -42,14 +46,14 @@
+ }
+ 
+ :host([single-colored]) #logo {
+-  -webkit-mask-image: url(./icons/google_logo.svg);
++  -webkit-mask-image: url(./icons/gooroom_newtab_logo.svg);
+   -webkit-mask-repeat: no-repeat;
+   -webkit-mask-size: 100%;
+   background-color: var(--ntp-logo-color);
+ }
+ 
+ :host(:not([single-colored])) #logo {
+-  background-image: url(./icons/google_logo.svg);
++  background-image: url(./icons/gooroom_newtab_logo.svg);
+   background-repeat: no-repeat;
+   background-size: 100%;
+ }
+Index: gooroom-browser-debian.git/chrome/browser/ui/webui/favicon_source.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/webui/favicon_source.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/webui/favicon_source.cc
+@@ -121,7 +121,7 @@ int GetFaviconOrder(GURL page_url, base:
+   base::FilePath shortcut_json = shortcut_dir.AppendASCII("shortcut.json");
+   std::string input;
+   ReadFileToString(shortcut_json, &input);
+-  absl::optional<base::Value> root = base::JSONReader::Read(input, base::JSON_PARSE_RFC);
++  std::optional<base::Value> root = base::JSONReader::Read(input, base::JSON_PARSE_RFC);
+   base::Value* url=nullptr;
+ 
+   if (root) {

@@ -1,0 +1,104 @@
+From cb31899b4cad9f0165d1636c5f094408e7b26d19 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Mon, 27 Jul 2020 13:45:46 +0900
+Subject: [PATCH 34/63] BugTrackingSystem
+
+746 : Change string Chromium to Gooroom Browser on gooroom://flags page
+743 : Remove Translate option on settings language page
+741 : Remove report function on settings person security page
+740 : Remove 'USB not found'strings on content settings usb page
+738 : Change string 'Chromium' to 'Open Project(Chromium)'on reset settings page
+731 : Update adobe-flash version
+728 : Remove browser-login on gooroom://devices page
+726 : Change string 'chrome' to 'gooroom' on man page
+723 : Change strings 'About Chromium' to 'About Gooroom Browser' on settings icon
+722 : Remove browser-login on gooroom://history page
+721 : Restrict secret mode access on bookmark
+714 : Remove browser-login on gooroom://welcome page
+205 : Remove google-cloud-login on print page
+---
+ chrome/app/resources/manpage.1.in                      | 10 +++++-----
+ chrome/browser/resources/history/side_bar.html         |  7 -------
+ .../ui/bookmarks/bookmark_context_menu_controller.cc   |  4 ++--
+ content/browser/web_contents/web_contents_impl.cc      |  1 +
+ 4 files changed, 8 insertions(+), 14 deletions(-)
+
+Index: gooroom-browser-debian.git/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
++++ gooroom-browser-debian.git/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+@@ -244,8 +244,8 @@ size_t BookmarkContextMenuController::Ge
+ }
+ 
+ void BookmarkContextMenuController::BuildMenu() {
+-  bool isolated_mode_enabled =
+-      enterprise_isolated_mode::IsolatedModeReplacesIncognito(profile_);
++//  bool isolated_mode_enabled =
++//      enterprise_isolated_mode::IsolatedModeReplacesIncognito(profile_);
+ 
+   if (selection_.size() == 1 && selection_[0]->is_url()) {
+     AddItem(IDC_BOOKMARK_BAR_OPEN_ALL, IDS_BOOKMARK_BAR_OPEN_IN_NEW_TAB);
+@@ -253,13 +253,13 @@ void BookmarkContextMenuController::Buil
+             IDS_BOOKMARK_BAR_OPEN_IN_NEW_WINDOW);
+     AddItem(IDC_BOOKMARK_BAR_OPEN_SPLIT_VIEW,
+             IDS_BOOKMARK_BAR_OPEN_IN_SPLIT_VIEW);
+-    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
+-            IDS_BOOKMARK_BAR_OPEN_INCOGNITO);
++//    AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
++//            IDS_BOOKMARK_BAR_OPEN_INCOGNITO);
+ 
+-    if (isolated_mode_enabled) {
+-      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED,
+-              IDS_BOOKMARK_BAR_OPEN_ISOLATED);
+-    }
++//    if (isolated_mode_enabled) {
++//      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED,
++//              IDS_BOOKMARK_BAR_OPEN_ISOLATED);
++//    }
+   } else {
+     int count = bookmarks::OpenCount(selection_);
+     AddItem(IDC_BOOKMARK_BAR_OPEN_ALL,
+@@ -274,25 +274,25 @@ void BookmarkContextMenuController::Buil
+               l10n_util::GetPluralStringFUTF16(
+                   IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_NEW_TAB_GROUP, count));
+ 
+-      int incognito_count = bookmarks::OpenCount(selection_, profile_);
+-      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
+-              l10n_util::GetPluralStringFUTF16(
+-                  IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_INCOGNITO, incognito_count));
+-      if (isolated_mode_enabled) {
+-        AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED,
+-                l10n_util::GetPluralStringFUTF16(
+-                    IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_ISOLATED, incognito_count));
+-      }
++//      int incognito_count = bookmarks::OpenCount(selection_, profile_);
++//      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
++//              l10n_util::GetPluralStringFUTF16(
++//                  IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_INCOGNITO, incognito_count));
++//      if (isolated_mode_enabled) {
++//        AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED,
++//                l10n_util::GetPluralStringFUTF16(
++//                    IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_ISOLATED, incognito_count));
++//      }
+     } else {
+-      int incognito_count = bookmarks::OpenCount(selection_, profile_);
+-      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
+-              l10n_util::GetPluralStringFUTF16(
+-                  IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_INCOGNITO, incognito_count));
+-      if (isolated_mode_enabled) {
+-        AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED,
+-                l10n_util::GetPluralStringFUTF16(
+-                    IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_ISOLATED, incognito_count));
+-      }
++//      int incognito_count = bookmarks::OpenCount(selection_, profile_);
++//      AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_INCOGNITO,
++//              l10n_util::GetPluralStringFUTF16(
++//                  IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_INCOGNITO, incognito_count));
++//      if (isolated_mode_enabled) {
++//        AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED,
++//                l10n_util::GetPluralStringFUTF16(
++//                    IDS_BOOKMARK_BAR_OPEN_ALL_COUNT_ISOLATED, incognito_count));
++//      }
+ 
+       AddItem(IDC_BOOKMARK_BAR_OPEN_ALL_NEW_TAB_GROUP,
+               l10n_util::GetPluralStringFUTF16(

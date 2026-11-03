@@ -1,0 +1,217 @@
+From a368e5984deb63aa3de3dad80dff95247f5babc5 Mon Sep 17 00:00:00 2001
+From: junsungc <junsungc@gooroom.kr>
+Date: Wed, 22 Jul 2020 15:34:42 +0900
+Subject: [PATCH 08/63] Put gooroom logo into the browser
+
+---
+ .../app/theme/chrome_unscaled_resources.grd   |  26 +++---------------
+ .../gooroom/product_logo_16.png               | Bin 0 -> 50166 bytes
+ .../gooroom/product_logo_22.png               | Bin 0 -> 11852 bytes
+ .../gooroom/product_logo_32.png               | Bin 0 -> 13265 bytes
+ .../gooroom/product_logo_name_22.png          | Bin 0 -> 6632 bytes
+ .../gooroom/product_logo_name_22_white.png    | Bin 0 -> 4324 bytes
+ .../gooroom/product_logo_name_48.png          | Bin 0 -> 6632 bytes
+ .../gooroom/product_logo_white.png            | Bin 0 -> 4324 bytes
+ .../gooroom/webstore_icon.png                 | Bin 0 -> 19929 bytes
+ .../gooroom/webstore_icon_16.png              | Bin 0 -> 625 bytes
+ .../gooroom/webstore_icon_24.png              | Bin 0 -> 985 bytes
+ .../gooroom/webstore_icon_32.png              | Bin 0 -> 1403 bytes
+ .../gooroom/product_logo_16.png               | Bin 0 -> 2157 bytes
+ .../gooroom/product_logo_32.png               | Bin 0 -> 5941 bytes
+ .../gooroom/product_logo_name_22.png          | Bin 0 -> 6904 bytes
+ .../gooroom/product_logo_name_48.png          | Bin 0 -> 9382 bytes
+ .../gooroom/product_logo_white.png            | Bin 0 -> 5125 bytes
+ .../gooroom/webstore_icon.png                 | Bin 0 -> 27381 bytes
+ .../gooroom/webstore_icon_16.png              | Bin 0 -> 1097 bytes
+ .../gooroom/webstore_icon_24.png              | Bin 0 -> 1628 bytes
+ .../gooroom/webstore_icon_32.png              | Bin 0 -> 2289 bytes
+ chrome/app/theme/gooroom/BRANDING             |   7 +++++
+ .../app/theme/gooroom/gooroom_newtab_logo.png | Bin 0 -> 10049 bytes
+ .../app/theme/gooroom/linux/app_list_16.png   | Bin 0 -> 270 bytes
+ .../app/theme/gooroom/linux/app_list_256.png  | Bin 0 -> 1986 bytes
+ .../app/theme/gooroom/linux/app_list_32.png   | Bin 0 -> 418 bytes
+ .../app/theme/gooroom/linux/app_list_48.png   | Bin 0 -> 530 bytes
+ chrome/app/theme/gooroom/mac/app.icns         | Bin 0 -> 111762 bytes
+ chrome/app/theme/gooroom/mac/document.icns    | Bin 0 -> 97120 bytes
+ chrome/app/theme/gooroom/product_logo_128.png | Bin 0 -> 50166 bytes
+ chrome/app/theme/gooroom/product_logo_22.png  | Bin 0 -> 50166 bytes
+ .../theme/gooroom/product_logo_22_mono.png    | Bin 0 -> 537 bytes
+ chrome/app/theme/gooroom/product_logo_256.png | Bin 0 -> 50166 bytes
+ chrome/app/theme/gooroom/product_logo_48.png  | Bin 0 -> 50167 bytes
+ chrome/app/theme/gooroom/product_logo_64.png  | Bin 0 -> 50169 bytes
+ chrome/app/theme/theme_resources.grd          |  10 ++++---
+ .../icons/gooroom_newtab_logo.png             | Bin 0 -> 10049 bytes
+ components/infobars/core/infobar_delegate.cc  |   2 +-
+ .../gooroom/product_logo.png                  | Bin 0 -> 8711 bytes
+ .../gooroom/product_logo_white.png            | Bin 0 -> 2094 bytes
+ .../gooroom/product_logo.png                  | Bin 0 -> 5278 bytes
+ .../gooroom/product_logo_white.png            | Bin 0 -> 4640 bytes
+ .../version_ui_scaled_resources.grdp          |   4 +--
+ .../version_ui/resources/about_version.css    |   2 +-
+ 44 files changed, 21 insertions(+), 30 deletions(-)
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_16.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_22.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_32.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_name_22.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_name_22_white.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_name_48.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/product_logo_white.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/webstore_icon.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/webstore_icon_16.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/webstore_icon_24.png
+ create mode 100644 chrome/app/theme/default_100_percent/gooroom/webstore_icon_32.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/product_logo_16.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/product_logo_32.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/product_logo_name_22.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/product_logo_name_48.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/product_logo_white.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/webstore_icon.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/webstore_icon_16.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/webstore_icon_24.png
+ create mode 100644 chrome/app/theme/default_200_percent/gooroom/webstore_icon_32.png
+ create mode 100644 chrome/app/theme/gooroom/BRANDING
+ create mode 100644 chrome/app/theme/gooroom/gooroom_newtab_logo.png
+ create mode 100644 chrome/app/theme/gooroom/linux/app_list_16.png
+ create mode 100644 chrome/app/theme/gooroom/linux/app_list_256.png
+ create mode 100644 chrome/app/theme/gooroom/linux/app_list_32.png
+ create mode 100644 chrome/app/theme/gooroom/linux/app_list_48.png
+ create mode 100644 chrome/app/theme/gooroom/mac/app.icns
+ create mode 100644 chrome/app/theme/gooroom/mac/document.icns
+ create mode 100644 chrome/app/theme/gooroom/product_logo_128.png
+ create mode 100644 chrome/app/theme/gooroom/product_logo_22.png
+ create mode 100644 chrome/app/theme/gooroom/product_logo_22_mono.png
+ create mode 100644 chrome/app/theme/gooroom/product_logo_256.png
+ create mode 100644 chrome/app/theme/gooroom/product_logo_48.png
+ create mode 100644 chrome/app/theme/gooroom/product_logo_64.png
+ create mode 100644 chrome/browser/resources/new_tab_page/icons/gooroom_newtab_logo.png
+ create mode 100644 components/resources/default_100_percent/gooroom/product_logo.png
+ create mode 100644 components/resources/default_100_percent/gooroom/product_logo_white.png
+ create mode 100644 components/resources/default_200_percent/gooroom/product_logo.png
+ create mode 100644 components/resources/default_200_percent/gooroom/product_logo_white.png
+
+Index: gooroom-browser-debian.git/chrome/app/theme/chrome_unscaled_resources.grd
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/app/theme/chrome_unscaled_resources.grd
++++ gooroom-browser-debian.git/chrome/app/theme/chrome_unscaled_resources.grd
+@@ -14,28 +14,10 @@
+   </outputs>
+   <release seq="1">
+     <includes>
+-      <if expr="is_linux">
+-        <then>
+-          <include name="IDR_PRODUCT_LOGO_64" file="${branding_path_component}/linux/product_logo_64.png" type="BINDATA" />
+-          <include name="IDR_PRODUCT_LOGO_128" file="${branding_path_component}/linux/product_logo_128.png" type="BINDATA" />
+-          <include name="IDR_PRODUCT_LOGO_256" file="${branding_path_component}/linux/product_logo_256.png" type="BINDATA" />
+-        </then>
+-        <else>
+-          <include name="IDR_PRODUCT_LOGO_64" file="${branding_path_component}/product_logo_64.png" type="BINDATA" />
+-          <include name="IDR_PRODUCT_LOGO_128" file="${branding_path_component}/product_logo_128.png" type="BINDATA" />
+-          <include name="IDR_PRODUCT_LOGO_256" file="${branding_path_component}/product_logo_256.png" type="BINDATA" />
+-        </else>
+-      </if>
+-      <if expr="is_macosx">
+-        <if expr="_is_chrome_for_testing_branded">
+-          <then>
+-            <include name="IDR_STATUS_TRAY_ICON" file="google_chrome/product_logo_22_mono.png" type="BINDATA" />
+-          </then>
+-          <else> <!-- not _is_chrome_for_testing_branded -->
+-            <include name="IDR_STATUS_TRAY_ICON" file="${branding_path_component}/product_logo_22_mono.png" type="BINDATA" />
+-          </else>
+-        </if> <!-- _is_chrome_for_testing_branded -->
+-      </if>
++      <include name="IDR_PRODUCT_LOGO_64" file="gooroom/product_logo_64.png" type="BINDATA" />
++      <include name="IDR_PRODUCT_LOGO_128" file="gooroom/product_logo_128.png" type="BINDATA" />
++      <include name="IDR_PRODUCT_LOGO_256" file="gooroom/product_logo_256.png" type="BINDATA" />
++      <include name="IDR_STATUS_TRAY_ICON" file="gooroom/product_logo_22.png" type="BINDATA" />
+       <if expr="_google_chrome">
+         <then>
+           <include name="IDR_PRODUCT_LOGO_SVG" file="${branding_path_component}/chrome_logo.svg" type="BINDATA" />
+Index: gooroom-browser-debian.git/chrome/app/theme/gooroom/BRANDING
+===================================================================
+--- /dev/null
++++ gooroom-browser-debian.git/chrome/app/theme/gooroom/BRANDING
+@@ -0,0 +1,7 @@
++COMPANY_FULLNAME=Gooroom
++COMPANY_SHORTNAME=Gooroom
++PRODUCT_FULLNAME=Gooroom-browser
++PRODUCT_SHORTNAME=Gooroom-browser
++PRODUCT_INSTALLER_FULLNAME=Gooroom-browser Installer
++PRODUCT_INSTALLER_SHORTNAME=Gooroom-browser Installer
++COPYRIGHT=Copyright 2018 The Gooroom-browser Authors. All rights reserved.
+\ No newline at end of file
+Index: gooroom-browser-debian.git/chrome/app/theme/theme_resources.grd
+===================================================================
+--- gooroom-browser-debian.git.orig/chrome/app/theme/theme_resources.grd
++++ gooroom-browser-debian.git/chrome/app/theme/theme_resources.grd
+@@ -171,6 +171,8 @@
+           <if expr="is_linux">
+             <then>
+               <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="${branding_path_component}/linux/product_logo_16.png" />
++              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_16" file="gooroom/product_logo_16.png" />
++              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32" file="gooroom/product_logo_32.png" />
+               <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32_BETA" file="${branding_path_component}/linux/product_logo_32_beta.png" />
+               <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32_DEV" file="${branding_path_component}/linux/product_logo_32_dev.png" />
+             </then>
+@@ -182,8 +184,8 @@
+           </if> <!-- is_linux -->
+           <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_32_CANARY" file="${branding_path_component}/product_logo_32_canary.png" />
+           <if expr="not is_android">
+-            <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="${branding_path_component}/product_logo_name_22.png" />
+-            <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="${branding_path_component}/product_logo_name_22_white.png" />
++          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="gooroom/product_logo_name_22.png" />
++          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="gooroom/product_logo_name_22_white.png" />
+           </if>
+           <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_ENTERPRISE" file="${branding_path_component}/product_logo_enterprise.png" />
+           <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_ENTERPRISE_WHITE" file="${branding_path_component}/product_logo_enterprise_white.png" />
+@@ -199,8 +201,8 @@
+           </if> <!-- is_linux -->
+           <if expr="_is_chrome_for_testing_branded">
+             <then>
+-              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="chromium/product_logo_name_22.png" />
+-              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="chromium/product_logo_name_22_white.png" />
++              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="gooroom/product_logo_name_22.png" />
++              <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22_WHITE" file="gooroom/product_logo_name_22_white.png" />
+             </then>
+             <else> <!-- not _is_chrome_for_testing_branded -->
+               <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_NAME_22" file="${branding_path_component}/product_logo_name_22.png" />
+Index: gooroom-browser-debian.git/components/infobars/core/infobar_delegate.cc
+===================================================================
+--- gooroom-browser-debian.git.orig/components/infobars/core/infobar_delegate.cc
++++ gooroom-browser-debian.git/components/infobars/core/infobar_delegate.cc
+@@ -34,7 +34,7 @@ const gfx::VectorIcon& InfoBarDelegate::
+ }
+ 
+ ui::ImageModel InfoBarDelegate::GetIcon() const {
+-#if !BUILDFLAG(IS_IOS) && !BUILDFLAG(IS_ANDROID)
++#if !BUILDFLAG(IS_IOS) && !BUILDFLAG(IS_ANDROID) && !defined(GOOROOM_BUILD)
+   const gfx::VectorIcon& vector_icon = GetVectorIcon();
+   if (!vector_icon.is_empty()) {
+     return ui::ImageModel::FromVectorIcon(vector_icon, ui::kColorInfoBarIcon,
+Index: gooroom-browser-debian.git/components/resources/version_ui_scaled_resources.grdp
+===================================================================
+--- gooroom-browser-debian.git.orig/components/resources/version_ui_scaled_resources.grdp
++++ gooroom-browser-debian.git/components/resources/version_ui_scaled_resources.grdp
+@@ -14,8 +14,8 @@
+           <structure type="chrome_scaled_image" name="IDR_PRODUCT_FAVICON" file="google_chrome/google_chrome_for_testing/favicon_product.png" />
+         </then>
+         <else>
+-          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO" file="chromium/product_logo.png" />
+-          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_WHITE" file="chromium/product_logo_white.png" />
++          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO" file="gooroom/product_logo.png" />
++          <structure type="chrome_scaled_image" name="IDR_PRODUCT_LOGO_WHITE" file="gooroom/product_logo_white.png" />
+           <structure type="chrome_scaled_image" name="IDR_PRODUCT_FAVICON" file="chromium/favicon_product.png" />
+         </else>
+       </if>
+Index: gooroom-browser-debian.git/components/webui/version/resources/about_version.css
+===================================================================
+--- gooroom-browser-debian.git.orig/components/webui/version/resources/about_version.css
++++ gooroom-browser-debian.git/components/webui/version/resources/about_version.css
+@@ -60,7 +60,7 @@
+   float: right;
+   margin-inline-start: 40px;
+   text-align: end;
+-  width: 180px;
++  width: 220px;
+ }
+ 
+ #company {
